@@ -9,12 +9,24 @@ this functionality.
 import argparse
 import sys
 import warnings
+import importlib
+import inspect
+from pprint import pprint
 
 import MDAnalysis as mda
-from MDAnalysis.analysis.base import AnalysisBase, add_to_CLIs
+from MDAnalysis.analysis import __all__
 from MDAnalysis.analysis import analysis_interfaces
+from MDAnalysis.analysis.base import add_to_CLIs, AnalysisBase
 
-from MDAnalysis.analysis import density
+
+skip_mods = ('base', 'rdf_s')
+relevant_modules = (_mod for _mod in __all__ if _mod not in skip_mods)
+
+for module in relevant_modules:
+    module = importlib.import_module('MDAnalysis.analysis.' + module)
+    for name, member in inspect.getmembers(module):
+        if inspect.isclass(member) and issubclass(member, AnalysisBase):
+            add_to_CLIs(member)
 
 
 # Coloring for warnings and errors
@@ -36,81 +48,81 @@ def _warning(message,
 warnings.showwarning = _warning
 
 
-@add_to_CLIs
-class NewAnalysis(AnalysisBase):
-    """
-    This is a doc.
-
-    The trajectory is read, frame by frame, and the atoms in `atomgroup` are
-    histogrammed on a 3D grid with spacing `delta`.
-
-    Parameters
-    ----------
-    atomgroup : AtomGroup or UpdatingAtomGroup
-            Group of atoms (such as all the water oxygen atoms) being analyzed.
-            This can be an :class:`~MDAnalysis.core.groups.UpdatingAtomGroup` for
-            selections that change every time step.
-    atomgroup2 : AtomGroup
-            fancy second atomgroup
-    delta : float (optional)
-            Bin size for the density grid in ångström (same in x,y,z).
-    float_arg : list or str or tuple
-        Does something.
-    bool_arg : bool
-        a bool argument
-    """
-
-    def __init__(
-        self,
-        atomgroup,
-        atomgroup2,
-        par1,
-        par2,
-        par3,
-        par4,
-        *args,
-        float_arg=0.5,
-        none_arg=None,
-        bool_arg=True,
-        tuple_arg=(4, 5),
-        str_arg="string",
-        **kwargs,
-    ):
-        super().__init__(atomgroup.universe.trajectory)
-        self._par1 = par1
-        self._par2 = par2
-        self._par3 = par3
-        self._par4 = par4
-
-    def _single_frame(self):
-        pass
-
-
-# testing another analysis
-@add_to_CLIs
-class NewAnalysis2(NewAnalysis):
-    """
-    This is another doc.
-
-    The trajectory is read, frame by frame, and the atoms in `atomgroup` are
-    histogrammed on a 3D grid with spacing `delta`.
-
-    Parameters
-    ----------
-    atomgroup : AtomGroup or UpdatingAtomGroup
-            Group of atoms (such as all the water oxygen atoms) being analyzed.
-            This can be an :class:`~MDAnalysis.core.groups.UpdatingAtomGroup` for
-            selections that change every time step.
-    atomgroup2 : AtomGroup
-            fancy second atomgroup
-    delta : float (optional)
-            Bin size for the density grid in ångström (same in x,y,z).
-    float_arg : list or str or tuple
-        Does something.
-    """
-
-    def _single_frame(self):
-        pass
+#@add_to_CLIs
+#class NewAnalysis(AnalysisBase):
+#    """
+#    This is a doc.
+#
+#    The trajectory is read, frame by frame, and the atoms in `atomgroup` are
+#    histogrammed on a 3D grid with spacing `delta`.
+#
+#    Parameters
+#    ----------
+#    atomgroup : AtomGroup or UpdatingAtomGroup
+#            Group of atoms (such as all the water oxygen atoms) being analyzed.
+#            This can be an :class:`~MDAnalysis.core.groups.UpdatingAtomGroup` for
+#            selections that change every time step.
+#    atomgroup2 : AtomGroup
+#            fancy second atomgroup
+#    delta : float (optional)
+#            Bin size for the density grid in ångström (same in x,y,z).
+#    float_arg : list or str or tuple
+#        Does something.
+#    bool_arg : bool
+#        a bool argument
+#    """
+#
+#    def __init__(
+#        self,
+#        atomgroup,
+#        atomgroup2,
+#        par1,
+#        par2,
+#        par3,
+#        par4,
+#        *args,
+#        float_arg=0.5,
+#        none_arg=None,
+#        bool_arg=True,
+#        tuple_arg=(4, 5),
+#        str_arg="string",
+#        **kwargs,
+#    ):
+#        super().__init__(atomgroup.universe.trajectory)
+#        self._par1 = par1
+#        self._par2 = par2
+#        self._par3 = par3
+#        self._par4 = par4
+#
+#    def _single_frame(self):
+#        pass
+#
+#
+## testing another analysis
+#@add_to_CLIs
+#class NewAnalysis2(NewAnalysis):
+#    """
+#    This is another doc.
+#
+#    The trajectory is read, frame by frame, and the atoms in `atomgroup` are
+#    histogrammed on a 3D grid with spacing `delta`.
+#
+#    Parameters
+#    ----------
+#    atomgroup : AtomGroup or UpdatingAtomGroup
+#            Group of atoms (such as all the water oxygen atoms) being analyzed.
+#            This can be an :class:`~MDAnalysis.core.groups.UpdatingAtomGroup` for
+#            selections that change every time step.
+#    atomgroup2 : AtomGroup
+#            fancy second atomgroup
+#    delta : float (optional)
+#            Bin size for the density grid in ångström (same in x,y,z).
+#    float_arg : list or str or tuple
+#        Does something.
+#    """
+#
+#    def _single_frame(self):
+#        pass
 
 
 ###############################################################################
@@ -130,6 +142,7 @@ STR_TYPE_DICT = {
 
 def add_interface_CLI(cli_parser, interface_name, parameters):
     """Function for adding subparsers to cli_parser"""
+    #pprint(parameters)
 
     analysis_class_parser = cli_parser.add_parser(
         interface_name, help="".join(parameters["desc"])
@@ -218,10 +231,14 @@ def add_interface_CLI(cli_parser, interface_name, parameters):
              len(opt_) * [optional_parameters_group]
 
     action_dict = {True: "store_false", False: "store_true"}
+    #print(parameters_to_parse)
     for group, (name, args_dict) in zip(groups, parameters_to_parse):
 
         # prepares parameters before add_argument
-        type_ = STR_TYPE_DICT[args_dict["type"]]
+        try:
+            type_ = STR_TYPE_DICT[args_dict["type"]]
+        except KeyError:
+            type_ = str
 
         try:
             default = args_dict["default"]
