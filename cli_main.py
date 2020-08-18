@@ -4,29 +4,39 @@ Main entry point for the MDAnalysis CLI interface.
 This also demonstrates how other third party libraries could incorporate
 this functionality.
 """
-
 # NOTE: names in this file are orientative
 import argparse
-import sys
-import warnings
 import importlib
 import inspect
-from pprint import pprint
+import sys
+import warnings
 
 import MDAnalysis as mda
 from MDAnalysis.analysis import __all__
-from MDAnalysis.analysis import analysis_interfaces
-from MDAnalysis.analysis.base import add_to_CLIs, AnalysisBase
+from MDAnalysis.analysis.base import AnalysisBase
+from numpydoc.docscrape import NumpyDocString
 
 
+# modules in MDAnalysis.analysis packages that are ignored by MDA-CLI
+# relevant modules used in this CLI factory
 skip_mods = ('base', 'rdf_s')
 relevant_modules = (_mod for _mod in __all__ if _mod not in skip_mods)
 
-for module in relevant_modules:
-    module = importlib.import_module('MDAnalysis.analysis.' + module)
-    for name, member in inspect.getmembers(module):
-        if inspect.isclass(member) and issubclass(member, AnalysisBase):
-            add_to_CLIs(member)
+# global dictionary storing the parameters for all Analysis classes
+analysis_interfaces = {}
+
+# serves CLI factory
+STR_TYPE_DICT = {
+    "bool": bool,
+    "str": str,
+    "list": list,
+    "tuple": tuple,
+    "int": int,
+    "float": float,
+    "complex": complex,
+    "NoneType": type(None),
+    "AtomGroup": mda.AtomGroup,
+}
 
 
 # Coloring for warnings and errors
@@ -48,102 +58,93 @@ def _warning(message,
 warnings.showwarning = _warning
 
 
-#@add_to_CLIs
-#class NewAnalysis(AnalysisBase):
-#    """
-#    This is a doc.
-#
-#    The trajectory is read, frame by frame, and the atoms in `atomgroup` are
-#    histogrammed on a 3D grid with spacing `delta`.
-#
-#    Parameters
-#    ----------
-#    atomgroup : AtomGroup or UpdatingAtomGroup
-#            Group of atoms (such as all the water oxygen atoms) being analyzed.
-#            This can be an :class:`~MDAnalysis.core.groups.UpdatingAtomGroup` for
-#            selections that change every time step.
-#    atomgroup2 : AtomGroup
-#            fancy second atomgroup
-#    delta : float (optional)
-#            Bin size for the density grid in ångström (same in x,y,z).
-#    float_arg : list or str or tuple
-#        Does something.
-#    bool_arg : bool
-#        a bool argument
-#    """
-#
-#    def __init__(
-#        self,
-#        atomgroup,
-#        atomgroup2,
-#        par1,
-#        par2,
-#        par3,
-#        par4,
-#        *args,
-#        float_arg=0.5,
-#        none_arg=None,
-#        bool_arg=True,
-#        tuple_arg=(4, 5),
-#        str_arg="string",
-#        **kwargs,
-#    ):
-#        super().__init__(atomgroup.universe.trajectory)
-#        self._par1 = par1
-#        self._par2 = par2
-#        self._par3 = par3
-#        self._par4 = par4
-#
-#    def _single_frame(self):
-#        pass
-#
-#
-## testing another analysis
-#@add_to_CLIs
-#class NewAnalysis2(NewAnalysis):
-#    """
-#    This is another doc.
-#
-#    The trajectory is read, frame by frame, and the atoms in `atomgroup` are
-#    histogrammed on a 3D grid with spacing `delta`.
-#
-#    Parameters
-#    ----------
-#    atomgroup : AtomGroup or UpdatingAtomGroup
-#            Group of atoms (such as all the water oxygen atoms) being analyzed.
-#            This can be an :class:`~MDAnalysis.core.groups.UpdatingAtomGroup` for
-#            selections that change every time step.
-#    atomgroup2 : AtomGroup
-#            fancy second atomgroup
-#    delta : float (optional)
-#            Bin size for the density grid in ångström (same in x,y,z).
-#    float_arg : list or str or tuple
-#        Does something.
-#    """
-#
-#    def _single_frame(self):
-#        pass
+def add_to_CLIs(callable_obj, storage_dict):
+    """Inspect Analysis class or function."""
+    storage_dict[callable_obj.__name__] = {}
+    storage_dict[callable_obj.__name__]["callable"] = callable_obj
 
+    sig = inspect.signature(callable_obj)
+    doc = NumpyDocString(callable_obj.__doc__)
 
-###############################################################################
+    # args for CLIs
+    positional_args = {}
+    optional_args = {}
 
-STR_TYPE_DICT = {
-    "bool": bool,
-    "str": str,
-    "list": list,
-    "tuple": tuple,
-    "int": int,
-    "float": float,
-    "complex": complex,
-    "NoneType": type(None),
-    "AtomGroup": mda.AtomGroup,
-}
+    for sig_name, sig_param in sig.parameters.items():
+
+        if sig_param.kind == inspect.Parameter.VAR_KEYWORD:
+            # this is **kwargs
+            # define behaviour here
+            # i doubt this is of any use,
+            # if exists in analysis classes mostlikely refers to
+            # receiving parameters remaining from other contexts
+            pass
+
+        elif sig_param.kind == inspect.Parameter.VAR_POSITIONAL:
+            # this is for *args
+            # I think the same rationale as for VAR_KEYWORD applies
+            pass
+
+        elif sig_param.default == inspect.Parameter.empty:
+            for doc_param in doc["Parameters"]:
+                if doc_param.name == sig_name:
+                    positional_args[sig_name] = {
+                        "type": doc_param.type.split()[0],
+                        "desc": " ".join(doc_param.desc),
+                    }
+                    break
+            # else reaches if the parameter in the signature is not present in the docstring
+            # it shouldn't, but just in case :-)
+            # unless we explicitly decide not to consider any parameters not referenced in the
+            # documentation.
+            else:
+                # str is the default value of argparse arguments type parameter
+                positional_args[sig_name] = {
+                    "type": "str",
+                    "desc": "No description available.",
+                }
+
+        else:
+            for doc_param in doc["Parameters"]:
+                if doc_param.name == sig_name:
+                    optional_args[sig_name] = {
+                        "type": doc_param.type.split()[0],
+                        "default": sig_param.default,
+                        "desc": " ".join(doc_param.desc),
+                    }
+                    break
+            else:
+                optional_args[sig_name] = {
+                    "type": type(sig_param.default).__name__,  # corrected here
+                    "default": sig_param.default,
+                    "desc": "No description available.",
+                }
+
+    storage_dict[callable_obj.__name__]["positional"] = positional_args
+    storage_dict[callable_obj.__name__]["optional"] = optional_args
+    storage_dict[callable_obj.__name__]["desc"] = doc["Summary"]
+    storage_dict[callable_obj.__name__]["desc_long"] = doc["Extended Summary"]
+
+    # we can add here whatever we need more
+    return callable_obj
 
 
 def add_interface_CLI(cli_parser, interface_name, parameters):
-    """Function for adding subparsers to cli_parser"""
-    #pprint(parameters)
+    """
+    Add subparsers to `cli_parser`.
 
+    Parameters
+    ----------
+    cli_parser : argparse.sub_parser
+        The main parser where the new parser will be added.
+
+    interface_name : str
+        Name of the interface name.
+
+    parameters : dict
+        Parameters needed to fill the argparse requirements for the
+        CLI interface.
+    """
     analysis_class_parser = cli_parser.add_parser(
         interface_name, help="".join(parameters["desc"])
     )
@@ -275,19 +276,20 @@ def add_interface_CLI(cli_parser, interface_name, parameters):
                 name_par, dest=name, type=type_, default=default,
                 help="{} (default: %(default)s)".format(description)
             )
+    return
 
 
 def main(
-    # top and trajs need to be positional parameters in all CLIs
-    # these can be added on the add_interface_CLI level
-    topology,
-    trajectories,
-    # analysis_callable paramter needs to be injected where from the
-    # global dictionary using argparse.set_defaults()
-    # https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser.set_defaults
-    analysis_callable=None,
-    **analysis_kwargs
-):
+        # top and trajs need to be positional parameters in all CLIs
+        # these can be added on the add_interface_CLI level
+        topology,
+        trajectories,
+        # analysis_callable paramter needs to be injected where from the
+        # global dictionary using argparse.set_defaults()
+        # https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser.set_defaults
+        analysis_callable=None,
+        **analysis_kwargs
+        ):
     """
     Main client logic.
     """
@@ -347,30 +349,34 @@ def main(
     save_results_to_some_file(results)
 
 
-ap = argparse.ArgumentParser()
-cli_parser = ap.add_subparsers(title="MDAnalysis Analysis CLI")
-
-
-# adds each Analysis class/function as a CLI under 'cli_parser'
-# to be writen
-for interface_name, parameters in analysis_interfaces.items():
-    add_interface_CLI(cli_parser, interface_name, parameters)
-
-
-def maincli():
+def maincli(ap):
     """Execute main client interface."""
     if len(sys.argv) < 2:
         ap.error("A subcommand is required.")
 
     try:
         args = ap.parse_args()
-        print(args)
         main(**vars(args))
     except Exception as e:
         sys.exit("{}Error: {}{}".format(bcolors.fail, e, bcolors.endc))
 
 
+ap = argparse.ArgumentParser()
+cli_parser = ap.add_subparsers(title="MDAnalysis Analysis CLI")
+
+# populates analysis_interfaces dictionary
+for module in relevant_modules:
+    module = importlib.import_module('MDAnalysis.analysis.' + module)
+    for name, member in inspect.getmembers(module):
+        if inspect.isclass(member) and issubclass(member, AnalysisBase):
+            add_to_CLIs(member, analysis_interfaces)
+
+# adds each Analysis class/function as a CLI under 'cli_parser'
+# to be writen
+for interface_name, parameters in analysis_interfaces.items():
+    add_interface_CLI(cli_parser, interface_name, parameters)
+
 # the entry point for this file needs to be added also to the
 # setup.py file
 if __name__ == "__main__":
-    maincli()
+    maincli(ap)
