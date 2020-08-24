@@ -8,8 +8,10 @@ this functionality.
 import argparse
 import importlib
 import inspect
+import re
 import sys
 import warnings
+from collections import defaultdict
 
 import MDAnalysis as mda
 from MDAnalysis.analysis import __all__
@@ -19,7 +21,7 @@ from numpydoc.docscrape import NumpyDocString
 
 # modules in MDAnalysis.analysis packages that are ignored by MDA-CLI
 # relevant modules used in this CLI factory
-skip_mods = ('base', 'rdf_s')
+skip_mods = ('base', 'rdf_s', 'hydrogenbonds', 'hbonds')
 relevant_modules = (_mod for _mod in __all__ if _mod not in skip_mods)
 
 # global dictionary storing the parameters for all Analysis classes
@@ -58,13 +60,53 @@ def _warning(message,
 warnings.showwarning = _warning
 
 
+def parse_docs(klass):
+    doc1 = klass.__doc__ or ''
+    doc2 = klass.__init__.__doc__ or ''
+    doc = doc1 + doc2
+
+    doc_lines = [s for s in (s.strip() for s in doc.lstrip().split('\n')) if s]
+
+    short = doc_lines[0]
+    try:
+        param_index = doc_lines.index('Parameters')
+    except ValueError:
+        param_index = doc_lines.index('Arguments')
+
+    long_desc = '\n'.join(doc_lines[1:param_index])
+
+    par_i = param_index + 2
+    for i, line in enumerate(doc_lines[par_i:], start=par_i):
+        if '----' in line:  # at least of Note\n----
+            end_param = i - 1
+            break
+    else:
+        end_param = -1
+
+    params = defaultdict(dict)
+    desc_tmp = []
+    type_regex = re.compile(r'^(\w+|\{.*\})')
+    # goes back to front to register descriptions ;-)
+    for line in doc_lines[par_i: end_param][::-1]:
+        if ' : ' in line:
+            par_name, others_ = line.split(' : ')
+            par_type = type_regex.findall(others_)[0]
+            params[par_name]['type'] = par_type
+            params[par_name]['desc'] = ' '.join(desc_tmp[::-1])
+            desc_tmp.clear()
+        else:
+            desc_tmp.append(line)
+
+    return short, long_desc, params
+
+
 def add_to_CLIs(callable_obj, storage_dict):
     """Inspect Analysis class or function."""
     storage_dict[callable_obj.__name__] = {}
     storage_dict[callable_obj.__name__]["callable"] = callable_obj
 
     sig = inspect.signature(callable_obj)
-    doc = NumpyDocString(callable_obj.__doc__)
+    summary, extended, doc = parse_docs(callable_obj)
 
     # args for CLIs
     positional_args = {}
@@ -86,11 +128,11 @@ def add_to_CLIs(callable_obj, storage_dict):
             pass
 
         elif sig_param.default == inspect.Parameter.empty:
-            for doc_param in doc["Parameters"]:
-                if doc_param.name == sig_name:
+            for param_name, doc_param in doc.items():
+                if param_name == sig_name:
                     positional_args[sig_name] = {
-                        "type": doc_param.type.split()[0],
-                        "desc": " ".join(doc_param.desc),
+                        "type": doc_param['type'],
+                        "desc": doc_param['desc'],
                     }
                     break
             # else reaches if the parameter in the signature is not present in the docstring
@@ -105,12 +147,12 @@ def add_to_CLIs(callable_obj, storage_dict):
                 }
 
         else:
-            for doc_param in doc["Parameters"]:
-                if doc_param.name == sig_name:
+            for param_name, doc_param in doc.items():
+                if param_name == sig_name:
                     optional_args[sig_name] = {
-                        "type": doc_param.type.split()[0],
+                        "type": doc_param['type'],
                         "default": sig_param.default,
-                        "desc": " ".join(doc_param.desc),
+                        "desc": doc_param['desc'],
                     }
                     break
             else:
@@ -122,8 +164,8 @@ def add_to_CLIs(callable_obj, storage_dict):
 
     storage_dict[callable_obj.__name__]["positional"] = positional_args
     storage_dict[callable_obj.__name__]["optional"] = optional_args
-    storage_dict[callable_obj.__name__]["desc"] = doc["Summary"]
-    storage_dict[callable_obj.__name__]["desc_long"] = doc["Extended Summary"]
+    storage_dict[callable_obj.__name__]["desc"] = summary
+    storage_dict[callable_obj.__name__]["desc_long"] = extended
 
     # we can add here whatever we need more
     return callable_obj
@@ -146,12 +188,12 @@ def add_interface_CLI(cli_parser, interface_name, parameters):
         CLI interface.
     """
     analysis_class_parser = cli_parser.add_parser(
-        interface_name, help="".join(parameters["desc"])
+        interface_name,
+        help=parameters["desc"],
+        formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 
-    analysis_class_parser.description = " ".join(
-        parameters["desc"] + parameters["desc_long"]
-    )
+    analysis_class_parser.description = parameters["desc"] + parameters["desc_long"]
 
     common_group = analysis_class_parser.add_argument_group(
         title="Common Analysis Parameters"
