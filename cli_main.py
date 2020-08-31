@@ -16,7 +16,6 @@ from collections import defaultdict
 import MDAnalysis as mda
 from MDAnalysis.analysis import __all__
 from MDAnalysis.analysis.base import AnalysisBase
-from numpydoc.docscrape import NumpyDocString
 
 
 # modules in MDAnalysis.analysis packages that are ignored by MDA-CLI
@@ -61,19 +60,18 @@ warnings.showwarning = _warning
 
 
 def parse_docs(klass):
-    doc1 = klass.__doc__ or ''
-    doc2 = klass.__init__.__doc__ or ''
-    doc = doc1 + doc2
+    doc = klass.__doc__ or ''
+    doc += klass.__init__.__doc__ or ''
 
     doc_lines = [s for s in (s.strip() for s in doc.lstrip().split('\n')) if s]
 
-    short = doc_lines[0]
+    summary = doc_lines[0]
     try:
         param_index = doc_lines.index('Parameters')
     except ValueError:
         param_index = doc_lines.index('Arguments')
 
-    long_desc = '\n'.join(doc_lines[1:param_index])
+    summary_extended = '\n'.join(doc_lines[1:param_index])
 
     par_i = param_index + 2
     for i, line in enumerate(doc_lines[par_i:], start=par_i):
@@ -97,7 +95,7 @@ def parse_docs(klass):
         else:
             desc_tmp.append(line)
 
-    return short, long_desc, params
+    return summary, summary_extended, params
 
 
 def add_to_CLIs(callable_obj, storage_dict):
@@ -106,7 +104,7 @@ def add_to_CLIs(callable_obj, storage_dict):
     storage_dict[callable_obj.__name__]["callable"] = callable_obj
 
     sig = inspect.signature(callable_obj)
-    summary, extended, doc = parse_docs(callable_obj)
+    summary, summary_extended, doc = parse_docs(callable_obj)
 
     # args for CLIs
     positional_args = {}
@@ -165,7 +163,7 @@ def add_to_CLIs(callable_obj, storage_dict):
     storage_dict[callable_obj.__name__]["positional"] = positional_args
     storage_dict[callable_obj.__name__]["optional"] = optional_args
     storage_dict[callable_obj.__name__]["desc"] = summary
-    storage_dict[callable_obj.__name__]["desc_long"] = extended
+    storage_dict[callable_obj.__name__]["desc_long"] = summary_extended
 
     # we can add here whatever we need more
     return callable_obj
@@ -190,10 +188,9 @@ def add_interface_CLI(cli_parser, interface_name, parameters):
     analysis_class_parser = cli_parser.add_parser(
         interface_name,
         help=parameters["desc"],
-        formatter_class=argparse.RawDescriptionHelpFormatter,
+        description=parameters["desc"] + "\n\n" + parameters["desc_long"],
+        formatter_class=argparse.RawDescriptionHelpFormatter
     )
-
-    analysis_class_parser.description = parameters["desc"] + parameters["desc_long"]
 
     common_group = analysis_class_parser.add_argument_group(
         title="Common Analysis Parameters"
@@ -347,9 +344,9 @@ def main(
 
     # Convert special types (i.e AtomGroups)
     # Ugly that we have to parse again... but currently I have no better idea :(
-    for doc_param in NumpyDocString(analysis_callable.__doc__)["Parameters"]:
-        if "AtomGroup" in doc_param.type:
-            analysis_kwargs[doc_param.name] = u.select_atoms(analysis_kwargs[doc_param.name])
+    for doc_param in parse_docs(analysis_callable)[2]:
+        if "AtomGroup" in doc_param['type']:
+            analysis_kwargs[doc_param['name']] = u.select_atoms(analysis_kwargs[doc_param['type']])
 
     ac = analysis_callable(**analysis_kwargs)
 
