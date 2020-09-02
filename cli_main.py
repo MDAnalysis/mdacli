@@ -60,83 +60,7 @@ def _warning(message,
 warnings.showwarning = _warning
 
 
-def parse_docs(klass):
-    """
-    Parse classes docstrings to a convenient dictionary.
-
-    This parser is based on NumpyDocString format, yet it is not so
-    strict. Combined docstrings from class main docstring and `__init__`
-    method.
-
-    Parameters
-    ----------
-    klass : callable
-        A klass object from which a DOCSTRING can be extracted.
-
-    Returns
-    -------
-    dict
-    """
-    doc = klass.__doc__ or ''
-    doc += klass.__init__.__doc__ or ''
-
-    doc_lines = [s for s in (s.strip() for s in doc.lstrip().split('\n')) if s]
-
-    # first docstring sentence is the summary
-    summary = doc_lines[0]
-
-    # sometimes signature parameters in docstring are referred as "Arguments"
-    try:
-        param_index = doc_lines.index('Parameters')
-    except ValueError:
-        param_index = doc_lines.index('Arguments')
-
-    # the extended summary is every text that exists between the summary
-    # and the Parameters title line
-    summary_extended = '\n'.join(doc_lines[1:param_index])
-
-    # the line to start collecting parameters is `param_index` + 2
-    # because of the "Parameters" title and the '---------' underscore
-    par_i = param_index + 2
-
-    # search for the line where Parameters section ends
-    # will search until the end of the docstring or until a '----'-like
-    # line is found - corresponding to the start of another section
-    for i, line in enumerate(doc_lines[par_i:], start=par_i):
-        if '----' in line:  # at least of Note\n----
-            # -1 because the exact line is the one of the title not of
-            # the underlines
-            end_param_line = i - 1
-            break
-    else:
-        # if the end of the docstring is reached, takes the last line
-        end_param_line = -1
-
-    # starts collecting parameters in doctrings
-    params = defaultdict(dict)  # the dictionary which will be returned
-
-    # temporary parameter description list
-    desc_tmp = []
-
-    # regex to find parameter types
-    type_regex = re.compile(r'^(\w+|\{.*\})')
-
-    # goes back to front to register descriptions first ;-)
-    # considers only the Parameters section
-    for line in doc_lines[par_i: end_param_line][::-1]:
-        if ' : ' in line:
-            par_name, others_ = line.split(' : ')
-            par_type = type_regex.findall(others_)[0]
-            params[par_name]['type'] = par_type
-            params[par_name]['desc'] = ' '.join(desc_tmp[::-1])
-            desc_tmp.clear()
-        else:
-            desc_tmp.append(line)
-
-    return summary, summary_extended, params
-
-
-def add_to_CLIs(callable_obj, storage_dict):
+def parse_callable_signature(callable_obj, storage_dict):
     """
     Parse a callable object to a convenient dictionary for CLI creation.
 
@@ -235,7 +159,83 @@ def add_to_CLIs(callable_obj, storage_dict):
     return
 
 
-def add_interface_CLI(cli_parser, interface_name, parameters):
+def parse_docs(klass):
+    """
+    Parse classes docstrings to a convenient dictionary.
+
+    This parser is based on NumpyDocString format, yet it is not so
+    strict. Combined docstrings from class main docstring and `__init__`
+    method.
+
+    Parameters
+    ----------
+    klass : callable
+        A klass object from which a DOCSTRING can be extracted.
+
+    Returns
+    -------
+    dict
+    """
+    doc = klass.__doc__ or ''
+    doc += klass.__init__.__doc__ or ''
+
+    doc_lines = [s for s in (s.strip() for s in doc.lstrip().split('\n')) if s]
+
+    # first docstring sentence is the summary
+    summary = doc_lines[0]
+
+    # sometimes signature parameters in docstring are referred as "Arguments"
+    try:
+        param_index = doc_lines.index('Parameters')
+    except ValueError:
+        param_index = doc_lines.index('Arguments')
+
+    # the extended summary is every text that exists between the summary
+    # and the Parameters title line
+    summary_extended = '\n'.join(doc_lines[1:param_index])
+
+    # the line to start collecting parameters is `param_index` + 2
+    # because of the "Parameters" title and the '---------' underscore
+    par_i = param_index + 2
+
+    # search for the line where Parameters section ends
+    # will search until the end of the docstring or until a '----'-like
+    # line is found - corresponding to the start of another section
+    for i, line in enumerate(doc_lines[par_i:], start=par_i):
+        if '----' in line:  # at least of Note\n----
+            # -1 because the exact line is the one of the title not of
+            # the underlines
+            end_param_line = i - 1
+            break
+    else:
+        # if the end of the docstring is reached, takes the last line
+        end_param_line = -1
+
+    # starts collecting parameters in doctrings
+    params = defaultdict(dict)  # the dictionary which will be returned
+
+    # temporary parameter description list
+    desc_tmp = []
+
+    # regex to find parameter types
+    type_regex = re.compile(r'^(\w+|\{.*\})')
+
+    # goes back to front to register descriptions first ;-)
+    # considers only the Parameters section
+    for line in doc_lines[par_i: end_param_line][::-1]:
+        if ' : ' in line:
+            par_name, others_ = line.split(' : ')
+            par_type = type_regex.findall(others_)[0]
+            params[par_name]['type'] = par_type
+            params[par_name]['desc'] = ' '.join(desc_tmp[::-1])
+            desc_tmp.clear()
+        else:
+            desc_tmp.append(line)
+
+    return summary, summary_extended, params
+
+
+def create_CLI(cli_parser, interface_name, parameters):
     """
     Add subparsers to `cli_parser`.
 
@@ -408,14 +408,14 @@ def add_interface_CLI(cli_parser, interface_name, parameters):
 
 def main(
         # top and trajs need to be positional parameters in all CLIs
-        # these can be added on the add_interface_CLI level
+        # these can be added on the create_CLI level
         topology,
         trajectories,
         # analysis_callable paramter needs to be injected where from the
         # global dictionary using argparse.set_defaults()
         # https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser.set_defaults
         analysis_callable=None,
-        **analysis_kwargs
+        **analysis_kwargs,
         ):
     """
     Main client logic.
@@ -489,22 +489,32 @@ def maincli(ap):
         sys.exit("{}Error: {}{}".format(bcolors.fail, e, bcolors.endc))
 
 
-ap = argparse.ArgumentParser()
-cli_parser = ap.add_subparsers(title="MDAnalysis Analysis CLI")
+def setup_clients():
+    """
+    Setup ArgumentParser clients.
 
-# populates analysis_interfaces dictionary
-for module in relevant_modules:
-    module = importlib.import_module('MDAnalysis.analysis.' + module)
-    for name, member in inspect.getmembers(module):
-        if inspect.isclass(member) and issubclass(member, AnalysisBase):
-            add_to_CLIs(member, analysis_interfaces)
+    Returns
+    -------
+    argparse.ArgumentParser instance
+    """
+    ap = argparse.ArgumentParser()
+    cli_parser = ap.add_subparsers(title="MDAnalysis Analysis CLI")
 
-# adds each Analysis class/function as a CLI under 'cli_parser'
-# to be writen
-for interface_name, parameters in analysis_interfaces.items():
-    add_interface_CLI(cli_parser, interface_name, parameters)
+    # populates analysis_interfaces dictionary
+    for module in relevant_modules:
+        module = importlib.import_module('MDAnalysis.analysis.' + module)
+        for name, member in inspect.getmembers(module):
+            if inspect.isclass(member) and issubclass(member, AnalysisBase):
+                parse_callable_signature(member, analysis_interfaces)
+
+    # adds each Analysis class/function as a CLI under 'cli_parser'
+    # to be writen
+    for interface_name, parameters in analysis_interfaces.items():
+        create_CLI(cli_parser, interface_name, parameters)
+
+    return ap
 
 # the entry point for this file needs to be added also to the
 # setup.py file
 if __name__ == "__main__":
-    maincli(ap)
+    maincli(setup_clients())
