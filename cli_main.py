@@ -437,32 +437,40 @@ def main(
         if "AtomGroup" in dictionary['type']:
             analysis_kwargs[param_name] = u.select_atoms(analysis_kwargs[param_name])
 
-    ac = analysis_callable(**analysis_kwargs)
-
     with warnings.catch_warnings():
         warnings.simplefilter('always')
-        if analysis_kwargs["begin"] > u.trajectory.totaltime:
+        begin = analysis_kwargs.pop("begin")
+        if begin > u.trajectory.totaltime:
             raise ValueError("Start ({:.2f} ps) is larer than total time "
                              "({:.2f} ps).".format(analysis_kwargs["begin"],
                                                    u.trajectory.totaltime))
-        elif analysis_kwargs["begin"] > 0:
+        elif begin > 0:
             startframe = int(analysis_kwargs["begin"] // u.trajectory.dt)
         else:
             startframe = 0
-        if analysis_kwargs["end"] is not None:
+    
+        end = analysis_kwargs.pop("end")
+        if end is not None:
             stopframe = int(analysis_kwargs["end"] // u.trajectory.dt)
             analysis_kwargs["end"] += 1  # catch also last frame in loops
         else:
             stopframe = None
-        if analysis_kwargs["dt"] > 0:
+
+        dt = analysis_kwargs.pop("dt")
+        if dt > 0:
             step = int(analysis_kwargs["dt"] // u.trajectory.dt)
         else:
             step = 1
 
+    # Collect paramaters not necessary for initilizing ac object.
+    verbose = analysis_kwargs.pop("verbose")
+    analysis_kwargs.pop("func")
+
+    ac = analysis_callable(**analysis_kwargs)
     results = ac.run(start=startframe,
                      stop=stopframe,
                      step=step,
-                     verbose=analysis_kwargs["verbose"])
+                     verbose=verbose)
 
     # prototype lines to test functionality TO REMOVE
     print(analysis_kwargs)
