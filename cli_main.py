@@ -432,9 +432,10 @@ def main(
 
     # Convert special types (i.e AtomGroups)
     # Ugly that we have to parse again... but currently I have no better idea :(
-    for doc_param in parse_docs(analysis_callable)[2]:
-        if "AtomGroup" in doc_param['type']:
-            analysis_kwargs[doc_param['name']] = u.select_atoms(analysis_kwargs[doc_param['type']])
+    params = parse_docs(analysis_callable)[2]  # Index [2] for paramaters
+    for param_name, dictionary in params.items():
+        if "AtomGroup" in dictionary['type']:
+            analysis_kwargs[param_name] = u.select_atoms(analysis_kwargs[param_name])
 
     ac = analysis_callable(**analysis_kwargs)
 
