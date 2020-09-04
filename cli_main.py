@@ -4,22 +4,24 @@ Main entry point for the MDAnalysis CLI interface.
 This also demonstrates how other third party libraries could incorporate
 this functionality.
 """
-# NOTE: names in this file are orientative
 import argparse
 import importlib
 import inspect
+import re
 import sys
 import warnings
+from collections import defaultdict
 
 import MDAnalysis as mda
 from MDAnalysis.analysis import __all__
 from MDAnalysis.analysis.base import AnalysisBase
-from numpydoc.docscrape import NumpyDocString
 
 
 # modules in MDAnalysis.analysis packages that are ignored by MDA-CLI
 # relevant modules used in this CLI factory
-skip_mods = ('base', 'rdf_s')
+# hydro* are removed here because they have a different folder/file structure
+# and need to be investigated separately
+skip_mods = ('base', 'rdf_s', 'hydrogenbonds', 'hbonds')
 relevant_modules = (_mod for _mod in __all__ if _mod not in skip_mods)
 
 # global dictionary storing the parameters for all Analysis classes
@@ -58,80 +60,203 @@ def _warning(message,
 warnings.showwarning = _warning
 
 
-def add_to_CLIs(callable_obj, storage_dict):
-    """Inspect Analysis class or function."""
+def parse_callable_signature(callable_obj, storage_dict):
+    """
+    Parse a callable object to a convenient dictionary for CLI creation.
+
+    The parameters used in the CLI are a combination of the callable
+    signature and the information in the callable docstring.
+
+    Parameters
+    ----------
+    callable_obj : callable
+        The callable object to inspect. Details of this object required
+        for the creation of a CLI are added to the `storage_dict`.
+
+    storage_dict : dict
+        The dictionary that stores the details of the callable.
+
+    Returns
+    -------
+    None
+        Modifies `storage_dict` in place.
+    """
     storage_dict[callable_obj.__name__] = {}
     storage_dict[callable_obj.__name__]["callable"] = callable_obj
 
     sig = inspect.signature(callable_obj)
-    doc = NumpyDocString(callable_obj.__doc__)
+    summary, summary_extended, doc = parse_docs(callable_obj)
 
     # args for CLIs
     positional_args = {}
     optional_args = {}
 
+    # tuple to ignore args and kwargs, these are note necessary to consider
+    # for the purpose of this implementation - at least to currently
+    ARGS_KWARGS = (
+        inspect.Parameter.VAR_KEYWORD,
+        inspect.Parameter.VAR_POSITIONAL,
+        )
+
+    # brings to local scope
+    EMPTY = inspect.Parameter.empty
+
+    # for each parameter in the callable's signature
     for sig_name, sig_param in sig.parameters.items():
 
-        if sig_param.kind == inspect.Parameter.VAR_KEYWORD:
-            # this is **kwargs
-            # define behaviour here
-            # i doubt this is of any use,
-            # if exists in analysis classes mostlikely refers to
-            # receiving parameters remaining from other contexts
+        if sig_param.kind in ARGS_KWARGS:
             pass
 
-        elif sig_param.kind == inspect.Parameter.VAR_POSITIONAL:
-            # this is for *args
-            # I think the same rationale as for VAR_KEYWORD applies
-            pass
+        # positional parameter
+        elif sig_param.default == EMPTY:
 
-        elif sig_param.default == inspect.Parameter.empty:
-            for doc_param in doc["Parameters"]:
-                if doc_param.name == sig_name:
+            # parameter type and description is extract from docstring
+            for param_name, doc_param in doc.items():
+                if param_name == sig_name:
                     positional_args[sig_name] = {
-                        "type": doc_param.type.split()[0],
-                        "desc": " ".join(doc_param.desc),
-                    }
-                    break
-            # else reaches if the parameter in the signature is not present in the docstring
-            # it shouldn't, but just in case :-)
-            # unless we explicitly decide not to consider any parameters not referenced in the
-            # documentation.
+                        "type": doc_param['type'],
+                        "desc": doc_param['desc'],
+                        }
+                    break  # done, jumps off the loop
+
             else:
+                # else reaches if the parameter in the signature is not present in
+                # the docstring. It shouldn't, but just in case :-)
+                # unless we explicitly decide not to consider any parameters not
+                # referenced in the documentation, this should be kept
+                #
                 # str is the default value of argparse arguments type parameter
                 positional_args[sig_name] = {
                     "type": "str",
                     "desc": "No description available.",
-                }
-
-        else:
-            for doc_param in doc["Parameters"]:
-                if doc_param.name == sig_name:
-                    optional_args[sig_name] = {
-                        "type": doc_param.type.split()[0],
-                        "default": sig_param.default,
-                        "desc": " ".join(doc_param.desc),
                     }
-                    break
+
+        # named parameters
+        else:
+            for param_name, doc_param in doc.items():
+                if param_name == sig_name:
+                    optional_args[sig_name] = {
+                        "type": doc_param['type'],  # type taken form docstring
+                        "default": sig_param.default,  # but default taken from signature
+                        "desc": doc_param['desc'],
+                    }
+                    break  # parameter captured, break the loop
             else:
+                # if the parameter is in signature but NOT in the docstring
+                # uses type.__name__ to match with STR_TYPE_DICT keys
                 optional_args[sig_name] = {
                     "type": type(sig_param.default).__name__,  # corrected here
                     "default": sig_param.default,
                     "desc": "No description available.",
-                }
+                    }
 
+    # places all information captured for the callable in the dictionary
     storage_dict[callable_obj.__name__]["positional"] = positional_args
     storage_dict[callable_obj.__name__]["optional"] = optional_args
-    storage_dict[callable_obj.__name__]["desc"] = doc["Summary"]
-    storage_dict[callable_obj.__name__]["desc_long"] = doc["Extended Summary"]
+    storage_dict[callable_obj.__name__]["desc"] = summary
+    storage_dict[callable_obj.__name__]["desc_long"] = summary_extended
 
-    # we can add here whatever we need more
-    return callable_obj
+    return
 
 
-def add_interface_CLI(cli_parser, interface_name, parameters):
+def parse_docs(klass):
+    """
+    Parse classes docstrings to a convenient dictionary.
+
+    This parser is based on NumpyDocString format, yet it is not so
+    strict. Combined docstrings from class main docstring and `__init__`
+    method.
+
+    Parameters
+    ----------
+    klass : callable
+        A klass object from which a DOCSTRING can be extracted.
+
+    Returns
+    -------
+    tuple (str, str, dict of dict)
+        * One line summary description of the callable
+        * Extended description of the callable
+        * dictionary where keys are parameter names and subdictinary
+            has keys "type" and "desc" for parameter type and description.
+    """
+    doc = klass.__doc__ or ''
+    doc += klass.__init__.__doc__ or ''
+
+    doc_lines = [s for s in (s.strip() for s in doc.lstrip().split('\n')) if s]
+
+    # first docstring sentence is the summary
+    summary = doc_lines[0]
+
+    # sometimes signature parameters in docstring are referred as "Arguments"
+    try:
+        param_index = doc_lines.index('Parameters')
+    except ValueError:
+        param_index = doc_lines.index('Arguments')
+
+    # the extended summary is every text that exists between the summary
+    # and the Parameters title line
+    summary_extended = '\n'.join(doc_lines[1:param_index])
+
+    # the line to start collecting parameters is `param_index` + 2
+    # because of the "Parameters" title and the '---------' underscore
+    par_i = param_index + 2
+
+    # search for the line where Parameters section ends
+    # will search until the end of the docstring or until a '----'-like
+    # line is found - corresponding to the start of another section
+    for i, line in enumerate(doc_lines[par_i:], start=par_i):
+        if '----' in line:  # at least of Note\n----
+            # -1 because the exact line is the one of the title not of
+            # the underlines
+            end_param_line = i - 1
+            break
+    else:
+        # if the end of the docstring is reached, takes the last line
+        end_param_line = -1
+
+    # starts collecting parameters in doctrings
+    params = defaultdict(dict)  # the dictionary which will be returned
+
+    # temporary parameter description list
+    desc_tmp = []
+
+    # regex to find parameter types
+    type_regex = re.compile(r'^(\w+|\{.*\})')
+
+    # goes back to front to register descriptions first ;-)
+    # considers only the Parameters section
+    for line in doc_lines[par_i: end_param_line][::-1]:
+        if ' : ' in line:
+            par_name, others_ = line.split(' : ')
+            par_type = type_regex.findall(others_)[0]
+            params[par_name]['type'] = par_type
+            params[par_name]['desc'] = ' '.join(desc_tmp[::-1])
+            desc_tmp.clear()
+        else:
+            desc_tmp.append(line)
+
+    return summary, summary_extended, params
+
+
+def create_CLI(cli_parser, interface_name, parameters):
     """
     Add subparsers to `cli_parser`.
+
+    Subparsers parameters are divided in three categories:
+
+    1) Common Analysis classes Parameters
+        Common to all generated CLIs, for example:
+            * topology, trajectory, time frame
+
+    2) Mandatory Parameters
+        mandatory parameters are defined in the CLI as named parameters
+        as per design
+
+    3) Optional Parameters
+        Named parameters in the Analysis class
+
+    All CLI's parameters are named parameters.
 
     Parameters
     ----------
@@ -144,24 +269,27 @@ def add_interface_CLI(cli_parser, interface_name, parameters):
     parameters : dict
         Parameters needed to fill the argparse requirements for the
         CLI interface.
-    """
-    analysis_class_parser = cli_parser.add_parser(
-        interface_name, help="".join(parameters["desc"])
-    )
 
-    analysis_class_parser.description = " ".join(
-        parameters["desc"] + parameters["desc_long"]
-    )
+    Returns
+    -------
+    None
+    """
+    # creates the subparser
+    analysis_class_parser = cli_parser.add_parser(
+        interface_name,
+        help=parameters["desc"],
+        description=parameters["desc"] + "\n\n" + parameters["desc_long"],
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        )
 
     common_group = analysis_class_parser.add_argument_group(
-        title="Common Analysis Parameters"
-    )
+        title="Common Analysis Parameters",
+        )
 
     # adds main function as the default func parameter.
     # this is possible because the main function is equal to all Analysis Classes
     common_group.set_defaults(func=main)
 
-    # Adds also the callable
     common_group.set_defaults(analysis_callable=parameters["callable"])
 
     common_group.add_argument(
@@ -255,6 +383,7 @@ def add_interface_CLI(cli_parser, interface_name, parameters):
                 name_par, dest=name, nargs="+", default=default,
                 help="{} (default: %(default)s)".format(description)
             )
+
         elif type_ is bool:
             group.add_argument(
                 name_par,
@@ -263,6 +392,7 @@ def add_interface_CLI(cli_parser, interface_name, parameters):
                 default=default,
                 help=description,
             )
+
         elif type_ is mda.AtomGroup:
             group.add_argument(
                 name_par,
@@ -271,6 +401,7 @@ def add_interface_CLI(cli_parser, interface_name, parameters):
                 default=default,
                 help=description + " Use a MDAnalysis selection string."
             )
+
         else:
             group.add_argument(
                 name_par, dest=name, type=type_, default=default,
@@ -281,14 +412,14 @@ def add_interface_CLI(cli_parser, interface_name, parameters):
 
 def main(
         # top and trajs need to be positional parameters in all CLIs
-        # these can be added on the add_interface_CLI level
+        # these can be added on the create_CLI level
         topology,
         trajectories,
         # analysis_callable paramter needs to be injected where from the
         # global dictionary using argparse.set_defaults()
         # https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser.set_defaults
         analysis_callable=None,
-        **analysis_kwargs
+        **analysis_kwargs,
         ):
     """
     Main client logic.
@@ -305,37 +436,47 @@ def main(
 
     # Convert special types (i.e AtomGroups)
     # Ugly that we have to parse again... but currently I have no better idea :(
-    for doc_param in NumpyDocString(analysis_callable.__doc__)["Parameters"]:
-        if "AtomGroup" in doc_param.type:
-            analysis_kwargs[doc_param.name] = u.select_atoms(analysis_kwargs[doc_param.name])
-
-    ac = analysis_callable(**analysis_kwargs)
+    params = parse_docs(analysis_callable)[2]  # Index [2] for paramaters
+    for param_name, dictionary in params.items():
+        if "AtomGroup" in dictionary['type']:
+            analysis_kwargs[param_name] = u.select_atoms(analysis_kwargs[param_name])
 
     with warnings.catch_warnings():
         warnings.simplefilter('always')
-        if analysis_kwargs["begin"] > u.trajectory.totaltime:
+        begin = analysis_kwargs.pop("begin")
+        if begin > u.trajectory.totaltime:
             raise ValueError("Start ({:.2f} ps) is larer than total time "
                              "({:.2f} ps).".format(analysis_kwargs["begin"],
                                                    u.trajectory.totaltime))
-        elif analysis_kwargs["begin"] > 0:
+        elif begin > 0:
             startframe = int(analysis_kwargs["begin"] // u.trajectory.dt)
         else:
             startframe = 0
-        if analysis_kwargs["end"] is not None:
+    
+        end = analysis_kwargs.pop("end")
+        if end is not None:
             stopframe = int(analysis_kwargs["end"] // u.trajectory.dt)
             analysis_kwargs["end"] += 1  # catch also last frame in loops
         else:
             stopframe = None
-        if analysis_kwargs["dt"] > 0:
+
+        dt = analysis_kwargs.pop("dt")
+        if dt > 0:
             step = int(analysis_kwargs["dt"] // u.trajectory.dt)
         else:
             step = 1
 
+    # Collect paramaters not necessary for initilizing ac object.
+    verbose = analysis_kwargs.pop("verbose")
+    analysis_kwargs.pop("func")
+
+    ac = analysis_callable(**analysis_kwargs)
     results = ac.run(start=startframe,
                      stop=stopframe,
                      step=step,
-                     verbose=analysis_kwargs["verbose"])
+                     verbose=verbose)
 
+    # prototype lines to test functionality TO REMOVE
     print(analysis_kwargs)
     sys.exit("Analysis complete. exiting...")
     # extract results?
@@ -361,22 +502,32 @@ def maincli(ap):
         sys.exit("{}Error: {}{}".format(bcolors.fail, e, bcolors.endc))
 
 
-ap = argparse.ArgumentParser()
-cli_parser = ap.add_subparsers(title="MDAnalysis Analysis CLI")
+def setup_clients():
+    """
+    Setup ArgumentParser clients.
 
-# populates analysis_interfaces dictionary
-for module in relevant_modules:
-    module = importlib.import_module('MDAnalysis.analysis.' + module)
-    for name, member in inspect.getmembers(module):
-        if inspect.isclass(member) and issubclass(member, AnalysisBase):
-            add_to_CLIs(member, analysis_interfaces)
+    Returns
+    -------
+    argparse.ArgumentParser instance
+    """
+    ap = argparse.ArgumentParser()
+    cli_parser = ap.add_subparsers(title="MDAnalysis Analysis CLI")
 
-# adds each Analysis class/function as a CLI under 'cli_parser'
-# to be writen
-for interface_name, parameters in analysis_interfaces.items():
-    add_interface_CLI(cli_parser, interface_name, parameters)
+    # populates analysis_interfaces dictionary
+    for module in relevant_modules:
+        module = importlib.import_module('MDAnalysis.analysis.' + module)
+        for name, member in inspect.getmembers(module):
+            if inspect.isclass(member) and issubclass(member, AnalysisBase):
+                parse_callable_signature(member, analysis_interfaces)
+
+    # adds each Analysis class/function as a CLI under 'cli_parser'
+    # to be writen
+    for interface_name, parameters in analysis_interfaces.items():
+        create_CLI(cli_parser, interface_name, parameters)
+
+    return ap
 
 # the entry point for this file needs to be added also to the
 # setup.py file
 if __name__ == "__main__":
-    maincli(ap)
+    maincli(setup_clients())
