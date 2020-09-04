@@ -174,7 +174,11 @@ def parse_docs(klass):
 
     Returns
     -------
-    dict
+    tuple (str, str, dict of dict)
+        * One line summary description of the callable
+        * Extended description of the callable
+        * dictionary where keys are parameter names and subdictinary
+            has keys "type" and "desc" for parameter type and description.
     """
     doc = klass.__doc__ or ''
     doc += klass.__init__.__doc__ or ''
