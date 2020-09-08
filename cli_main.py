@@ -21,7 +21,7 @@ from MDAnalysis.analysis.base import AnalysisBase
 # relevant modules used in this CLI factory
 # hydro* are removed here because they have a different folder/file structure
 # and need to be investigated separately
-skip_mods = ('base', 'rdf_s', 'hydrogenbonds', 'hbonds')
+skip_mods = ('rdf_s', 'hydrogenbonds', 'hbonds')
 relevant_modules = (_mod for _mod in __all__ if _mod not in skip_mods)
 
 # global dictionary storing the parameters for all Analysis classes
@@ -515,9 +515,12 @@ def setup_clients():
 
     # populates analysis_interfaces dictionary
     for module in relevant_modules:
-        module = importlib.import_module('MDAnalysis.analysis.' + module)
+        with warnings.catch_warnings():
+            warnings.simplefilter('ignore')
+            module = importlib.import_module('MDAnalysis.analysis.' + module)
         for name, member in inspect.getmembers(module):
-            if inspect.isclass(member) and issubclass(member, AnalysisBase):
+            if inspect.isclass(member) and issubclass(member, AnalysisBase) \
+               and member is not AnalysisBase:
                 parse_callable_signature(member, analysis_interfaces)
 
     # adds each Analysis class/function as a CLI under 'cli_parser'
