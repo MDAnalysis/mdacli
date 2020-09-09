@@ -1,9 +1,18 @@
+#!/usr/bin/env python3
+# -*- Mode: python; tab-width: 4; indent-tabs-mode:nil; coding:utf-8 -*-
+#
+# Copyright (c) 2020 Authors and contributors
+#
+# Released under the GNU Public Licence, v2 or any higher version
+# SPDX-License-Identifier: GPL-2.0-or-later
+
 """
 Main entry point for the MDAnalysis CLI interface.
 
 This also demonstrates how other third party libraries could incorporate
 this functionality.
 """
+
 import argparse
 import importlib
 import inspect
@@ -360,7 +369,6 @@ def create_CLI(cli_parser, interface_name, parameters):
              len(opt_) * [optional_parameters_group]
 
     action_dict = {True: "store_false", False: "store_true"}
-    #print(parameters_to_parse)
     for group, (name, args_dict) in zip(groups, parameters_to_parse):
 
         # prepares parameters before add_argument
@@ -452,7 +460,7 @@ def main(
             startframe = int(analysis_kwargs["begin"] // u.trajectory.dt)
         else:
             startframe = 0
-    
+
         end = analysis_kwargs.pop("end")
         if end is not None:
             stopframe = int(analysis_kwargs["end"] // u.trajectory.dt)
@@ -529,6 +537,7 @@ def setup_clients():
         create_CLI(cli_parser, interface_name, parameters)
 
     return ap
+
 
 # the entry point for this file needs to be added also to the
 # setup.py file
