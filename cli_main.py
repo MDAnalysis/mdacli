@@ -447,7 +447,13 @@ def main(
     params = parse_docs(analysis_callable)[2]  # Index [2] for paramaters
     for param_name, dictionary in params.items():
         if "AtomGroup" in dictionary['type']:
-            analysis_kwargs[param_name] = u.select_atoms(analysis_kwargs[param_name])
+            sel = u.select_atoms(analysis_kwargs[param_name])
+            if len(sel) > 0:
+                analysis_kwargs[param_name] = sel
+            else:
+                raise ValueError("AtomGroup `-{}` with selection `{}` does not "
+                                 "contain any atoms".format(param_name,
+                                                            analysis_kwargs[param_name]))
 
     with warnings.catch_warnings():
         warnings.simplefilter('always')
