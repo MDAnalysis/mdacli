@@ -93,19 +93,18 @@ def convert_str_time(x, dt):
     """
 
     # regex to split value and units while handling scientific input
-    type_regex = re.compile(r"(?!e)[a-z]")
+    type_regex = re.compile(r"(?!e)\d+|\D+")
     res = type_regex.findall(x)
 
-    if len(res) > 0:  # input has units
-        val, unit = x.split(res[0])
-        unit = res[0] + unit
-        val = mda.units.convert(float(val), unit, "ps")
-        frame = int(val//dt)
-    else:
-        try:
+    try:
+        if len(res) == 2:
+            val, unit = res
+            val = mda.units.convert(float(val), unit, "ps")
+            frame = int(val // dt)
+        else:
             frame = int(x)
-        except ValueError:
-            raise ValueError("Only integers are valid for frame selection")
+    except (TypeError, ValueError):
+        raise ValueError("Only integers or time step combinations (´12ps´) are valid for frame selection")
 
     return frame
 
@@ -501,13 +500,13 @@ def main(
     with warnings.catch_warnings():
         warnings.simplefilter('always')
         startframe = convert_str_time(analysis_kwargs.pop("begin"), u.trajectory.dt)
-        if startframe > u.trajectory.n_frames:
-            raise ValueError("Start frame {} is larger than total number of frames "
-                             "{}.".format(startframe,
-                                          u.trajectory.n_frames))
-
         stopframe = convert_str_time(analysis_kwargs.pop("end"), u.trajectory.dt)
         step = convert_str_time(analysis_kwargs.pop("dt"), u.trajectory.dt)
+
+        # raises error if frame selection range is an empty selection
+        if not list(range(u.trajectory.n_frames)[slice(startframe, stopframe, step)]):
+            raise ValueError("Trajectory frame range {}:{}:{} is not valid for {} frames."
+                             "".format(startframe, stopframe, step, u.trajectory.n_frames))
 
     # Collect paramaters not necessary for initilizing ac object.
     verbose = analysis_kwargs.pop("verbose")
