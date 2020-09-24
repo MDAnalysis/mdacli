@@ -69,6 +69,47 @@ def _warning(message,
 warnings.showwarning = _warning
 
 
+def convert_str_time(x, dt):
+    """
+    Converts a string x into a frame number based on given `dt`.
+    If `x` does not contain any units its assumed to be a frame number already.
+
+    Parameters
+    ----------
+    x : str
+        the input string
+    dt : float
+        the time step in ps
+
+    Returns
+    -------
+    int
+        frame number
+
+    Raises
+    ------
+    ValueError
+        The input does not contain any units but is not an integer.
+    """
+
+    # regex to split value and units while handling scientific input
+    type_regex = re.compile(r'((-?\d{1,}e?E?-?\d*)|[a-z]*$)')
+    val_, unit_, *_ = type_regex.findall(x)
+
+    try:
+        val, unit = float(val_[0]), unit_[0]
+        if unit != "":
+            val = mda.units.convert(val, unit, "ps")
+            frame = int(val // dt)
+        else:
+            frame = int(val)
+    except (TypeError, ValueError):
+        raise ValueError("Only integers or time step combinations (´12ps´) "
+                         "are valid for frame selection")
+
+    return frame
+
+
 def parse_callable_signature(callable_obj, storage_dict):
     """
     Parse a callable object to a convenient dictionary for CLI creation.
@@ -325,23 +366,25 @@ def create_CLI(cli_parser, interface_name, parameters):
     common_group.add_argument(
         "-b",
         dest="begin",
-        type=float,
-        default=0,
-        help="start time (ps) for evaluation. (default: %(default)s)"
+        type=str,
+        default="0",
+        help="frame or start time for evaluation. (default: %(default)s)"
     )
 
     common_group.add_argument(
-        "-e", dest="end", type=float, default=None,
-        help="end time (ps) for evaluation. (default: %(default)s)"
+        "-e",
+        dest="end",
+        type=str,
+        default="-1",
+        help="frame or end time for evaluation. (default: %(default)s)"
     )
 
     common_group.add_argument(
         "-dt",
         dest="dt",
-        type=float,
-        default=0,
-        help="time step (ps) to read analysis frame. "
-             "If `0` take all frames (default: %(default)s)"
+        type=str,
+        default="1",
+        help="step or time step for evaluation. (default: %(default)s)"
     )
 
     common_group.add_argument(
@@ -457,28 +500,14 @@ def main(
 
     with warnings.catch_warnings():
         warnings.simplefilter('always')
-        begin = analysis_kwargs.pop("begin")
-        if begin > u.trajectory.totaltime:
-            raise ValueError("Start ({:.2f} ps) is larer than total time "
-                             "({:.2f} ps).".format(analysis_kwargs["begin"],
-                                                   u.trajectory.totaltime))
-        elif begin > 0:
-            startframe = int(analysis_kwargs["begin"] // u.trajectory.dt)
-        else:
-            startframe = 0
+        startframe = convert_str_time(analysis_kwargs.pop("begin"), u.trajectory.dt)
+        stopframe = convert_str_time(analysis_kwargs.pop("end"), u.trajectory.dt)
+        step = convert_str_time(analysis_kwargs.pop("dt"), u.trajectory.dt)
 
-        end = analysis_kwargs.pop("end")
-        if end is not None:
-            stopframe = int(analysis_kwargs["end"] // u.trajectory.dt)
-            analysis_kwargs["end"] += 1  # catch also last frame in loops
-        else:
-            stopframe = None
-
-        dt = analysis_kwargs.pop("dt")
-        if dt > 0:
-            step = int(analysis_kwargs["dt"] // u.trajectory.dt)
-        else:
-            step = 1
+        # raises error if frame selection range is an empty selection
+        if not list(range(u.trajectory.n_frames)[slice(startframe, stopframe, step)]):
+            raise ValueError("Trajectory frame range {}:{}:{} is not valid for {} frames."
+                             "".format(startframe, stopframe, step, u.trajectory.n_frames))
 
     # Collect paramaters not necessary for initilizing ac object.
     verbose = analysis_kwargs.pop("verbose")
