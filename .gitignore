@@ -1,0 +1,13 @@
+*.so
+/*.egg-info
+*.pyc
+__pycache__
+/build
+/dist
+*.DS_store
+*.npz
+*.dat
+*.npy
+*.txt
+*.xvg
+.duecredit.p

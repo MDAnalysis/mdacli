@@ -93,18 +93,19 @@ def convert_str_time(x, dt):
     """
 
     # regex to split value and units while handling scientific input
-    type_regex = re.compile(r"(?!e)\d+|\D+")
-    res = type_regex.findall(x)
+    type_regex = re.compile(r'((-?\d{1,}e?E?-?\d*)|[a-z]*$)')
+    val_, unit_, *_ = type_regex.findall(x)
 
     try:
-        if len(res) == 2:
-            val, unit = res
-            val = mda.units.convert(float(val), unit, "ps")
+        val, unit = float(val_[0]), unit_[0]
+        if unit != "":
+            val = mda.units.convert(val, unit, "ps")
             frame = int(val // dt)
         else:
-            frame = int(x)
+            frame = int(val)
     except (TypeError, ValueError):
-        raise ValueError("Only integers or time step combinations (´12ps´) are valid for frame selection")
+        raise ValueError("Only integers or time step combinations (´12ps´) "
+                         "are valid for frame selection")
 
     return frame
 
