@@ -397,19 +397,19 @@ def create_CLI(cli_parser, interface_name, parameters):
     opt_ = sorted(list(parameters["optional"].items()), key=lambda x: x[0])
 
     parameters_to_parse = pos_ + opt_
-
     mandatory_parameters_group = analysis_class_parser.add_argument_group(
         title="Mandatory Parameters",
         description="Mandatory parameters of this Analysis",
     )
+    groups = len(pos_) * [mandatory_parameters_group]
 
-    optional_parameters_group = analysis_class_parser.add_argument_group(
-        title="Optional Parameters",
-        description="Optional parameters specific of this Analysis",
-    )
-
-    groups = len(pos_) * [mandatory_parameters_group] + \
-             len(opt_) * [optional_parameters_group]
+    # Only create parser if optional arguments exist
+    if len(opt_) > 0:
+        optional_parameters_group = analysis_class_parser.add_argument_group(
+            title="Optional Parameters",
+            description="Optional parameters specific of this Analysis",
+        )
+        groups += len(opt_) * [optional_parameters_group]
 
     action_dict = {True: "store_false", False: "store_true"}
     for group, (name, args_dict) in zip(groups, parameters_to_parse):
