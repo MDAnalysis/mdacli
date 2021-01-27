@@ -27,7 +27,7 @@ setup(
     description='A command line client for MDAnalysis Analysis classes.',
     long_description=long_description,
     long_description_content_type='text/x-rst',
-    license='MIT License',
+    license='GPLv2',
     author='',
     author_email='',
     maintainer='',

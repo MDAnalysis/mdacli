@@ -9,12 +9,13 @@ import sys
 import sphinx_py3doc_enhanced_theme
 
 
-mock_modules = [
-    'matplotlib',
-    ]
-
-for modulename in mock_modules:
-    sys.modules[modulename] = mock.Mock()
+# activate if there are dependencies
+#mock_modules = [
+#    'matplotlib',
+#    ]
+#
+#for modulename in mock_modules:
+#    sys.modules[modulename] = mock.Mock()
 
 extensions = [
     'sphinx.ext.autodoc',
@@ -44,17 +45,17 @@ if os.getenv('SPELLCHECK'):
 
 source_suffix = '.rst'
 master_doc = 'index'
-project = 'Python-Project-Skeleton'
-year = '2020'
-author = 'Joao MC Teixeira'
+project = 'mdacli'
+year = '2021'
+author = 'Philip Lecko and Joao MC Teixeira'
 copyright = '{0}, {1}'.format(year, author)
-version = release = '0.7.0'
+version = release = '0.0.0'
 
 pygments_style = 'trac'
 templates_path = ['.']
 extlinks = {
-    'issue': ('https://github.com/joaomcteixeira/python-project-skeleton/issues/%s', '#'),  # noqa: E501
-    'pr': ('https://github.com/joaomcteixeira/python-project-skeleton/pull/%s', 'PR #'),  # noqa: E501
+    'issue': ('https://github.com/PicoCentauri/mda_cli/cissues/%s', '#'),  # noqa: E501
+    'pr': ('https://github.comPicoCentauri/mda_cli/pull/%s', 'PR #'),  # noqa: E501
     }
 
 # codecov io closes connection if host is accessed too repetitively.
@@ -62,13 +63,13 @@ extlinks = {
 # in the .travis.yml file
 # see https://github.com/codecov/codecov-python/issues/158
 linkcheck_ignore = [
-    r'https://codecov.io/gh/joaomcteixeira/python-project-skeleton/*',
+    r'https://codecov.io/gh/PicroCentauri/mda_cli/*',
     ]
 
 html_theme = "sphinx_py3doc_enhanced_theme"
 html_theme_path = [sphinx_py3doc_enhanced_theme.get_html_theme_path()]
 html_theme_options = {
-    'githuburl': 'https://github.com/joaomcteixeira/python-project-skeleton',
+    'githuburl': 'https://github.com/PicoCentauri/mda_cli',
     }
 
 html_use_smartypants = True

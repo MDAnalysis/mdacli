@@ -6,10 +6,10 @@ How to contribute to this project.
 Fork this repository
 --------------------
 
-`Fork this repository before contributing`_. It is a better practice, possibly even enforced, that only Pull Request from forks are accepted - consider a case where there are several main maintainers. In my opinion enforcing forks creates a cleaner representation of the `contributions to the project`_.
+`Fork this repository before contributing`_.
 
 Clone your fork
-~~~~~~~~~~~~~~~
+---------------
 
 Next, clone your fork to your local machine, keep it `up to date with the upstream`_, and update the online fork with those updates.
 
@@ -17,13 +17,27 @@ Next, clone your fork to your local machine, keep it `up to date with the upstre
 
     git clone https://github.com/YOUR-USERNAME/mda_cli.git
     cd mda_cli
+
+Keep your fork up to date
+-------------------------
+
+It is important to keep your fork up-to-date with the main repository. Inside the main project folder, every time you wish to update your fork do the following::
+
+    git checkout master
+
+    # add the upstream only the very first time
     git remote add upstream git://github.com/PicoCentauri/mda_cli.git
+
     git fetch upstream
     git merge upstream/master
     git pull origin master
 
+While you are developing on a branch, you can keep it up to date with the upstream master by repeating the above commands and replacing ``master`` by the name of your development branch.
+
 Install for developers
 ----------------------
+
+If you are contributing to ``madcli``, most likely you are already a contributor of ``MDAnalysis``. Nonetheless, here are some tips.
 
 Create a dedicated Python environment where to develop the project.
 
@@ -31,26 +45,28 @@ If you are using :code:`pip` follow the official instructions on `Installing pac
 
 ::
 
-    python3 -m venv pyprojskel
-    source pyprojskel/bin/activate
+    python3 -m venv mdaclidev
+    source mdaclidev/bin/activate
 
 If you are using `Anaconda`_ go for:
 
 ::
 
-    conda create --name pyprojskel python=3.7
-    conda activate pyprojskel
+    conda create --name mdaclidev python=3.7
+    conda activate mdaclidec
 
-Where :code:`pyprojskel` is the name you wish to give to the environment dedicated to this project.
+Where :code:`mdaclidev` is the name you wish to give to the environment dedicated to this project.
 
-Either under *pip* or *conda*, install the package in :code:`develop` mode, and also :ref:`tox<Uniformed Tests with tox>`. **Note**, here I assume our project has **no** dependencies.
+Install ``MDAnalysis`` in your ``dev`` environment.
 
-::
+Either under *pip* or *conda*, install the ``mdacli`` in :code:`develop` mode, and also :ref:`tox<Uniformed Tests with tox>`.
+
+From inside the repository main folder::
 
     python setup.py develop
     pip install tox
 
-This configuration, together with the use of the ``src`` folder layer, guarantee that you will always run the code after installation. Also, thanks to the ``develop`` flag, any changes in the code will be automatically reflected in the installed version.
+Thanks to the ``develop`` flag, any changes in the code will be automatically reflected in the installed version.
 
 Make a new branch
 -----------------
@@ -72,10 +88,10 @@ Develop the feature and keep regular pushes to your fork with comprehensible com
     git commit (add a nice commit message)
     git push origin new_branch
 
-While you are developing, you can execute ``tox`` as needed to run your unittests or inspect lint, etc. See the last section of this page.
+While you are developing, you can execute ``tox`` as needed to run unittests or inspect lint, etc. See the last section of this page.
 
 Update CHANGELOG
-~~~~~~~~~~~~~~~~
+----------------
 
 Update the changelog file under :code:`docs/CHANGELOG.rst` with an explanatory bullet list of your contribution. Add that list right after the main title and before the last version subtitle::
 
@@ -91,28 +107,26 @@ Update the changelog file under :code:`docs/CHANGELOG.rst` with an explanatory b
 Also add your name to the authors list at :code:`docs/AUTHORS.rst`.
 
 Pull Request
-~~~~~~~~~~~~
+------------
 
 Once you are finished, you can Pull Request you additions to the main repository, and engage with the community. Please read the ``PULLREQUEST.rst`` guidelines first, you will see them when you open a PR.
 
 **Before submitting a Pull Request, verify your development branch passes all tests as** :ref:`described bellow<Uniformed Tests with tox>` **. If you are developing new code you should also implement new test cases.**
 
+Also, before PR, update your development branch to the upstream master branch.
 
 Uniformed Tests with tox
 ------------------------
 
-Thanks to `Tox`_ we can have a unified testing platform where all developers are forced to follow the same rules and, above all, all tests occur in a controlled Python environment.
-
-With *Tox*, the testing setup can be defined in a configuration file, the `tox.ini`_, which contains all the operations that are performed during the test phase. Therefore, to run the unified test suite, developers just need to execute ``tox``, provided `tox is installed`_ in the Python environment in use.
+Thanks to `Tox`_ we can have a unified testing platform where all developers are forced to follow the same rules and, above all, all tests occur in a controlled Python environment. Install ``tox`` as follows:
 
 ::
 
-    pip install tox
+    pip install tox tox-conda
     # or
-    conda install tox -c conda-forge
+    conda install tox tox-conda -c conda-forge
 
-
-One of the greatest advantages of using Tox together with the :ref:`src layout<The src layout>` is that unittest actually perform on the installed source (our package) inside an isolated deployment environment. In order words, tests are performed in an environment simulating a post-installation state instead of a pre-deploy/development environment. Under this setup, there is no need, in general cases, to distribute test scripts along with the actual source, in my honest opinion - see `MANIFEST.in`_.
+You need to install ``tox-conda`` because that facilitates a lot the installation of MDAnalysis during testing.
 
 Before creating a Pull Request from your branch, certify that all the tests pass correctly by running:
 
@@ -120,29 +134,23 @@ Before creating a Pull Request from your branch, certify that all the tests pass
 
     tox
 
-These are exactly the same tests that will be performed online in the Github Actions.
+These are exactly the same tests that will be performed online in the Github Actions. Possibly, some tests referring to specific Python versions may fail because the interpreter is not installed. Ignored these tests.
 
 Also, you can run individual environments if you wish to test only specific functionalities, for example:
 
 ::
 
     tox -e lint  # code style
-    tox -e build  # file compatibility for PR and packaging
+    tox -e build  # packaging
+    tox -e prreq  # specific requests for PRs
     tox -e docs  # only builds the documentation
     tox -e py37
 
 
-.. _tox.ini: https://github.com/PicoCentauri/mda_cli/blob/master/tox.ini
 .. _Tox: https://tox.readthedocs.io/en/latest/
-.. _tox is installed: https://tox.readthedocs.io/en/latest/install.html
 .. _MANIFEST.in: https://github.com/PicoCentauri/mda_cli/blob/master/MANIFEST.in
 .. _Fork this repository before contributing: https://github.com/PicoCentauri/mda_cli/network/members
-.. _up to date with the upstream: https://gist.github.com/CristinaSolana/1885435
-.. _contributions to the project: https://github.com/PicoCentauri/mda_cli/network
-.. _Gitflow Workflow: https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow
 .. _Pull Request: https://github.com/PicoCentauri/mda_cli/pulls
 .. _PULLREQUEST.rst: https://github.com/PicoCentauri/mda_cli/blob/master/docs/PULLREQUEST.rst
-.. _1: https://git-scm.com/docs/git-merge#Documentation/git-merge.txt---no-ff
-.. _2: https://stackoverflow.com/questions/9069061/what-is-the-difference-between-git-merge-and-git-merge-no-ff
 .. _Installing packages using pip and virtual environments: https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment
 .. _Anaconda: https://www.anaconda.com/
