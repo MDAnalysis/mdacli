@@ -497,6 +497,8 @@ def main(
                 raise ValueError("AtomGroup `-{}` with selection `{}` does not "
                                  "contain any atoms".format(param_name,
                                                             analysis_kwargs[param_name]))
+        elif "Universe" in dictionary['type']:
+            analysis_kwargs[param_name] = u
 
     with warnings.catch_warnings():
         warnings.simplefilter('always')
