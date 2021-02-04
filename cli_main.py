@@ -30,7 +30,7 @@ from MDAnalysis.analysis.base import AnalysisBase
 # relevant modules used in this CLI factory
 # hydro* are removed here because they have a different folder/file structure
 # and need to be investigated separately
-skip_mods = ('rdf_s', 'hydrogenbonds', 'hbonds')
+skip_mods = ('hydrogenbonds', 'hbonds')
 relevant_modules = (_mod for _mod in __all__ if _mod not in skip_mods)
 
 # global dictionary storing the parameters for all Analysis classes
