@@ -11,7 +11,7 @@ __pycache__
 *.txt
 *.xvg
 .duecredit.p
-.tox
+.tox/
 .swp
 
 # Unit test / coverage reports

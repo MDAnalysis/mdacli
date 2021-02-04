@@ -7,7 +7,6 @@ include LICENSE
 exclude .bumpversion.cfg
 exclude .codacy.yaml
 exclude .coveragerc
-exclude .cookiecutterrc
 exclude .readthedocs.yml
 exclude .codeclimate.yml
 exclude tox.ini
