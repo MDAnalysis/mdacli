@@ -21,7 +21,7 @@ Next, clone your fork to your local machine, keep it `up to date with the upstre
 Keep your fork up to date
 -------------------------
 
-It is important to keep your fork up-to-date with the main repository. Inside the main project folder, every time you wish to update your fork do the following::
+It is important to keep your fork up-to-date with the main repository. Inside the forked project folder, every time you wish to update your fork with the main (upstream) repository do the following::
 
     git checkout master
 
@@ -142,8 +142,8 @@ Also, you can run individual environments if you wish to test only specific func
 
     tox -e lint  # code style
     tox -e build  # packaging
-    tox -e prreq  # specific requests for PRs
     tox -e docs  # only builds the documentation
+    tox -e prreq  # specific requests for PRs
     tox -e py37
 
 
