@@ -10,6 +10,7 @@ __pycache__
 *.npy
 *.txt
 *.xvg
+*.egg-info
 .duecredit.p
 .tox/
 .swp
