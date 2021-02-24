@@ -336,9 +336,9 @@ def create_CLI(cli_parser, interface_name, parameters):
         title="Common Analysis Parameters",
         )
 
-    # adds main function as the default func parameter.
-    # this is possible because the main function is equal to all Analysis Classes
-    common_group.set_defaults(func=main)
+    # adds analyze_data function as the default func parameter.
+    # this is possible because the analyze_data function is equal to all Analysis Classes
+    common_group.set_defaults(func=analyze_data)
 
     common_group.set_defaults(analysis_callable=parameters["callable"])
 
@@ -461,7 +461,7 @@ def create_CLI(cli_parser, interface_name, parameters):
     return
 
 
-def main(
+def analyze_data(
         # top and trajs need to be positional parameters in all CLIs
         # these can be added on the create_CLI level
         topology,
@@ -542,7 +542,7 @@ def maincli(ap):
 
     try:
         args = ap.parse_args()
-        main(**vars(args))
+        analyze_data(**vars(args))
     except Exception as e:
         sys.exit("{}Error: {}{}".format(bcolors.fail, e, bcolors.endc))
 
@@ -576,7 +576,12 @@ def setup_clients():
     return ap
 
 
+def main():
+    maincli(setup_clients())
+
+
 # the entry point for this file needs to be added also to the
 # setup.py file
 if __name__ == "__main__":
-    maincli(setup_clients())
+    main()
+    #maincli(setup_clients())
