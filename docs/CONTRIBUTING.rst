@@ -11,7 +11,7 @@ Fork this repository
 Clone your fork
 ---------------
 
-Next, clone your fork to your local machine, keep it `up to date with the upstream`_, and update the online fork with those updates.
+Next, clone your fork to your local machine, keep it up to date with the upstream (see later), and update the online fork with those updates.
 
 ::
 
