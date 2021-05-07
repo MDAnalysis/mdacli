@@ -12,7 +12,6 @@ Main entry point for the MDAnalysis CLI interface.
 This also demonstrates how other third party libraries could incorporate
 this functionality.
 """
-
 import argparse
 import importlib
 import inspect
@@ -47,11 +46,13 @@ STR_TYPE_DICT = {
     "complex": complex,
     "NoneType": type(None),
     "AtomGroup": mda.AtomGroup,
-}
+    }
 
 
 # Coloring for warnings and errors
 class bcolors:
+    """Colors for warnings."""
+
     warning = '\033[93m'
     fail = '\033[91m'
     endc = '\033[0m'
@@ -71,8 +72,10 @@ warnings.showwarning = _warning
 
 def convert_str_time(x, dt):
     """
-    Converts a string x into a frame number based on given `dt`.
-    If `x` does not contain any units its assumed to be a frame number already.
+    Convert a string `x` into a frame number based on given `dt`.
+
+    If `x` does not contain any units its assumed to be a frame number
+    already.
 
     Parameters
     ----------
@@ -91,7 +94,6 @@ def convert_str_time(x, dt):
     ValueError
         The input does not contain any units but is not an integer.
     """
-
     # regex to split value and units while handling scientific input
     type_regex = re.compile(r'((-?\d{1,}e?E?-?\d*)|[a-z]*$)')
     val_, unit_, *_ = type_regex.findall(x)
@@ -104,8 +106,10 @@ def convert_str_time(x, dt):
         else:
             frame = int(val)
     except (TypeError, ValueError):
-        raise ValueError("Only integers or time step combinations (´12ps´) "
-                         "are valid for frame selection")
+        raise ValueError(
+            "Only integers or time step combinations (´12ps´) "
+            "are valid for frame selection"
+            )
 
     return frame
 
@@ -170,8 +174,8 @@ def parse_callable_signature(callable_obj, storage_dict):
                     break  # done, jumps off the loop
 
             else:
-                # else reaches if the parameter in the signature is not present in
-                # the docstring. It shouldn't, but just in case :-)
+                # else reaches if the parameter in the signature is not present
+                # in the docstring. It shouldn't, but just in case :-)
                 # unless we explicitly decide not to consider any parameters not
                 # referenced in the documentation, this should be kept
                 #
@@ -186,10 +190,12 @@ def parse_callable_signature(callable_obj, storage_dict):
             for param_name, doc_param in doc.items():
                 if param_name == sig_name:
                     optional_args[sig_name] = {
-                        "type": doc_param['type'],  # type taken form docstring
-                        "default": sig_param.default,  # but default taken from signature
+                        # type taken form docstring
+                        "type": doc_param['type'],
+                        # but default taken from signature
+                        "default": sig_param.default,
                         "desc": doc_param['desc'],
-                    }
+                        }
                     break  # parameter captured, break the loop
             else:
                 # if the parameter is in signature but NOT in the docstring
@@ -336,9 +342,10 @@ def create_CLI(cli_parser, interface_name, parameters):
         title="Common Analysis Parameters",
         )
 
-    # adds main function as the default func parameter.
-    # this is possible because the main function is equal to all Analysis Classes
-    common_group.set_defaults(func=main)
+    # adds analyze_data function as the default func parameter.
+    # this is possible because the analyze_data function is equal to all
+    # Analysis Classes
+    common_group.set_defaults(func=analyze_data)
 
     common_group.set_defaults(analysis_callable=parameters["callable"])
 
@@ -350,7 +357,7 @@ def create_CLI(cli_parser, interface_name, parameters):
         help="The topolgy file. "
         "The FORMATs {} are implemented in MDAnalysis."
         "".format(", ".join(mda._PARSERS.keys())),
-    )
+        )
 
     common_group.add_argument(
         "-f",
@@ -361,7 +368,7 @@ def create_CLI(cli_parser, interface_name, parameters):
         help="A single or multiple trajectory files. "
         "The FORMATs {} are implemented in MDAnalysis."
         "".format(", ".join(mda._READERS.keys())),
-    )
+        )
 
     common_group.add_argument(
         "-b",
@@ -369,7 +376,7 @@ def create_CLI(cli_parser, interface_name, parameters):
         type=str,
         default="0",
         help="frame or start time for evaluation. (default: %(default)s)"
-    )
+        )
 
     common_group.add_argument(
         "-e",
@@ -377,7 +384,7 @@ def create_CLI(cli_parser, interface_name, parameters):
         type=str,
         default="-1",
         help="frame or end time for evaluation. (default: %(default)s)"
-    )
+        )
 
     common_group.add_argument(
         "-dt",
@@ -385,13 +392,14 @@ def create_CLI(cli_parser, interface_name, parameters):
         type=str,
         default="1",
         help="step or time step for evaluation. (default: %(default)s)"
-    )
+        )
 
     common_group.add_argument(
         "-v",
         dest="verbose",
         help="Be loud and noisy",
-        action="store_true")
+        action="store_true"
+        )
 
     pos_ = sorted(list(parameters["positional"].items()), key=lambda x: x[0])
     opt_ = sorted(list(parameters["optional"].items()), key=lambda x: x[0])
@@ -400,7 +408,7 @@ def create_CLI(cli_parser, interface_name, parameters):
     mandatory_parameters_group = analysis_class_parser.add_argument_group(
         title="Mandatory Parameters",
         description="Mandatory parameters of this Analysis",
-    )
+        )
     groups = len(pos_) * [mandatory_parameters_group]
 
     # Only create parser if optional arguments exist
@@ -408,7 +416,7 @@ def create_CLI(cli_parser, interface_name, parameters):
         optional_parameters_group = analysis_class_parser.add_argument_group(
             title="Optional Parameters",
             description="Optional parameters specific of this Analysis",
-        )
+            )
         groups += len(opt_) * [optional_parameters_group]
 
     action_dict = {True: "store_false", False: "store_true"}
@@ -433,7 +441,7 @@ def create_CLI(cli_parser, interface_name, parameters):
             group.add_argument(
                 name_par, dest=name, nargs="+", default=default,
                 help="{} (default: %(default)s)".format(description)
-            )
+                )
 
         elif type_ is bool:
             group.add_argument(
@@ -442,7 +450,7 @@ def create_CLI(cli_parser, interface_name, parameters):
                 action=action_dict[default],
                 default=default,
                 help=description,
-            )
+                )
 
         elif type_ is mda.AtomGroup:
             group.add_argument(
@@ -451,17 +459,17 @@ def create_CLI(cli_parser, interface_name, parameters):
                 type=str,
                 default=default,
                 help=description + " Use a MDAnalysis selection string."
-            )
+                )
 
         else:
             group.add_argument(
                 name_par, dest=name, type=type_, default=default,
                 help="{} (default: %(default)s)".format(description)
-            )
+                )
     return
 
 
-def main(
+def analyze_data(
         # top and trajs need to be positional parameters in all CLIs
         # these can be added on the create_CLI level
         topology,
@@ -472,18 +480,16 @@ def main(
         analysis_callable=None,
         **analysis_kwargs,
         ):
-    """
-    Main client logic.
-    """
+    """Perform main client logic."""
     u = mda.Universe(topology, trajectories)
 
-    # so, here we need to do some investigation, questions are:
-    # * do all Analysis classes/functions have the same execution interface?
-    # * we need to discuss with Oliver maybe to ensure that the above point is true
-    # * otherwise we would need to write a dedicated cli main function to each Analysis class
-    # * however, we can accept a certain number of different interfaces and we can
-    # handle the control flow with try/catch statements until the correct interface
-    # is found. try/catch on polymorphism, yeah! :-D
+    # so, here we need to do some investigation, questions are: * do all
+    # Analysis classes/functions have the same execution interface?  * we need
+    # to discuss with Oliver maybe to ensure that the above point is true *
+    # otherwise we would need to write a dedicated cli main function to each
+    # Analysis class * however, we can accept a certain number of different
+    # interfaces and we can handle the control flow with try/catch statements
+    # until the correct interface is found. try/catch on polymorphism, yeah! :-D
 
     # Convert special types (i.e AtomGroups)
     # Ugly that we have to parse again... but currently I have no better idea :(
@@ -494,22 +500,26 @@ def main(
             if len(sel) > 0:
                 analysis_kwargs[param_name] = sel
             else:
-                raise ValueError("AtomGroup `-{}` with selection `{}` does not "
-                                 "contain any atoms".format(param_name,
-                                                            analysis_kwargs[param_name]))
+                raise ValueError(
+                    "AtomGroup `-{}` with selection `{}` does not "
+                    "contain any atoms".format(
+                        param_name,
+                        analysis_kwargs[param_name]
+                        )
+                    )
         elif "Universe" in dictionary['type']:
             analysis_kwargs[param_name] = u
 
     with warnings.catch_warnings():
         warnings.simplefilter('always')
-        startframe = convert_str_time(analysis_kwargs.pop("begin"), u.trajectory.dt)
-        stopframe = convert_str_time(analysis_kwargs.pop("end"), u.trajectory.dt)
+        startframe = convert_str_time(analysis_kwargs.pop("begin"), u.trajectory.dt)  # noqa: E501
+        stopframe = convert_str_time(analysis_kwargs.pop("end"), u.trajectory.dt)  # noqa: E501
         step = convert_str_time(analysis_kwargs.pop("dt"), u.trajectory.dt)
 
         # raises error if frame selection range is an empty selection
-        if not list(range(u.trajectory.n_frames)[slice(startframe, stopframe, step)]):
-            raise ValueError("Trajectory frame range {}:{}:{} is not valid for {} frames."
-                             "".format(startframe, stopframe, step, u.trajectory.n_frames))
+        if not list(range(u.trajectory.n_frames)[slice(startframe, stopframe, step)]):  # noqa: E501
+            raise ValueError("Trajectory frame range {}:{}:{} is not valid for {} frames."  # noqa: E501
+                             "".format(startframe, stopframe, step, u.trajectory.n_frames))  # noqa: E501
 
     # Collect paramaters not necessary for initilizing ac object.
     verbose = analysis_kwargs.pop("verbose")
@@ -532,7 +542,7 @@ def main(
     # we can definitively create a common method on all classes that links
     # to the classes specific method/attribute where the results are stored.
 
-    save_results_to_some_file(results)
+    save_results_to_some_file(results)  # noqa: F821
 
 
 def maincli(ap):
@@ -542,14 +552,14 @@ def maincli(ap):
 
     try:
         args = ap.parse_args()
-        main(**vars(args))
+        analyze_data(**vars(args))
     except Exception as e:
         sys.exit("{}Error: {}{}".format(bcolors.fail, e, bcolors.endc))
 
 
 def setup_clients():
     """
-    Setup ArgumentParser clients.
+    Set up ArgumentParser clients.
 
     Returns
     -------
@@ -563,7 +573,7 @@ def setup_clients():
         with warnings.catch_warnings():
             warnings.simplefilter('ignore')
             module = importlib.import_module('MDAnalysis.analysis.' + module)
-        for name, member in inspect.getmembers(module):
+        for _, member in inspect.getmembers(module):
             if inspect.isclass(member) and issubclass(member, AnalysisBase) \
                and member is not AnalysisBase:
                 parse_callable_signature(member, analysis_interfaces)
@@ -576,7 +586,12 @@ def setup_clients():
     return ap
 
 
+def main():
+    """Execute main CLI entry point."""
+    maincli(setup_clients())
+
+
 # the entry point for this file needs to be added also to the
 # setup.py file
 if __name__ == "__main__":
-    maincli(setup_clients())
+    main()

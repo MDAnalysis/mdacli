@@ -1,11 +1,18 @@
-# MDAnalysis CLI interface
+MDAnalysis CLI interface
+========================
 
 A simple command line interface (CLI) to the analysis classes of [MDAnalysis](https://www.mdanalysis.org) 
 using argparse. This project is in an early developing stage and 
 work in progress.
 
-To test the functionality of the CLI simply run
+Provided you have MDAnalysis installed, install `mdacli` with the following:
 
 ```bash
-python cli_main.py -h
+python setup.py develop
+```
+
+and run ``mdacli``,
+
+```bash
+mdacli -h
 ```
