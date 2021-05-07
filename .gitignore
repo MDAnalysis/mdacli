@@ -8,7 +8,6 @@ __pycache__
 *.npz
 *.dat
 *.npy
-*.txt
 *.xvg
 *.egg-info
 .duecredit.p
