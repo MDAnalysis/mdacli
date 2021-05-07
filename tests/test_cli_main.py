@@ -12,7 +12,7 @@ import sys
 # Workaround since we have no real module
 sys.path.append("..")
 
-from cli_main import convert_str_time
+from mdacli.cli import convert_str_time
 
 
 @pytest.mark.parametrize('x, frame',
