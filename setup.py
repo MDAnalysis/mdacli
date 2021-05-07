@@ -16,6 +16,7 @@ def read(*names, **kwargs):
     with open(path, encoding=kwargs.get('encoding', 'utf8')) as fh:
         return fh.read()
 
+
 long_description = '{}\n{}'.format(
     read('README.rst'),
     read(join('docs', 'CHANGELOG.rst')),
