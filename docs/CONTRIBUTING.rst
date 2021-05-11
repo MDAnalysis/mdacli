@@ -23,16 +23,16 @@ Keep your fork up to date
 
 It is important to keep your fork up-to-date with the main repository. Inside the forked project folder, every time you wish to update your fork with the main (upstream) repository do the following::
 
-    git checkout master
+    git checkout main
 
     # add the upstream only the very first time
     git remote add upstream git://github.com/PicoCentauri/mda_cli.git
 
     git fetch upstream
-    git merge upstream/master
-    git pull origin master
+    git merge upstream/main
+    git pull origin main
 
-While you are developing on a branch, you can keep it up to date with the upstream master by repeating the above commands and replacing ``master`` by the name of your development branch.
+While you are developing on a branch, you can keep it up to date with the upstream main by repeating the above commands and replacing ``main`` by the name of your development branch.
 
 Install for developers
 ----------------------
@@ -71,11 +71,11 @@ Thanks to the ``develop`` flag, any changes in the code will be automatically re
 Make a new branch
 -----------------
 
-From the ``master`` branch create a new branch where to develop the new code.
+From the ``main`` branch create a new branch where to develop the new code.
 
 ::
 
-    git checkout master
+    git checkout main
     git checkout -b new_branch
 
 
@@ -113,7 +113,7 @@ Once you are finished, you can Pull Request you additions to the main repository
 
 **Before submitting a Pull Request, verify your development branch passes all tests as** :ref:`described bellow<Uniformed Tests with tox>` **. If you are developing new code you should also implement new test cases.**
 
-Also, before PR, update your development branch to the upstream master branch.
+Also, before PR, update your development branch to the upstream main branch.
 
 Uniformed Tests with tox
 ------------------------
@@ -148,9 +148,9 @@ Also, you can run individual environments if you wish to test only specific func
 
 
 .. _Tox: https://tox.readthedocs.io/en/latest/
-.. _MANIFEST.in: https://github.com/PicoCentauri/mda_cli/blob/master/MANIFEST.in
+.. _MANIFEST.in: https://github.com/PicoCentauri/mda_cli/blob/main/MANIFEST.in
 .. _Fork this repository before contributing: https://github.com/PicoCentauri/mda_cli/network/members
 .. _Pull Request: https://github.com/PicoCentauri/mda_cli/pulls
-.. _PULLREQUEST.rst: https://github.com/PicoCentauri/mda_cli/blob/master/docs/PULLREQUEST.rst
+.. _PULLREQUEST.rst: https://github.com/PicoCentauri/mda_cli/blob/main/docs/PULLREQUEST.rst
 .. _Installing packages using pip and virtual environments: https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment
 .. _Anaconda: https://www.anaconda.com/
