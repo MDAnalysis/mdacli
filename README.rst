@@ -16,3 +16,5 @@ and run ``mdacli``,
 ```bash
 mdacli -h
 ```
+
+version v0.0.0
