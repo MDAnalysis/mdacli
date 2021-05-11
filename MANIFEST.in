@@ -13,6 +13,7 @@ exclude tox.ini
 
 prune devtools
 prune tests
+prune data
 
 global-exclude *.py[cod] __pycache__/* *.so *.dylib 
 global-exclude tags
