@@ -3,7 +3,7 @@
 #on:
 #  push:
 #    branches:
-#      - master
+#      - main
 #
 #jobs:
 #  bump-version:
@@ -65,7 +65,7 @@
 #        bump2version patch
 #      if: env.SKIPBUMP == 'FALSE'
 #
-#    - name: Commit version change to master
+#    - name: Commit version change to main
 #      run: |
 #        git push --follow-tags
 

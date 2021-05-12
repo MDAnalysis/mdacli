@@ -1,10 +1,10 @@
 # tests required for Pull Requests
-# but should not run after push to master
+# but should not run after push to main
 name: PR Requirements
 
 on:
   pull_request:
-    branches: [master]
+    branches: [main]
 
 jobs:
   build:
