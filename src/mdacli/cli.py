@@ -18,12 +18,11 @@ import inspect
 import sys
 import warnings
 
-
 import MDAnalysis as mda
 from MDAnalysis.analysis import __all__
 from MDAnalysis.analysis.base import AnalysisBase
 
-from .utils import *
+from mdacli.utils import convert_str_time, parse_docs, parse_callable_signature
 
 
 # modules in MDAnalysis.analysis packages that are ignored by mdacli
@@ -360,3 +359,8 @@ def setup_clients():
         create_CLI(cli_parser, interface_name, parameters)
 
     return ap
+
+
+def main():
+    """Execute main CLI entry point."""
+    maincli(setup_clients())

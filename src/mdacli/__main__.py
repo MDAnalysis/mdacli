@@ -16,14 +16,6 @@ Why does this file exist, and why __main__? For more info, read:
 - https://docs.python.org/3/using/cmdline.html#cmdoption-m
 """
 
-import sys
-
-if __package__ is None and not hasattr(sys, 'frozen'):
-    # direct call of __main__.py
-    import os.path
-    path = os.path.realpath(os.path.abspath(__file__))
-    sys.path.insert(0, os.path.dirname(os.path.dirname(path)))
-
 import mdacli
 
 if __name__ == '__main__':
