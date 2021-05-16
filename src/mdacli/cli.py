@@ -29,7 +29,7 @@ from MDAnalysis.analysis.base import AnalysisBase
 # relevant modules used in this CLI factory
 # hydro* are removed here because they have a different folder/file structure
 # and need to be investigated separately
-skip_mods = ('hydrogenbonds', 'hbonds')
+skip_mods = ('base', 'hydrogenbonds', 'hbonds')
 relevant_modules = (_mod for _mod in __all__ if _mod not in skip_mods)
 
 # global dictionary storing the parameters for all Analysis classes
@@ -279,7 +279,7 @@ def parse_docs(klass):
 
     # regex to find parameter types
     type_regex = re.compile(r'^(\w+|\{.*\})|(?<=\`\~)(.*?)(?=\`)')
-    name_type_sep = re.compile(r'\s\:\s|\:\s|\:')
+    name_type_sep = re.compile(r'\s\:\s|\:\s')
 
     # goes back to front to register descriptions first ;-)
     # considers only the Parameters section
