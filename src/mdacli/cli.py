@@ -16,6 +16,7 @@ import argparse
 import importlib
 import inspect
 import re
+import pickle
 import sys
 import warnings
 from collections import defaultdict
@@ -526,23 +527,19 @@ def analyze_data(
     analysis_kwargs.pop("func")
 
     ac = analysis_callable(**analysis_kwargs)
-    results = ac.run(start=startframe,
-                     stop=stopframe,
-                     step=step,
-                     verbose=verbose)
+    ac.run(start=startframe,
+           stop=stopframe,
+           step=step,
+           verbose=verbose)
 
-    # prototype lines to test functionality TO REMOVE
-    print(analysis_kwargs)
-    sys.exit("Analysis complete. exiting...")
-    # extract results?
-    # here the same, how are the results collected?
-    # for RMSD we need to access the 'rmsd' attribute after .run() method.
-    # do we need to alter (add) a common interface on all the MDAnalysis
-    # interfaces. This would imply a intervention on the MDA code itself.
-    # we can definitively create a common method on all classes that links
-    # to the classes specific method/attribute where the results are stored.
-
-    save_results_to_some_file(results)  # noqa: F821
+    try:
+        ac.save_results()
+    except AttributeError:
+        fname = analysis_callable.__name__ + ".pickle"
+        warnings.warn("No specific saving function."
+                      "Pickling results into `{}`.".format(fname))
+        with open(fname, "wb") as f:
+            pickle.dump(ac, f)
 
 
 def maincli(ap):
