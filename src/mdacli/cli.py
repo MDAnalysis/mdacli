@@ -286,7 +286,7 @@ def parse_docs(klass):
     for line in doc_lines[par_i: end_param_line][::-1]:
         if name_type_sep.findall(line):
             par_name, others_ = name_type_sep.split(line)
-            par_type = [_ for _ in type_regex.findall(others_) if _][0]
+            par_type = [_ for _ in type_regex.findall(others_)[0] if _][0]
             params[par_name]['type'] = par_type
             params[par_name]['desc'] = ' '.join(desc_tmp[::-1])
             desc_tmp.clear()
