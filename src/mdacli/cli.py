@@ -491,9 +491,10 @@ def create_CLI(cli_parser, interface_name, parameters):
                 )
     return
 
+
 def stack_1d_arrays_list(list_1D, extra_list=None):
-    """Stacks a list of 1D numpy arrays of the same length vertically together. 
-       The result is a list containing 2D arrays where each array got the same 
+    """Stacks a list of 1D numpy arrays of the same length vertically together.
+       The result is a list containing 2D arrays where each array got the same
        number of rows.
        
        Parameters
@@ -502,8 +503,8 @@ def stack_1d_arrays_list(list_1D, extra_list=None):
            list of 1 dimensional numpy arrays
         
        extra_list : list
-           additional list of numpy arrays on which the 
-           operations are executed as for `list_1d``
+           additional list of numpy arrays on which the
+           operations are executed as for ``list_1d``
            
        Returns
        -------
@@ -545,12 +546,12 @@ def stack_1d_arrays_list(list_1D, extra_list=None):
 def save_results(fprefix, results):
     """Save the attributes of a results instance to disk.
 
-       1D, 2D and 3D numpy arrays are saved to csv files. All 1D arrays 
-       of the same lengths are veertically stacked. For 3D arrays 
-       a csv file is created for the dimension with the lowest number of 
+       1D, 2D and 3D numpy arrays are saved to csv files. All 1D arrays
+       of the same lengths are veertically stacked. For 3D arrays
+       a csv file is created for the dimension with the lowest number of
        indices. Higher dimensional arrays are ignored.
        
-       Everything else is tried to saved inside a json file. Types which 
+       Everything else is tried to saved inside a json file. Types which
        can not be saved into json are ignored.
     
        Parameters
