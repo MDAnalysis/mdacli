@@ -279,7 +279,6 @@ def parse_docs(klass):
 
     # regex to find parameter types
     type_regex = re.compile(r'^(\w+|\{.*\})|(?<=\`\~)(.*?)(?=\`)')
-    name_type_sep = re.compile(r'\s\:\s|\:\s')
 
     # goes back to front to register descriptions first ;-)
     # considers only the Parameters section
