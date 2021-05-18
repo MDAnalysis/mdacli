@@ -30,3 +30,9 @@ coverage.xml
 docs/_build/
 docs/html
 docs/latex
+
+# editors and IDEs
+*.sw[a-z]
+*~
+.idea
+.vscode
