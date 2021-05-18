@@ -5,7 +5,7 @@
 #
 # Released under the GNU Public Licence, v2 or any higher version
 # SPDX-License-Identifier: GPL-2.0-or-later
-"""Setuptools-based setup script for tests of MDAnalysis.
+"""Setuptools-based setup script for tests of mdacli.
 
 For a basic installation just type the command::
 
@@ -91,7 +91,7 @@ setup(
         ],
     entry_points={
         'console_scripts': [
-            'mdacli= mdacli:cli.main',
+            'mdacli= mdacli.cli:main',
             ]
         #
         },
