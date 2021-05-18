@@ -284,8 +284,8 @@ def parse_docs(klass):
     # goes back to front to register descriptions first ;-)
     # considers only the Parameters section
     for line in doc_lines[par_i: end_param_line][::-1]:
-        if name_type_sep.findall(line):
-            par_name, others_ = name_type_sep.split(line)
+        if ' : ' in line:
+            par_name, others_ = line.split(' : ')
             par_type = [_ for _ in type_regex.findall(others_)[0] if _][0]
             params[par_name]['type'] = par_type
             params[par_name]['desc'] = ' '.join(desc_tmp[::-1])
