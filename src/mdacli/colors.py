@@ -15,7 +15,7 @@ Taken from https://gist.github.com/tuvokki/14deb97bef6df9bc6553.
 
 class Emphasise:
     """Class for emphaising strings with colors etc.
-    
+
     Attributes
     ----------
     bold : str
@@ -55,7 +55,7 @@ class Emphasise:
     @staticmethod
     def emphasise(str, style):
         """Decorate a ``str`` with desired style.
-        
+
         The Style could be a color, bold or underline.
 
         Parameters
@@ -64,7 +64,7 @@ class Emphasise:
             message to print
         style : str
             emphasising style. See class attributes for available styles
-        
+
         Example
         -------
         >>> print(Emphasise.emphasise("My colored message", Emphasise.blue))
@@ -75,12 +75,12 @@ class Emphasise:
     @staticmethod
     def warning(message):
         """Return a yellow warning.
-        
+
         Parameters
         ----------
         message : str
             yellow warning to print
-        
+
         Returns
         -------
         decorated_message : str
@@ -95,7 +95,7 @@ class Emphasise:
     @staticmethod
     def error(message):
         """Return a red error.
-        
+
         Parameters
         ----------
         message : str
@@ -105,7 +105,7 @@ class Emphasise:
         -------
         decorated_message : str
             decorated message
-        
+
         Example
         ------
         >>> print(bcolors.error("Potential Danger!"))
@@ -115,7 +115,7 @@ class Emphasise:
     @staticmethod
     def ok(message):
         """Return a green ok.
-        
+
         Parameters
         ----------
         message : str
@@ -125,7 +125,7 @@ class Emphasise:
         -------
         decorated_message : str
             decorated message
-        
+
         Example
         ------
         >>> print(bcolors.ok("Yay!"))
@@ -135,7 +135,7 @@ class Emphasise:
     @staticmethod
     def info(message):
         """Return a blue info.
-        
+
         Parameters
         ----------
         message : str
@@ -145,7 +145,7 @@ class Emphasise:
         -------
         decorated_message : str
             decorated message
-        
+
         Example
         ------
         >>> print(bcolors.info("Blue Yay!"))
@@ -155,7 +155,7 @@ class Emphasise:
     @staticmethod
     def header(message):
         """Return a pink header.
-        
+
         Parameters
         ----------
         message : str
@@ -165,7 +165,7 @@ class Emphasise:
         -------
         decorated_message : str
             decorated message
-        
+
         Example
         ------
         >>> print(bcolors.header("This is great"))
@@ -175,7 +175,7 @@ class Emphasise:
     @staticmethod
     def debug(message):
         """Return a turquoise debug message.
-        
+
         Parameters
         ----------
         message : str
@@ -185,7 +185,7 @@ class Emphasise:
         -------
         decorated_message : str
             decorated message
-        
+
         Example
         ------
         >>> print(bcolors.debug("a=1"))
