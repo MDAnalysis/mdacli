@@ -5,6 +5,13 @@
 #
 # Released under the GNU Public Licence, v2 or any higher version
 # SPDX-License-Identifier: GPL-2.0-or-later
+"""Setuptools-based setup script for tests of MDAnalysis.
+
+For a basic installation just type the command::
+
+  python setup.py develop
+
+"""
 
 from glob import glob
 from os.path import basename, dirname, join, splitext

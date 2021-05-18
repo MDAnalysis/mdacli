@@ -22,7 +22,7 @@ import MDAnalysis as mda
 from MDAnalysis.analysis import __all__
 from MDAnalysis.analysis.base import AnalysisBase
 
-from mdacli.utils import convert_str_time, parse_docs, parse_callable_signature
+from mdacli.utils import convert_str_time, parse_callable_signature, parse_docs
 
 
 # modules in MDAnalysis.analysis packages that are ignored by mdacli

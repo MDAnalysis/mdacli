@@ -5,9 +5,12 @@
 #
 # Released under the GNU Public Licence, v2 or any higher version
 # SPDX-License-Identifier: GPL-2.0-or-later
-from collections import defaultdict
+
+"""Useful helper functions for running the cli."""
+
 import inspect
 import re
+from collections import defaultdict
 
 import MDAnalysis as mda
 

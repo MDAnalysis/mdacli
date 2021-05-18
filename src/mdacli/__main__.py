@@ -9,7 +9,6 @@
 """
 Entrypoint module, in case you use `python3 -mdacli`.
 
-
 Why does this file exist, and why __main__? For more info, read:
 
 - https://www.python.org/dev/peps/pep-0338/
@@ -17,6 +16,7 @@ Why does this file exist, and why __main__? For more info, read:
 """
 
 from mdacli.cli import main
+
 
 if __name__ == '__main__':
     main()
