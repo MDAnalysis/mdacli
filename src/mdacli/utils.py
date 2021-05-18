@@ -121,8 +121,8 @@ def parse_callable_signature(callable_obj, storage_dict):
             else:
                 # else reaches if the parameter in the signature is not present
                 # in the docstring. It shouldn't, but just in case :-)
-                # unless we explicitly decide not to consider any parameters not
-                # referenced in the documentation, this should be kept
+                # unless we explicitly decide not to consider any parameters
+                # not referenced in the documentation, this should be kept
                 #
                 # str is the default value of argparse arguments type parameter
                 positional_args[sig_name] = {
