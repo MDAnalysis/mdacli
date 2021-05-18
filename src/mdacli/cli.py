@@ -22,6 +22,7 @@ import MDAnalysis as mda
 from MDAnalysis.analysis import __all__
 from MDAnalysis.analysis.base import AnalysisBase
 
+from mdacli.colors import Emphasise
 from mdacli.utils import convert_str_time, parse_callable_signature, parse_docs
 
 
@@ -49,22 +50,8 @@ STR_TYPE_DICT = {
     }
 
 
-# Coloring for warnings and errors
-class bcolors:
-    """Colors for warnings."""
-
-    warning = '\033[93m'
-    fail = '\033[91m'
-    endc = '\033[0m'
-
-
-def _warning(message,
-             category=UserWarning,
-             filename='',
-             lineno=-1,
-             file=None,
-             line=None):
-    print("{}Warning: {}{}".format(bcolors.warning, message, bcolors.endc))
+def _warning(message, *args, **kwargs):
+    print(Emphasise.warning(f"Warning: {message}"))
 
 
 warnings.showwarning = _warning
@@ -329,7 +316,7 @@ def maincli(ap):
         args = ap.parse_args()
         analyze_data(**vars(args))
     except Exception as e:
-        sys.exit("{}Error: {}{}".format(bcolors.fail, e, bcolors.endc))
+        sys.exit(Emphasise.error(f"Error: {e}"))
 
 
 def setup_clients():
