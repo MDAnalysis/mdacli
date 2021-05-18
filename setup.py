@@ -1,9 +1,11 @@
-#!/usr/bin/env python
-# -*- encoding: utf-8 -*-
-"""Setup dot py."""
-from __future__ import absolute_import, print_function
+#!/usr/bin/env python3
+# -*- Mode: python; tab-width: 4; indent-tabs-mode:nil; coding:utf-8 -*-
+#
+# Copyright (c) 2020 Authors and contributors
+#
+# Released under the GNU Public Licence, v2 or any higher version
+# SPDX-License-Identifier: GPL-2.0-or-later
 
-# import re
 from glob import glob
 from os.path import basename, dirname, join, splitext
 
@@ -82,7 +84,7 @@ setup(
         ],
     entry_points={
         'console_scripts': [
-            'mdacli= mdacli.cli:main',
+            'mdacli= mdacli:main',
             ]
         #
         },
