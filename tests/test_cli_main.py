@@ -6,18 +6,12 @@
 # Released under the GNU Public Licence, v2 or any higher version
 # SPDX-License-Identifier: GPL-2.0-or-later
 """Test mdacli."""
-import sys
 
 import pytest
-
-
 from MDAnalysis.analysis.rdf import InterRDF
-from MDAnalysis.tests.datafiles import PSF, DCD
+from MDAnalysis.tests.datafiles import DCD, PSF
 
-# Workaround since we have no real module
-sys.path.append("..")
-
-from mdacli.cli import convert_str_time  # noqa: E402
+from mdacli.cli import analyze_data, convert_str_time
 
 
 @pytest.mark.parametrize('x, frame',
@@ -42,10 +36,12 @@ def test_convert_str_time_raise():
         convert_str_time('0.1', dt=1)
 
 
-class TestMain(object):
+class Test_analyze_data(object):
+    """Test class for analyze_data."""
 
     @pytest.fixture()
     def kwargs(self):
+        """Keyword arguments for run."""
         kwargs = {}
         kwargs["begin"] = "0"
         kwargs["end"] = "1"
@@ -56,8 +52,7 @@ class TestMain(object):
         kwargs["func"] = None
         return kwargs
 
-    def test_pickling(self, kwargs, tmpdir):
+    def test_run(self, kwargs, tmpdir):
+        """Simple test run."""
         with tmpdir.as_cwd():
-            with pytest.warns(UserWarning):
-                main(PSF, DCD, analysis_callable=InterRDF, **kwargs)
-                open("{}.pickle".format(InterRDF.__name__))
+            analyze_data(PSF, DCD, analysis_callable=InterRDF, **kwargs)

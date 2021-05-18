@@ -13,7 +13,6 @@ This also demonstrates how other third party libraries could incorporate
 this functionality.
 """
 import argparse
-from collections import defaultdict
 import importlib
 import inspect
 import json
@@ -21,13 +20,13 @@ import os
 import re
 import sys
 import warnings
-
 import zipfile
+from collections import defaultdict
 
-import numpy as np
 import MDAnalysis as mda
+import numpy as np
 from MDAnalysis.analysis import __all__
-from MDAnalysis.analysis.base import AnalysisBase
+from MDAnalysis.analysis.base import AnalysisBase, Results
 
 
 # modules in MDAnalysis.analysis packages that are ignored by MDA-CLI
@@ -493,28 +492,28 @@ def create_CLI(cli_parser, interface_name, parameters):
 
 
 def stack_1d_arrays_list(list_1D, extra_list=None):
-    """Stacks a list of 1D numpy arrays of the same length vertically together.
-       The result is a list containing 2D arrays where each array got the same
-       number of rows.
-       
-       Parameters
-       ----------
-       list_1d : list
-           list of 1 dimensional numpy arrays
-        
-       extra_list : list
-           additional list of numpy arrays on which the
-           operations are executed as for ``list_1d``
-           
-       Returns
-       -------
-       out_list : list
-           list of stacked 2D numpy arrays organized by their length
-       out_extra : list
-           list of stacked 2D numpy applied applied to the same operations
-           as out_list
-       """
-    
+    """Stack a list of 1D numpy arrays of the same length vertically together.
+
+    The result is a list containing 2D arrays where each array got the same
+    number of rows.
+
+    Parameters
+    ----------
+    list_1d : list
+        list of 1 dimensional numpy arrays
+
+    extra_list : list
+        additional list of numpy arrays on which the
+        operations are executed as for ``list_1d``
+
+    Returns
+    -------
+    out_list : list
+        list of stacked 2D numpy arrays organized by their length
+    out_extra : list
+        list of stacked 2D numpy applied applied to the same operations
+        as out_list
+    """
     # Sort for lengths
     lengths = np.array([len(a) for a in list_1D])
     sorted_idx = np.argsort(lengths)
@@ -529,15 +528,17 @@ def stack_1d_arrays_list(list_1D, extra_list=None):
     out_lists = []
     # Concentanate lists of the same lenngth
     for i in range(0, len(new_length_idx) - 1):
-        out_lists.append(np.vstack(list_1D_sorted[new_length_idx[i]:new_length_idx[i+1]]))
-        
-        
+        out_lists.append(np.vstack(list_1D_sorted[new_length_idx[i]:
+                                                  new_length_idx[i + 1]]))
+
     if extra_list is not None:
         extra_list_sorted = [extra_list[i] for i in sorted_idx]
         out_extra = []
         for i in range(0, len(new_length_idx) - 1):
-            out_extra.append(np.vstack(extra_list_sorted[new_length_idx[i]:new_length_idx[i+1]]))
-        
+            out_extra.append(np.vstack(extra_list_sorted[new_length_idx[i]:
+                                                         new_length_idx[i + 1]]
+                                       ))
+
         return out_lists, out_extra
     else:
         return out_lists
@@ -546,29 +547,28 @@ def stack_1d_arrays_list(list_1D, extra_list=None):
 def save_results(fprefix, results):
     """Save the attributes of a results instance to disk.
 
-       1D, 2D and 3D numpy arrays are saved to csv files. All 1D arrays
-       of the same lengths are veertically stacked. For 3D arrays
-       a csv file is created for the dimension with the lowest number of
-       indices. Higher dimensional arrays are ignored.
-       
-       Everything else is tried to saved inside a json file. Types which
-       can not be saved into json are ignored.
-    
-       Parameters
-       ----------
-       fprefix : str
-            prefix for all files saved
-       results : `MDAnalysis.analysis.base.Results`
-            A Results instance from which the stored data is taken.
-       """
-    
+    1D, 2D and 3D numpy arrays are saved to csv files. All 1D arrays
+    of the same lengths are veertically stacked. For 3D arrays
+    a csv file is created for the dimension with the lowest number of
+    indices. Higher dimensional arrays are ignored.
+
+    Everything else is tried to saved inside a json file. Types which
+    can not be saved into json are ignored.
+
+    Parameters
+    ----------
+    fprefix : str
+        prefix for all files saved
+    results : `MDAnalysis.analysis.base.Results`
+        A Results instance from which the stored data is taken.
+    """
     list_1D = []
     list_1D_labels = []
     json_dict = {}
-    
+
     for key, item in results.items():
         if isinstance(item, Results):
-            # Run `save_results` recursively if 
+            # Run `save_results` recursively if
             # `item` is results instancee
             save_results(f"{fprefix}_{key}", item)
         elif isinstance(item, np.ndarray):
@@ -586,31 +586,34 @@ def save_results(fprefix, results):
             elif n_dims == 3:
                 min_dim = np.argmin(item)
                 files_to_zip = []
-                # Split array along the dimension with smallest number of entries
-                for i, arr in enumerate(np.split(item, item.shape[min_dim], axis=min_dim)):
+                # Split array along the dimension with smallest number
+                # of entries
+                for i, arr in enumerate(np.split(item,
+                                                 item.shape[min_dim],
+                                                 axis=min_dim)):
                     files_to_zip.append(f"{key}_dim_{min_dim}_idx_{i}.csv")
                     np.savetxt(fname=files_to_zip[i],
                                X=np.squeeze(arr),
                                delimiter=',')
-                    
+
                 # Compress all csv files into a single zip archive
                 with zipfile.ZipFile(f'{key}.zip', 'w') as zipF:
                     for file in files_to_zip:
                         zipF.write(file, compress_type=zipfile.ZIP_DEFLATED)
-                        os.remove(file) 
-                
+                        os.remove(file)
+
             else:
                 warnings.warn("Saving numpy arrays with more than "
                               "three dimensions is currently not supported.")
-        elif isinstance(item, (bool, int, float, list, tuple, dict)) or \
-             item is None:
-            #This can be encoded in a json file
+        elif (isinstance(item, (bool, int, float, list, tuple, dict))
+              or item is None):
+            # This can be encoded in a json file
             json_dict[key] = item
-    
+
         else:
             warnings.warn(f"Saving {key} of type {type(item)}"
                           "is currently not supported.")
-            
+
     # Stack 1D arrays and save teheem to csv
     if len(list_1D) > 0:
         out_lists, out_lables = stack_1d_arrays_list(list_1D, list_1D_labels)
@@ -622,7 +625,7 @@ def save_results(fprefix, results):
             np.savetxt(fname=f"{fprefix}_{'_'.join(out_label)}.csv",
                        X=out_list.T,
                        header=''.join([f"{i:>25}" for i in out_label])[3:]
-                          )
+                       )
 
     # Save everything which is left to a json file
     with open(f'{fprefix}.json', 'w') as f:
