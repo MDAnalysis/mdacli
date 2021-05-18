@@ -30,7 +30,7 @@ from mdacli.utils import convert_str_time, parse_callable_signature, parse_docs
 # relevant modules used in this CLI factory
 # hydro* are removed here because they have a different folder/file structure
 # and need to be investigated separately
-skip_mods = ('hydrogenbonds', 'hbonds')
+skip_mods = ('base', 'hydrogenbonds', 'hbonds')
 relevant_modules = (_mod for _mod in __all__ if _mod not in skip_mods)
 
 # global dictionary storing the parameters for all Analysis classes

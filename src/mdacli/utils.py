@@ -223,14 +223,15 @@ def parse_docs(klass):
     desc_tmp = []
 
     # regex to find parameter types
-    type_regex = re.compile(r'^(\w+|\{.*\})')
+    type_regex = re.compile(r'^(\w+|\{.*\})|(?<=\`\~)(.*?)(?=\`)')
 
     # goes back to front to register descriptions first ;-)
     # considers only the Parameters section
     for line in doc_lines[par_i: end_param_line][::-1]:
         if ' : ' in line:
             par_name, others_ = line.split(' : ')
-            params[par_name]['type'] = type_regex.findall(others_)[0]
+            par_type = [_ for _ in type_regex.findall(others_)[0] if _][0]
+            params[par_name]['type'] = par_type
             params[par_name]['desc'] = ' '.join(desc_tmp[::-1])
             desc_tmp.clear()
         else:
