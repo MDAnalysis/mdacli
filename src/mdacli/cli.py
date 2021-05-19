@@ -130,6 +130,14 @@ def create_CLI(cli_parser, interface_name, parameters):
         "See topology for implemented formats.")
 
     common_group.add_argument(
+        "-atom_style",
+        dest="atom_style",
+        type=str,
+        default=None,
+        help="Manually set the atom_style information"
+        "(currently only LAMMPS parser). E.g. atom_style='id type x y z'.")
+
+    common_group.add_argument(
         "-f",
         dest="trajectories",
         type=str,
@@ -147,23 +155,6 @@ def create_CLI(cli_parser, interface_name, parameters):
         default=None,
         help="Override automatic trajectory type detection. "
         "See trajectory for implemented formats.")
-
-    common_group.add_argument(
-        "-atom_style",
-        dest="atom_style",
-        type=str,
-        default=None,
-        help="Manually set the atom_style information"
-        "(currently only LAMMPS parser). E.g. atom_style='id type x y z'.")
-
-    common_group.add_argument(
-        "-box",
-        dest="box",
-        type=float,
-        default=None,
-        nargs="+",
-        help="Sets the box dimensions x y z [alpha beta gamma]"
-        "(Å). If 'None' dimensions from the trajectory will be used.")
 
     common_group.add_argument(
         "-b",
@@ -280,6 +271,16 @@ def run_analsis(analysis_callable, **kwargs):
     ----------
     analysis_callable : function
         Analysis class for which the analysis is performed.
+
+    Returns
+    -------
+    ac : `MDAnalysis.analysis.base.AnalysisBase`
+        AnalysisBase instance of the given ``analysis_callable`` after run.
+
+    Raises
+    ------
+    IndexError
+        If the given box dimensions do not have length 3 or 6
     """
     verbose = kwargs.pop("verbose")
     kwargs.pop("func")
@@ -303,18 +304,6 @@ def run_analsis(analysis_callable, **kwargs):
                    format=kwargs.pop("trajectory_format"))
     if verbose:
         print("Done!\n")
-
-    box = kwargs.pop("box")
-    if box is not None:
-        if len(box) == 6:
-            u.dimensions = box
-        if len(box) == 3:
-            u.dimensions[:3] = box
-            u.dimensions[3:] = [90, 90, 90]
-        else:
-            raise IndexError(
-                "Box dimensions must contain 3 entries for "
-                "the box length and possibly 3 more for the angles.")
 
     # Convert special types (i.e AtomGroups)
     # Ugly that we have to parse again... but currently I have no better idea :(
