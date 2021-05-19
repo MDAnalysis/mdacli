@@ -96,8 +96,8 @@ def get_1D_arrays(results):
 def is_array_1D(arr):
     """Assert arr is an array and of 1 single dimension."""
     valid = \
-        isinstance(value, np.ndarray) \
-        and value.ndim == 1
+        isinstance(arr, np.ndarray) \
+        and arr.ndim == 1
 
     return valid
 
@@ -374,3 +374,9 @@ def get_cli_input():
         ]
 
     return "Command line was: {} {}".format(program_name, " ".join(arguments))
+
+
+def calculate_array_format(*a):
+    """
+    """
+    return "%+20s"

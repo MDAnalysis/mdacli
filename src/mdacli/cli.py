@@ -251,8 +251,6 @@ def create_CLI(cli_parser, interface_name, parameters):
     return
 
 
-
-
 def analyze_data(
         # top and trajs need to be positional parameters in all CLIs
         # these can be added on the create_CLI level
@@ -318,9 +316,13 @@ def analyze_data(
            step=step,
            verbose=verbose)
 
-    save_results(os.path.join(output_directory,
-                              f"{output_prefix}{type(ac).__name__}"),
-                 ac.results)
+    save_results(
+        ac.results,
+        os.path.join(
+            output_directory,
+            f"{output_prefix}{type(ac).__name__}"
+            ),
+        )
 
 
 def maincli(ap):
