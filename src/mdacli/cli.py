@@ -276,11 +276,6 @@ def run_analsis(analysis_callable, **kwargs):
     -------
     ac : `MDAnalysis.analysis.base.AnalysisBase`
         AnalysisBase instance of the given ``analysis_callable`` after run.
-
-    Raises
-    ------
-    IndexError
-        If the given box dimensions do not have length 3 or 6
     """
     verbose = kwargs.pop("verbose")
     kwargs.pop("func")
@@ -339,7 +334,6 @@ def run_analsis(analysis_callable, **kwargs):
                                          stop=stopframe,
                                          step=step,
                                          verbose=verbose)
-
     return ac
 
 
