@@ -15,16 +15,13 @@ this functionality.
 import argparse
 import importlib
 import inspect
-import json
 import os
 import sys
 import warnings
-import zipfile
 
 import MDAnalysis as mda
-import numpy as np
 from MDAnalysis.analysis import __all__
-from MDAnalysis.analysis.base import AnalysisBase, Results
+from MDAnalysis.analysis.base import AnalysisBase
 
 from mdacli.colors import Emphasise
 from mdacli.utils import convert_str_time, parse_callable_signature, parse_docs
