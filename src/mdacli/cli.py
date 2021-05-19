@@ -22,6 +22,7 @@ import MDAnalysis as mda
 from MDAnalysis.analysis import __all__
 from MDAnalysis.analysis.base import AnalysisBase
 
+from mdacli import __version__
 from mdacli.colors import Emphasise
 from mdacli.utils import convert_str_time, parse_callable_signature, parse_docs
 
@@ -104,11 +105,10 @@ def create_CLI(cli_parser, interface_name, parameters):
         title="Common Analysis Parameters",
         )
 
-    # adds analyze_data function as the default func parameter.
-    # this is possible because the analyze_data function is equal to all
+    # Add run_analsis function as the default func parameter.
+    # this is possible because the run_analsis function is equal to all
     # Analysis Classes
-    common_group.set_defaults(func=analyze_data)
-
+    common_group.set_defaults(func=run_analsis)
     common_group.set_defaults(analysis_callable=parameters["callable"])
 
     common_group.add_argument(
@@ -122,6 +122,14 @@ def create_CLI(cli_parser, interface_name, parameters):
         )
 
     common_group.add_argument(
+        "-top",
+        dest="topology_format",
+        type=str,
+        default=None,
+        help="Override automatic topology type detection. "
+        "See topology for implemented formats.")
+
+    common_group.add_argument(
         "-f",
         dest="trajectories",
         type=str,
@@ -131,6 +139,31 @@ def create_CLI(cli_parser, interface_name, parameters):
         "The FORMATs {} are implemented in MDAnalysis."
         "".format(", ".join(mda._READERS.keys())),
         )
+
+    common_group.add_argument(
+        "-traj",
+        dest="trajectory_format",
+        type=str,
+        default=None,
+        help="Override automatic trajectory type detection. "
+        "See trajectory for implemented formats.")
+
+    common_group.add_argument(
+        "-atom_style",
+        dest="atom_style",
+        type=str,
+        default=None,
+        help="Manually set the atom_style information"
+        "(currently only LAMMPS parser). E.g. atom_style='id type x y z'.")
+
+    common_group.add_argument(
+        "-box",
+        dest="box",
+        type=float,
+        default=None,
+        nargs="+",
+        help="Sets the box dimensions x y z [alpha beta gamma]"
+        "(Å). If 'None' dimensions from the trajectory will be used.")
 
     common_group.add_argument(
         "-b",
@@ -231,70 +264,92 @@ def create_CLI(cli_parser, interface_name, parameters):
     return
 
 
-def analyze_data(
-        # top and trajs need to be positional parameters in all CLIs
-        # these can be added on the create_CLI level
-        topology,
-        trajectories,
-        # analysis_callable paramter needs to be injected where from the
-        # global dictionary using argparse.set_defaults()
-        # https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser.set_defaults
-        analysis_callable=None,
-        **analysis_kwargs,
-        ):
-    """Perform main client logic."""
-    u = mda.Universe(topology, trajectories)
+# TODO: Split the kwargs into two
+# dictionaries: one for the common_paramaters and one for the
+# specific for each anaylsis.
+def run_analsis(analysis_callable, **kwargs):
+    """Perform main client logic.
+    
+    ``kwargs`` contains all paramaters necessary for the analysis_callable
+    and the initlization of the MDAnalysis Universe.
 
-    # so, here we need to do some investigation, questions are: * do all
-    # Analysis classes/functions have the same execution interface?  * we need
-    # to discuss with Oliver maybe to ensure that the above point is true *
-    # otherwise we would need to write a dedicated cli main function to each
-    # Analysis class * however, we can accept a certain number of different
-    # interfaces and we can handle the control flow with try/catch statements
-    # until the correct interface is found. try/catch on polymorphism, yeah! :-D
+    Parameters
+    ----------
+    analysis_callable : function
+        Analysis class for which the analysis is performed.
+    """
+    verbose = kwargs.pop("verbose")
+    kwargs.pop("func")
+
+    if verbose:
+        print("Loading trajectory...", end="")
+        sys.stdout.flush()
+
+    # Prepare kwargs for universe creation
+    u_kwargs = {}
+    atom_style = kwargs["atom_style"]
+    if atom_style is not None:
+        u_kwargs['atom_style'] = atom_style
+
+    u = mda.Universe(kwargs.pop("topology"),
+                     topology_format=kwargs.pop("topology_format"),
+                     **u_kwargs)
+
+    if kwargs["trajectories"] is not None:
+        u.load_new(kwargs.pop("trajectories"),
+                   format=kwargs.pop("trajectory_format"))
+    if verbose:
+        print("Done!\n")
+
+    box = kwargs.pop("box")
+    if box is not None:
+        if len(box) == 6:
+            u.dimensions = box
+        if len(box) == 3:
+            u.dimensions[:3] = box
+            u.dimensions[3:] = [90, 90, 90]
+        else:
+            raise IndexError(
+                "Box dimensions must contain 3 entries for "
+                "the box length and possibly 3 more for the angles.")
 
     # Convert special types (i.e AtomGroups)
     # Ugly that we have to parse again... but currently I have no better idea :(
     params = parse_docs(analysis_callable)[2]  # Index [2] for paramaters
     for param_name, dictionary in params.items():
         if "AtomGroup" in dictionary['type']:
-            sel = u.select_atoms(analysis_kwargs[param_name])
+            sel = u.select_atoms(kwargs[param_name])
             if len(sel) > 0:
-                analysis_kwargs[param_name] = sel
+                kwargs[param_name] = sel
             else:
                 raise ValueError(
                     "AtomGroup `-{}` with selection `{}` does not "
                     "contain any atoms".format(
                         param_name,
-                        analysis_kwargs[param_name]
+                        kwargs[param_name]
                         )
                     )
         elif "Universe" in dictionary['type']:
-            analysis_kwargs[param_name] = u
+            kwargs[param_name] = u
 
     with warnings.catch_warnings():
         warnings.simplefilter('always')
-        startframe = convert_str_time(analysis_kwargs.pop("begin"), u.trajectory.dt)  # noqa: E501
-        stopframe = convert_str_time(analysis_kwargs.pop("end"), u.trajectory.dt)  # noqa: E501
-        step = convert_str_time(analysis_kwargs.pop("dt"), u.trajectory.dt)
+        startframe = convert_str_time(kwargs.pop("begin"), u.trajectory.dt)  # noqa: E501
+        stopframe = convert_str_time(kwargs.pop("end"), u.trajectory.dt)  # noqa: E501
+        step = convert_str_time(kwargs.pop("dt"), u.trajectory.dt)
 
         # raises error if frame selection range is an empty selection
         if not list(range(u.trajectory.n_frames)[slice(startframe, stopframe, step)]):  # noqa: E501
             raise ValueError("Trajectory frame range {}:{}:{} is not valid for {} frames."  # noqa: E501
                              "".format(startframe, stopframe, step, u.trajectory.n_frames))  # noqa: E501
 
-    # Collect paramaters not necessary for initilizing ac object.
-    verbose = analysis_kwargs.pop("verbose")
-    analysis_kwargs.pop("func")
-
-    ac = analysis_callable(**analysis_kwargs)
+    ac = analysis_callable(**kwargs)
     results = ac.run(start=startframe,
                      stop=stopframe,
                      step=step,
                      verbose=verbose)
 
     # prototype lines to test functionality TO REMOVE
-    print(analysis_kwargs)
     sys.exit("Analysis complete. exiting...")
     # extract results?
     # here the same, how are the results collected?
@@ -314,7 +369,7 @@ def maincli(ap):
 
     try:
         args = ap.parse_args()
-        analyze_data(**vars(args))
+        run_analsis(**vars(args))
     except Exception as e:
         sys.exit(Emphasise.error(f"Error: {e}"))
 
@@ -328,6 +383,10 @@ def setup_clients():
     argparse.ArgumentParser instance
     """
     ap = argparse.ArgumentParser()
+    ap.add_argument('--version',
+                    action='version',
+                    version="mdacli {}".format(__version__))
+
     cli_parser = ap.add_subparsers(title="MDAnalysis Analysis CLI")
 
     # populates analysis_interfaces dictionary
