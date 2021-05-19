@@ -267,9 +267,12 @@ def create_CLI(cli_parser, interface_name, parameters):
 # TODO: Split the kwargs into two
 # dictionaries: one for the common_paramaters and one for the
 # specific for each anaylsis.
+# TODO: Also the script fails if many paramaters are not given like
+# begin, end, topolog_format. However, these paramaters are optional
+# so they should also be here.
 def run_analsis(analysis_callable, **kwargs):
     """Perform main client logic.
-    
+
     ``kwargs`` contains all paramaters necessary for the analysis_callable
     and the initlization of the MDAnalysis Universe.
 
@@ -343,23 +346,12 @@ def run_analsis(analysis_callable, **kwargs):
             raise ValueError("Trajectory frame range {}:{}:{} is not valid for {} frames."  # noqa: E501
                              "".format(startframe, stopframe, step, u.trajectory.n_frames))  # noqa: E501
 
-    ac = analysis_callable(**kwargs)
-    results = ac.run(start=startframe,
-                     stop=stopframe,
-                     step=step,
-                     verbose=verbose)
+    ac = analysis_callable(**kwargs).run(start=startframe,
+                                         stop=stopframe,
+                                         step=step,
+                                         verbose=verbose)
 
-    # prototype lines to test functionality TO REMOVE
-    sys.exit("Analysis complete. exiting...")
-    # extract results?
-    # here the same, how are the results collected?
-    # for RMSD we need to access the 'rmsd' attribute after .run() method.
-    # do we need to alter (add) a common interface on all the MDAnalysis
-    # interfaces. This would imply a intervention on the MDA code itself.
-    # we can definitively create a common method on all classes that links
-    # to the classes specific method/attribute where the results are stored.
-
-    save_results_to_some_file(results)  # noqa: F821
+    return ac
 
 
 def maincli(ap):

@@ -11,8 +11,10 @@ import sys
 from unittest.mock import patch
 
 import pytest
+from MDAnalysis.analysis.rdf import InterRDF
+from MDAnalysisTests.datafiles import DCD, PSF
 
-from mdacli.cli import setup_clients
+from mdacli.cli import run_analsis, setup_clients
 
 
 def test_required_args():
@@ -56,3 +58,32 @@ def test_setup_clients(opt, dest, val):
         args = setup_clients().parse_args()
         t = type(val)
         assert t(getattr(args, dest)) == val
+
+
+class Test_analyze_data(object):
+    """Test class for analyze_data."""
+
+    @pytest.fixture()
+    def kwargs(self):
+        """Keyword arguments for run."""
+        kwargs = {}
+        kwargs["topology"] = PSF
+        kwargs["trajectories"] = DCD
+        kwargs["begin"] = "0"
+        kwargs["begin"] = "0"
+        kwargs["end"] = "1"
+        kwargs["dt"] = "1"
+        kwargs["verbose"] = False
+        kwargs["g1"] = "all"
+        kwargs["g2"] = "all"
+        kwargs["box"] = None
+        kwargs["atom_style"] = None
+        kwargs["trajectory_format"] = None
+        kwargs["topology_format"] = None
+        kwargs["func"] = None
+        return kwargs
+
+    def test_run(self, kwargs, tmpdir):
+        """Simple test run."""
+        with tmpdir.as_cwd():
+            run_analsis(analysis_callable=InterRDF, **kwargs)
