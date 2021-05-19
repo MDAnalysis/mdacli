@@ -9,10 +9,11 @@
 import json
 import os
 import sys
+import warnings
 import zipfile
+from pathlib import Path
 
 import numpy as np
-
 from MDAnalysis.analysis.base import Results
 
 from mdacli.colors import Emphasise
@@ -49,7 +50,7 @@ def save_results(results, fprefix="mdacli_results"):
 
 def save_1D_arrays(results, fprefix="1darray", remove=True):
     """
-    Saves 1D arrays from results.
+    Save 1D arrays from results.
 
     Parameters
     ----------
@@ -81,7 +82,6 @@ def save_1D_arrays(results, fprefix="1darray", remove=True):
 
 def get_1D_arrays(results):
     """Get items from dict which correspond to np.ndarrays one dim."""
-
     list_1D = []
     list_1D_labels = []
 
@@ -177,7 +177,6 @@ def is_array_higher_dim(arr):
 
 def save_result_array(arr, fprefix='prefix', arr_name='arr_name'):
     """Save array to disk accoring to num of dimensions."""
-
     # Remove extra dimensions
     item = np.squeeze(arr)
     n_dims = item.ndim
@@ -211,6 +210,7 @@ def save_result_array(arr, fprefix='prefix', arr_name='arr_name'):
             )
 
     return
+
 
 def save_3D_array_to_2D_csv(
         item,
@@ -246,7 +246,7 @@ def save_3D_array_to_2D_csv(
         files_to_zip.append(fname)
 
     if zipit:
-        save_files_to_zip(files, zipname=arr_name, remove=True)
+        save_files_to_zip(files_to_zip, zipname=arr_name, remove=True)
 
     return
 
@@ -268,7 +268,7 @@ def save_json_serializables(results, remove=True, **jsonargs):
 
 
 def is_serializable(value):
-    "Assert if value is json serializable."""
+    """Assert if value is json serializable."""
     try:
         json.dumps(value)
         return True
@@ -277,6 +277,7 @@ def is_serializable(value):
 
 
 def save_to_json(json_dict, fname='jdict', indent=4, sort_keys=True):
+    """Save dictionary to JSON file."""
     with open(f'{fname}.json', 'w') as f:
         json.dump(json_dict, f, indent=indent, sort_keys=sort_keys)
 
@@ -285,30 +286,28 @@ def save_Results_object(results, fprefix='results', remove=True):
     """Save results if they are Results objects."""
     keys = []
     for key, value in results.items():
-        if isinstance(item, Results):
-            save_results(f"{fprefix}_{key}", item)
+        if isinstance(value, Results):
+            save_results(f"{fprefix}_{key}", value)
             keys.append(key)
 
     return return_with_remove(results, keys, remove)
 
 
 def return_with_remove(ddict, keys, remove):
+    """
+    Serve all saving functions.
+
+    If remove is true,
+    Returns subset of keys from dict.
+    Removes keys subset from original dict.
+
+    Else, return None.
+    """
     if remove:
         return {key: ddict.pop(key) for key in keys}
 
     else:
         return None
-
-
-
-
-
-
-
-
-
-
-
 
 
 def save_files_to_zip(files, zipname='thezip', remove=True):
@@ -340,7 +339,7 @@ def save_files_to_zip(files, zipname='thezip', remove=True):
 
 
 def remove_files(files):
-    """Removes files from disk."""
+    """Remove files from disk."""
     for filename in files:
         os.remove(filename)
     return
@@ -359,7 +358,7 @@ def savetxt_w_command(fname, X, header='', fsuffix=".csv", **kwargs):
         fname,
         X,
         header=header,
-        fmt=calculate_array_format(X),
+        fmt="%-20s",
         **kwargs)
 
 
@@ -374,9 +373,3 @@ def get_cli_input():
         ]
 
     return "Command line was: {} {}".format(program_name, " ".join(arguments))
-
-
-def calculate_array_format(*a):
-    """
-    """
-    return "%+20s"

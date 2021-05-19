@@ -24,8 +24,8 @@ from MDAnalysis.analysis import __all__
 from MDAnalysis.analysis.base import AnalysisBase
 
 from mdacli.colors import Emphasise
-from mdacli.utils import convert_str_time, parse_callable_signature, parse_docs
 from mdacli.save import save_results
+from mdacli.utils import convert_str_time, parse_callable_signature, parse_docs
 
 
 # modules in MDAnalysis.analysis packages that are ignored by mdacli
