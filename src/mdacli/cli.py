@@ -351,8 +351,6 @@ def run_analsis(analysis_callable, **kwargs):
                              "".format(startframe, stopframe, step, u.trajectory.n_frames))  # noqa: E501
 
     # Collect paramaters not necessary for initilizing ac object.
-    kwargs.pop("func")
-    verbose = kwargs.pop("verbose")
     output_directory = kwargs.pop("output_directory")
     output_prefix = kwargs.pop("output_prefix")
     output_prefix += "_" if len(output_prefix) > 0 else ""

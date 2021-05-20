@@ -77,6 +77,8 @@ class Test_run_analsis(object):
         kwargs["begin"] = "0"
         kwargs["end"] = "1"
         kwargs["dt"] = "1"
+        kwargs["output_directory"] = "."
+        kwargs["output_prefix"] = ""
         kwargs["verbose"] = False
         kwargs["g1"] = "all"
         kwargs["g2"] = "all"
