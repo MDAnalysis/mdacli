@@ -263,6 +263,8 @@ def save_json_serializables(results, remove=True, **jsonargs):
         for key in json_dict.keys():
             results.pop(key)
 
+    json_dict["command"] = get_cli_input()
+
     if json_dict:
         save_to_json(json_dict, **jsonargs)
 
