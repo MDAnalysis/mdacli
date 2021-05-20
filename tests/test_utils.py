@@ -8,7 +8,7 @@
 """Test mdacli utils."""
 import pytest
 
-from mdacli.cli import convert_str_time  # noqa: E402
+from mdacli.cli import convert_str_time
 
 
 @pytest.mark.parametrize('x, frame',

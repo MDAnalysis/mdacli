@@ -15,6 +15,7 @@ this functionality.
 import argparse
 import importlib
 import inspect
+import os
 import sys
 import warnings
 
@@ -24,6 +25,7 @@ from MDAnalysis.analysis.base import AnalysisBase
 
 from mdacli import __version__
 from mdacli.colors import Emphasise
+from mdacli.save import save_results
 from mdacli.utils import convert_str_time, parse_callable_signature, parse_docs
 
 
@@ -181,6 +183,24 @@ def create_CLI(cli_parser, interface_name, parameters):
         )
 
     common_group.add_argument(
+        "-pre",
+        dest="output_prefix",
+        type=str,
+        default="",
+        help="Additional prefix for all output files. Files will be "
+             " automatically named by the used module (default: %(default)s)"
+        )
+
+    common_group.add_argument(
+        "-o",
+        dest="output_directory",
+        type=str,
+        default=".",
+        help="Directory in which the output files produced will be stored."
+             "(default: %(default)s)"
+        )
+
+    common_group.add_argument(
         "-v",
         dest="verbose",
         help="Be loud and noisy",
@@ -330,10 +350,30 @@ def run_analsis(analysis_callable, **kwargs):
             raise ValueError("Trajectory frame range {}:{}:{} is not valid for {} frames."  # noqa: E501
                              "".format(startframe, stopframe, step, u.trajectory.n_frames))  # noqa: E501
 
-    ac = analysis_callable(**kwargs).run(start=startframe,
-                                         stop=stopframe,
-                                         step=step,
-                                         verbose=verbose)
+    # Collect paramaters not necessary for initilizing ac object.
+    kwargs.pop("func")
+    verbose = kwargs.pop("verbose")
+    output_directory = kwargs.pop("output_directory")
+    output_prefix = kwargs.pop("output_prefix")
+    output_prefix += "_" if len(output_prefix) > 0 else ""
+
+    ac = analysis_callable(**kwargs)
+    ac.run(start=startframe,
+           stop=stopframe,
+           step=step,
+           verbose=verbose)
+
+    try:
+        ac.save_results()
+
+    except AttributeError:
+        save_results(
+            ac.results,
+            os.path.join(
+                output_directory,
+                f"{output_prefix}{type(ac).__name__}"
+                ),
+            )
     return ac
 
 
