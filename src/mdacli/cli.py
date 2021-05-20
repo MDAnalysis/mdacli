@@ -316,13 +316,17 @@ def analyze_data(
            step=step,
            verbose=verbose)
 
-    save_results(
-        ac.results,
-        os.path.join(
-            output_directory,
-            f"{output_prefix}{type(ac).__name__}"
-            ),
-        )
+    try:
+        ac.save_results()
+
+    except AttributeError:
+        save_results(
+            ac.results,
+            os.path.join(
+                output_directory,
+                f"{output_prefix}{type(ac).__name__}"
+                ),
+            )
 
 
 def maincli(ap):
