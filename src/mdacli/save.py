@@ -9,14 +9,12 @@
 import json
 import os
 import sys
-import warnings
 import zipfile
+from functools import partial
 from pathlib import Path
 
 import numpy as np
 from MDAnalysis.analysis.base import Results
-
-from mdacli.colors import Emphasise
 
 
 def save_results(results, fprefix="mdacli_results"):
@@ -42,7 +40,9 @@ def save_results(results, fprefix="mdacli_results"):
         A Results instance from which the stored data is taken.
     """
     save_1D_arrays(results, fprefix=fprefix, remove=True)
-    save_XD_arrays(results, fprefix=fprefix, remove=True)
+    save_2D_arrays(results, fprefix=fprefix, remove=True)
+    save_3D_arrays(results, fprefix=fprefix, remove=True)
+    save_higher_dim_arrays(results, fprefix=fprefix, remove=True, min_ndim=4)
     save_json_serializables(results, remove=True, fname=fprefix)
     save_Results_object(results, fprefix=fprefix, remove=True)
     return
@@ -86,20 +86,11 @@ def get_1D_arrays(results):
     list_1D_labels = []
 
     for key, value in results.items():
-        if is_array_1D(value):
+        if is_1d_array(value):
             list_1D.append(value)
             list_1D_labels.append(key)
 
     return list_1D, list_1D_labels
-
-
-def is_array_1D(arr):
-    """Assert arr is an array and of 1 single dimension."""
-    valid = \
-        isinstance(arr, np.ndarray) \
-        and arr.ndim == 1
-
-    return valid
 
 
 def stack_1d_arrays_list(list_1D, extra_list=None):
@@ -155,61 +146,32 @@ def stack_1d_arrays_list(list_1D, extra_list=None):
         return out_lists
 
 
-def save_XD_arrays(results, fprefix="XD", remove=True):
-    """Save items of multidimensional arrays to CSV."""
+def save_2D_arrays(results, fprefix="2Darr", remove=True):
+    """Save items of 2D array."""
     keys = []
     for key, value in results.items():
-        if is_array_higher_dim(value):
-            save_result_array(value, fprefix=fprefix, arr_name=key)
+        value = try_to_squeeze_me(value)
+        if is_2d_array(value):
+            savetxt_w_command(fname=f"{fprefix}_{key}.csv", X=value)
             keys.append(key)
 
     return return_with_remove(results, keys, remove)
 
 
-def is_array_higher_dim(arr):
-    """Assert if arr is array of more than one dim."""
-    valid = \
-        isinstance(arr, np.ndarray) \
-        and arr.ndim > 1
-
-    return valid
-
-
-def save_result_array(arr, fprefix='prefix', arr_name='arr_name'):
-    """Save array to disk accoring to num of dimensions."""
-    # Remove extra dimensions
-    item = np.squeeze(arr)
-    n_dims = item.ndim
-
-    if n_dims == 2:
-        savetxt_w_command(
-            fname=f"{fprefix}_{arr_name}.csv",
-            X=item,
-            )
-
-    elif n_dims == 3:
-        save_3D_array_to_2D_csv(
-            item,
-            arr_name=f"{fprefix}_{arr_name}",
-            zipit=True,
-            )
-
-    elif n_dims > 3:
-        np.save(
-            f"{fprefix}_{arr_name}.npz",
-            item,
-            allow_pickle=False,
-            )
-
-    else:
-        warnings.warn(
-            Emphasise.warning(
-                f"Could not save the array if {n_dims} dimensions. "
-                "Something unexpected happend."
+def save_3D_arrays(results, fprefix="3Darr", remove=True):
+    """Save items of 2D array."""
+    keys = []
+    for key, value in results.items():
+        value = try_to_squeeze_me(value)
+        if is_3d_array(value):
+            save_3D_array_to_2D_csv(
+                value,
+                arr_name=f"{fprefix}_{key}",
+                zipit=True,
                 )
-            )
+            keys.append(key)
 
-    return
+    return return_with_remove(results, keys, remove)
 
 
 def save_3D_array_to_2D_csv(
@@ -251,6 +213,33 @@ def save_3D_array_to_2D_csv(
     return
 
 
+def save_higher_dim_arrays(results, fprefix="XDarr", remove=True, min_ndim=4):
+    """Save items of multidimensional arrays to CSV."""
+    keys = []
+    for key, value in results.items():
+        value = try_to_squeeze_me(value)
+        if is_higher_dimension_array(value, min_ndim):
+            save_result_array(value, fprefix=fprefix, arr_name=key)
+            keys.append(key)
+
+    return return_with_remove(results, keys, remove)
+
+
+def save_result_array(arr, fprefix='prefix'):
+    """Save array to disk accoring to num of dimensions."""
+    item = np.squeeze(arr)
+
+    save_options = {
+        item.ndim == 1: save_1D_arrays,
+        item.ndim == 2: save_2D_arrays,
+        item.ndim == 3: save_3D_arrays,
+        item.ndim > 3: save_higher_dim_arrays,
+        }
+
+    save_options[True](item, fprefix=fprefix)
+    return
+
+
 def save_json_serializables(results, remove=True, **jsonargs):
     """Save serializable items to a JSON."""
     json_dict = {
@@ -263,9 +252,8 @@ def save_json_serializables(results, remove=True, **jsonargs):
         for key in json_dict.keys():
             results.pop(key)
 
-    json_dict["command"] = get_cli_input()
-
     if json_dict:
+        json_dict["command"] = get_cli_input()
         save_to_json(json_dict, **jsonargs)
 
 
@@ -338,6 +326,34 @@ def save_files_to_zip(files, zipname='thezip', remove=True):
         remove_files(files)
 
     return
+
+
+def is_dimension_array(arr, ndim):
+    """Assert value is array and of certain dimension."""
+    valid = \
+        isinstance(arr, np.ndarray) \
+        and arr.ndim == ndim
+
+    return valid
+
+
+def is_higher_dimension_array(arr, ndim):
+    """Assert value is array and of certain dimension."""
+    valid = \
+        isinstance(arr, np.ndarray) \
+        and arr.ndim > ndim
+
+    return valid
+
+
+is_1d_array = partial(is_dimension_array, ndim=1)
+is_2d_array = partial(is_dimension_array, ndim=2)
+is_3d_array = partial(is_dimension_array, ndim=3)
+
+
+def try_to_squeeze_me(arr):
+    """Squeeze the arr if is array."""
+    return np.squeeze(arr) if isinstance(arr, np.ndarray) else arr
 
 
 def remove_files(files):
