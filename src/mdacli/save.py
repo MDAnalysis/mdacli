@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- Mode: python; tab-width: 4; indent-tabs-mode:nil; coding:utf-8 -*-
-#
+
 # Copyright (c) 2021 Authors and contributors
 #
 # Released under the GNU Public Licence, v2 or any higher version
@@ -10,15 +10,14 @@ import json
 import os
 import sys
 import zipfile
+from functools import partial
+from pathlib import Path
 
 import numpy as np
-
 from MDAnalysis.analysis.base import Results
 
-from mdacli.colors import Emphasise
 
-
-def save_results(fprefix, results):
+def save_results(results, fprefix="mdacli_results"):
     """
     Save the attributes of a results instance to disk.
 
@@ -40,108 +39,58 @@ def save_results(fprefix, results):
     results : `~MDAnalysis.analysis.base.Results`
         A Results instance from which the stored data is taken.
     """
+    save_1D_arrays(results, fprefix=fprefix, remove=True)
+    save_2D_arrays(results, fprefix=fprefix, remove=True)
+    save_3D_arrays(results, fprefix=fprefix, remove=True)
+    save_higher_dim_arrays(results, fprefix=fprefix, remove=True, min_ndim=4)
+    save_json_serializables(results, remove=True, fname=fprefix)
+    save_Results_object(results, fprefix=fprefix, remove=True)
+    return
+
+
+def save_1D_arrays(results, fprefix="1darray", remove=True):
+    """
+    Save 1D arrays from results.
+
+    Parameters
+    ----------
+    results : dict-like
+        Dictionary containing results.
+
+    remove : bool
+        If true remove keys mapping to 1D numpy arrays.
+    """
+    list_1D, list_1D_labels = get_1D_arrays(results)
+
+    if not list_1D:
+        return
+
+    out_lists, out_lables = stack_1d_arrays_list(list_1D, list_1D_labels)
+
+    for out_list, out_label in zip(out_lists, out_lables):
+        out_label = out_label.flatten()
+
+        # [3:] to align lables with entries
+        savetxt_w_command(
+            fname=f"{fprefix}_{'_'.join(out_label)}.csv",
+            X=out_list.T,
+            header=''.join([f"{i:>25}" for i in out_label])[3:]
+            )
+
+    return return_with_remove(results, list_1D_labels, remove)
+
+
+def get_1D_arrays(results):
+    """Get items from dict which correspond to np.ndarrays one dim."""
     list_1D = []
     list_1D_labels = []
-    json_dict = {}
 
-    for key, item in results.items():
-        if isinstance(item, Results):
-            # Run `save_results` recursively if
-            # `item` is results instancee
-            save_results(f"{fprefix}_{key}", item)
-        elif isinstance(item, np.ndarray):
-            # Remove extra dimensions
-            item = np.squeeze(item)
-            n_dims = item.ndim
+    for key, value in results.items():
+        if is_1d_array(value):
+            list_1D.append(value)
+            list_1D_labels.append(key)
 
-            if n_dims == 1:
-                list_1D.append(item)
-                list_1D_labels.append(key)
-
-            elif n_dims == 2:
-                np.savetxt(
-                    fname=f"{fprefix}_{key}.csv",
-                    X=item,
-                    fmt='%-10s',
-                    #delimiter='\t',
-                    )
-
-            elif n_dims == 3:
-                min_dim = np.argmin(item)
-                files_to_zip = []
-
-                # Split array along the dimension with smallest number
-                # of entries
-                splitted_item = np.split(
-                    item,
-                    item.shape[min_dim],
-                    axis=min_dim,
-                    )
-
-                for arr in splitted_item:
-                    files_to_zip.append(f"{key}_dim_{min_dim}_idx_{i}.csv")
-                    np.savetxt(
-                        fname=files_to_zip[-1],
-                        X=np.squeeze(arr),
-                        delimiter=',',
-                        )
-
-                # Compress all csv files into a single zip archive
-                with zipfile.ZipFile(f'{key}.zip', 'w') as zipF:
-                    for file_name in files_to_zip:
-                        zipF.write(
-                            file_name,
-                            compress_type=zipfile.ZIP_DEFLATED,
-                            )
-                        os.remove(file_name)
-
-            elif n_dims > 3:
-                np.save(
-                    f"{fprefix}_{key}",
-                    item,
-                    allow_pickle=False,
-                    )
-
-            else:
-                warnings.warn(
-                    Emphasise.warning(
-                        "Saving numpy arrays with more than "
-                        "three dimensions is currently not supported."
-                        )
-                    )
-
-        elif (isinstance(item, (bool, int, float, list, tuple, dict))
-              or item is None):
-            # This can be encoded in a json file
-            json_dict[key] = item
-
-        else:
-            warnings.warn(Emphasise.warning(f"Saving {key} of type {type(item)}"
-                          "is currently not supported."))
-
-    # Stack 1D arrays and save teheem to csv
-    if len(list_1D) > 0:
-        out_lists, out_lables = stack_1d_arrays_list(list_1D, list_1D_labels)
-
-        command_run = ' '.join(sys.argv) + "\n"
-
-        for out_list, out_label in zip(out_lists, out_lables):
-            out_label = out_label.flatten()
-
-            # [3:] to align lables with entries
-            savetxt_w_command(
-                fname=f"{fprefix}_{'_'.join(out_label)}.csv",
-                X=out_list.T,
-                header=''.join([f"{i:>25}" for i in out_label])[3:]
-                )
-
-    # Save everything which is left to a json file
-    # if json dict is not empty
-    if json_dict:
-        with open(f'{fprefix}.json', 'w') as f:
-            json.dump(json_dict, f)
-
-    return
+    return list_1D, list_1D_labels
 
 
 def stack_1d_arrays_list(list_1D, extra_list=None):
@@ -197,6 +146,221 @@ def stack_1d_arrays_list(list_1D, extra_list=None):
         return out_lists
 
 
+def save_2D_arrays(results, fprefix="2Darr", remove=True):
+    """Save items of 2D array."""
+    keys = []
+    for key, value in results.items():
+        value = try_to_squeeze_me(value)
+        if is_2d_array(value):
+            savetxt_w_command(fname=f"{fprefix}_{key}.csv", X=value)
+            keys.append(key)
+
+    return return_with_remove(results, keys, remove)
+
+
+def save_3D_arrays(results, fprefix="3Darr", remove=True):
+    """Save items of 2D array."""
+    keys = []
+    for key, value in results.items():
+        value = try_to_squeeze_me(value)
+        if is_3d_array(value):
+            save_3D_array_to_2D_csv(
+                value,
+                arr_name=f"{fprefix}_{key}",
+                zipit=True,
+                )
+            keys.append(key)
+
+    return return_with_remove(results, keys, remove)
+
+
+def save_3D_array_to_2D_csv(
+        item,
+        arr_name='arr',
+        zipit=True,
+        ):
+    """
+    Save 3D array to 2D CSVs.
+
+    Has option to store all in a ZIP file.
+    """
+    min_dim = np.argmin(item)
+    files_to_zip = []
+
+    # Split array along the dimension with smallest number
+    # of entries
+    splitted_item = np.split(
+        item,
+        item.shape[min_dim],
+        axis=min_dim,
+        )
+
+    save_to_folder = not zipit
+    folder = None
+    if save_to_folder:
+        folder = Path(arr_name)
+        folder.mkdir(parents=True, exist_ok=True)
+
+    for i, arr in enumerate(splitted_item):
+        fname = f"{arr_name}_dim_{min_dim}_idx_{i}.csv"
+        foutname = folder.joinpath(fname) if folder else fname
+        savetxt_w_command(fname=foutname, X=np.squeeze(arr))
+        files_to_zip.append(fname)
+
+    if zipit:
+        save_files_to_zip(files_to_zip, zipname=arr_name, remove=True)
+
+    return
+
+
+def save_higher_dim_arrays(results, fprefix="XDarr", remove=True, min_ndim=4):
+    """Save items of multidimensional arrays to CSV."""
+    keys = []
+    for key, value in results.items():
+        value = try_to_squeeze_me(value)
+        if is_higher_dimension_array(value, min_ndim):
+            save_result_array(value, fprefix=fprefix, arr_name=key)
+            keys.append(key)
+
+    return return_with_remove(results, keys, remove)
+
+
+def save_result_array(arr, fprefix='prefix'):
+    """Save array to disk accoring to num of dimensions."""
+    item = np.squeeze(arr)
+
+    save_options = {
+        item.ndim == 1: save_1D_arrays,
+        item.ndim == 2: save_2D_arrays,
+        item.ndim == 3: save_3D_arrays,
+        item.ndim > 3: save_higher_dim_arrays,
+        }
+
+    save_options[True](item, fprefix=fprefix)
+    return
+
+
+def save_json_serializables(results, remove=True, **jsonargs):
+    """Save serializable items to a JSON."""
+    json_dict = {
+        key: value
+        for key, value in results.items()
+        if is_serializable(value)
+        }
+
+    if remove:
+        for key in json_dict.keys():
+            results.pop(key)
+
+    if json_dict:
+        json_dict["command"] = get_cli_input()
+        save_to_json(json_dict, **jsonargs)
+
+
+def is_serializable(value):
+    """Assert if value is json serializable."""
+    try:
+        json.dumps(value)
+        return True
+    except (TypeError, OverflowError):
+        return False
+
+
+def save_to_json(json_dict, fname='jdict', indent=4, sort_keys=True):
+    """Save dictionary to JSON file."""
+    with open(f'{fname}.json', 'w') as f:
+        json.dump(json_dict, f, indent=indent, sort_keys=sort_keys)
+
+
+def save_Results_object(results, fprefix='results', remove=True):
+    """Save results if they are Results objects."""
+    keys = []
+    for key, value in results.items():
+        if isinstance(value, Results):
+            save_results(f"{fprefix}_{key}", value)
+            keys.append(key)
+
+    return return_with_remove(results, keys, remove)
+
+
+def return_with_remove(ddict, keys, remove):
+    """
+    Serve all saving functions.
+
+    If remove is true,
+    Returns subset of keys from dict.
+    Removes keys subset from original dict.
+
+    Else, return None.
+    """
+    if remove:
+        return {key: ddict.pop(key) for key in keys}
+
+    else:
+        return None
+
+
+def save_files_to_zip(files, zipname='thezip', remove=True):
+    """
+    Compress all files into a single zip archive.
+
+    Parameters
+    ----------
+    files : list-like
+        File names to save to the ZIP archive.
+
+    zipname : str
+        The name of the zip file without extension.
+
+    remove : bool, option, default True
+        Removes the original files.
+    """
+    with zipfile.ZipFile(f'{zipname}.zip', 'w') as zipF:
+        for file_name in files:
+            zipF.write(
+                file_name,
+                compress_type=zipfile.ZIP_DEFLATED,
+                )
+
+    if remove:
+        remove_files(files)
+
+    return
+
+
+def is_dimension_array(arr, ndim):
+    """Assert value is array and of certain dimension."""
+    valid = \
+        isinstance(arr, np.ndarray) \
+        and arr.ndim == ndim
+
+    return valid
+
+
+def is_higher_dimension_array(arr, ndim):
+    """Assert value is array and of certain dimension."""
+    valid = \
+        isinstance(arr, np.ndarray) \
+        and arr.ndim > ndim
+
+    return valid
+
+
+is_1d_array = partial(is_dimension_array, ndim=1)
+is_2d_array = partial(is_dimension_array, ndim=2)
+is_3d_array = partial(is_dimension_array, ndim=3)
+
+
+def try_to_squeeze_me(arr):
+    """Squeeze the arr if is array."""
+    return np.squeeze(arr) if isinstance(arr, np.ndarray) else arr
+
+
+def remove_files(files):
+    """Remove files from disk."""
+    for filename in files:
+        os.remove(filename)
+    return
 
 
 def savetxt_w_command(fname, X, header='', fsuffix=".csv", **kwargs):
@@ -208,7 +372,12 @@ def savetxt_w_command(fname, X, header='', fsuffix=".csv", **kwargs):
     """
     header = "{}\n{}".format(get_cli_input(), header)
     fname = "{}{}".format(fname, (not fname.endswith(fsuffix)) * fsuffix)
-    np.savetxt(fname, X, header=header, **kwargs) 
+    np.savetxt(
+        fname,
+        X,
+        header=header,
+        fmt="%-20s",
+        **kwargs)
 
 
 def get_cli_input():

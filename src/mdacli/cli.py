@@ -15,20 +15,17 @@ this functionality.
 import argparse
 import importlib
 import inspect
-import json
 import os
 import sys
 import warnings
-import zipfile
 
 import MDAnalysis as mda
-import numpy as np
 from MDAnalysis.analysis import __all__
-from MDAnalysis.analysis.base import AnalysisBase, Results
+from MDAnalysis.analysis.base import AnalysisBase
 
 from mdacli.colors import Emphasise
-from mdacli.utils import convert_str_time, parse_callable_signature, parse_docs
 from mdacli.save import save_results
+from mdacli.utils import convert_str_time, parse_callable_signature, parse_docs
 
 
 # modules in MDAnalysis.analysis packages that are ignored by mdacli
@@ -254,8 +251,6 @@ def create_CLI(cli_parser, interface_name, parameters):
     return
 
 
-
-
 def analyze_data(
         # top and trajs need to be positional parameters in all CLIs
         # these can be added on the create_CLI level
@@ -321,9 +316,17 @@ def analyze_data(
            step=step,
            verbose=verbose)
 
-    save_results(os.path.join(output_directory,
-                              f"{output_prefix}{type(ac).__name__}"),
-                 ac.results)
+    try:
+        ac.save_results()
+
+    except AttributeError:
+        save_results(
+            ac.results,
+            os.path.join(
+                output_directory,
+                f"{output_prefix}{type(ac).__name__}"
+                ),
+            )
 
 
 def maincli(ap):
