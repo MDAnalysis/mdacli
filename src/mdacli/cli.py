@@ -15,6 +15,7 @@ this functionality.
 import argparse
 import importlib
 import inspect
+import os
 import sys
 import warnings
 
@@ -23,6 +24,7 @@ from MDAnalysis.analysis import __all__
 from MDAnalysis.analysis.base import AnalysisBase
 
 from mdacli.colors import Emphasise
+from mdacli.save import save_results
 from mdacli.utils import convert_str_time, parse_callable_signature, parse_docs
 
 
@@ -157,6 +159,24 @@ def create_CLI(cli_parser, interface_name, parameters):
         )
 
     common_group.add_argument(
+        "-pre",
+        dest="output_prefix",
+        type=str,
+        default="",
+        help="Additional prefix for all output files. Files will be "
+             " automatically named by the used module (default: %(default)s)"
+        )
+
+    common_group.add_argument(
+        "-o",
+        dest="output_directory",
+        type=str,
+        default=".",
+        help="Directory in which the output files produced will be stored."
+             "(default: %(default)s)"
+        )
+
+    common_group.add_argument(
         "-v",
         dest="verbose",
         help="Be loud and noisy",
@@ -284,27 +304,29 @@ def analyze_data(
                              "".format(startframe, stopframe, step, u.trajectory.n_frames))  # noqa: E501
 
     # Collect paramaters not necessary for initilizing ac object.
-    verbose = analysis_kwargs.pop("verbose")
     analysis_kwargs.pop("func")
+    verbose = analysis_kwargs.pop("verbose")
+    output_directory = analysis_kwargs.pop("output_directory")
+    output_prefix = analysis_kwargs.pop("output_prefix")
+    output_prefix += "_" if len(output_prefix) > 0 else ""
 
     ac = analysis_callable(**analysis_kwargs)
-    results = ac.run(start=startframe,
-                     stop=stopframe,
-                     step=step,
-                     verbose=verbose)
+    ac.run(start=startframe,
+           stop=stopframe,
+           step=step,
+           verbose=verbose)
 
-    # prototype lines to test functionality TO REMOVE
-    print(analysis_kwargs)
-    sys.exit("Analysis complete. exiting...")
-    # extract results?
-    # here the same, how are the results collected?
-    # for RMSD we need to access the 'rmsd' attribute after .run() method.
-    # do we need to alter (add) a common interface on all the MDAnalysis
-    # interfaces. This would imply a intervention on the MDA code itself.
-    # we can definitively create a common method on all classes that links
-    # to the classes specific method/attribute where the results are stored.
+    try:
+        ac.save_results()
 
-    save_results_to_some_file(results)  # noqa: F821
+    except AttributeError:
+        save_results(
+            ac.results,
+            os.path.join(
+                output_directory,
+                f"{output_prefix}{type(ac).__name__}"
+                ),
+            )
 
 
 def maincli(ap):

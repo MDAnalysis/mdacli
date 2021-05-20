@@ -6,15 +6,10 @@
 # Released under the GNU Public Licence, v2 or any higher version
 # SPDX-License-Identifier: GPL-2.0-or-later
 """Test mdacli."""
-import sys
 
 import pytest
 
-
-# Workaround since we have no real module
-sys.path.append("..")
-
-from mdacli.cli import convert_str_time  # noqa: E402
+from mdacli.cli import convert_str_time
 
 
 @pytest.mark.parametrize('x, frame',
