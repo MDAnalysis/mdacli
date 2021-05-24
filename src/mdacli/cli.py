@@ -347,7 +347,6 @@ def maincli(ap):
 
     try:
         args = ap.parse_args()
-        sys.exit(args)
         analyze_data(**vars(args))
     except Exception as e:
         sys.exit(Emphasise.error(f"Error: {e}"))
