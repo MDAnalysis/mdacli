@@ -27,14 +27,6 @@ from mdacli.colors import Emphasise
 from mdacli.save import save_results
 from mdacli.utils import convert_str_time, parse_callable_signature, parse_docs
 
-
-# modules in MDAnalysis.analysis packages that are ignored by mdacli
-# relevant modules used in this CLI factory
-# hydro* are removed here because they have a different folder/file structure
-# and need to be investigated separately
-skip_mods = ('base', 'hydrogenbonds', 'hbonds')
-relevant_modules = (_mod for _mod in __all__ if _mod not in skip_mods)
-
 # global dictionary storing the parameters for all Analysis classes
 analysis_interfaces = {}
 
@@ -341,26 +333,27 @@ def maincli(ap):
         sys.exit(Emphasise.error(f"Error: {e}"))
 
 
-def setup_clients():
+def setup_clients(title, members):
     """
     Set up ArgumentParser clients.
+
+    Parameters
+    ----------
+    title : str
+        title of the parser
+    members : list
+        list containing Analysis classes for setting up the parser
 
     Returns
     -------
     argparse.ArgumentParser instance
     """
     ap = argparse.ArgumentParser()
-    cli_parser = ap.add_subparsers(title="MDAnalysis Analysis CLI")
+    cli_parser = ap.add_subparsers(title=title)
 
     # populates analysis_interfaces dictionary
-    for module in relevant_modules:
-        with warnings.catch_warnings():
-            warnings.simplefilter('ignore')
-            module = importlib.import_module('MDAnalysis.analysis.' + module)
-        for _, member in inspect.getmembers(module):
-            if inspect.isclass(member) and issubclass(member, AnalysisBase) \
-               and member is not AnalysisBase:
-                parse_callable_signature(member, analysis_interfaces)
+    for member in members:
+        parse_callable_signature(member, analysis_interfaces)
 
     # adds each Analysis class/function as a CLI under 'cli_parser'
     # to be writen
@@ -372,4 +365,25 @@ def setup_clients():
 
 def main():
     """Execute main CLI entry point."""
-    maincli(setup_clients())
+
+    # modules in MDAnalysis.analysis packages that are ignored by mdacli
+    # relevant modules used in this CLI factory
+    # hydro* are removed here because they have a different folder/file structure
+    # and need to be investigated separately
+    skip_mods = ('base', 'hydrogenbonds', 'hbonds')
+    relevant_modules = (_mod for _mod in __all__ if _mod not in skip_mods)
+
+    members = []
+    for module in relevant_modules:
+        with warnings.catch_warnings():
+            warnings.simplefilter('ignore')
+            module = importlib.import_module('MDAnalysis.analysis.' + module)
+        for _, member in inspect.getmembers(module):
+            if inspect.isclass(member) and issubclass(member, AnalysisBase) \
+               and member is not AnalysisBase:
+                members.append(member)
+
+    title = "MDAnalysis Analysis CLI"
+    ap = setup_clients(title=title,
+                       members=members)
+    maincli(ap)
