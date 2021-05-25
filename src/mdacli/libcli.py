@@ -3,6 +3,7 @@ import argparse
 import json
 from pathlib import Path
 
+
 class KwargsDict(argparse.Action):
     """
     Convert input string to a dictionary.
