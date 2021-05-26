@@ -13,15 +13,12 @@ This also demonstrates how other third party libraries could incorporate
 this functionality.
 """
 import argparse
-import importlib
-import inspect
 import os
 import sys
 import warnings
 
 import MDAnalysis as mda
 from MDAnalysis.analysis import __all__
-from MDAnalysis.analysis.base import AnalysisBase
 
 from mdacli import libcli
 from mdacli.colors import Emphasise
@@ -31,7 +28,7 @@ from mdacli.utils import convert_str_time, parse_callable_signature, parse_docs
 
 # modules in MDAnalysis.analysis packages that are ignored by mdacli
 # relevant modules used in this CLI factory
-# hydro* are removed here because they have a different folder/file structure 
+# hydro* are removed here because they have a different folder/file structure
 # and need to be investigated separately
 skip_mods = ('base', 'hydrogenbonds', 'hbonds')
 relevant_modules = (_mod for _mod in __all__ if _mod not in skip_mods)
@@ -384,16 +381,13 @@ def setup_clients(title, members):
 
 def main():
     """Execute main CLI entry point."""
+    with warnings.catch_warnings():
+        warnings.simplefilter('ignore')
+        members = libcli.find_AnalysisBase_members(*[f'MDAnalysis.analysis.{m}'
+                                                   for m in relevant_modules])
 
-    members = []
-    for module in relevant_modules:
-        with warnings.catch_warnings():
-            warnings.simplefilter('ignore')
-            module = importlib.import_module('MDAnalysis.analysis.' + module)
-        for _, member in inspect.getmembers(module):
-            if inspect.isclass(member) and issubclass(member, AnalysisBase) \
-               and member is not AnalysisBase:
-                members.append(member)
+    if members is None:
+        sys.exit("No analysis modules found.")
 
     title = "MDAnalysis Analysis CLI"
     ap = setup_clients(title=title,

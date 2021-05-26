@@ -6,16 +6,9 @@
 # Released under the GNU Public Licence, v2 or any higher version
 # SPDX-License-Identifier: GPL-2.0-or-later
 """Test mdacli."""
-import argparse
-import os
-from json.decoder import JSONDecodeError
-
 import pytest
 
-from mdacli import libcli
 from mdacli.cli import convert_str_time
-
-from . import example_json
 
 
 @pytest.mark.parametrize('x, frame',
@@ -38,51 +31,3 @@ def test_convert_str_time_raise():
     """Test convert string to time ValueError."""
     with pytest.raises(ValueError):
         convert_str_time('0.1', dt=1)
-
-
-@pytest.mark.parametrize(
-    'cmd,expected',
-    [
-        ('-d {"key1":1}', {"key1": 1}),
-        ]
-    )
-def test_KwargsDict(cmd, expected):
-    """Test dict reading action."""
-    ap = argparse.ArgumentParser()
-    ap.add_argument(
-        '-d',
-        action=libcli.KwargsDict,
-        default=None,
-        )
-    args = ap.parse_args(cmd.split())
-    assert args.d == expected
-
-
-@pytest.mark.parametrize(
-    'cmd,expected',
-    [
-        (f"-d {os.fspath(example_json)}", {"key1": 1}),
-        ]
-    )
-def test_KwargsDict_from_file(cmd, expected):
-    """Test dict reading action."""
-    ap = argparse.ArgumentParser()
-    ap.add_argument(
-        '-d',
-        action=libcli.KwargsDict,
-        default=None,
-        )
-    args = ap.parse_args(cmd.split())
-    assert args.d == expected
-
-
-def test_KwargsDict_error():
-    """Test error."""
-    ap = argparse.ArgumentParser()
-    ap.add_argument(
-        '-d',
-        action=libcli.KwargsDict,
-        default=None,
-        )
-    with pytest.raises(JSONDecodeError):
-        ap.parse_args("-d fail".split())
