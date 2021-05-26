@@ -23,6 +23,7 @@ import MDAnalysis as mda
 from MDAnalysis.analysis import __all__
 from MDAnalysis.analysis.base import AnalysisBase
 
+from mdacli import libcli
 from mdacli.colors import Emphasise
 from mdacli.save import save_results
 from mdacli.utils import convert_str_time, parse_callable_signature, parse_docs
@@ -44,6 +45,7 @@ STR_TYPE_DICT = {
     "str": str,
     "list": list,
     "tuple": tuple,
+    "dict": dict,
     "int": int,
     "float": float,
     "complex": complex,
@@ -223,6 +225,15 @@ def create_CLI(cli_parser, interface_name, parameters):
             group.add_argument(
                 name_par, dest=name, nargs="+", default=default,
                 help="{} (default: %(default)s)".format(description)
+                )
+
+        elif issubclass(type_, dict):
+            group.add_argument(
+                name_par,
+                dest=name,
+                default=None,
+                action=libcli.KwargsDict,
+                help=description,
                 )
 
         elif type_ is bool:
