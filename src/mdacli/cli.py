@@ -28,6 +28,13 @@ from mdacli.save import save_results
 from mdacli.utils import convert_str_time, parse_callable_signature, parse_docs
 
 
+# modules in MDAnalysis.analysis packages that are ignored by mdacli
+# relevant modules used in this CLI factory
+# hydro* are removed here because they have a different folder/file structure 
+# and need to be investigated separately
+skip_mods = ('base', 'hydrogenbonds', 'hbonds')
+relevant_modules = (_mod for _mod in __all__ if _mod not in skip_mods)
+
 # global dictionary storing the parameters for all Analysis classes
 analysis_interfaces = {}
 
@@ -366,12 +373,6 @@ def setup_clients(title, members):
 
 def main():
     """Execute main CLI entry point."""
-    # modules in MDAnalysis.analysis packages that are ignored by mdacli
-    # relevant modules used in this CLI factory
-    # hydro* are removed here because they have a different folder/file
-    # structure and need to be investigated separately
-    skip_mods = ('base', 'hydrogenbonds', 'hbonds')
-    relevant_modules = (_mod for _mod in __all__ if _mod not in skip_mods)
 
     members = []
     for module in relevant_modules:
