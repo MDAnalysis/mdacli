@@ -72,14 +72,14 @@ def test_KwargsDict_error():
 def test_find_AnalysisBase_members():
     """Test several input modules."""
     names = ["helix_analysis", "lineardensity"]
-    members = libcli.find_AnalysisBase_members(*names)
+    members = libcli.find_AnalysisBase_members(names)
     assert members[0] is HELANAL
     assert members[1] is LinearDensity
 
 
 def test_find_AnalysisBase_members_single():
     """Test one input module."""
-    members = libcli.find_AnalysisBase_members('rdf')
+    members = libcli.find_AnalysisBase_members(['rdf'])
 
     assert members[0] is InterRDF
     assert members[1] is InterRDF_s

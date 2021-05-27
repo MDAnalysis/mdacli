@@ -78,14 +78,14 @@ def find_classes_in_modules(klass, *module_names):
     return members or None
 
 
-def find_AnalysisBase_members(*modules):
+def find_AnalysisBase_members(modules):
     """Find Analysis Base members in modules."""
     members = find_classes_in_modules(
         AnalysisBase, *[f'MDAnalysis.analysis.{m}' for m in modules])
     return members
 
 
-def find_AnalysisBase_members_ignore_warnings(*modules):
+def find_AnalysisBase_members_ignore_warnings(modules):
     """Find Analysis Base members in modules and ignoring all warnings."""
     with warnings.catch_warnings():
         warnings.simplefilter('ignore')
