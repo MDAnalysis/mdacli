@@ -75,7 +75,7 @@ def find_classes_in_modules(klass, *module_names):
                and member is not klass:
                 members.append(member)
 
-    return None if not members else members
+    return members or None
 
 
 def find_AnalysisBase_members(modules):
