@@ -5,39 +5,20 @@
 #
 # Released under the GNU Public Licence, v2 or any higher version
 # SPDX-License-Identifier: GPL-2.0-or-later
-"""Test mdacli."""
+"""Test libcli."""
 import argparse
 import os
 from json.decoder import JSONDecodeError
 
 import pytest
+from MDAnalysis.analysis.base import AnalysisBase
+from MDAnalysis.analysis.helix_analysis import HELANAL
+from MDAnalysis.analysis.lineardensity import LinearDensity
+from MDAnalysis.analysis.rdf import InterRDF, InterRDF_s
 
 from mdacli import libcli
-from mdacli.cli import convert_str_time
 
 from . import example_json
-
-
-@pytest.mark.parametrize('x, frame',
-                         (('1', 1),
-                          ('-1', -1),
-                          ('1ns', 1000),
-                          ('12e3', 12e3),
-                          ('12e3ps', 12e3)))
-def test_convert_str_time(x, frame):
-    """Test convert string to time."""
-    assert frame == convert_str_time(x, dt=1)
-
-
-def test_convert_str_time_dt():
-    """Test convert string to time in ps."""
-    assert 1 == convert_str_time("10ps", dt=10)
-
-
-def test_convert_str_time_raise():
-    """Test convert string to time ValueError."""
-    with pytest.raises(ValueError):
-        convert_str_time('0.1', dt=1)
 
 
 @pytest.mark.parametrize(
@@ -86,3 +67,26 @@ def test_KwargsDict_error():
         )
     with pytest.raises(JSONDecodeError):
         ap.parse_args("-d fail".split())
+
+
+def test_find_AnalysisBase_members():
+    """Test several input modules."""
+    names = ["helix_analysis", "lineardensity"]
+    members = libcli.find_AnalysisBase_members(names)
+    assert members[0] is HELANAL
+    assert members[1] is LinearDensity
+
+
+def test_find_AnalysisBase_members_single():
+    """Test one input module."""
+    members = libcli.find_AnalysisBase_members(['rdf'])
+
+    assert members[0] is InterRDF
+    assert members[1] is InterRDF_s
+
+
+def test_find_AnalysisBase_members_None():
+    """Test that no module is found."""
+    members = libcli.find_classes_in_modules(AnalysisBase, "MDAnalysis")
+
+    assert members is None

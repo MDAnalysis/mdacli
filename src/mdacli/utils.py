@@ -59,7 +59,7 @@ def convert_str_time(x, dt):
     return frame
 
 
-def parse_callable_signature(callable_obj, storage_dict):
+def parse_callable_signature(callable_obj):
     """
     Parse a callable object to a convenient dictionary for CLI creation.
 
@@ -72,16 +72,13 @@ def parse_callable_signature(callable_obj, storage_dict):
         The callable object to inspect. Details of this object required
         for the creation of a CLI are added to the `storage_dict`.
 
-    storage_dict : dict
-        The dictionary that stores the details of the callable.
-
     Returns
     -------
     None
         Modifies `storage_dict` in place.
     """
-    storage_dict[callable_obj.__name__] = {}
-    storage_dict[callable_obj.__name__]["callable"] = callable_obj
+    storage_dict = {}
+    storage_dict["callable"] = callable_obj
 
     sig = inspect.signature(callable_obj)
     summary, summary_extended, doc = parse_docs(callable_obj)
@@ -152,12 +149,12 @@ def parse_callable_signature(callable_obj, storage_dict):
                     }
 
     # places all information captured for the callable in the dictionary
-    storage_dict[callable_obj.__name__]["positional"] = positional_args
-    storage_dict[callable_obj.__name__]["optional"] = optional_args
-    storage_dict[callable_obj.__name__]["desc"] = summary
-    storage_dict[callable_obj.__name__]["desc_long"] = summary_extended
+    storage_dict["positional"] = positional_args
+    storage_dict["optional"] = optional_args
+    storage_dict["desc"] = summary
+    storage_dict["desc_long"] = summary_extended
 
-    return
+    return storage_dict
 
 
 def parse_docs(klass):
