@@ -21,8 +21,8 @@ import MDAnalysis as mda
 from MDAnalysis.analysis import __all__
 
 from mdacli import __version__
-from mdacli.libcli import KwargsDict, find_AnalysisBase_members_ignore_warnings
 from mdacli.colors import Emphasise
+from mdacli.libcli import KwargsDict, find_AnalysisBase_members_ignore_warnings
 from mdacli.save import save_results
 from mdacli.utils import convert_str_time, parse_callable_signature, parse_docs
 
@@ -33,9 +33,6 @@ from mdacli.utils import convert_str_time, parse_callable_signature, parse_docs
 # and need to be investigated separately
 _skip_mods = ('base', 'hydrogenbonds', 'hbonds')
 _relevant_modules = (mod for mod in __all__ if mod not in _skip_mods)
-
-# global dictionary storing the parameters for all Analysis classes
-#analysis_interfaces = {}
 
 # serves CLI factory
 STR_TYPE_DICT = {
@@ -417,9 +414,6 @@ def setup_clients(title, members):
 
     cli_parser = ap.add_subparsers(title=title)
 
-    # populates analysis_interfaces dictionary
-    #for member in members:
-    #    parse_callable_signature(member, analysis_interfaces)
     analysis_interfaces = {
         member.__name__: parse_callable_signature(member)
         for member in members
