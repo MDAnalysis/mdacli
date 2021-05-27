@@ -11,6 +11,7 @@ import os
 from json.decoder import JSONDecodeError
 
 import pytest
+from MDAnalysis.analysis.base import AnalysisBase
 from MDAnalysis.analysis.helix_analysis import HELANAL
 from MDAnalysis.analysis.lineardensity import LinearDensity
 from MDAnalysis.analysis.rdf import InterRDF, InterRDF_s
@@ -71,15 +72,14 @@ def test_KwargsDict_error():
 def test_find_AnalysisBase_members():
     """Test several input modules."""
     names = ["helix_analysis", "lineardensity"]
-    members = libcli.find_AnalysisBase_members(*[f'MDAnalysis.analysis.{m}'
-                                               for m in names])
+    members = libcli.find_AnalysisBase_members(*names)
     assert members[0] is HELANAL
     assert members[1] is LinearDensity
 
 
 def test_find_AnalysisBase_members_single():
     """Test one input module."""
-    members = libcli.find_AnalysisBase_members('MDAnalysis.analysis.rdf')
+    members = libcli.find_AnalysisBase_members('rdf')
 
     assert members[0] is InterRDF
     assert members[1] is InterRDF_s
@@ -87,6 +87,6 @@ def test_find_AnalysisBase_members_single():
 
 def test_find_AnalysisBase_members_None():
     """Test that no module is found."""
-    members = libcli.find_AnalysisBase_members('MDAnalysis')
+    members = libcli.find_classes_in_modules(AnalysisBase, "MDAnalysis")
 
     assert members is None
