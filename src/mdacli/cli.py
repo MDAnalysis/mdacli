@@ -95,21 +95,23 @@ def create_CLI(cli_parser, interface_name, parameters):
     analysis_class_parser = cli_parser.add_parser(
         interface_name,
         help=parameters["desc"],
-        description=parameters["desc"] + "\n\n" + parameters["desc_long"],
+        description=f"{parameters['desc']}\n\n{parameters['desc_long']}",
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        )
-
-    common_group = analysis_class_parser.add_argument_group(
-        title="Common Analysis Parameters",
         )
 
     # Add run_analsis function as the default func parameter.
     # this is possible because the run_analsis function is equal to all
     # Analysis Classes
-    # common_group.set_defaults(func=analyze_data)
-    # common_group.set_defaults(analysis_callable=parameters["callable"])
+    analysis_class_parser.set_defaults(
+        analysis_callable=parameters["callable"])
 
-    common_group.add_argument(
+    universe_group = analysis_class_parser.add_argument_group(
+        title="Universe Parameters",
+        description="Parameters specific for loading the topology and"
+                    " trajectory"
+        )
+
+    universe_group.add_argument(
         "-s",
         dest="topology",
         type=str,
@@ -119,7 +121,7 @@ def create_CLI(cli_parser, interface_name, parameters):
         "".format(", ".join(mda._PARSERS.keys())),
         )
 
-    common_group.add_argument(
+    universe_group.add_argument(
         "-top",
         dest="topology_format",
         type=str,
@@ -127,7 +129,7 @@ def create_CLI(cli_parser, interface_name, parameters):
         help="Override automatic topology type detection. "
         "See topology for implemented formats.")
 
-    common_group.add_argument(
+    universe_group.add_argument(
         "-atom_style",
         dest="atom_style",
         type=str,
@@ -135,18 +137,18 @@ def create_CLI(cli_parser, interface_name, parameters):
         help="Manually set the atom_style information"
         "(currently only LAMMPS parser). E.g. atom_style='id type x y z'.")
 
-    common_group.add_argument(
+    universe_group.add_argument(
         "-f",
-        dest="trajectories",
+        dest="coordinates",
         type=str,
         default=None,
         nargs="+",
-        help="A single or multiple trajectory files. "
+        help="A single or multiple coordinate files. "
         "The FORMATs {} are implemented in MDAnalysis."
         "".format(", ".join(mda._READERS.keys())),
         )
 
-    common_group.add_argument(
+    universe_group.add_argument(
         "-traj",
         dest="trajectory_format",
         type=str,
@@ -154,7 +156,11 @@ def create_CLI(cli_parser, interface_name, parameters):
         help="Override automatic trajectory type detection. "
         "See trajectory for implemented formats.")
 
-    common_group.add_argument(
+    run_group = analysis_class_parser.add_argument_group(
+        title="Analysis run Parameters",
+        description="Genereal parameters specific for running the analysis"
+        )
+    run_group.add_argument(
         "-b",
         dest="begin",
         type=str,
@@ -162,7 +168,7 @@ def create_CLI(cli_parser, interface_name, parameters):
         help="frame or start time for evaluation. (default: %(default)s)"
         )
 
-    common_group.add_argument(
+    run_group.add_argument(
         "-e",
         dest="end",
         type=str,
@@ -170,7 +176,7 @@ def create_CLI(cli_parser, interface_name, parameters):
         help="frame or end time for evaluation. (default: %(default)s)"
         )
 
-    common_group.add_argument(
+    run_group.add_argument(
         "-dt",
         dest="dt",
         type=str,
@@ -178,7 +184,20 @@ def create_CLI(cli_parser, interface_name, parameters):
         help="step or time step for evaluation. (default: %(default)s)"
         )
 
-    common_group.add_argument(
+    run_group.add_argument(
+        "-v",
+        dest="verbose",
+        help="Be loud and noisy",
+        action="store_true"
+        )
+
+    # TODO: Should only be added if class does not have save_results 
+    # function. However we only have a dict here and can not check this 
+    # currently...
+    save_group = analysis_class_parser.add_argument_group(
+        title="Saving Parameters",
+        )
+    save_group.add_argument(
         "-pre",
         dest="output_prefix",
         type=str,
@@ -187,20 +206,13 @@ def create_CLI(cli_parser, interface_name, parameters):
              " automatically named by the used module (default: %(default)s)"
         )
 
-    common_group.add_argument(
+    save_group.add_argument(
         "-o",
         dest="output_directory",
         type=str,
         default=".",
         help="Directory in which the output files produced will be stored."
              "(default: %(default)s)"
-        )
-
-    common_group.add_argument(
-        "-v",
-        dest="verbose",
-        help="Be loud and noisy",
-        action="store_true"
         )
 
     pos_ = sorted(list(parameters["positional"].items()), key=lambda x: x[0])
@@ -278,122 +290,237 @@ def create_CLI(cli_parser, interface_name, parameters):
                 )
     return
 
-def create_universe():
-    pass
 
-def setup_analysis_parameters():
-    pass
-
-# TODO: Split the kwargs into two
-# dictionaries: one for the common_paramaters and one for the
-# specific for each anaylsis.
-# TODO: Also the script fails if many paramaters are not given like
-# begin, end, topolog_format. However, these paramaters are optional
-# so they should also be here.
-def run_analsis(analysis_callable, **kwargs):
-    """Perform main client logic.
-
-    ``kwargs`` contains all paramaters necessary for the analysis_callable
-    and the initlization of the MDAnalysis Universe.
+def create_universe(topology,
+                    coordinates=None,
+                    topology_format=None,
+                    atom_style=None,
+                    trajectory_format=None):
+    """
+    Initilize a MDAnalysis universe instance.
 
     Parameters
     ----------
-    analysis_callable : function
-        Analysis class for which the analysis is performed.
+    topology : str, stream, `~MDAnalysis.core.topology.Topology`, `np.ndarray`
+        A CHARMM/XPLOR PSF topology file, PDB file or Gromacs GRO file; used to
+        define the list of atoms. If the file includes bond information,
+        partial charges, atom masses, ... then these data will be available to
+        MDAnalysis. Alternatively, an existing
+        :class:`MDAnalysis.core.topology.Topology` instance may be given,
+        numpy coordinates, or None for an empty universe.
+    coordinates : str, stream, list of str, list of stream
+        Coordinates can be provided as files of
+        a single frame (eg a PDB, CRD, or GRO file); a list of single
+        frames; or a trajectory file (in CHARMM/NAMD/LAMMPS DCD, Gromacs
+        XTC/TRR, or generic XYZ format). The coordinates must be
+        ordered in the same way as the list of atoms in the topology.
+        See :ref:`Supported coordinate formats` for what can be read
+        as coordinates. Alternatively, streams can be given.
+    topology_format : str, None
+        Provide the file format of the topology file; ``None`` guesses it from
+        the file extension. Can also pass a subclass of
+        :class:`MDAnalysis.topology.base.TopologyReaderBase` to define a custom
+        reader to be used on the topology file.
+    trajectory_format : str or list or object
+        provide the file format of the coordinate or trajectory file;
+        ``None`` guesses it from the file extension. Note that this
+        keyword has no effect if a list of file names is supplied because
+        the "chained" reader has to guess the file format for each
+        individual list member [``None``]. Can also pass a subclass of
+        :class:`MDAnalysis.coordinates.base.ProtoReader` to define a custom
+        reader to be used on the trajectory file.
+    atom_style : str
+        Customised LAMMPS `atom_style` information.
 
     Returns
     -------
-    ac : `MDAnalysis.analysis.base.AnalysisBase`
-        AnalysisBase instance of the given ``analysis_callable`` after run.
+    u : `MDAnalysis.Universe`
     """
-    verbose = kwargs.pop("verbose")
-    kwargs.pop("func")
 
-    if verbose:
-        print("Loading trajectory...", end="")
-        sys.stdout.flush()
+    # MDAnalysis throws a warning if the topology does not include coordintes.
+    with warnings.catch_warnings():
+        warnings.simplefilter('ignore')
+        u = mda.Universe(topology,
+                        topology_format=topology_format,
+                        atom_style=atom_style)
 
-    # Prepare kwargs for universe creation
-    u_kwargs = {}
-    atom_style = kwargs["atom_style"]
-    if atom_style is not None:
-        u_kwargs['atom_style'] = atom_style
+    if coordinates is not None:
+        u.load_new(coordinates,
+                   format=trajectory_format)
 
-    u = mda.Universe(kwargs.pop("topology"),
-                     topology_format=kwargs.pop("topology_format"),
-                     **u_kwargs)
+    return u
 
-    if kwargs["trajectories"] is not None:
-        u.load_new(kwargs.pop("trajectories"),
-                   format=kwargs.pop("trajectory_format"))
-    if verbose:
-        print("Done!\n")
 
-    # Convert special types (i.e AtomGroups)
-    # Ugly that we have to parse again... but currently I have no better idea :(
-    params = parse_docs(analysis_callable)[2]  # Index [2] for paramaters
+def convert_analysis_parameters(universe,
+                                analysis_callable,
+                                analysis_parameters):
+    """
+    Convert parameters from the command line for the anlysis.
+
+    Convert special types (i.e AtomGroups) from the command line 
+    strings into the correct format.
+
+    Parameters
+    ----------
+    universe : `MDAnalysis.Universe`
+        Universe for which the kwargs are related to
+    analysis_callable : function
+        Analysis class for which the analysis is performed.
+    analysis_parameters : dict
+        parameters to be processed
+
+    Returns
+    -------
+    converted_params : dict
+        Dictionary containing the converted paramaters
+
+    Raises
+    ------
+    ValueError
+        If an Atomgroup does not contain any atoms
+    """
+    # Index 2 for paramaters
+    params = parse_docs(analysis_callable)[2]
     for param_name, dictionary in params.items():
         if "AtomGroup" in dictionary['type']:
-            sel = u.select_atoms(kwargs[param_name])
+            sel = universe.select_atoms(analysis_parameters[param_name])
             if len(sel) > 0:
-                kwargs[param_name] = sel
+                analysis_parameters[param_name] = sel
             else:
                 raise ValueError(
                     "AtomGroup `-{}` with selection `{}` does not "
                     "contain any atoms".format(
                         param_name,
-                        kwargs[param_name]
+                        analysis_parameters[param_name]
                         )
                     )
         elif "Universe" in dictionary['type']:
-            kwargs[param_name] = u
+            analysis_parameters[param_name] = universe
 
-    with warnings.catch_warnings():
-        warnings.simplefilter('always')
-        startframe = convert_str_time(kwargs.pop("begin"), u.trajectory.dt)  # noqa: E501
-        stopframe = convert_str_time(kwargs.pop("end"), u.trajectory.dt)  # noqa: E501
-        step = convert_str_time(kwargs.pop("dt"), u.trajectory.dt)
+    return analysis_parameters
 
-        # raises error if frame selection range is an empty selection
-        if not list(range(u.trajectory.n_frames)[slice(startframe, stopframe, step)]):  # noqa: E501
-            raise ValueError("Trajectory frame range {}:{}:{} is not valid for {} frames."  # noqa: E501
-                             "".format(startframe, stopframe, step, u.trajectory.n_frames))  # noqa: E501
 
-    # Collect paramaters not necessary for initilizing ac object.
-    output_directory = kwargs.pop("output_directory")
-    output_prefix = kwargs.pop("output_prefix")
-    output_prefix += "_" if len(output_prefix) > 0 else ""
+def split_argparse_into_groups(parser, namespace):
+    """
+    Split the the populated namespace of argparse into groups.
 
-    ac = analysis_callable(**kwargs)
-    ac.run(start=startframe,
-           stop=stopframe,
-           step=step,
-           verbose=verbose)
+    See https://stackoverflow.com/questions/31519997/is-it-possible-to-only-parse-one-argument-groups-parameters-with-argparse
+    for details
 
-    try:
-        ac.save_results()
+    Parameters
+    ----------
+    parse : `argparse.ArgumentParser`
+        argument parser instance
+    namespace : `argparse.Namespace`
+        instance storing the parameters
 
-    except AttributeError:
-        save_results(
-            ac.results,
-            os.path.join(
-                output_directory,
-                f"{output_prefix}{type(ac).__name__}"
-                ),
-            )
-    return ac
+    Returns
+    -------
+    arg_grouped_dict : dict
+        Dictionary containing parameters split according to their groups
+    """
+    arg_grouped_dict = {}
+    for group in parser._action_groups:
+        group_dict={a.dest:getattr(namespace, a.dest, None)
+            for a in group._group_actions}
+        arg_grouped_dict[group.title] = group_dict
+    
+    return arg_grouped_dict
 
 
 def maincli(ap):
-    """Execute main client interface."""
+    """Execute main client interface.
+    
+    Returns
+    -------
+    ac : `MDAnalysis.analysis.base.AnalysisBase`
+        AnalysisBase instance of the given ``analysis_callable`` after run.
+    """
     if len(sys.argv) < 2:
         ap.error("A subcommand is required.")
 
     try:
         args = ap.parse_args()
-        run_analsis(**vars(args))
+        verbose = args.verbose
+        analysis_callable = args.analysis_callable
+
+        # Get the correct ArgumentParser instance from all subparsers
+        # [0] selects the first subparser where our analysises live in.
+        ap_sup = ap._subparsers._group_actions[0].choices[
+            analysis_callable.__name__]
+        arg_grouped_dict = split_argparse_into_groups(ap_sup, args)
+
+        # Initilize Universe
+        if verbose:
+            print("Loading trajectory...", end="")
+        universe = create_universe(**arg_grouped_dict["Universe Parameters"])
+        if verbose:
+            print("Done!\n")
+            sys.stdout.flush()
+
+        # Setup Analysis instance
+        ac_parameters_dict = arg_grouped_dict["Mandatory Parameters"]
+
+        # Only exsists if optional arguments are defined
+        try:
+            ac_parameters_dict += arg_grouped_dict["Optional Parameters"]
+        except KeyError:
+            pass
+
+        ac_parameters_dict = convert_analysis_parameters(
+                                universe,
+                                analysis_callable,
+                                ac_parameters_dict)
+
+        ac = analysis_callable(**ac_parameters_dict)
+
+        # Run the analysis
+        with warnings.catch_warnings():
+            warnings.simplefilter('always')
+            startframe = convert_str_time(
+                    arg_grouped_dict["Analysis run Parameters"]["begin"],
+                    universe.trajectory.dt)
+            stopframe = convert_str_time(
+                    arg_grouped_dict["Analysis run Parameters"]["end"],
+                    universe.trajectory.dt)
+            step = convert_str_time(
+                    arg_grouped_dict["Analysis run Parameters"]["dt"],
+                    universe.trajectory.dt)
+
+        # raises error if frame selection range is an empty selection
+        if not list(range(universe.trajectory.n_frames)[slice(startframe,
+                                                              stopframe,
+                                                              step)]):
+            raise ValueError(f"Trajectory frame range {startframe}:"
+                             f"{stopframe}:{step} is not valid for"
+                             f" {universe.trajectory.n_frames} frames.")
+
+        ac.run(start=startframe,
+               stop=stopframe,
+               step=step,
+               verbose=verbose)
+
+        # Save the data
+        output_directory = arg_grouped_dict["Saving Parameters"]["output_directory"]
+        output_prefix = arg_grouped_dict["Saving Parameters"]["output_prefix"]
+        output_prefix += "_" if len(output_prefix) > 0 else ""
+
+        try:
+            ac.save_results()
+
+        except AttributeError:
+            save_results(
+                ac.results,
+                os.path.join(
+                    output_directory,
+                    f"{output_prefix}{type(ac).__name__}"
+                    ),
+                )
+
     except Exception as e:
         sys.exit(Emphasise.error(f"Error: {e}"))
+
+    return ac
 
 
 def setup_clients(title, members):
