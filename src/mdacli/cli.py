@@ -111,9 +111,8 @@ def create_CLI(cli_parser, interface_name, parameters):
     # adds analyze_data function as the default func parameter.
     # this is possible because the analyze_data function is equal to all
     # Analysis Classes
-    common_group.set_defaults(func=analyze_data)
-
-    common_group.set_defaults(analysis_callable=parameters["callable"])
+    # common_group.set_defaults(func=analyze_data)
+    # common_group.set_defaults(analysis_callable=parameters["callable"])
 
     common_group.add_argument(
         "-s",
@@ -203,7 +202,6 @@ def create_CLI(cli_parser, interface_name, parameters):
             )
         groups += len(opt_) * [optional_parameters_group]
 
-    action_dict = {True: "store_false", False: "store_true"}
     for group, (name, args_dict) in zip(groups, parameters_to_parse):
 
         # prepares parameters before add_argument
@@ -218,15 +216,15 @@ def create_CLI(cli_parser, interface_name, parameters):
             default = None
 
         name_par = "-" + name
-
         description = args_dict["desc"]
-
         if issubclass(type_, (list, tuple)):
             group.add_argument(
-                name_par, dest=name, nargs="+", default=default,
+                name_par,
+                dest=name,
+                default=default,
+                nargs="+",
                 help="{} (default: %(default)s)".format(description)
                 )
-
         elif issubclass(type_, dict):
             group.add_argument(
                 name_par,
@@ -235,16 +233,14 @@ def create_CLI(cli_parser, interface_name, parameters):
                 action=libcli.KwargsDict,
                 help=description,
                 )
-
         elif type_ is bool:
             group.add_argument(
                 name_par,
                 dest=name,
-                action=action_dict[default],
+                action="store_false" if default else "store_true",
                 default=default,
                 help=description,
                 )
-
         elif type_ is mda.AtomGroup:
             group.add_argument(
                 name_par,
@@ -253,14 +249,21 @@ def create_CLI(cli_parser, interface_name, parameters):
                 default=default,
                 help=description + " Use a MDAnalysis selection string."
                 )
-
         else:
             group.add_argument(
-                name_par, dest=name, type=type_, default=default,
-                help="{} (default: %(default)s)".format(description)
+                name_par,
+                dest=name,
+                type=type_,
+                default=default,
+                help=f"{description} (default: %(default)s)"
                 )
     return
 
+def create_universe():
+    pass
+
+def setup_analysis_parameters():
+    pass
 
 def analyze_data(
         # top and trajs need to be positional parameters in all CLIs
