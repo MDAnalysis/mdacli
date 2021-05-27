@@ -17,7 +17,11 @@ from MDAnalysisTests.datafiles import TPR, XTC
 from MDAnalysisTests.topology.test_lammpsdata import LAMMPS_NORESID
 from numpy.testing import assert_equal
 
-from mdacli.cli import run_analsis, setup_clients
+from mdacli.cli import _relevant_modules, run_analsis, setup_clients
+from mdacli.libcli import find_AnalysisBase_members_ignore_warnings
+
+
+_relev_mod = list(_relevant_modules)
 
 
 def test_required_args():
@@ -56,8 +60,10 @@ def test_setup_clients(opt, dest, val):
             testargs.append(str(i))
     else:
         testargs.append(str(val))
+    members = find_AnalysisBase_members_ignore_warnings(_relev_mod)
+
     with patch.object(sys, 'argv', testargs):
-        args = setup_clients().parse_args()
+        args = setup_clients(title='title', members=members).parse_args()
         t = type(val)
         assert t(getattr(args, dest)) == val
 

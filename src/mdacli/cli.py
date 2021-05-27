@@ -13,18 +13,16 @@ This also demonstrates how other third party libraries could incorporate
 this functionality.
 """
 import argparse
-import importlib
-import inspect
 import os
 import sys
 import warnings
 
 import MDAnalysis as mda
 from MDAnalysis.analysis import __all__
-from MDAnalysis.analysis.base import AnalysisBase
 
-from mdacli import __version__, libcli
+from mdacli import __version__
 from mdacli.colors import Emphasise
+from mdacli.libcli import KwargsDict, find_AnalysisBase_members_ignore_warnings
 from mdacli.save import save_results
 from mdacli.utils import convert_str_time, parse_callable_signature, parse_docs
 
@@ -33,11 +31,8 @@ from mdacli.utils import convert_str_time, parse_callable_signature, parse_docs
 # relevant modules used in this CLI factory
 # hydro* are removed here because they have a different folder/file structure
 # and need to be investigated separately
-skip_mods = ('base', 'hydrogenbonds', 'hbonds')
-relevant_modules = (_mod for _mod in __all__ if _mod not in skip_mods)
-
-# global dictionary storing the parameters for all Analysis classes
-analysis_interfaces = {}
+_skip_mods = ('base', 'hydrogenbonds', 'hbonds')
+_relevant_modules = (mod for mod in __all__ if mod not in _skip_mods)
 
 # serves CLI factory
 STR_TYPE_DICT = {
@@ -255,7 +250,7 @@ def create_CLI(cli_parser, interface_name, parameters):
                 name_par,
                 dest=name,
                 default=None,
-                action=libcli.KwargsDict,
+                action=KwargsDict,
                 help=description,
                 )
 
@@ -397,9 +392,16 @@ def maincli(ap):
         sys.exit(Emphasise.error(f"Error: {e}"))
 
 
-def setup_clients():
+def setup_clients(title, members):
     """
     Set up ArgumentParser clients.
+
+    Parameters
+    ----------
+    title : str
+        title of the parser
+    members : list
+        list containing Analysis classes for setting up the parser
 
     Returns
     -------
@@ -410,17 +412,12 @@ def setup_clients():
                     action='version',
                     version="mdacli {}".format(__version__))
 
-    cli_parser = ap.add_subparsers(title="MDAnalysis Analysis CLI")
+    cli_parser = ap.add_subparsers(title=title)
 
-    # populates analysis_interfaces dictionary
-    for module in relevant_modules:
-        with warnings.catch_warnings():
-            warnings.simplefilter('ignore')
-            module = importlib.import_module('MDAnalysis.analysis.' + module)
-        for _, member in inspect.getmembers(module):
-            if inspect.isclass(member) and issubclass(member, AnalysisBase) \
-               and member is not AnalysisBase:
-                parse_callable_signature(member, analysis_interfaces)
+    analysis_interfaces = {
+        member.__name__: parse_callable_signature(member)
+        for member in members
+        }
 
     # adds each Analysis class/function as a CLI under 'cli_parser'
     # to be writen
@@ -432,4 +429,11 @@ def setup_clients():
 
 def main():
     """Execute main CLI entry point."""
-    maincli(setup_clients())
+    members = find_AnalysisBase_members_ignore_warnings(_relevant_modules)
+
+    if members is None:
+        sys.exit("No analysis modules found.")
+
+    title = "MDAnalysis Analysis CLI"
+    ap = setup_clients(title=title, members=members)
+    maincli(ap)
