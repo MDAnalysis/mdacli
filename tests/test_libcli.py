@@ -90,3 +90,20 @@ def test_find_AnalysisBase_members_None():
     members = libcli.find_classes_in_modules(AnalysisBase, "MDAnalysis")
 
     assert members is None
+
+def split_argparse_into_groups():
+
+    parser = argparse.ArgumentParser()
+
+    group1 = parser.add_argument_group('group1')
+    group1.add_argument('--test1', help="test1")
+
+    group2 = parser.add_argument_group('group2')
+    group2.add_argument('--test2', help="test2")
+
+    args = parser.parse_args('--test1 one --test2 two'.split())
+
+    arg_grouped_dict = split_argparse_into_groups(parser, args)
+
+    assert arg_grouped_dict["group1"]["test1"] == "one"
+    assert arg_grouped_dict["group2"]["test2"] == "two"

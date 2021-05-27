@@ -91,3 +91,31 @@ def find_AnalysisBase_members_ignore_warnings(modules):
         warnings.simplefilter('ignore')
         members = find_AnalysisBase_members(modules)
     return members
+
+
+def split_argparse_into_groups(parser, namespace):
+    """
+    Split the the populated namespace of argparse into groups.
+
+    See https://stackoverflow.com/questions/31519997/is-it-possible-to-only-parse-one-argument-groups-parameters-with-argparse
+    for details
+
+    Parameters
+    ----------
+    parse : `argparse.ArgumentParser`
+        argument parser instance
+    namespace : `argparse.Namespace`
+        instance storing the parameters
+
+    Returns
+    -------
+    arg_grouped_dict : dict
+        Dictionary containing parameters split according to their groups
+    """
+    arg_grouped_dict = {}
+    for group in parser._action_groups:
+        group_dict={a.dest:getattr(namespace, a.dest, None)
+            for a in group._group_actions}
+        arg_grouped_dict[group.title] = group_dict
+
+    return arg_grouped_dict

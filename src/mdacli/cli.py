@@ -23,6 +23,7 @@ from MDAnalysis.analysis import __all__
 from mdacli import __version__
 from mdacli.colors import Emphasise
 from mdacli.libcli import KwargsDict, find_AnalysisBase_members_ignore_warnings
+from mdacli.libcli import split_argparse_into_groups
 from mdacli.save import save_results
 from mdacli.utils import convert_str_time, parse_callable_signature, parse_docs
 
@@ -60,17 +61,23 @@ def create_CLI(cli_parser, interface_name, parameters):
     """
     Add subparsers to `cli_parser`.
 
-    Subparsers parameters are divided in three categories:
+    Subparsers parameters are divided in the following categories:
 
-    1) Common Analysis classes Parameters
-        Common to all generated CLIs, for example:
-            * topology, trajectory, time frame
+    1. Universe Parameters
+        Common to all generated CLIs, to create the Univserse example:
+            * topology, trajectory
 
-    2) Mandatory Parameters
+    2. Analysis run Parameters time frame
+        begin, end, step and vebosity
+
+    3. Saving Parameters
+        output_prefix and output_directory
+
+    4. Mandatory Parameters
         mandatory parameters are defined in the CLI as named parameters
         as per design
 
-    3) Optional Parameters
+    5. Optional Parameters
         Named parameters in the Analysis class
 
     All CLI's parameters are named parameters.
@@ -191,8 +198,8 @@ def create_CLI(cli_parser, interface_name, parameters):
         action="store_true"
         )
 
-    # TODO: Should only be added if class does not have save_results 
-    # function. However we only have a dict here and can not check this 
+    # TODO: Should only be added if class does not have save_results
+    # function. However we only have a dict here and can not check this
     # currently...
     save_group = analysis_class_parser.add_argument_group(
         title="Saving Parameters",
@@ -330,25 +337,25 @@ def create_universe(topology,
         :class:`MDAnalysis.coordinates.base.ProtoReader` to define a custom
         reader to be used on the trajectory file.
     atom_style : str
-        Customised LAMMPS `atom_style` information.
+        Customised LAMMPS `atom_style` information. Only works with 
+        `topology_format = data`
 
     Returns
     -------
-    u : `MDAnalysis.Universe`
+    universe : `MDAnalysis.Universe`
     """
 
     # MDAnalysis throws a warning if the topology does not include coordintes.
     with warnings.catch_warnings():
         warnings.simplefilter('ignore')
-        u = mda.Universe(topology,
-                        topology_format=topology_format,
-                        atom_style=atom_style)
+        universe = mda.Universe(topology,
+                                topology_format=topology_format,
+                                atom_style=atom_style)
 
     if coordinates is not None:
-        u.load_new(coordinates,
-                   format=trajectory_format)
+        universe.load_new(coordinates, format=trajectory_format)
 
-    return u
+    return universe
 
 
 def convert_analysis_parameters(universe,
@@ -357,8 +364,13 @@ def convert_analysis_parameters(universe,
     """
     Convert parameters from the command line for the anlysis.
 
-    Convert special types (i.e AtomGroups) from the command line 
-    strings into the correct format.
+    Convert special types (i.e AtomGroups) from the command line
+    strings into the correct format. Parameters are changed inplace.
+
+    The following types are converted:
+
+    * AtomGroup: Select atoms based on ``universe.select_atoms``
+    * Universe: Assign the given universe.
 
     Parameters
     ----------
@@ -369,17 +381,11 @@ def convert_analysis_parameters(universe,
     analysis_parameters : dict
         parameters to be processed
 
-    Returns
-    -------
-    converted_params : dict
-        Dictionary containing the converted paramaters
-
     Raises
     ------
     ValueError
         If an Atomgroup does not contain any atoms
     """
-    # Index 2 for paramaters
     params = parse_docs(analysis_callable)[2]
     for param_name, dictionary in params.items():
         if "AtomGroup" in dictionary['type']:
@@ -397,128 +403,96 @@ def convert_analysis_parameters(universe,
         elif "Universe" in dictionary['type']:
             analysis_parameters[param_name] = universe
 
-    return analysis_parameters
-
-
-def split_argparse_into_groups(parser, namespace):
-    """
-    Split the the populated namespace of argparse into groups.
-
-    See https://stackoverflow.com/questions/31519997/is-it-possible-to-only-parse-one-argument-groups-parameters-with-argparse
-    for details
-
-    Parameters
-    ----------
-    parse : `argparse.ArgumentParser`
-        argument parser instance
-    namespace : `argparse.Namespace`
-        instance storing the parameters
-
-    Returns
-    -------
-    arg_grouped_dict : dict
-        Dictionary containing parameters split according to their groups
-    """
-    arg_grouped_dict = {}
-    for group in parser._action_groups:
-        group_dict={a.dest:getattr(namespace, a.dest, None)
-            for a in group._group_actions}
-        arg_grouped_dict[group.title] = group_dict
-    
-    return arg_grouped_dict
-
 
 def maincli(ap):
     """Execute main client interface.
-    
+
+    Parameters
+    ----------
+    ap : `argparse.ArgumentParser`
+        Argument parser instance
+
     Returns
     -------
     ac : `MDAnalysis.analysis.base.AnalysisBase`
         AnalysisBase instance of the given ``analysis_callable`` after run.
     """
-    if len(sys.argv) < 2:
-        ap.error("A subcommand is required.")
+    args = ap.parse_args()
+    verbose = args.verbose
+    analysis_callable = args.analysis_callable
+
+    # Get the correct ArgumentParser instance from all subparsers
+    # [0] selects the first subparser where our analysises live in.
+    ap_sup = ap._subparsers._group_actions[0].choices[
+        analysis_callable.__name__]
+    arg_grouped_dict = split_argparse_into_groups(ap_sup, args)
+
+    # Initilize Universe
+    if verbose:
+        print("Loading trajectory...", end="")
+    universe = create_universe(**arg_grouped_dict["Universe Parameters"])
+    if verbose:
+        print("Done!\n")
+        sys.stdout.flush()
+
+    # Setup Analysis instance
+    ac_parameters_dict = arg_grouped_dict["Mandatory Parameters"]
+
+    # Only exsists if optional arguments are defined
+    try:
+        ac_parameters_dict += arg_grouped_dict["Optional Parameters"]
+    except KeyError:
+        pass
+
+    ac_parameters_dict = convert_analysis_parameters(
+                            universe,
+                            analysis_callable,
+                            ac_parameters_dict)
+
+    ac = analysis_callable(**ac_parameters_dict)
+
+    # Run the analysis
+    with warnings.catch_warnings():
+        warnings.simplefilter('always')
+        startframe = convert_str_time(
+                arg_grouped_dict["Analysis run Parameters"]["begin"],
+                universe.trajectory.dt)
+        stopframe = convert_str_time(
+                arg_grouped_dict["Analysis run Parameters"]["end"],
+                universe.trajectory.dt)
+        step = convert_str_time(
+                arg_grouped_dict["Analysis run Parameters"]["dt"],
+                universe.trajectory.dt)
+
+    # raises error if frame selection range is an empty selection
+    if not list(range(universe.trajectory.n_frames)[slice(startframe,
+                                                            stopframe,
+                                                            step)]):
+        raise ValueError(f"Trajectory frame range {startframe}:"
+                            f"{stopframe}:{step} is not valid for"
+                            f" {universe.trajectory.n_frames} frames.")
+
+    ac.run(start=startframe,
+            stop=stopframe,
+            step=step,
+            verbose=verbose)
+
+    # Save the data
+    output_directory = arg_grouped_dict["Saving Parameters"]["output_directory"]
+    output_prefix = arg_grouped_dict["Saving Parameters"]["output_prefix"]
+    output_prefix += "_" if len(output_prefix) > 0 else ""
 
     try:
-        args = ap.parse_args()
-        verbose = args.verbose
-        analysis_callable = args.analysis_callable
+        ac.save_results()
 
-        # Get the correct ArgumentParser instance from all subparsers
-        # [0] selects the first subparser where our analysises live in.
-        ap_sup = ap._subparsers._group_actions[0].choices[
-            analysis_callable.__name__]
-        arg_grouped_dict = split_argparse_into_groups(ap_sup, args)
-
-        # Initilize Universe
-        if verbose:
-            print("Loading trajectory...", end="")
-        universe = create_universe(**arg_grouped_dict["Universe Parameters"])
-        if verbose:
-            print("Done!\n")
-            sys.stdout.flush()
-
-        # Setup Analysis instance
-        ac_parameters_dict = arg_grouped_dict["Mandatory Parameters"]
-
-        # Only exsists if optional arguments are defined
-        try:
-            ac_parameters_dict += arg_grouped_dict["Optional Parameters"]
-        except KeyError:
-            pass
-
-        ac_parameters_dict = convert_analysis_parameters(
-                                universe,
-                                analysis_callable,
-                                ac_parameters_dict)
-
-        ac = analysis_callable(**ac_parameters_dict)
-
-        # Run the analysis
-        with warnings.catch_warnings():
-            warnings.simplefilter('always')
-            startframe = convert_str_time(
-                    arg_grouped_dict["Analysis run Parameters"]["begin"],
-                    universe.trajectory.dt)
-            stopframe = convert_str_time(
-                    arg_grouped_dict["Analysis run Parameters"]["end"],
-                    universe.trajectory.dt)
-            step = convert_str_time(
-                    arg_grouped_dict["Analysis run Parameters"]["dt"],
-                    universe.trajectory.dt)
-
-        # raises error if frame selection range is an empty selection
-        if not list(range(universe.trajectory.n_frames)[slice(startframe,
-                                                              stopframe,
-                                                              step)]):
-            raise ValueError(f"Trajectory frame range {startframe}:"
-                             f"{stopframe}:{step} is not valid for"
-                             f" {universe.trajectory.n_frames} frames.")
-
-        ac.run(start=startframe,
-               stop=stopframe,
-               step=step,
-               verbose=verbose)
-
-        # Save the data
-        output_directory = arg_grouped_dict["Saving Parameters"]["output_directory"]
-        output_prefix = arg_grouped_dict["Saving Parameters"]["output_prefix"]
-        output_prefix += "_" if len(output_prefix) > 0 else ""
-
-        try:
-            ac.save_results()
-
-        except AttributeError:
-            save_results(
-                ac.results,
-                os.path.join(
-                    output_directory,
-                    f"{output_prefix}{type(ac).__name__}"
-                    ),
-                )
-
-    except Exception as e:
-        sys.exit(Emphasise.error(f"Error: {e}"))
+    except AttributeError:
+        save_results(
+            ac.results,
+            os.path.join(
+                output_directory,
+                f"{output_prefix}{analysis_callable.__name__}"
+                ),
+            )
 
     return ac
 
@@ -567,4 +541,11 @@ def main():
 
     title = "MDAnalysis Analysis CLI"
     ap = setup_clients(title=title, members=members)
-    maincli(ap)
+
+    if len(sys.argv) < 2:
+        ap.error("A subcommand is required.")
+
+    try:
+        maincli(ap)
+    except Exception as e:
+        sys.exit(Emphasise.error(f"Error: {e}"))
