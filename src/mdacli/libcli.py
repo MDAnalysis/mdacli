@@ -46,9 +46,9 @@ class KwargsDict(argparse.Action):
         setattr(namespace, self.dest, jdict)
 
 
-def find_AnalysisBase_members(*module_name):
+def find_AnalysisBase_members(*module_names):
     """
-    Check for AnalysiBase members in the module given by module_name.
+    Check for AnalysiBase members in the module given by module_names.
 
     A series of names can be given as arguments.
 
@@ -63,7 +63,7 @@ def find_AnalysisBase_members(*module_name):
     list of analysis classes
     """
     members = []
-    for name in module_name:
+    for name in module_names:
         module = importlib.import_module(name)
         for _, member in inspect.getmembers(module):
             if inspect.isclass(member) and issubclass(member, AnalysisBase) \

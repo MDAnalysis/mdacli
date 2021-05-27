@@ -30,11 +30,11 @@ from mdacli.utils import convert_str_time, parse_callable_signature, parse_docs
 # relevant modules used in this CLI factory
 # hydro* are removed here because they have a different folder/file structure
 # and need to be investigated separately
-skip_mods = ('base', 'hydrogenbonds', 'hbonds')
-relevant_modules = (_mod for _mod in __all__ if _mod not in skip_mods)
+_skip_mods = ('base', 'hydrogenbonds', 'hbonds')
+_relevant_modules = (mod for mod in __all__ if mod not in _skip_mods)
 
 # global dictionary storing the parameters for all Analysis classes
-analysis_interfaces = {}
+#analysis_interfaces = {}
 
 # serves CLI factory
 STR_TYPE_DICT = {
@@ -417,8 +417,12 @@ def setup_clients(title, members):
     cli_parser = ap.add_subparsers(title=title)
 
     # populates analysis_interfaces dictionary
-    for member in members:
-        parse_callable_signature(member, analysis_interfaces)
+    #for member in members:
+    #    parse_callable_signature(member, analysis_interfaces)
+    analysis_interfaces = {
+        member.__name__: parse_callable_signature(member)
+        for member in members
+        }
 
     # adds each Analysis class/function as a CLI under 'cli_parser'
     # to be writen
@@ -432,13 +436,13 @@ def main():
     """Execute main CLI entry point."""
     with warnings.catch_warnings():
         warnings.simplefilter('ignore')
-        members = libcli.find_AnalysisBase_members(*[f'MDAnalysis.analysis.{m}'
-                                                   for m in relevant_modules])
+        members = libcli.find_AnalysisBase_members(
+            *[f'MDAnalysis.analysis.{m}' for m in _relevant_modules]
+            )
 
     if members is None:
         sys.exit("No analysis modules found.")
 
     title = "MDAnalysis Analysis CLI"
-    ap = setup_clients(title=title,
-                       members=members)
+    ap = setup_clients(title=title, members=members)
     maincli(ap)
