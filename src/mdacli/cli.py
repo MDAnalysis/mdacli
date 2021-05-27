@@ -20,7 +20,8 @@ import warnings
 import MDAnalysis as mda
 from MDAnalysis.analysis import __all__
 
-from mdacli import __version__, libcli
+from mdacli import __version__
+from mdacli.libcli import KwargsDict, find_AnalysisBase_members_ignore_warnings
 from mdacli.colors import Emphasise
 from mdacli.save import save_results
 from mdacli.utils import convert_str_time, parse_callable_signature, parse_docs
@@ -252,7 +253,7 @@ def create_CLI(cli_parser, interface_name, parameters):
                 name_par,
                 dest=name,
                 default=None,
-                action=libcli.KwargsDict,
+                action=KwargsDict,
                 help=description,
                 )
 
@@ -434,11 +435,7 @@ def setup_clients(title, members):
 
 def main():
     """Execute main CLI entry point."""
-    with warnings.catch_warnings():
-        warnings.simplefilter('ignore')
-        members = libcli.find_AnalysisBase_members(
-            *[f'MDAnalysis.analysis.{m}' for m in _relevant_modules]
-            )
+    members = find_AnalysisBase_members_ignore_warnings(_relevant_modules)
 
     if members is None:
         sys.exit("No analysis modules found.")
