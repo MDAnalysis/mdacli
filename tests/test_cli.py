@@ -10,15 +10,17 @@ import subprocess
 import sys
 from io import StringIO
 from unittest.mock import patch
+from MDAnalysis.core.universe import Universe
 
 import pytest
-from MDAnalysis.analysis.rdf import InterRDF
+from MDAnalysis.analysis.rms import RMSF
+from MDAnalysis.analysis.gnm import GNMAnalysis
 from MDAnalysisTests.datafiles import TPR, XTC
 from MDAnalysisTests.topology.test_lammpsdata import LAMMPS_NORESID
 from MDAnalysisTests.core.test_universe import CHOL_GRO
 
 from mdacli.cli import _relevant_modules, setup_clients
-from mdacli.cli import create_universe
+from mdacli.cli import create_universe, convert_analysis_parameters
 
 from mdacli.libcli import find_AnalysisBase_members_ignore_warnings
 
@@ -51,9 +53,9 @@ def test_extra_options(args):
      ('-f', "coordinates", ["foo", "bar"]),
      ('-traj', "trajectory_format", "foo"),
      ('-atom_style', "atom_style", "foo"),
-     ('-b', "begin", 42),
-     ('-e', "end", 42),
-     ('-dt', "dt", 42)))
+     ('-b', "start", 42),
+     ('-e', "stop", 42),
+     ('-dt', "step", 42)))
 def test_setup_clients(opt, dest, val):
     """Test all additional arguments."""
     testargs = ["mdacli", "RMSF", opt]
@@ -97,6 +99,44 @@ class Test_create_Universe:
                             atom_style="id type x y z")
         assert u.atoms[0].mass ==  28.0
 
+
+class Test_convert_analysis_parameters:
+    @pytest.fixture()
+    def universe(self):
+        return Universe(TPR, XTC)
+
+    def test_Atomgroup(self, universe):
+        analysis_parameters = {"atomgroup": "all"}
+        convert_analysis_parameters(universe,
+                                    RMSF,
+                                    analysis_parameters)
+        assert analysis_parameters["atomgroup"] == universe.atoms
+
+    def test_Universe(self, universe):
+        analysis_parameters = {"universe": None}
+        convert_analysis_parameters(universe,
+                                    GNMAnalysis,
+                                    analysis_parameters)
+        assert analysis_parameters["universe"] == universe
+
+    def test_zero_atoms(self, universe):
+        analysis_parameters = {"atomgroup": "name foo"}
+        with pytest.raises(ValueError, match="AtomGroup `-atomgroup` with "):
+            convert_analysis_parameters(universe,
+                                        RMSF,
+                                        analysis_parameters)
+
+    def test_only_set_if_key_exists(self, universe):
+        """The docparser does not distinguis between mandatory and positional
+        arguments. So we only should set the value if it is inside the dict."""
+        analysis_parameters = {}
+        convert_analysis_parameters(universe,
+                                    RMSF,
+                                    analysis_parameters)
+        assert not analysis_parameters
+
+# class test_maincli:
+#     pass
 
 # class Test_run_analsis(object):
 #     """Test class for analyze_data."""

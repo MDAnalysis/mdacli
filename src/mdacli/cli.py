@@ -362,9 +362,9 @@ def convert_analysis_parameters(universe,
                                 analysis_callable,
                                 analysis_parameters):
     """
-    Convert parameters from the command line for the anlysis.
+    Convert parameters from the command line suitbale for anlysis.
 
-    Convert special types (i.e AtomGroups) from the command line
+    Special types (i.e AtomGroups) are concerted from the command line
     strings into the correct format. Parameters are changed inplace.
 
     The following types are converted:
@@ -377,7 +377,7 @@ def convert_analysis_parameters(universe,
     universe : `MDAnalysis.Universe`
         Universe for which the kwargs are related to
     analysis_callable : function
-        Analysis class for which the analysis is performed.
+        Analysis class for which the analysis should be performed.
     analysis_parameters : dict
         parameters to be processed
 
@@ -388,20 +388,17 @@ def convert_analysis_parameters(universe,
     """
     params = parse_docs(analysis_callable)[2]
     for param_name, dictionary in params.items():
-        if "AtomGroup" in dictionary['type']:
-            sel = universe.select_atoms(analysis_parameters[param_name])
-            if len(sel) > 0:
-                analysis_parameters[param_name] = sel
-            else:
-                raise ValueError(
-                    "AtomGroup `-{}` with selection `{}` does not "
-                    "contain any atoms".format(
-                        param_name,
-                        analysis_parameters[param_name]
-                        )
-                    )
-        elif "Universe" in dictionary['type']:
-            analysis_parameters[param_name] = universe
+        if param_name in analysis_parameters.keys():
+            if "AtomGroup" in dictionary['type']:
+                sel = universe.select_atoms(analysis_parameters[param_name])
+                if sel:
+                    analysis_parameters[param_name] = sel
+                else:
+                    raise ValueError(f"AtomGroup `-{param_name}` with selection"
+                                    f" `{analysis_parameters[param_name]}` does"
+                                    " not contain any atoms")
+            elif "Universe" in dictionary['type']:
+                analysis_parameters[param_name] = universe
 
 
 def maincli(ap):
@@ -460,13 +457,13 @@ def maincli(ap):
     ac.run(verbose=verbose, **arg_grouped_dict["Analysis run Parameters"])
 
     # Save the data
-    arg_grouped_dict["Saving Parameters"]["output_prefix"] += "_" \
-        if arg_grouped_dict["Saving Parameters"]["output_prefix"] else ""
-
     try:
         ac.save_results()
 
     except AttributeError:
+        arg_grouped_dict["Saving Parameters"]["output_prefix"] += "_" \
+            if arg_grouped_dict["Saving Parameters"]["output_prefix"] else ""
+
         save_results(
             ac.results,
             os.path.join(
