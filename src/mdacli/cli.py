@@ -15,6 +15,7 @@ this functionality.
 import argparse
 import os
 import sys
+import traceback
 import warnings
 
 import MDAnalysis as mda
@@ -347,12 +348,9 @@ def create_universe(topology,
     -------
     universe : `MDAnalysis.Universe`
     """
-    # MDAnalysis throws a warning if the topology does not include coordintes.
-    with warnings.catch_warnings():
-        warnings.simplefilter('ignore')
-        universe = mda.Universe(topology,
-                                topology_format=topology_format,
-                                atom_style=atom_style)
+    universe = mda.Universe(topology,
+                            topology_format=topology_format,
+                            atom_style=atom_style)
 
     if coordinates is not None:
         universe.load_new(coordinates, format=trajectory_format)
@@ -495,20 +493,21 @@ def convert_analysis_parameters(universe,
                 analysis_parameters[param_name] = universe
 
 
-def maincli(ap):
+def maincli(ap, args):
     """Execute main client interface.
 
     Parameters
     ----------
     ap : `argparse.ArgumentParser`
         Argument parser instance
+    args : `argparse.Namespace`
+        Parsed argument instance
 
     Returns
     -------
     ac : `MDAnalysis.analysis.base.AnalysisBase`
         AnalysisBase instance of the given ``analysis_callable`` after run.
     """
-    args = ap.parse_args()
     analysis_callable = args.analysis_callable
 
     # Get the correct ArgumentParser instance from all subparsers
@@ -531,26 +530,19 @@ def maincli(ap):
                 arg_grouped_dict["Output Parameters"])
 
 
-def setup_clients(title, members):
+def setup_clients(ap, title, members):
     """
-    Set up ArgumentParser clients.
+    Set up analysis clients for an ArgumentParser instance.
 
     Parameters
     ----------
+    ap : `argparse.ArgumentParser`
+        Argument parser instance
     title : str
         title of the parser
     members : list
         list containing Analysis classes for setting up the parser
-
-    Returns
-    -------
-    argparse.ArgumentParser instance
     """
-    ap = argparse.ArgumentParser()
-    ap.add_argument('--version',
-                    action='version',
-                    version="mdacli {}".format(__version__))
-
     cli_parser = ap.add_subparsers(title=title)
 
     analysis_interfaces = {
@@ -563,8 +555,6 @@ def setup_clients(title, members):
     for interface_name, parameters in analysis_interfaces.items():
         create_CLI(cli_parser, interface_name, parameters)
 
-    return ap
-
 
 def main():
     """Execute main CLI entry point."""
@@ -573,15 +563,30 @@ def main():
     if members is None:
         sys.exit("No analysis modules found.")
 
-    title = "MDAnalysis Analysis CLI"
-    ap = setup_clients(title=title, members=members)
+    ap = argparse.ArgumentParser()
+    ap.add_argument('--version',
+                    action='version',
+                    version="mdacli {}".format(__version__))
+    ap.add_argument('--debug',
+                    action='store_true',
+                    help="Run with debug options.")
+    setup_clients(ap, title="MDAnalysis Analysis CLI", members=members)
 
     if len(sys.argv) < 2:
         ap.error("A subcommand is required.")
 
+    args = ap.parse_args()
+
+    if args.debug:
+        args.verbose = True
+    else:
+        # Ignore all warnings if not in debug mode
+        warnings.filterwarnings("ignore")
+
     try:
-        with warnings.catch_warnings():
-            warnings.simplefilter('always')
-            maincli(ap)
+        maincli(ap, args)
     except Exception as e:
-        sys.exit(Emphasise.error(f"Error: {e}"))
+        if args.debug:
+            traceback.print_exc()
+        else:
+            sys.exit(Emphasise.error(f"Error: {e}"))
