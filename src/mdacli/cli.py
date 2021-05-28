@@ -169,7 +169,7 @@ def create_CLI(cli_parser, interface_name, parameters):
         )
     run_group.add_argument(
         "-b",
-        dest="begin",
+        dest="start",
         type=str,
         default="0",
         help="frame or start time for evaluation. (default: %(default)s)"
@@ -177,7 +177,7 @@ def create_CLI(cli_parser, interface_name, parameters):
 
     run_group.add_argument(
         "-e",
-        dest="end",
+        dest="stop",
         type=str,
         default="-1",
         help="frame or end time for evaluation. (default: %(default)s)"
@@ -185,7 +185,7 @@ def create_CLI(cli_parser, interface_name, parameters):
 
     run_group.add_argument(
         "-dt",
-        dest="dt",
+        dest="step",
         type=str,
         default="1",
         help="step or time step for evaluation. (default: %(default)s)"
@@ -418,7 +418,6 @@ def maincli(ap):
         AnalysisBase instance of the given ``analysis_callable`` after run.
     """
     args = ap.parse_args()
-    verbose = args.verbose
     analysis_callable = args.analysis_callable
 
     # Get the correct ArgumentParser instance from all subparsers
@@ -426,6 +425,7 @@ def maincli(ap):
     ap_sup = ap._subparsers._group_actions[0].choices[
         analysis_callable.__name__]
     arg_grouped_dict = split_argparse_into_groups(ap_sup, args)
+    verbose = arg_grouped_dict["Analysis run Parameters"].pop("verbose")
 
     # Initilize Universe
     if verbose:
@@ -435,52 +435,33 @@ def maincli(ap):
         print("Done!\n")
         sys.stdout.flush()
 
-    # Setup Analysis instance
-    ac_parameters_dict = arg_grouped_dict["Mandatory Parameters"]
-
-    # Only exsists if optional arguments are defined
+    # Initilize analysis callable
+    convert_analysis_parameters(universe,
+                                analysis_callable, 
+                                arg_grouped_dict["Mandatory Parameters"])
+    
     try:
-        ac_parameters_dict += arg_grouped_dict["Optional Parameters"]
-    except KeyError:
-        pass
+        convert_analysis_parameters(universe,
+                                    analysis_callable, 
+                                    arg_grouped_dict["Optional Parameters"])
+    except KeyError:  # Optional Parameters may not exist
+        arg_grouped_dict["Optional Parameters"] = {}
 
-    ac_parameters_dict = convert_analysis_parameters(
-                            universe,
-                            analysis_callable,
-                            ac_parameters_dict)
-
-    ac = analysis_callable(**ac_parameters_dict)
+    ac = analysis_callable(**arg_grouped_dict["Mandatory Parameters"],
+                           **arg_grouped_dict["Optional Parameters"])
 
     # Run the analysis
     with warnings.catch_warnings():
         warnings.simplefilter('always')
-        startframe = convert_str_time(
-                arg_grouped_dict["Analysis run Parameters"]["begin"],
-                universe.trajectory.dt)
-        stopframe = convert_str_time(
-                arg_grouped_dict["Analysis run Parameters"]["end"],
-                universe.trajectory.dt)
-        step = convert_str_time(
-                arg_grouped_dict["Analysis run Parameters"]["dt"],
-                universe.trajectory.dt)
+        for key, value in arg_grouped_dict["Analysis run Parameters"].items():
+            arg_grouped_dict["Analysis run Parameters"][key] =  \
+                convert_str_time(value, universe.trajectory.dt)
 
-    # raises error if frame selection range is an empty selection
-    if not list(range(universe.trajectory.n_frames)[slice(startframe,
-                                                            stopframe,
-                                                            step)]):
-        raise ValueError(f"Trajectory frame range {startframe}:"
-                            f"{stopframe}:{step} is not valid for"
-                            f" {universe.trajectory.n_frames} frames.")
-
-    ac.run(start=startframe,
-            stop=stopframe,
-            step=step,
-            verbose=verbose)
+    ac.run(verbose=verbose, **arg_grouped_dict["Analysis run Parameters"])
 
     # Save the data
-    output_directory = arg_grouped_dict["Saving Parameters"]["output_directory"]
-    output_prefix = arg_grouped_dict["Saving Parameters"]["output_prefix"]
-    output_prefix += "_" if len(output_prefix) > 0 else ""
+    arg_grouped_dict["Saving Parameters"]["output_prefix"] += "_" \
+        if arg_grouped_dict["Saving Parameters"]["output_prefix"] else ""
 
     try:
         ac.save_results()
@@ -489,13 +470,11 @@ def maincli(ap):
         save_results(
             ac.results,
             os.path.join(
-                output_directory,
-                f"{output_prefix}{analysis_callable.__name__}"
-                ),
-            )
+                arg_grouped_dict["Saving Parameters"]["output_directory"],
+                f"{arg_grouped_dict['Saving Parameters']['output_prefix']}"
+                f"{analysis_callable.__name__}"))
 
     return ac
-
 
 def setup_clients(title, members):
     """
