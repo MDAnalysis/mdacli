@@ -91,8 +91,9 @@ def test_find_AnalysisBase_members_None():
 
     assert members is None
 
-def split_argparse_into_groups():
 
+def split_argparse_into_groups():
+    """Test splitting argparse Namespace into several dicts."""
     parser = argparse.ArgumentParser()
 
     group1 = parser.add_argument_group('group1')

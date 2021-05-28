@@ -22,8 +22,11 @@ from MDAnalysis.analysis import __all__
 
 from mdacli import __version__
 from mdacli.colors import Emphasise
-from mdacli.libcli import KwargsDict, find_AnalysisBase_members_ignore_warnings
-from mdacli.libcli import split_argparse_into_groups
+from mdacli.libcli import (
+    KwargsDict,
+    find_AnalysisBase_members_ignore_warnings,
+    split_argparse_into_groups,
+    )
 from mdacli.save import save_results
 from mdacli.utils import convert_str_time, parse_callable_signature, parse_docs
 
@@ -67,8 +70,8 @@ def create_CLI(cli_parser, interface_name, parameters):
         Common to all generated CLIs, to create the Univserse example:
             * topology, trajectory
 
-    2. Analysis run Parameters time frame
-        begin, end, step and vebosity
+    2. Analysis Run parameters
+         time frame as begin, end, step and vebosity
 
     3. Saving Parameters
         output_prefix and output_directory
@@ -164,7 +167,7 @@ def create_CLI(cli_parser, interface_name, parameters):
         "See trajectory for implemented formats.")
 
     run_group = analysis_class_parser.add_argument_group(
-        title="Analysis run Parameters",
+        title="Analysis Run Parameters",
         description="Genereal parameters specific for running the analysis"
         )
     run_group.add_argument(
@@ -201,10 +204,10 @@ def create_CLI(cli_parser, interface_name, parameters):
     # TODO: Should only be added if class does not have save_results
     # function. However we only have a dict here and can not check this
     # currently...
-    save_group = analysis_class_parser.add_argument_group(
-        title="Saving Parameters",
+    output_group = analysis_class_parser.add_argument_group(
+        title="Output Parameters",
         )
-    save_group.add_argument(
+    output_group.add_argument(
         "-pre",
         dest="output_prefix",
         type=str,
@@ -213,7 +216,7 @@ def create_CLI(cli_parser, interface_name, parameters):
              " automatically named by the used module (default: %(default)s)"
         )
 
-    save_group.add_argument(
+    output_group.add_argument(
         "-o",
         dest="output_directory",
         type=str,
@@ -337,14 +340,13 @@ def create_universe(topology,
         :class:`MDAnalysis.coordinates.base.ProtoReader` to define a custom
         reader to be used on the trajectory file.
     atom_style : str
-        Customised LAMMPS `atom_style` information. Only works with 
+        Customised LAMMPS `atom_style` information. Only works with
         `topology_format = data`
 
     Returns
     -------
     universe : `MDAnalysis.Universe`
     """
-
     # MDAnalysis throws a warning if the topology does not include coordintes.
     with warnings.catch_warnings():
         warnings.simplefilter('ignore')
@@ -358,14 +360,105 @@ def create_universe(topology,
     return universe
 
 
+def run_analsis(analysis_callable,
+                universe_parameters,
+                mandatory_analysis_parameters,
+                optional_analysis_parameters=None,
+                run_parameters=None,
+                output_parameters=None):
+    """Perform main client logic.
+
+    Parameters
+    ----------
+    analysis_callable : function
+        Analysis class for which the analysis is performed.
+    mandatory_analysis_parameters : dict
+        Mandatory parameters for executing the analysis
+    optional_analysis_parameters : dict
+        Optional parameters for executing the analysis
+    run_parameters : dict
+        time frame parameters: start, stop, step, verbose
+    output_parameters : dict
+        output_prefix and output_directory
+
+    Returns
+    -------
+    ac : `MDAnalysis.analysis.base.AnalysisBase`
+        AnalysisBase instance of the given ``analysis_callable`` after run.
+    """
+    if optional_analysis_parameters is None:
+        optional_analysis_parameters = {}
+
+    if run_parameters is None:
+        run_parameters = {}
+
+    if output_parameters is None:
+        output_parameters = {}
+
+    try:
+        verbose = run_parameters.pop("verbose")
+    except KeyError:
+        verbose = False
+
+    # Initilize Universe
+    if verbose:
+        print("Loading trajectory...", end="")
+    universe = create_universe(**universe_parameters)
+    if verbose:
+        print("Done!\n")
+        sys.stdout.flush()
+
+    # Initilize analysis callable
+    convert_analysis_parameters(universe,
+                                analysis_callable,
+                                mandatory_analysis_parameters)
+
+    convert_analysis_parameters(universe,
+                                analysis_callable,
+                                optional_analysis_parameters)
+
+    ac = analysis_callable(**mandatory_analysis_parameters,
+                           **optional_analysis_parameters)
+
+    # Run the analysis
+    for key, value in run_parameters.items():
+        run_parameters[key] = convert_str_time(value, universe.trajectory.dt)
+
+    ac.run(verbose=verbose, **run_parameters)
+
+    # Save results
+    try:
+        ac.save_results()
+
+    except AttributeError:
+        direcory = ""
+        try:
+            direcory += output_parameters["output_directory"]
+        except KeyError:
+            pass
+
+        fname = ""
+        try:
+            fname += output_parameters["output_prefix"] + "_"
+        except KeyError:
+            pass
+        fname += analysis_callable.__name__
+        save_results(ac.results, os.path.join(direcory, fname))
+
+    return ac
+
+
 def convert_analysis_parameters(universe,
                                 analysis_callable,
                                 analysis_parameters):
     """
     Convert parameters from the command line suitbale for anlysis.
 
-    Special types (i.e AtomGroups) are concerted from the command line
+    Special types (i.e AtomGroups) are converted from the command line
     strings into the correct format. Parameters are changed inplace.
+    Note that only keys are converted an no new key are added if
+    present in the doc of the `analysis_callable` but not
+    in the `analysis_parameters` dict.
 
     The following types are converted:
 
@@ -394,9 +487,10 @@ def convert_analysis_parameters(universe,
                 if sel:
                     analysis_parameters[param_name] = sel
                 else:
-                    raise ValueError(f"AtomGroup `-{param_name}` with selection"
-                                    f" `{analysis_parameters[param_name]}` does"
-                                    " not contain any atoms")
+                    raise ValueError(f"AtomGroup `-{param_name}`"
+                                     f" with selection"
+                                     f" `{analysis_parameters[param_name]}`"
+                                     f" does not contain any atoms")
             elif "Universe" in dictionary['type']:
                 analysis_parameters[param_name] = universe
 
@@ -422,56 +516,20 @@ def maincli(ap):
     ap_sup = ap._subparsers._group_actions[0].choices[
         analysis_callable.__name__]
     arg_grouped_dict = split_argparse_into_groups(ap_sup, args)
-    verbose = arg_grouped_dict["Analysis run Parameters"].pop("verbose")
 
-    # Initilize Universe
-    if verbose:
-        print("Loading trajectory...", end="")
-    universe = create_universe(**arg_grouped_dict["Universe Parameters"])
-    if verbose:
-        print("Done!\n")
-        sys.stdout.flush()
-
-    # Initilize analysis callable
-    convert_analysis_parameters(universe,
-                                analysis_callable, 
-                                arg_grouped_dict["Mandatory Parameters"])
-    
+    # Optional parameters may not exist
     try:
-        convert_analysis_parameters(universe,
-                                    analysis_callable, 
-                                    arg_grouped_dict["Optional Parameters"])
-    except KeyError:  # Optional Parameters may not exist
+        arg_grouped_dict["Optional Parameters"]
+    except KeyError:
         arg_grouped_dict["Optional Parameters"] = {}
 
-    ac = analysis_callable(**arg_grouped_dict["Mandatory Parameters"],
-                           **arg_grouped_dict["Optional Parameters"])
+    run_analsis(analysis_callable,
+                arg_grouped_dict["Universe Parameters"],
+                arg_grouped_dict["Mandatory Parameters"],
+                arg_grouped_dict["Optional Parameters"],
+                arg_grouped_dict["Analysis Run Parameters"],
+                arg_grouped_dict["Output Parameters"])
 
-    # Run the analysis
-    with warnings.catch_warnings():
-        warnings.simplefilter('always')
-        for key, value in arg_grouped_dict["Analysis run Parameters"].items():
-            arg_grouped_dict["Analysis run Parameters"][key] =  \
-                convert_str_time(value, universe.trajectory.dt)
-
-    ac.run(verbose=verbose, **arg_grouped_dict["Analysis run Parameters"])
-
-    # Save the data
-    try:
-        ac.save_results()
-
-    except AttributeError:
-        arg_grouped_dict["Saving Parameters"]["output_prefix"] += "_" \
-            if arg_grouped_dict["Saving Parameters"]["output_prefix"] else ""
-
-        save_results(
-            ac.results,
-            os.path.join(
-                arg_grouped_dict["Saving Parameters"]["output_directory"],
-                f"{arg_grouped_dict['Saving Parameters']['output_prefix']}"
-                f"{analysis_callable.__name__}"))
-
-    return ac
 
 def setup_clients(title, members):
     """
@@ -522,6 +580,8 @@ def main():
         ap.error("A subcommand is required.")
 
     try:
-        maincli(ap)
+        with warnings.catch_warnings():
+            warnings.simplefilter('always')
+            maincli(ap)
     except Exception as e:
         sys.exit(Emphasise.error(f"Error: {e}"))

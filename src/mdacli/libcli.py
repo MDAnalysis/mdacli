@@ -97,8 +97,8 @@ def split_argparse_into_groups(parser, namespace):
     """
     Split the the populated namespace of argparse into groups.
 
-    See https://stackoverflow.com/questions/31519997/is-it-possible-to-only-parse-one-argument-groups-parameters-with-argparse
-    for details
+    https://stackoverflow.com/questions/31519997/is-it-possible-to-
+    only-parse-one-argument-groups-parameters-with-argparse
 
     Parameters
     ----------
@@ -114,8 +114,8 @@ def split_argparse_into_groups(parser, namespace):
     """
     arg_grouped_dict = {}
     for group in parser._action_groups:
-        group_dict={a.dest:getattr(namespace, a.dest, None)
-            for a in group._group_actions}
+        group_dict = {a.dest: getattr(namespace, a.dest, None)
+                      for a in group._group_actions}
         arg_grouped_dict[group.title] = group_dict
 
     return arg_grouped_dict
