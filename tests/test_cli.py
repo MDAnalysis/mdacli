@@ -6,6 +6,7 @@
 # Released under the GNU Public Licence, v2 or any higher version
 # SPDX-License-Identifier: GPL-2.0-or-later
 """Test mdacli cli."""
+import argparse
 import os
 import subprocess
 import sys
@@ -73,7 +74,9 @@ def test_setup_clients(opt, dest, val):
     members = find_AnalysisBase_members_ignore_warnings(_relev_mod)
 
     with patch.object(sys, 'argv', testargs):
-        args = setup_clients(title='title', members=members).parse_args()
+        ap = argparse.ArgumentParser()
+        setup_clients(ap, title='title', members=members)
+        args = ap.parse_args()
         t = type(val)
         assert t(getattr(args, dest)) == val
 
