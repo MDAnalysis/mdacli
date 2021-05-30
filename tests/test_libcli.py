@@ -92,7 +92,7 @@ def test_find_AnalysisBase_members_None():
     assert members is None
 
 
-def split_argparse_into_groups():
+def test_split_argparse_into_groups():
     """Test splitting argparse Namespace into several dicts."""
     parser = argparse.ArgumentParser()
 
@@ -104,7 +104,7 @@ def split_argparse_into_groups():
 
     args = parser.parse_args('--test1 one --test2 two'.split())
 
-    arg_grouped_dict = split_argparse_into_groups(parser, args)
+    arg_grouped_dict = libcli.split_argparse_into_groups(parser, args)
 
     assert arg_grouped_dict["group1"]["test1"] == "one"
     assert arg_grouped_dict["group2"]["test2"] == "two"

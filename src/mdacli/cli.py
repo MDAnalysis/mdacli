@@ -346,7 +346,7 @@ def create_universe(topology,
 
     Returns
     -------
-    universe : `MDAnalysis.Universe`
+    `MDAnalysis.Universe`
     """
     universe = mda.Universe(topology,
                             topology_format=topology_format,
@@ -381,7 +381,7 @@ def run_analsis(analysis_callable,
 
     Returns
     -------
-    ac : `MDAnalysis.analysis.base.AnalysisBase`
+    `MDAnalysis.analysis.base.AnalysisBase`
         AnalysisBase instance of the given ``analysis_callable`` after run.
     """
     if optional_analysis_parameters is None:
@@ -393,10 +393,7 @@ def run_analsis(analysis_callable,
     if output_parameters is None:
         output_parameters = {}
 
-    try:
-        verbose = run_parameters.pop("verbose")
-    except KeyError:
-        verbose = False
+    verbose = run_parameters.pop("verbose", False)
 
     # Initilize Universe
     if verbose:
@@ -429,19 +426,11 @@ def run_analsis(analysis_callable,
         ac.save_results()
 
     except AttributeError:
-        direcory = ""
-        try:
-            direcory += output_parameters["output_directory"]
-        except KeyError:
-            pass
-
-        fname = ""
-        try:
-            fname += output_parameters["output_prefix"] + "_"
-        except KeyError:
-            pass
-        fname += analysis_callable.__name__
-        save_results(ac.results, os.path.join(direcory, fname))
+        directory = output_parameters.get("output_directory", "")
+        fname = output_parameters.get("output_prefix", "")
+        fname = f"{fname}_{analysis_callable.__name__}" if fname \
+            else analysis_callable.__name__
+        save_results(ac.results, os.path.join(directory, fname))
 
     return ac
 
@@ -454,7 +443,7 @@ def convert_analysis_parameters(universe,
 
     Special types (i.e AtomGroups) are converted from the command line
     strings into the correct format. Parameters are changed inplace.
-    Note that only keys are converted an no new key are added if
+    Note that only keys are converted and no new key are added if
     present in the doc of the `analysis_callable` but not
     in the `analysis_parameters` dict.
 
@@ -491,43 +480,6 @@ def convert_analysis_parameters(universe,
                                      f" does not contain any atoms")
             elif "Universe" in dictionary['type']:
                 analysis_parameters[param_name] = universe
-
-
-def maincli(ap, args):
-    """Execute main client interface.
-
-    Parameters
-    ----------
-    ap : `argparse.ArgumentParser`
-        Argument parser instance
-    args : `argparse.Namespace`
-        Parsed argument instance
-
-    Returns
-    -------
-    ac : `MDAnalysis.analysis.base.AnalysisBase`
-        AnalysisBase instance of the given ``analysis_callable`` after run.
-    """
-    analysis_callable = args.analysis_callable
-
-    # Get the correct ArgumentParser instance from all subparsers
-    # [0] selects the first subparser where our analysises live in.
-    ap_sup = ap._subparsers._group_actions[0].choices[
-        analysis_callable.__name__]
-    arg_grouped_dict = split_argparse_into_groups(ap_sup, args)
-
-    # Optional parameters may not exist
-    try:
-        arg_grouped_dict["Optional Parameters"]
-    except KeyError:
-        arg_grouped_dict["Optional Parameters"] = {}
-
-    run_analsis(analysis_callable,
-                arg_grouped_dict["Universe Parameters"],
-                arg_grouped_dict["Mandatory Parameters"],
-                arg_grouped_dict["Optional Parameters"],
-                arg_grouped_dict["Analysis Run Parameters"],
-                arg_grouped_dict["Output Parameters"])
 
 
 def setup_clients(ap, title, members):
@@ -570,6 +522,12 @@ def main():
     ap.add_argument('--debug',
                     action='store_true',
                     help="Run with debug options.")
+
+    # There is to much useless code execution done here:
+    # 1. We do not have to setup all possible clients all the time.
+    #    i.e. for `mdacli RMSD` only the RMSD client should be build.
+    # 2. for something like `mdacli -h` We do not have to build every 
+    #   sub parser in complete detail.
     setup_clients(ap, title="MDAnalysis Analysis CLI", members=members)
 
     if len(sys.argv) < 2:
@@ -583,8 +541,25 @@ def main():
         # Ignore all warnings if not in debug mode
         warnings.filterwarnings("ignore")
 
+    # Execute the main client interface.
     try:
-        maincli(ap, args)
+        analysis_callable = args.analysis_callable
+
+        # Get the correct ArgumentParser instance from all subparsers
+        # `[0]` selects the first subparser where our analysises live in.
+        ap_sup = ap._subparsers._group_actions[0].choices[
+            analysis_callable.__name__]
+        arg_grouped_dict = split_argparse_into_groups(ap_sup, args)
+
+        # Optional parameters may not exist
+        arg_grouped_dict.setdefault("Optional Parameters", {})
+
+        run_analsis(analysis_callable,
+                    arg_grouped_dict["Universe Parameters"],
+                    arg_grouped_dict["Mandatory Parameters"],
+                    arg_grouped_dict["Optional Parameters"],
+                    arg_grouped_dict["Analysis Run Parameters"],
+                    arg_grouped_dict["Output Parameters"])
     except Exception as e:
         if args.debug:
             traceback.print_exc()
