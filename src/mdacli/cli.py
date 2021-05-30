@@ -526,7 +526,7 @@ def main():
     # There is to much useless code execution done here:
     # 1. We do not have to setup all possible clients all the time.
     #    i.e. for `mdacli RMSD` only the RMSD client should be build.
-    # 2. for something like `mdacli -h` We do not have to build every 
+    # 2. for something like `mdacli -h` We do not have to build every
     #   sub parser in complete detail.
     setup_clients(ap, title="MDAnalysis Analysis CLI", members=members)
 
