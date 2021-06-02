@@ -7,10 +7,15 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 """
-Main entry point for the MDAnalysis CLI interface.
+A command line interface (CLI) to the analysis modules of MDAnalysis.
 
-This also demonstrates how other third party libraries could incorporate
-this functionality.
+The modules are all structured as part of a single mdacli wrapper, and invoked
+with commands like `mdacli RMSD`. Documentation for each module can be found at
+the respective sections on the `MDAnalysis Analysis Documentation`_, as well as
+`mdacli command -h`.
+
+
+.. _`MDAnalysis Documentation`: https://docs.mdanalysis.org/stable/documentation_pages/analysis_modules.html
 """
 import argparse
 import os
@@ -515,7 +520,9 @@ def main():
     if members is None:
         sys.exit("No analysis modules found.")
 
-    ap = argparse.ArgumentParser()
+    ap = argparse.ArgumentParser(
+        description=__doc__,
+        formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument('--version',
                     action='version',
                     version="mdacli {}".format(__version__))
