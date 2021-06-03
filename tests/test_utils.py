@@ -8,15 +8,13 @@
 """Test mdacli utils."""
 import argparse
 import os
-from json.decoder import JSONDecodeError
-
 import pytest
+from json import JSONDecodeError
 
-from mdacli import libcli
 from mdacli.cli import convert_str_time
+from mdacli import libcli
 
 from . import example_json
-
 
 @pytest.mark.parametrize('x, frame',
                          (('1', 1),
@@ -79,8 +77,8 @@ def test_KwargsDict_from_file(cmd, expected):
 @pytest.mark.parametrize(
     's,error',
     [
-        ("-d fail", FileNotFoundError),
         ("-d {fail}", JSONDecodeError),
+        ("-d fail", FileNotFoundError),
         ]
     )
 def test_KwargsDict_error(s, error):
