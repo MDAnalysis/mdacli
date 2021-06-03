@@ -15,7 +15,8 @@ the respective sections on the `MDAnalysis Analysis Documentation`_, as well as
 `mdacli command -h`.
 
 
-.. _`MDAnalysis Documentation`: https://docs.mdanalysis.org/stable/documentation_pages/analysis_modules.html
+.. _`MDAnalysis Documentation`: 
+   https://docs.mdanalysis.org/stable/documentation_pages/analysis_modules.html
 """
 import argparse
 import os
