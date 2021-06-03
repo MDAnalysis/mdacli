@@ -14,21 +14,19 @@ class KwargsDict(argparse.Action):
 
     def __call__(self, parser, namespace, value, option_string=None):
         """Call me."""
-        try:
-            if Path(value).exists():
-                # read dict from JSON file
-                with open(value, 'r') as fin:
-                    jdict = json.load(fin)
-
-            else:
+        if value.startswith("{") and value.endswith("}"):
+            try:
                 jdict = json.loads(value)
 
-        except json.decoder.JSONDecodeError as err:
-            raise json.decoder.JSONDecodeError(
-                "An error ocurred when reading "
-                f"{self.dest!r} argument.",
-                err.doc,
-                err.pos,
-                ) from None
+            except json.decoder.JSONDecodeError as err:
+                raise json.decoder.JSONDecodeError(
+                    "An error ocurred when reading "
+                    f"{self.dest!r} argument.",
+                    err.doc,
+                    err.pos,
+                    ) from None
+        else:
+            with open(value, 'r') as fin:
+                jdict = json.load(fin)
 
         setattr(namespace, self.dest, jdict)
