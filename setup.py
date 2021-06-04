@@ -91,7 +91,7 @@ setup(
         ],
     entry_points={
         'console_scripts': [
-            'mdacli= mdacli.cli:main',
+            'mda= mdacli.cli:main',
             ]
         #
         },

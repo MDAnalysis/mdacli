@@ -10,9 +10,8 @@ https://github.com/MDAnalysis/mdacli and install ``mdacli`` with the following::
 
    python setup.py develop
 
-and run ``mdacli``, ::
-
-   mdacli -h
+and run::
+   mda -h
 
 
 version v0.0.0
