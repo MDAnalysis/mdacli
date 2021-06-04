@@ -12,7 +12,6 @@ import importlib
 import inspect
 import json
 import warnings
-from pathlib import Path
 
 from MDAnalysis.analysis.base import AnalysisBase
 
