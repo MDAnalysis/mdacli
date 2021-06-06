@@ -45,7 +45,7 @@ def test_KwargsDict(cmd, expected):
         (f"-d {os.fspath(example_json)}", {"key1": 1}),
         ]
     )
-def s (cmd, expected):
+def test_KwargsDict_from_file(cmd, expected):
     """Test dict reading action."""
     ap = argparse.ArgumentParser()
     ap.add_argument(
