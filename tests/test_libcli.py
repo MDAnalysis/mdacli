@@ -57,7 +57,14 @@ def test_KwargsDict_from_file(cmd, expected):
     assert args.d == expected
 
 
-def test_KwargsDict_error():
+@pytest.mark.parametrize(
+    's, error, msg',
+    [
+        ("-d {fail}", JSONDecodeError, "An error ocurred when reading"),
+        ("-d fail", FileNotFoundError, "No such file or directory"),
+        ]
+    )
+def test_KwargsDict_error(s, error, msg):
     """Test error."""
     ap = argparse.ArgumentParser()
     ap.add_argument(
@@ -65,8 +72,8 @@ def test_KwargsDict_error():
         action=libcli.KwargsDict,
         default=None,
         )
-    with pytest.raises(JSONDecodeError):
-        ap.parse_args("-d fail".split())
+    with pytest.raises(error, match=msg):
+        ap.parse_args(s.split())
 
 
 def test_find_AnalysisBase_members():
