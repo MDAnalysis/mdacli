@@ -45,7 +45,7 @@ def test_KwargsDict(cmd, expected):
         (f"-d {os.fspath(example_json)}", {"key1": 1}),
         ]
     )
-def test_KwargsDict_from_file(cmd, expected):
+def s (cmd, expected):
     """Test dict reading action."""
     ap = argparse.ArgumentParser()
     ap.add_argument(
@@ -58,13 +58,13 @@ def test_KwargsDict_from_file(cmd, expected):
 
 
 @pytest.mark.parametrize(
-    's,error',
+    's, error, msg',
     [
-        ("-d {fail}", JSONDecodeError),
-        ("-d fail", FileNotFoundError),
+        ("-d {fail}", JSONDecodeError, "An error ocurred when reading"),
+        ("-d fail", FileNotFoundError, "No such file or directory"),
         ]
     )
-def test_KwargsDict_error(s, error):
+def test_KwargsDict_error(s, error, msg):
     """Test error."""
     ap = argparse.ArgumentParser()
     ap.add_argument(
@@ -72,7 +72,7 @@ def test_KwargsDict_error(s, error):
         action=libcli.KwargsDict,
         default=None,
         )
-    with pytest.raises(error):
+    with pytest.raises(error, match=msg):
         ap.parse_args(s.split())
 
 
