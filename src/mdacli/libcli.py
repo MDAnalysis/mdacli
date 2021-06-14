@@ -16,6 +16,16 @@ import warnings
 from MDAnalysis.analysis.base import AnalysisBase
 
 
+UNIVERSES = defaultdict(dict)
+
+
+def store_universe(name):
+    class StoreUniverse(argprase.Action):
+        def __call__(self, parser, namespace, value, option_string=None):
+            UNIVERSES[name][self.dest] = value
+    return StoreUniverse
+
+
 class KwargsDict(argparse.Action):
     """
     Convert input string to a dictionary.

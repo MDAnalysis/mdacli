@@ -107,60 +107,23 @@ def create_CLI(cli_parser, interface_name, parameters):
     analysis_class_parser = add_parser(cli_parser, interface_name, parameters)
     add_analysis_run_parameters(analysis_class_parser)
 
+    # adds only if save does not exist
     if not getattr(parameters['callable'], 'save', False):
         add_output_group(analysis_class_parser)
 
-    universe_group = analysis_class_parser.add_argument_group(
-        title="Universe Parameters",
-        description="Parameters specific for loading the topology and"
-                    " trajectory"
-        )
+    # add universes stuff
+    pos_args_name_type = get_args_name_type(parameters['positional'])
 
-    universe_group.add_argument(
-        "-s",
-        dest="topology",
-        type=str,
-        default="topol.tpr",
-        help="The topolgy file. "
-        "The FORMATs {} are implemented in MDAnalysis."
-        "".format(", ".join(mda._PARSERS.keys())),
-        )
 
-    universe_group.add_argument(
-        "-top",
-        dest="topology_format",
-        type=str,
-        default=None,
-        help="Override automatic topology type detection. "
-        "See topology for implemented formats.")
+    pos_args_code = get_universe_atomgroup_cli_code(pos_args_name_type)
 
-    universe_group.add_argument(
-        "-atom_style",
-        dest="atom_style",
-        type=str,
-        default=None,
-        help="Manually set the atom_style information"
-        "(currently only LAMMPS parser). E.g. atom_style='id type x y z'.")
+    if pos_args_code[0]:
+        add_universe_group(analysis_class_parser)
+    elif not pos_args_code[0] and pos_args_code[1]:
+        add_atomgroups_u(analysis_class_parser)
 
-    universe_group.add_argument(
-        "-f",
-        dest="coordinates",
-        type=str,
-        default=None,
-        nargs="+",
-        help="A single or multiple coordinate files. "
-        "The FORMATs {} are implemented in MDAnalysis."
-        "".format(", ".join(mda._READERS.keys())),
-        )
 
-    universe_group.add_argument(
-        "-traj",
-        dest="trajectory_format",
-        type=str,
-        default=None,
-        help="Override automatic trajectory type detection. "
-        "See trajectory for implemented formats.")
-
+    # others
     pos_ = sorted(list(parameters["positional"].items()), key=lambda x: x[0])
     opt_ = sorted(list(parameters["optional"].items()), key=lambda x: x[0])
 
@@ -235,6 +198,173 @@ def create_CLI(cli_parser, interface_name, parameters):
                 help=f"{description} (default: %(default)s)"
                 )
     return
+
+
+def add_single_universe(parser, name):
+    """Universe with traj and top."""
+    add_Universe_arg_set(parser, name)
+    add_Universe_selection(parser, name)
+
+
+def add_single_universe_single_atom_group(parser, name):
+    add_Universe_arg_set(parser, name)
+    add_atomgroup_selection(parser, name)
+
+
+
+
+def add_multiple_universes(parser, names):
+    for name in names:
+        add_Universe_arg_set(parser, name)
+
+
+def add_single_universe_and_selection_groups(parser, universe, selections):
+    add_Universe_arg_set(parser, name)
+    for selection in selections:
+        add_selection(parser, selection)
+
+
+def add_single_atomgroup(parser, name):
+    add_Universe_arg_set(parser, name)
+
+
+def add_multiple_atomgroups_selection(parser):
+    add_Universe_arg_set(parser)
+    add_atomgroups(parser)
+
+
+def add_multiple_atomgroups(parser, names):
+    for name in names:
+        add_Universe_arg_set(parser, name)
+
+
+def add_Universe_arg_set(parser, name=''):
+    name = f'-{name}' if name else ''
+    parser.add_argument(
+        f"-s{name}",
+        dest="topology",
+        type=str,
+        default="topol.tpr",
+        action=store_universe(name),
+        help="The topolgy file. "
+        "The FORMATs {} are implemented in MDAnalysis."
+        "".format(", ".join(mda._PARSERS.keys())),
+        )
+
+    group.add_argument(
+        f"-top{name}",
+        dest="topology_format",
+        type=str,
+        action=store_universe(name),
+        default=None,
+        help="Override automatic topology type detection. "
+        "See topology for implemented formats.")
+
+    group.add_argument(
+        f"-atom_style{name}",
+        dest="atom_style",
+        type=str,
+        action=store_universe(name),
+        default=None,
+        help="Manually set the atom_style information"
+        "(currently only LAMMPS parser). E.g. atom_style='id type x y z'.")
+
+    group.add_argument(
+        f"-f{name}",
+        dest="coordinates",
+        type=str,
+        default=None,
+        action=store_universe(name),
+        nargs="+",
+        help="A single or multiple coordinate files. "
+        "The FORMATs {} are implemented in MDAnalysis."
+        "".format(", ".join(mda._READERS.keys())),
+        )
+
+    universe_group.add_argument(
+        f"-traj{name}",
+        dest="trajectory_format",
+        type=str,
+        action=store_universe(name),
+        default=None,
+        help="Override automatic trajectory type detection. "
+        "See trajectory for implemented formats.")
+        
+
+
+def get_numbered_cycler(number):
+    return cycle([''] + list(map(str(range(1, number)))))
+
+
+def add_universe_args(analysis_class_parser, pos_args_code, pos_args_name_type):
+
+    universe_group = analysis_class_parser.add_argument_group(
+        title="Mandatory Universe-related Parameters",
+        description=(
+            "Parameters specific for loading the topologies and"
+            " trajectories."
+            )
+        )
+
+    universe_cycles = get_numbered_cycler(pos_args_code[0])
+    atomgroup_cycles = get_numbered_cycler(pos_args_code[1])
+    for arg in pos_args_name_type:
+        if arg[1] in universe_types:
+            add_universe_cli(universe_group, name, next(universe_cycles))
+        elif arg[1] in atom_group_types:
+            add_atomgroup_cli(universe_group, name, next(atomgroup_cycles))
+        else:
+            add_atomgroup_selection(universe_group, name)
+
+
+def add_universe_cli(group, name, n):
+    """."""
+    group.add_argument(
+        f"-s{n}",
+        dest=f"topology{n}",
+        type=str,
+        default="topol.tpr",
+        help="The topolgy file. "
+        "The FORMATs {} are implemented in MDAnalysis."
+        "".format(", ".join(mda._PARSERS.keys())),
+        )
+
+    group.add_argument(
+        f"-top{n}",
+        dest=f"topology_format{n}",
+        type=str,
+        default=None,
+        help="Override automatic topology type detection. "
+        "See topology for implemented formats.")
+
+    group.add_argument(
+        f"-atom_style{n}",
+        dest=f"atom_style{n}",
+        type=str,
+        default=None,
+        help="Manually set the atom_style information"
+        "(currently only LAMMPS parser). E.g. atom_style='id type x y z'.")
+
+    group.add_argument(
+        f"-f{n}",
+        dest=f"coordinates{n}",
+        type=str,
+        default=None,
+        nargs="+",
+        help="A single or multiple coordinate files. "
+        "The FORMATs {} are implemented in MDAnalysis."
+        "".format(", ".join(mda._READERS.keys())),
+        )
+
+    universe_group.add_argument(
+        f"-traj{n}",
+        dest=f"trajectory_format{n}",
+        type=str,
+        default=None,
+        help="Override automatic trajectory type detection. "
+        "See trajectory for implemented formats.")
+    return
+
 
 
 def add_parser(cli_parser, interface_name, parameters):  # str, dict -> None
@@ -316,6 +446,36 @@ def add_output_group(analysis_class_parser):
              "(default: %(default)s)"
         )
 
+def get_universe_atomgroup_cli_code(pos_args):
+    """."""
+    universe_types = (
+        'Universe',
+        'MDAnalysis.core.universe.Universe'
+        )
+
+    atom_group_types = (
+        'AtomGroup',
+        )
+
+    atom_group_multiple = (
+        'tuple',
+        'list',
+        'iterable',
+        )
+
+    universes = 0
+    atomgroups = 0
+    for posarg in pos_args:
+        if posarg[1] in universe_types:
+            universes += 1
+        elif posarg[1] in atom_group_types:
+            atomgroups += 1
+
+    return (universes, atomgroups)
+
+
+def get_args_name_type(ddict):
+    return [(name, d['type']) for name, d in ddict.items()]
 
 def create_universe(topology,
                     coordinates=None,
@@ -516,7 +676,6 @@ def setup_clients(ap, title, members):
         member.__name__: parse_callable_signature(member)
         for member in members
         }
-    pprint(analysis_interfaces['RMSD'])
 
     # adds each Analysis class/function as a CLI under 'cli_parser'
     # to be writen
