@@ -12,6 +12,7 @@ Main entry point for the MDAnalysis CLI interface.
 This also demonstrates how other third party libraries could incorporate
 this functionality.
 """
+from pprint import pprint
 import argparse
 import os
 import sys
@@ -102,19 +103,12 @@ def create_CLI(cli_parser, interface_name, parameters):
     -------
     None
     """
-    # creates the subparser
-    analysis_class_parser = cli_parser.add_parser(
-        interface_name,
-        help=parameters["desc"],
-        description=f"{parameters['desc']}\n\n{parameters['desc_long']}",
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        )
 
-    # Add run_analsis function as the default func parameter.
-    # this is possible because the run_analsis function is equal to all
-    # Analysis Classes
-    analysis_class_parser.set_defaults(
-        analysis_callable=parameters["callable"])
+    analysis_class_parser = add_parser(cli_parser, interface_name, parameters)
+    add_analysis_run_parameters(analysis_class_parser)
+
+    if not getattr(parameters['callable'], 'save', False):
+        add_output_group(analysis_class_parser)
 
     universe_group = analysis_class_parser.add_argument_group(
         title="Universe Parameters",
@@ -166,65 +160,6 @@ def create_CLI(cli_parser, interface_name, parameters):
         default=None,
         help="Override automatic trajectory type detection. "
         "See trajectory for implemented formats.")
-
-    run_group = analysis_class_parser.add_argument_group(
-        title="Analysis Run Parameters",
-        description="Genereal parameters specific for running the analysis"
-        )
-    run_group.add_argument(
-        "-b",
-        dest="start",
-        type=str,
-        default="0",
-        help="frame or start time for evaluation. (default: %(default)s)"
-        )
-
-    run_group.add_argument(
-        "-e",
-        dest="stop",
-        type=str,
-        default="-1",
-        help="frame or end time for evaluation. (default: %(default)s)"
-        )
-
-    run_group.add_argument(
-        "-dt",
-        dest="step",
-        type=str,
-        default="1",
-        help="step or time step for evaluation. (default: %(default)s)"
-        )
-
-    run_group.add_argument(
-        "-v",
-        dest="verbose",
-        help="Be loud and noisy",
-        action="store_true"
-        )
-
-    # TODO: Should only be added if class does not have save_results
-    # function. However we only have a dict here and can not check this
-    # currently...
-    output_group = analysis_class_parser.add_argument_group(
-        title="Output Parameters",
-        )
-    output_group.add_argument(
-        "-pre",
-        dest="output_prefix",
-        type=str,
-        default="",
-        help="Additional prefix for all output files. Files will be "
-             " automatically named by the used module (default: %(default)s)"
-        )
-
-    output_group.add_argument(
-        "-o",
-        dest="output_directory",
-        type=str,
-        default=".",
-        help="Directory in which the output files produced will be stored."
-             "(default: %(default)s)"
-        )
 
     pos_ = sorted(list(parameters["positional"].items()), key=lambda x: x[0])
     opt_ = sorted(list(parameters["optional"].items()), key=lambda x: x[0])
@@ -300,6 +235,86 @@ def create_CLI(cli_parser, interface_name, parameters):
                 help=f"{description} (default: %(default)s)"
                 )
     return
+
+
+def add_parser(cli_parser, interface_name, parameters):  # str, dict -> None
+    # creates the subparser
+    analysis_class_parser = cli_parser.add_parser(
+        interface_name,
+        help=parameters["desc"],
+        description=f"{parameters['desc']}\n\n{parameters['desc_long']}",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        )
+
+    # Add run_analsis function as the default func parameter.
+    # this is possible because the run_analsis function is equal to all
+    # Analysis Classes
+    analysis_class_parser.set_defaults(analysis_callable=parameters["callable"])
+
+    return analysis_class_parser
+
+
+def add_analysis_run_parameters(analysis_class_parser):
+    run_group = analysis_class_parser.add_argument_group(
+        title="Analysis Run Parameters",
+        description="Genereal parameters specific for running the analysis"
+        )
+    run_group.add_argument(
+        "-b",
+        dest="start",
+        type=str,
+        default="0",
+        help="frame or start time for evaluation. (default: %(default)s)"
+        )
+
+    run_group.add_argument(
+        "-e",
+        dest="stop",
+        type=str,
+        default="-1",
+        help="frame or end time for evaluation. (default: %(default)s)"
+        )
+
+    run_group.add_argument(
+        "-dt",
+        dest="step",
+        type=str,
+        default="1",
+        help="step or time step for evaluation. (default: %(default)s)"
+        )
+
+    run_group.add_argument(
+        "-v",
+        dest="verbose",
+        help="Be loud and noisy",
+        action="store_true"
+        )
+
+
+def add_output_group(analysis_class_parser):
+    # TODO: Should only be added if class does not have save_results
+    # function. However we only have a dict here and can not check this
+    # currently...
+    output_group = analysis_class_parser.add_argument_group(
+        title="Output Parameters",
+        )
+    output_group.add_argument(
+        "-pre",
+        dest="output_prefix",
+        type=str,
+        default="",
+        help="Additional prefix for all output files. Files will be "
+             " automatically named by the used module (default: %(default)s)"
+        )
+
+    output_group.add_argument(
+        "-o",
+        dest="output_directory",
+        type=str,
+        default=".",
+        help="Directory in which the output files produced will be stored."
+             "(default: %(default)s)"
+        )
 
 
 def create_universe(topology,
@@ -501,6 +516,7 @@ def setup_clients(ap, title, members):
         member.__name__: parse_callable_signature(member)
         for member in members
         }
+    pprint(analysis_interfaces['RMSD'])
 
     # adds each Analysis class/function as a CLI under 'cli_parser'
     # to be writen
