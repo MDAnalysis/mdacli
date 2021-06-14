@@ -508,32 +508,49 @@ def setup_clients(ap, title, members):
         create_CLI(cli_parser, interface_name, parameters)
 
 
+def init_base_argparse():
+    """Create basic argument parser."""
+    ap = argparse.ArgumentParser()
+
+    ap.add_argument(
+        '--version',
+        action='version',
+        version="mdacli {}".format(__version__),
+        )
+
+    ap.add_argument(
+        '--debug',
+        action='store_true',
+        help="Run with debug options.",
+        )
+
+    return ap
+
+
+def exit_if_a_is_b(obj1, obj2, msg):
+    if obj1 is obj2:
+        sys.exit(msg)
+
+
 def main():
     """Execute main CLI entry point."""
-    members = find_AnalysisBase_members_ignore_warnings(_relevant_modules)
+    modules = find_AnalysisBase_members_ignore_warnings(_relevant_modules)
+    exit_if_a_is_b(modules, None, "No analysis modules founds.")
 
-    if members is None:
-        sys.exit("No analysis modules found.")
+    ap = init_base_argparse()
 
-    ap = argparse.ArgumentParser()
-    ap.add_argument('--version',
-                    action='version',
-                    version="mdacli {}".format(__version__))
-    ap.add_argument('--debug',
-                    action='store_true',
-                    help="Run with debug options.")
+    if len(sys.argv) < 2:
+        ap.error("A subcommand is required.")
 
     # There is to much useless code execution done here:
     # 1. We do not have to setup all possible clients all the time.
     #    i.e. for `mdacli RMSD` only the RMSD client should be build.
     # 2. for something like `mdacli -h` We do not have to build every
     #   sub parser in complete detail.
-    setup_clients(ap, title="MDAnalysis Analysis CLI", members=members)
-
-    if len(sys.argv) < 2:
-        ap.error("A subcommand is required.")
+    setup_clients(ap, title="MDAnalysis Analysis Clients", members=modules)
 
     args = ap.parse_args()
+    print(args)
 
     if args.debug:
         args.verbose = True
@@ -547,12 +564,13 @@ def main():
 
         # Get the correct ArgumentParser instance from all subparsers
         # `[0]` selects the first subparser where our analysises live in.
-        ap_sup = ap._subparsers._group_actions[0].choices[
-            analysis_callable.__name__]
+        _key = analysis_callable.__name__
+        ap_sup = ap._subparsers._group_actions[0].choices[_key]
         arg_grouped_dict = split_argparse_into_groups(ap_sup, args)
-
         # Optional parameters may not exist
+
         arg_grouped_dict.setdefault("Optional Parameters", {})
+        print(arg_grouped_dict)
 
         run_analsis(analysis_callable,
                     arg_grouped_dict["Universe Parameters"],

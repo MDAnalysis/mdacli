@@ -92,7 +92,7 @@ def find_AnalysisBase_members_ignore_warnings(modules):
 
 def split_argparse_into_groups(parser, namespace):
     """
-    Split the the populated namespace of argparse into groups.
+    Split the populated namespace of argparse into groups.
 
     https://stackoverflow.com/questions/31519997/is-it-possible-to-
     only-parse-one-argument-groups-parameters-with-argparse

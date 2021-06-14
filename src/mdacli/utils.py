@@ -74,8 +74,7 @@ def parse_callable_signature(callable_obj):
 
     Returns
     -------
-    None
-        Modifies `storage_dict` in place.
+    dict
     """
     storage_dict = {}
     storage_dict["callable"] = callable_obj
