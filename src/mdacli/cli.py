@@ -16,7 +16,6 @@ import argparse
 import logging
 import os
 import sys
-import traceback
 import warnings
 
 import MDAnalysis as mda
@@ -58,7 +57,7 @@ STR_TYPE_DICT = {
 
 
 def _warning(message, *args, **kwargs):
-    logger.warning(Emphasise.warning(f"Warning: {message}"))
+    logger.warning(Emphasise.warning(message))
 
 
 warnings.showwarning = _warning
@@ -570,4 +569,4 @@ def main():
                         arg_grouped_dict["Analysis Run Parameters"],
                         arg_grouped_dict["Output Parameters"])
         except Exception as e:
-            logger.error(e)
+            logger.error(Emphasise.error(e))

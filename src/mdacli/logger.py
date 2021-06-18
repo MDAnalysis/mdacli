@@ -11,14 +11,15 @@ import logging
 
 from logging.handlers import RotatingFileHandler
 
-logger = logging.getLogger(__name__)
+from mdacli.colors import Emphasise
 
-DEBUGFORMATTER = '%(filename)s:%(name)s:%(funcName)s:%(lineno)d: %(message)s'
+DEBUGFORMATTER = '{levelname}:{filename}:{name}:{funcName}:%{lineno}: {message}'
 """Debug file formatter."""
 
-INFOFORMATTER = '%(message)s'
+INFOFORMATTER = '{levelname}:{message}'
 """Log file and stream output formatter."""
 
+logger = logging.getLogger(__name__)
 
 @contextlib.contextmanager
 def setup_logging(logfile=None, debug=False):
@@ -26,17 +27,27 @@ def setup_logging(logfile=None, debug=False):
     try:
         log = logging.getLogger()
         if debug:
-            log.setLevel(logging.DEBUG)
-            fmt = logging.Formatter(DEBUGFORMATTER)
+            logging.basicConfig(format=DEBUGFORMATTER, 
+                                level=logging.DEBUG,
+                                style='{')
+            fmt = logging.Formatter(DEBUGFORMATTER, style='{')
         else:
-            log.setLevel(logging.INFO)
-            fmt = logging.Formatter(INFOFORMATTER)
+            logging.basicConfig(format=INFOFORMATTER,
+                                level=logging.INFO,
+                                style='{')
+            fmt = logging.Formatter(INFOFORMATTER, style='{')
+
         if logfile:
+            logfile += ".log" * (not logfile.endswith("log"))
             handler = RotatingFileHandler(filename=logfile,
                                           encoding='utf-8')
             handler.setFormatter(fmt)
             log.addHandler(handler)
         else:
+            logging.addLevelName(logging.INFO, Emphasise.info("INFO"))
+            logging.addLevelName(logging.DEBUG, Emphasise.debug("DEBUG"))
+            logging.addLevelName(logging.WARNING, Emphasise.warning("ERROR"))
+            logging.addLevelName(logging.ERROR, Emphasise.error("ERROR"))
             logger.info('Logging to file is disabled')
 
         yield
