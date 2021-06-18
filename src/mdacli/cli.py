@@ -58,7 +58,7 @@ STR_TYPE_DICT = {
 
 
 def _warning(message, *args, **kwargs):
-     logger.warning(Emphasise.warning(message))
+    logger.warning(Emphasise.warning(message))
 
 
 warnings.showwarning = _warning
