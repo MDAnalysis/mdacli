@@ -5,15 +5,16 @@
 #
 # Released under the GNU Public Licence, v2 or any higher version
 # SPDX-License-Identifier: GPL-2.0-or-later
+"""Logging."""
 
 import contextlib
 import logging
-
 from logging.handlers import RotatingFileHandler
 
 from mdacli.colors import Emphasise
 
-DEBUGFORMATTER = '{levelname}:{filename}:{name}:{funcName}:%{lineno}: {message}'
+
+DEBUGFORMATTER = '{levelname}:{filename}:{name}:{funcName}:{lineno}:{message}'
 """Debug file formatter."""
 
 INFOFORMATTER = '{levelname}:{message}'
@@ -21,13 +22,24 @@ INFOFORMATTER = '{levelname}:{message}'
 
 logger = logging.getLogger(__name__)
 
+
 @contextlib.contextmanager
 def setup_logging(logfile=None, debug=False):
-    """Setup logging."""
+    """
+    Create a logging environment.
+
+    Parameters
+    ----------
+    logfile : str
+        Name of the log file
+    debug : bool
+        Display debug logs. If ``False`` error, warnings and infos will be
+        logged.
+    """
     try:
         log = logging.getLogger()
         if debug:
-            logging.basicConfig(format=DEBUGFORMATTER, 
+            logging.basicConfig(format=DEBUGFORMATTER,
                                 level=logging.DEBUG,
                                 style='{')
             fmt = logging.Formatter(DEBUGFORMATTER, style='{')

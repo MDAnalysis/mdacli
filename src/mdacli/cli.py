@@ -28,9 +28,10 @@ from mdacli.libcli import (
     find_AnalysisBase_members_ignore_warnings,
     split_argparse_into_groups,
     )
+from mdacli.logger import setup_logging
 from mdacli.save import save_results
 from mdacli.utils import convert_str_time, parse_callable_signature, parse_docs
-from mdacli.logger import setup_logging
+
 
 logger = logging.getLogger(__name__)
 
@@ -54,13 +55,6 @@ STR_TYPE_DICT = {
     "NoneType": type(None),
     "AtomGroup": mda.AtomGroup,
     }
-
-
-def _warning(message, *args, **kwargs):
-    logger.warning(Emphasise.warning(message))
-
-
-warnings.showwarning = _warning
 
 
 def create_CLI(cli_parser, interface_name, parameters):
@@ -529,7 +523,6 @@ def main():
                     action='store',
                     help='Logfile (optional)')
 
-    
     # There is to much useless code execution done here:
     # 1. We do not have to setup all possible clients all the time.
     #    i.e. for `mdacli RMSD` only the RMSD client should be build.
