@@ -13,6 +13,7 @@ This also demonstrates how other third party libraries could incorporate
 this functionality.
 """
 import argparse
+import logging
 import os
 import sys
 import traceback
@@ -30,7 +31,9 @@ from mdacli.libcli import (
     )
 from mdacli.save import save_results
 from mdacli.utils import convert_str_time, parse_callable_signature, parse_docs
+from mdacli.logger import setup_logging
 
+logger = logging.getLogger(__name__)
 
 # modules in MDAnalysis.analysis packages that are ignored by mdacli
 # relevant modules used in this CLI factory
@@ -55,7 +58,7 @@ STR_TYPE_DICT = {
 
 
 def _warning(message, *args, **kwargs):
-    print(Emphasise.warning(f"Warning: {message}"))
+    logger.warning(Emphasise.warning(f"Warning: {message}"))
 
 
 warnings.showwarning = _warning
@@ -397,10 +400,10 @@ def run_analsis(analysis_callable,
 
     # Initilize Universe
     if verbose:
-        print("Loading trajectory...", end="")
+        logger.info("Loading trajectory.")
     universe = create_universe(**universe_parameters)
     if verbose:
-        print("Done!\n")
+        logger.info("Done!\n")
         sys.stdout.flush()
 
     # Initilize analysis callable
@@ -522,7 +525,12 @@ def main():
     ap.add_argument('--debug',
                     action='store_true',
                     help="Run with debug options.")
+    ap.add_argument('--logfile',
+                    dest='logfile',
+                    action='store',
+                    help='Logfile (optional)')
 
+    
     # There is to much useless code execution done here:
     # 1. We do not have to setup all possible clients all the time.
     #    i.e. for `mdacli RMSD` only the RMSD client should be build.
@@ -541,27 +549,25 @@ def main():
         # Ignore all warnings if not in debug mode
         warnings.filterwarnings("ignore")
 
-    # Execute the main client interface.
-    try:
-        analysis_callable = args.analysis_callable
+    with setup_logging(logfile=args.logfile, debug=args.debug):
+        # Execute the main client interface.
+        try:
+            analysis_callable = args.analysis_callable
 
-        # Get the correct ArgumentParser instance from all subparsers
-        # `[0]` selects the first subparser where our analysises live in.
-        ap_sup = ap._subparsers._group_actions[0].choices[
-            analysis_callable.__name__]
-        arg_grouped_dict = split_argparse_into_groups(ap_sup, args)
+            # Get the correct ArgumentParser instance from all subparsers
+            # `[0]` selects the first subparser where our analysises live in.
+            ap_sup = ap._subparsers._group_actions[0].choices[
+                analysis_callable.__name__]
+            arg_grouped_dict = split_argparse_into_groups(ap_sup, args)
 
-        # Optional parameters may not exist
-        arg_grouped_dict.setdefault("Optional Parameters", {})
+            # Optional parameters may not exist
+            arg_grouped_dict.setdefault("Optional Parameters", {})
 
-        run_analsis(analysis_callable,
-                    arg_grouped_dict["Universe Parameters"],
-                    arg_grouped_dict["Mandatory Parameters"],
-                    arg_grouped_dict["Optional Parameters"],
-                    arg_grouped_dict["Analysis Run Parameters"],
-                    arg_grouped_dict["Output Parameters"])
-    except Exception as e:
-        if args.debug:
-            traceback.print_exc()
-        else:
-            sys.exit(Emphasise.error(f"Error: {e}"))
+            run_analsis(analysis_callable,
+                        arg_grouped_dict["Universe Parameters"],
+                        arg_grouped_dict["Mandatory Parameters"],
+                        arg_grouped_dict["Optional Parameters"],
+                        arg_grouped_dict["Analysis Run Parameters"],
+                        arg_grouped_dict["Output Parameters"])
+        except Exception as e:
+            logger.error(e)

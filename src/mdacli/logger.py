@@ -1,0 +1,47 @@
+#!/usr/bin/env python3
+# -*- Mode: python; tab-width: 4; indent-tabs-mode:nil; coding:utf-8 -*-
+#
+# Copyright (c) 2021 Authors and contributors
+#
+# Released under the GNU Public Licence, v2 or any higher version
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+import contextlib
+import logging
+
+from logging.handlers import RotatingFileHandler
+
+logger = logging.getLogger(__name__)
+
+DEBUGFORMATTER = '%(filename)s:%(name)s:%(funcName)s:%(lineno)d: %(message)s'
+"""Debug file formatter."""
+
+INFOFORMATTER = '%(message)s'
+"""Log file and stream output formatter."""
+
+
+@contextlib.contextmanager
+def setup_logging(logfile=None, debug=False):
+    """Setup logging."""
+    try:
+        log = logging.getLogger()
+        if debug:
+            log.setLevel(logging.DEBUG)
+            fmt = logging.Formatter(DEBUGFORMATTER)
+        else:
+            log.setLevel(logging.INFO)
+            fmt = logging.Formatter(INFOFORMATTER)
+        if logfile:
+            handler = RotatingFileHandler(filename=logfile,
+                                          encoding='utf-8')
+            handler.setFormatter(fmt)
+            log.addHandler(handler)
+        else:
+            logger.info('Logging to file is disabled')
+
+        yield
+    finally:
+        handlers = log.handlers[:]
+        for handler in handlers:
+            handler.close()
+            log.removeHandler(handler)
