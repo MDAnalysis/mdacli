@@ -57,6 +57,13 @@ STR_TYPE_DICT = {
     }
 
 
+def _warning(message, *args, **kwargs):
+     logger.warning(Emphasise.warning(message))
+
+
+warnings.showwarning = _warning
+
+
 def create_CLI(cli_parser, interface_name, parameters):
     """
     Add subparsers to `cli_parser`.
@@ -393,7 +400,7 @@ def run_analsis(analysis_callable,
 
     # Initilize Universe
     if verbose:
-        logger.info("Loading trajectory.")
+        logger.info("Loading trajectory...")
     universe = create_universe(**universe_parameters)
     if verbose:
         logger.info("Done!\n")

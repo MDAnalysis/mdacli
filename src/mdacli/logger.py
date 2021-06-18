@@ -14,10 +14,11 @@ from logging.handlers import RotatingFileHandler
 from mdacli.colors import Emphasise
 
 
-DEBUGFORMATTER = '{levelname}:{filename}:{name}:{funcName}:{lineno}:{message}'
+DEBUGFORMATTER = '[{levelname}] {filename}:{name}:{funcName}:{lineno}:'
+DEBUGFORMATTER += '{message}'
 """Debug file formatter."""
 
-INFOFORMATTER = '{levelname}:{message}'
+INFOFORMATTER = '{message}'
 """Log file and stream output formatter."""
 
 logger = logging.getLogger(__name__)
