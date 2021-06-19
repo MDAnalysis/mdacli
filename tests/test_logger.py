@@ -44,8 +44,8 @@ class Test_setup_logger:
         with tmpdir.as_cwd():
             with mdacli.logger.setup_logging(logfile="logfile", debug=True):
                 self.log_msg()
-                assert "test:test_logger.py:18 foo\n" in caplog.text
+                assert "test:test_logger.py:20 foo\n" in caplog.text
                 with open("logfile.log", "r") as f:
                     log = f.read()
 
-                assert "test_logger.py:test:log_msg:18:foo\n" in log
+                assert "test_logger.py:test:log_msg:20:foo\n" in log
