@@ -9,7 +9,7 @@
 
 import contextlib
 import logging
-from logging.handlers import RotatingFileHandler
+import sys
 
 from mdacli.colors import Emphasise
 
@@ -40,26 +40,26 @@ def setup_logging(logfile=None, debug=False):
     try:
         log = logging.getLogger()
         if debug:
-            logging.basicConfig(format=DEBUGFORMATTER,
-                                level=logging.DEBUG,
-                                style='{')
-            fmt = logging.Formatter(DEBUGFORMATTER, style='{')
+            format = DEBUGFORMATTER
+            level = logging.DEBUG
         else:
-            logging.basicConfig(format=INFOFORMATTER,
-                                level=logging.INFO,
-                                style='{')
-            fmt = logging.Formatter(INFOFORMATTER, style='{')
+            format = INFOFORMATTER
+            level = logging.INFO
+
+        logging.basicConfig(format=format,
+                            handlers=[logging.StreamHandler(sys.stdout)],
+                            level=level,
+                            style='{')
 
         if logfile:
             logfile += ".log" * (not logfile.endswith("log"))
-            handler = RotatingFileHandler(filename=logfile,
-                                          encoding='utf-8')
-            handler.setFormatter(fmt)
+            handler = logging.FileHandler(filename=logfile, encoding='utf-8')
+            handler.setFormatter(logging.Formatter(format, style='{'))
             log.addHandler(handler)
         else:
             logging.addLevelName(logging.INFO, Emphasise.info("INFO"))
             logging.addLevelName(logging.DEBUG, Emphasise.debug("DEBUG"))
-            logging.addLevelName(logging.WARNING, Emphasise.warning("ERROR"))
+            logging.addLevelName(logging.WARNING, Emphasise.warning("WARNING"))
             logging.addLevelName(logging.ERROR, Emphasise.error("ERROR"))
             logger.info('Logging to file is disabled')
 
