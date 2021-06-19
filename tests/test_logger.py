@@ -18,7 +18,7 @@ class Test_setup_logger:
         """Info message parsed to the log."""
         logger = logging.getLogger("test")
         logger.info("foo")
- 
+
     def test_default_log(self, caplog):
         """Default message in STDOUT."""
         caplog.set_level(logging.INFO)
