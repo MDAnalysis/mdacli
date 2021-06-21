@@ -50,9 +50,9 @@ class Test_setup_logger:
                                              logfile="logfile",
                                              debug=True):
                 logger.info("foo")
-                assert "test:test_logger.py:54 foo\n" in caplog.text
+                assert "test:test_logger.py:52 foo\n" in caplog.text
 
             with open("logfile.log", "r") as f:
                 log = f.read()
 
-            assert "test_logger.py:test:test_debug_log:54: foo\n" in log
+            assert "test_logger.py:test:test_debug_log:52: foo\n" in log
