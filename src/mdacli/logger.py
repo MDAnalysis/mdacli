@@ -14,36 +14,29 @@ import sys
 from mdacli.colors import Emphasise
 
 
-DEBUGFORMATTER = '[{levelname}] {filename}:{name}:{funcName}:{lineno}:'
-DEBUGFORMATTER += '{message}'
-"""Debug file formatter."""
-
-INFOFORMATTER = '{message}'
-"""Log file and stream output formatter."""
-
-logger = logging.getLogger(__name__)
-
-
 @contextlib.contextmanager
-def setup_logging(logfile=None, debug=False):
+def setup_logging(logobj, logfile=None, debug=False):
     """
-    Create a logging environment.
+    Create a logging environment for a given logobj.
 
     Parameters
     ----------
+    logobj : ``logging.Logger``
+        A logging instance
     logfile : str
         Name of the log file
     debug : bool
-        Display debug logs. If ``False`` error, warnings and infos will be
-        logged.
+        If ``True`` detailed debug logs inludcing filename and function name
+        are displayed. If ``False`` only the message logged from 
+        errors, warnings and infos will be displayed.
     """
     try:
-        log = logging.getLogger()
+        format = '{message}'
         if debug:
-            format = DEBUGFORMATTER
+            format = "[{levelname}] {filename}:{name}:{funcName}:{lineno}: " \
+                     + format
             level = logging.DEBUG
         else:
-            format = INFOFORMATTER
             level = logging.INFO
 
         logging.basicConfig(format=format,
@@ -55,17 +48,17 @@ def setup_logging(logfile=None, debug=False):
             logfile += ".log" * (not logfile.endswith("log"))
             handler = logging.FileHandler(filename=logfile, encoding='utf-8')
             handler.setFormatter(logging.Formatter(format, style='{'))
-            log.addHandler(handler)
+            logobj.addHandler(handler)
         else:
             logging.addLevelName(logging.INFO, Emphasise.info("INFO"))
             logging.addLevelName(logging.DEBUG, Emphasise.debug("DEBUG"))
             logging.addLevelName(logging.WARNING, Emphasise.warning("WARNING"))
             logging.addLevelName(logging.ERROR, Emphasise.error("ERROR"))
-            logger.info('Logging to file is disabled')
+            logobj.info('Logging to file is disabled.')
 
         yield
     finally:
-        handlers = log.handlers[:]
+        handlers = logobj.handlers[:]
         for handler in handlers:
             handler.close()
-            log.removeHandler(handler)
+            logobj.removeHandler(handler)

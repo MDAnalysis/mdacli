@@ -548,7 +548,7 @@ def main():
         # Ignore all warnings if not in debug mode
         warnings.filterwarnings("ignore")
 
-    with setup_logging(logfile=args.logfile, debug=args.debug):
+    with setup_logging(logger, logfile=args.logfile, debug=args.debug):
         # Execute the main client interface.
         try:
             analysis_callable = args.analysis_callable
