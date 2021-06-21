@@ -8,8 +8,6 @@
 """Test mdacli logger."""
 import logging
 
-import pytest
-
 import mdacli.logger
 
 
@@ -53,7 +51,7 @@ class Test_setup_logger:
                                              debug=True):
                 logger.info("foo")
                 assert "test:test_logger.py:54 foo\n" in caplog.text
-                
+
             with open("logfile.log", "r") as f:
                 log = f.read()
 

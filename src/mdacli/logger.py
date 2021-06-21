@@ -27,7 +27,7 @@ def setup_logging(logobj, logfile=None, debug=False):
         Name of the log file
     debug : bool
         If ``True`` detailed debug logs inludcing filename and function name
-        are displayed. If ``False`` only the message logged from 
+        are displayed. If ``False`` only the message logged from
         errors, warnings and infos will be displayed.
     """
     try:
