@@ -53,6 +53,12 @@ def test_extra_options(args):
     subprocess.check_call(['mda', '--' + args])
 
 
+@pytest.mark.parametrize('args', ("RMSF", "rmsf"))
+def test_case_insensitive(args):
+    """Test for beeing case insensitive."""
+    subprocess.check_call(['mda', args, "-h"])
+
+
 @pytest.mark.parametrize(
     'opt, dest, val',
     (('-s', "topology", "foo"),
@@ -65,7 +71,7 @@ def test_extra_options(args):
      ('-dt', "step", 42)))
 def test_setup_clients(opt, dest, val):
     """Test all additional arguments."""
-    testargs = ["mdacli", "RMSF", opt]
+    testargs = ["mdacli", "rmsf", opt]
     if type(val) == list:
         for i in val:
             testargs.append(str(i))
