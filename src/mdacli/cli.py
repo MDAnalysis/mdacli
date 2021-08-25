@@ -488,6 +488,10 @@ def init_base_argparse():
         help="Run with debug options.",
         )
 
+    ap.add_argument('--logfile',
+                    dest='logfile',
+                    action='store',
+                    help='Logfile (optional)')
     return ap
 
 
@@ -505,18 +509,6 @@ def main():
 
     if len(sys.argv) < 2:
         ap.error("A subcommand is required.")
-
-    ap = argparse.ArgumentParser()
-    ap.add_argument('--version',
-                    action='version',
-                    version="mdacli {}".format(__version__))
-    ap.add_argument('--debug',
-                    action='store_true',
-                    help="Run with debug options.")
-    ap.add_argument('--logfile',
-                    dest='logfile',
-                    action='store',
-                    help='Logfile (optional)')
 
     # There is to much useless code execution done here:
     # 1. We do not have to setup all possible clients all the time.
