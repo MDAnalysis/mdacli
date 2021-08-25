@@ -14,9 +14,9 @@ this functionality.
 """
 from pprint import pprint
 import argparse
+import logging
 import os
 import sys
-import traceback
 import warnings
 
 import MDAnalysis as mda
@@ -29,9 +29,12 @@ from mdacli.libcli import (
     find_AnalysisBase_members_ignore_warnings,
     split_argparse_into_groups,
     )
+from mdacli.logger import setup_logging
 from mdacli.save import save_results
 from mdacli.utils import convert_str_time, parse_callable_signature, parse_docs
 
+
+logger = logging.getLogger(__name__)
 
 # modules in MDAnalysis.analysis packages that are ignored by mdacli
 # relevant modules used in this CLI factory
@@ -56,7 +59,7 @@ STR_TYPE_DICT = {
 
 
 def _warning(message, *args, **kwargs):
-    print(Emphasise.warning(f"Warning: {message}"))
+    logger.warning(Emphasise.warning(message))
 
 
 warnings.showwarning = _warning
@@ -572,10 +575,10 @@ def run_analsis(analysis_callable,
 
     # Initilize Universe
     if verbose:
-        print("Loading trajectory...", end="")
+        logger.info("Loading trajectory...")
     universe = create_universe(**universe_parameters)
     if verbose:
-        print("Done!\n")
+        logger.info("Done!\n")
         sys.stdout.flush()
 
     # Initilize analysis callable
@@ -716,6 +719,18 @@ def main():
 
     if len(sys.argv) < 2:
         ap.error("A subcommand is required.")
+
+    ap = argparse.ArgumentParser()
+    ap.add_argument('--version',
+                    action='version',
+                    version="mdacli {}".format(__version__))
+    ap.add_argument('--debug',
+                    action='store_true',
+                    help="Run with debug options.")
+    ap.add_argument('--logfile',
+                    dest='logfile',
+                    action='store',
+                    help='Logfile (optional)')
 
     # There is to much useless code execution done here:
     # 1. We do not have to setup all possible clients all the time.

@@ -7,6 +7,7 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 """Test mdacli cli."""
 import argparse
+import logging
 import os
 import subprocess
 import sys
@@ -47,7 +48,7 @@ def test_wrong_module():
         subprocess.check_call(['mda', 'foo'])
 
 
-@pytest.mark.parametrize('args', ("version", "help"))
+@pytest.mark.parametrize('args', ("version", "debug", "help"))
 def test_extra_options(args):
     """Test for a ab extra option."""
     subprocess.check_call(['mda', '--' + args])
@@ -212,16 +213,16 @@ class Test_run_analsis:
                      universe_parameters,
                      mandatory_parameters,
                      tmpdir,
-                     capsys):
+                     caplog):
         """Test for being verbose."""
         run_parameters = {"verbose": True}
+        caplog.set_level(logging.INFO)
         with tmpdir.as_cwd():
             run_analsis(analysis_callable=InterRDF,
                         universe_parameters=universe_parameters,
                         mandatory_analysis_parameters=mandatory_parameters,
                         run_parameters=run_parameters)
-        captured = capsys.readouterr()
-        assert "Loading trajectory..." in captured.out
+        assert "Loading trajectory..." in caplog.text
 
     def test_custom_output(self,
                            universe_parameters,
