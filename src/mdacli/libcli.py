@@ -13,6 +13,7 @@ import inspect
 import json
 import warnings
 
+import MDAnalysis as mda
 from MDAnalysis.analysis.base import AnalysisBase
 
 
@@ -185,3 +186,74 @@ def add_output_group(analysis_class_parser):
         help="Directory in which the output files produced will be stored."
              "(default: %(default)s)"
         )
+
+
+def add_cli_universe(parser, name=''):
+    """."""
+    name = f'-{name}' if name else ''
+    parser.add_argument(
+        f"-s{name}",
+        dest="topology",
+        type=str,
+        default="topol.tpr",
+        action=store_universe(name),
+        help="The topolgy file. "
+        "The FORMATs {} are implemented in MDAnalysis."
+        "".format(", ".join(mda._PARSERS.keys())),
+        )
+
+    group.add_argument(
+        f"-top{name}",
+        dest="topology_format",
+        type=str,
+        action=store_universe(name),
+        default=None,
+        help="Override automatic topology type detection. "
+        "See topology for implemented formats.")
+
+    group.add_argument(
+        f"-atom_style{name}",
+        dest="atom_style",
+        type=str,
+        action=store_universe(name),
+        default=None,
+        help="Manually set the atom_style information"
+        "(currently only LAMMPS parser). E.g. atom_style='id type x y z'.")
+
+    group.add_argument(
+        f"-f{name}",
+        dest="coordinates",
+        type=str,
+        default=None,
+        action=store_universe(name),
+        nargs="+",
+        help="A single or multiple coordinate files. "
+        "The FORMATs {} are implemented in MDAnalysis."
+        "".format(", ".join(mda._READERS.keys())),
+        )
+
+    universe_group.add_argument(
+        f"-traj{name}",
+        dest="trajectory_format",
+        type=str,
+        action=store_universe(name),
+        default=None,
+        help="Override automatic trajectory type detection. "
+        "See trajectory for implemented formats.")
+
+    return
+
+
+def add_cli_atom_group(parser, name='')
+    """."""
+    add_cli_universe(parser, name=name)
+
+    parser.add_argument(
+        '-selection',
+        dest="selection",
+        type=str,
+        default="all",
+        help="Atom selection to create MDAnalysis AtomGroup.",
+        )
+
+    return
