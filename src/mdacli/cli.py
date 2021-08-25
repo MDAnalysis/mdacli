@@ -26,6 +26,8 @@ from mdacli import __version__
 from mdacli.colors import Emphasise
 from mdacli.libcli import (
     KwargsDict,
+    add_analysis_run_parameters,
+    add_output_group,
     find_AnalysisBase_members_ignore_warnings,
     split_argparse_into_groups,
     )
@@ -63,6 +65,15 @@ def _warning(message, *args, **kwargs):
 
 
 warnings.showwarning = _warning
+
+
+_sig_types = {
+    (0, 1): add_cli_single_atom_group,
+    (1, 0): add_cli_single_universe,
+    (2, 0): add_cli_several_universes,
+    (0, 2): add_cli_several_atomgroups,
+    }
+
 
 
 def create_CLI(cli_parser, interface_name, parameters):
@@ -106,7 +117,6 @@ def create_CLI(cli_parser, interface_name, parameters):
     -------
     None
     """
-
     analysis_class_parser = add_parser(cli_parser, interface_name, parameters)
     add_analysis_run_parameters(analysis_class_parser)
 
@@ -115,10 +125,8 @@ def create_CLI(cli_parser, interface_name, parameters):
         add_output_group(analysis_class_parser)
 
     # add universes stuff
-    pos_args_name_type = get_args_name_type(parameters['positional'])
-
-
-    pos_args_code = get_universe_atomgroup_cli_code(pos_args_name_type)
+    _ = get_args_name_type(parameters['positional'])
+    pos_args_code = get_universe_atomgroup_cli_code(_)
 
     if pos_args_code[0]:
         add_universe_group(analysis_class_parser)
@@ -387,67 +395,6 @@ def add_parser(cli_parser, interface_name, parameters):  # str, dict -> None
     return analysis_class_parser
 
 
-def add_analysis_run_parameters(analysis_class_parser):
-    run_group = analysis_class_parser.add_argument_group(
-        title="Analysis Run Parameters",
-        description="Genereal parameters specific for running the analysis"
-        )
-    run_group.add_argument(
-        "-b",
-        dest="start",
-        type=str,
-        default="0",
-        help="frame or start time for evaluation. (default: %(default)s)"
-        )
-
-    run_group.add_argument(
-        "-e",
-        dest="stop",
-        type=str,
-        default="-1",
-        help="frame or end time for evaluation. (default: %(default)s)"
-        )
-
-    run_group.add_argument(
-        "-dt",
-        dest="step",
-        type=str,
-        default="1",
-        help="step or time step for evaluation. (default: %(default)s)"
-        )
-
-    run_group.add_argument(
-        "-v",
-        dest="verbose",
-        help="Be loud and noisy",
-        action="store_true"
-        )
-
-
-def add_output_group(analysis_class_parser):
-    # TODO: Should only be added if class does not have save_results
-    # function. However we only have a dict here and can not check this
-    # currently...
-    output_group = analysis_class_parser.add_argument_group(
-        title="Output Parameters",
-        )
-    output_group.add_argument(
-        "-pre",
-        dest="output_prefix",
-        type=str,
-        default="",
-        help="Additional prefix for all output files. Files will be "
-             " automatically named by the used module (default: %(default)s)"
-        )
-
-    output_group.add_argument(
-        "-o",
-        dest="output_directory",
-        type=str,
-        default=".",
-        help="Directory in which the output files produced will be stored."
-             "(default: %(default)s)"
-        )
 
 def get_universe_atomgroup_cli_code(pos_args):
     """."""
@@ -673,17 +620,17 @@ def setup_clients(ap, title, members):
     members : list
         list containing Analysis classes for setting up the parser
     """
-    cli_parser = ap.add_subparsers(title=title)
+    cli_subparser = ap.add_subparsers(title=title)
 
     analysis_interfaces = {
         member.__name__: parse_callable_signature(member)
         for member in members
         }
 
-    # adds each Analysis class/function as a CLI under 'cli_parser'
+    # adds each Analysis class/function as a CLI under 'cli_subparser'
     # to be writen
     for interface_name, parameters in analysis_interfaces.items():
-        create_CLI(cli_parser, interface_name, parameters)
+        create_CLI(cli_subparser, interface_name, parameters)
 
 
 def init_base_argparse():
@@ -757,6 +704,7 @@ def main():
         _key = analysis_callable.__name__
         ap_sup = ap._subparsers._group_actions[0].choices[_key]
         arg_grouped_dict = split_argparse_into_groups(ap_sup, args)
+
         # Optional parameters may not exist
 
         arg_grouped_dict.setdefault("Optional Parameters", {})

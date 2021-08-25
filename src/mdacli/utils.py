@@ -61,7 +61,7 @@ def convert_str_time(x, dt):
 
 def parse_callable_signature(callable_obj):
     """
-    Parse a callable object to a convenient dictionary for CLI creation.
+    Parse a callable signature to a convenient dictionary for CLI creation.
 
     The parameters used in the CLI are a combination of the callable
     signature and the information in the callable docstring.

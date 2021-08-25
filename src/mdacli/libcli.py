@@ -126,3 +126,62 @@ def split_argparse_into_groups(parser, namespace):
         arg_grouped_dict[group.title] = group_dict
 
     return arg_grouped_dict
+
+
+def add_analysis_run_parameters(analysis_class_parser):
+    run_group = analysis_class_parser.add_argument_group(
+        title="Analysis Run Parameters",
+        description="Genereal parameters specific for running the analysis"
+        )
+    run_group.add_argument(
+        "-b",
+        dest="start",
+        type=str,
+        default="0",
+        help="frame or start time for evaluation. (default: %(default)s)"
+        )
+
+    run_group.add_argument(
+        "-e",
+        dest="stop",
+        type=str,
+        default="-1",
+        help="frame or end time for evaluation. (default: %(default)s)"
+        )
+
+    run_group.add_argument(
+        "-dt",
+        dest="step",
+        type=str,
+        default="1",
+        help="step or time step for evaluation. (default: %(default)s)"
+        )
+
+    run_group.add_argument(
+        "-v",
+        dest="verbose",
+        help="Be loud and noisy",
+        action="store_true"
+        )
+
+def add_output_group(analysis_class_parser):
+    output_group = analysis_class_parser.add_argument_group(
+        title="Output Parameters",
+        )
+    output_group.add_argument(
+        "-pre",
+        dest="output_prefix",
+        type=str,
+        default="",
+        help="Additional prefix for all output files. Files will be "
+             " automatically named by the used module (default: %(default)s)"
+        )
+
+    output_group.add_argument(
+        "-o",
+        dest="output_directory",
+        type=str,
+        default=".",
+        help="Directory in which the output files produced will be stored."
+             "(default: %(default)s)"
+        )
