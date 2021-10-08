@@ -216,7 +216,7 @@ def create_CLI(cli_parser, interface_name, parameters):
 
 def add_parser(cli_parser, interface_name, parameters):
     """Add the parser.
-    
+
     str, dict -> None
     ...
     """
