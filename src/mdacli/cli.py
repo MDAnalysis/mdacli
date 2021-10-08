@@ -26,9 +26,9 @@ from mdacli import __version__
 from mdacli.colors import Emphasise
 from mdacli.libcli import (
     KwargsDict,
-    add_run_group,
-    add_output_group,
     add_cli_universe,
+    add_output_group,
+    add_run_group,
     find_AnalysisBase_members_ignore_warnings,
     split_argparse_into_groups,
     )
@@ -94,7 +94,7 @@ def create_CLI(cli_parser, interface_name, parameters):
         Named parameters in the Analysis class
 
     6. Reference Universe Parameters
-        A reference Universe for selection commands. Only is created if 
+        A reference Universe for selection commands. Only is created if
         AtomGroup arguments exist.
 
     All CLI's parameters are named parameters.
@@ -193,12 +193,12 @@ def create_CLI(cli_parser, interface_name, parameters):
             try:
                 reference_universe_group
             except NameError:
-                reference_universe_group = analysis_class_parser.add_argument_group(
-                    title="Reference Universe Parameters",
-                    description="Parameters specific for loading the reference"
-                                "topology and trajectory used for atom "
-                                "selection."
-                )
+                reference_universe_group = \
+                    analysis_class_parser.add_argument_group(
+                        title="Reference Universe Parameters",
+                        description="Parameters specific for loading "
+                                    "the reference topology and trajectory"
+                                    " used for atom selection.")
                 add_cli_universe(reference_universe_group)
 
         elif issubclass(type_, mda.Universe):
@@ -214,11 +214,12 @@ def create_CLI(cli_parser, interface_name, parameters):
     return
 
 
-def get_numbered_cycler(number):
-    return cycle([''] + list(map(str(range(1, number)))))
-
-
-def add_parser(cli_parser, interface_name, parameters):  # str, dict -> None
+def add_parser(cli_parser, interface_name, parameters):
+    """Add the parser.
+    
+    str, dict -> None
+    ...
+    """
     # creates the subparser
     analysis_class_parser = cli_parser.add_parser(
         interface_name,
@@ -230,7 +231,8 @@ def add_parser(cli_parser, interface_name, parameters):  # str, dict -> None
     # Add run_analsis function as the default func parameter.
     # this is possible because the run_analsis function is equal to all
     # Analysis Classes
-    analysis_class_parser.set_defaults(analysis_callable=parameters["callable"])
+    analysis_class_parser.set_defaults(
+        analysis_callable=parameters["callable"])
 
     return analysis_class_parser
 
@@ -345,9 +347,6 @@ def run_analsis(analysis_callable,
     if universe is None:
         universe = reference_universe
 
-    # TODO: still some attribute problems here 
-    # f.e. Error: 'NoneType' object has no attribute 'trajectory'.... in EINSTEINMSD
-
     ac = analysis_callable(**mandatory_analysis_parameters,
                            **optional_analysis_parameters)
 
@@ -377,8 +376,8 @@ def convert_analysis_parameters(analysis_callable,
     """
     Convert parameters from the command line suitbale for anlysis.
 
-    Special types (i.e AtomGroups, Universes) are converted from the 
-    command line strings into the correct format. Parameters are changed inplace.
+    Special types (i.e AtomGroups, Universes) are converted from the command
+    line strings into the correct format. Parameters are changed inplace.
     Note that only keys are converted and no new key are added if
     present in the doc of the `analysis_callable` but not
     in the `analysis_parameters` dict.
@@ -400,7 +399,7 @@ def convert_analysis_parameters(analysis_callable,
     Returns
     -------
     universe : Universe
-        The universe created from the anaylysis parameters or None 
+        The universe created from the anaylysis parameters or None
         of no ine is created
 
     Raises
@@ -411,16 +410,17 @@ def convert_analysis_parameters(analysis_callable,
     params = parse_docs(analysis_callable)[2]
     universe = None
 
-    # If a Universe is part of the parameters several extra arguments with 
-    # non matching names were created. We seperate them by their connecting 
+    # If a Universe is part of the parameters several extra arguments with
+    # non matching names were created. We seperate them by their connecting
     # character.
-    analysis_parameters_keys = [p.split("-")[-1] for p 
-                                        in analysis_parameters.keys()]
+    analysis_parameters_keys = [p.split("-")[-1] for p
+                                in analysis_parameters.keys()]
 
     for param_name, dictionary in params.items():
         if param_name in analysis_parameters_keys:
             if "AtomGroup" in dictionary['type']:
-                sel = reference_universe.select_atoms(analysis_parameters[param_name])
+                sel = reference_universe.select_atoms(
+                    analysis_parameters[param_name])
                 if sel:
                     analysis_parameters[param_name] = sel
                 else:
@@ -429,17 +429,22 @@ def convert_analysis_parameters(analysis_callable,
                                      f" `{analysis_parameters[param_name]}`"
                                      f" does not contain any atoms")
             elif "Universe" in dictionary['type']:
-                universe = create_universe(
-                    topology=analysis_parameters.pop(f"topology-{param_name}"),
-                    coordinates=analysis_parameters.pop(f"coordinates-{param_name}"),
-                    topology_format=analysis_parameters.pop(f"topology_format-{param_name}"),
-                    atom_style=analysis_parameters.pop(f"atom_style-{param_name}"),
-                    trajectory_format=analysis_parameters.pop(f"trajectory_format-{param_name}"))
 
+                # All Universe parameters
+                universe_parameters = {"topology": None,
+                                       "coordinates": None,
+                                       "topology_format": None,
+                                       "atom_style": None,
+                                       "trajectory_format": None}
+
+                for k in universe_parameters.keys():
+                    universe_parameters[k] = analysis_parameters.pop(
+                        f"{k}-{param_name}")
+
+                universe = create_universe(**universe_parameters)
                 analysis_parameters[param_name] = universe
 
     return universe
-    
 
 
 def setup_clients(ap, title, members):
@@ -491,7 +496,8 @@ def init_base_argparse():
     return ap
 
 
-def exit_if_a_is_b(obj1, obj2, msg):
+def _exit_if_a_is_b(obj1, obj2, msg):
+    """Exit if `obj1` and `obj2` are the same."""
     if obj1 is obj2:
         sys.exit(msg)
 
@@ -499,7 +505,7 @@ def exit_if_a_is_b(obj1, obj2, msg):
 def main():
     """Execute main CLI entry point."""
     modules = find_AnalysisBase_members_ignore_warnings(_relevant_modules)
-    exit_if_a_is_b(modules, None, "No analysis modules founds.")
+    _exit_if_a_is_b(modules, None, "No analysis modules founds.")
 
     ap = init_base_argparse()
 
