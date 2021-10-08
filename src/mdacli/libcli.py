@@ -17,14 +17,6 @@ import MDAnalysis as mda
 from MDAnalysis.analysis.base import AnalysisBase
 
 
-def store_universe(name):
-    pass
-    # class StoreUniverse(argprase.Action):
-    #     def __call__(self, parser, namespace, value, option_string=None):
-    #         UNIVERSES[name][self.dest] = value
-    # return StoreUniverse
-
-
 class KwargsDict(argparse.Action):
     """
     Convert input string to a dictionary.
@@ -164,6 +156,7 @@ def add_run_group(analysis_class_parser):
         action="store_true"
         )
 
+
 def add_output_group(analysis_class_parser):
     """."""
     output_group = analysis_class_parser.add_argument_group(
@@ -193,10 +186,9 @@ def add_cli_universe(parser, name=''):
     name = f'-{name}' if name else ''
     parser.add_argument(
         f"-s{name}",
-        dest="topology{name}",
+        dest=f"topology{name}",
         type=str,
         default="topol.tpr",
-        action=store_universe(name),
         help="The topolgy file. "
         "The FORMATs {} are implemented in MDAnalysis."
         "".format(", ".join(mda._PARSERS.keys())),
@@ -204,28 +196,25 @@ def add_cli_universe(parser, name=''):
 
     parser.add_argument(
         f"-top{name}",
-        dest="topology_format{name}",
+        dest=f"topology_format{name}",
         type=str,
-        action=store_universe(name),
         default=None,
         help="Override automatic topology type detection. "
         "See topology for implemented formats.")
 
     parser.add_argument(
         f"-atom_style{name}",
-        dest="atom_style{name}",
+        dest=f"atom_style{name}",
         type=str,
-        action=store_universe(name),
         default=None,
         help="Manually set the atom_style information"
         "(currently only LAMMPS parser). E.g. atom_style='id type x y z'.")
 
     parser.add_argument(
         f"-f{name}",
-        dest="coordinates{name}",
+        dest=f"coordinates{name}",
         type=str,
         default=None,
-        action=store_universe(name),
         nargs="+",
         help="A single or multiple coordinate files. "
         "The FORMATs {} are implemented in MDAnalysis."
@@ -234,11 +223,8 @@ def add_cli_universe(parser, name=''):
 
     parser.add_argument(
         f"-traj{name}",
-        dest="trajectory_format{name}",
+        dest=f"trajectory_format{name}",
         type=str,
-        action=store_universe(name),
         default=None,
         help="Override automatic trajectory type detection. "
         "See trajectory for implemented formats.")
-
-    return

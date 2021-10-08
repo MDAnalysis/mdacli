@@ -79,10 +79,6 @@ def create_CLI(cli_parser, interface_name, parameters):
 
     Subparsers parameters are divided in the following categories:
 
-    1. Universe Parameters
-        Common to all generated CLIs, to create the Univserse example:
-            * topology, trajectory
-
     2. Analysis Run parameters
          time frame as begin, end, step and vebosity
 
@@ -95,6 +91,10 @@ def create_CLI(cli_parser, interface_name, parameters):
 
     5. Optional Parameters
         Named parameters in the Analysis class
+
+    6. Reference Universe Parameters
+        A reference Universe for selection commands. Only is created if 
+        AtomGroup arguments exist.
 
     All CLI's parameters are named parameters.
 
@@ -193,9 +193,10 @@ def create_CLI(cli_parser, interface_name, parameters):
                 universe_group
             except NameError:
                 universe_group = analysis_class_parser.add_argument_group(
-                    title="Universe Parameters",
-                    description="Parameters specific for loading the topology and"
-                                " trajectory used for atom selection."
+                    title="Reference Universe Parameters",
+                    description="Parameters specific for loading the reference"
+                                "topology and trajectory used for atom "
+                                "selection."
                 )
                 add_cli_universe(universe_group)
 
@@ -290,9 +291,9 @@ def create_universe(topology,
 
 
 def run_analsis(analysis_callable,
-                universe_parameters,
                 mandatory_analysis_parameters,
                 optional_analysis_parameters=None,
+                reference_universe_parameters=None,
                 run_parameters=None,
                 output_parameters=None):
     """Perform main client logic.
@@ -326,22 +327,24 @@ def run_analsis(analysis_callable,
 
     verbose = run_parameters.pop("verbose", False)
 
-    # Initilize Universe
-    if verbose:
-        logger.info("Loading trajectory...")
-    universe = create_universe(**universe_parameters)
-    if verbose:
-        logger.info("Done!\n")
-        sys.stdout.flush()
+    print(reference_universe_parameters)
+    if reference_universe_parameters is not None:
+        reference_universe = create_universe(**reference_universe_parameters)
+    else:
+        reference_universe = None
 
     # Initilize analysis callable
-    convert_analysis_parameters(universe,
-                                analysis_callable,
-                                mandatory_analysis_parameters)
+    convert_analysis_parameters(analysis_callable,
+                                mandatory_analysis_parameters,
+                                reference_universe)
+
+    # TODO: Select a Universe from the arguments of no reference Universe 
+    #       is created.
 
     convert_analysis_parameters(universe,
                                 analysis_callable,
-                                optional_analysis_parameters)
+                                optional_analysis_parameters,
+                                reference_universe)
 
     ac = analysis_callable(**mandatory_analysis_parameters,
                            **optional_analysis_parameters)
@@ -366,14 +369,14 @@ def run_analsis(analysis_callable,
     return ac
 
 
-def convert_analysis_parameters(universe,
-                                analysis_callable,
-                                analysis_parameters):
+def convert_analysis_parameters(analysis_callable,
+                                analysis_parameters,
+                                reference_universe=None):
     """
     Convert parameters from the command line suitbale for anlysis.
 
-    Special types (i.e AtomGroups) are converted from the command line
-    strings into the correct format. Parameters are changed inplace.
+    Special types (i.e AtomGroups, Universes) are converted from the 
+    command line strings into the correct format. Parameters are changed inplace.
     Note that only keys are converted and no new key are added if
     present in the doc of the `analysis_callable` but not
     in the `analysis_parameters` dict.
@@ -381,16 +384,16 @@ def convert_analysis_parameters(universe,
     The following types are converted:
 
     * AtomGroup: Select atoms based on ``universe.select_atoms``
-    * Universe: Assign the given universe.
+    * Universe: Created from parameters.
 
     Parameters
     ----------
-    universe : `MDAnalysis.Universe`
-        Universe for which the kwargs are related to
     analysis_callable : function
         Analysis class for which the analysis should be performed.
     analysis_parameters : dict
         parameters to be processed
+    reference_universe : `MDAnalysis.Universe`
+        Universe from which the AtomGroup selection are done.
 
     Raises
     ------
@@ -401,7 +404,7 @@ def convert_analysis_parameters(universe,
     for param_name, dictionary in params.items():
         if param_name in analysis_parameters.keys():
             if "AtomGroup" in dictionary['type']:
-                sel = universe.select_atoms(analysis_parameters[param_name])
+                sel = reference_universe.select_atoms(analysis_parameters[param_name])
                 if sel:
                     analysis_parameters[param_name] = sel
                 else:
@@ -410,7 +413,10 @@ def convert_analysis_parameters(universe,
                                      f" `{analysis_parameters[param_name]}`"
                                      f" does not contain any atoms")
             elif "Universe" in dictionary['type']:
-                analysis_parameters[param_name] = universe
+                # TODO: Add logic here
+                # * pop all arguments with the name of the argument and 
+                # create a Universe from them.
+                analysis_parameters[param_name] = None
 
 
 def setup_clients(ap, title, members):
@@ -485,7 +491,6 @@ def main():
     setup_clients(ap, title="MDAnalysis Analysis Clients", members=modules)
 
     args = ap.parse_args()
-    print(args)
 
     if args.debug:
         args.verbose = True
@@ -504,15 +509,14 @@ def main():
             ap_sup = ap._subparsers._group_actions[0].choices[_key]
             arg_grouped_dict = split_argparse_into_groups(ap_sup, args)
 
-            # Optional parameters may not exist
-
+            # Some parameters may not exist
             arg_grouped_dict.setdefault("Optional Parameters", {})
-            print(arg_grouped_dict)
+            arg_grouped_dict.setdefault("Reference Universe Parameters", None)
 
             run_analsis(analysis_callable,
-                        arg_grouped_dict["Universe Parameters"],
                         arg_grouped_dict["Mandatory Parameters"],
                         arg_grouped_dict["Optional Parameters"],
+                        arg_grouped_dict["Reference Universe Parameters"],
                         arg_grouped_dict["Analysis Run Parameters"],
                         arg_grouped_dict["Output Parameters"])
         except Exception as e:
