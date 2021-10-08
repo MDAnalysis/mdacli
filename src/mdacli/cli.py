@@ -16,6 +16,7 @@ import argparse
 import logging
 import os
 import sys
+import traceback
 import warnings
 
 import MDAnalysis as mda
@@ -337,12 +338,10 @@ def run_analsis(analysis_callable,
                                            mandatory_analysis_parameters,
                                            reference_universe)
 
-    universe = convert_analysis_parameters(analysis_callable,
-                                           optional_analysis_parameters,
-                                           reference_universe)
+    convert_analysis_parameters(analysis_callable,
+                                optional_analysis_parameters,
+                                reference_universe)
 
-    # Set reference Univserse as universe for run parameters if no universe
-    # is present in mandatory or optional parameters.
     if universe is None:
         universe = reference_universe
 
