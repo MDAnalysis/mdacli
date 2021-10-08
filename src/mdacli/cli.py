@@ -25,8 +25,9 @@ from mdacli import __version__
 from mdacli.colors import Emphasise
 from mdacli.libcli import (
     KwargsDict,
-    add_analysis_run_parameters,
+    add_run_group,
     add_output_group,
+    add_cli_universe,
     find_AnalysisBase_members_ignore_warnings,
     split_argparse_into_groups,
     )
@@ -41,7 +42,12 @@ logger = logging.getLogger(__name__)
 # relevant modules used in this CLI factory
 # hydro* are removed here because they have a different folder/file structure
 # and need to be investigated separately
-_skip_mods = ('base', 'hydrogenbonds', 'hbonds')
+_skip_mods = ['base', 'hydrogenbonds', 'hbonds']
+
+# skip modules that contain lists as parameters for AtomGroups since
+# we can not parse them correctly so far.
+_skip_mods += ['Contacts', 'Dihedral', 'PersistenceLength', 'InterRDF_s']
+
 _relevant_modules = (mod for mod in __all__ if mod not in _skip_mods)
 
 # serves CLI factory
@@ -56,15 +62,8 @@ STR_TYPE_DICT = {
     "complex": complex,
     "NoneType": type(None),
     "AtomGroup": mda.AtomGroup,
+    "Universe": mda.Universe,
     }
-
-
-# _sig_types = {
-#     (0, 1): add_cli_single_atom_group,
-#     (1, 0): add_cli_single_universe,
-#     (2, 0): add_cli_several_universes,
-#     (0, 2): add_cli_several_atomgroups,
-#     }
 
 
 def _warning(message, *args, **kwargs):
@@ -116,35 +115,13 @@ def create_CLI(cli_parser, interface_name, parameters):
     None
     """
     analysis_class_parser = add_parser(cli_parser, interface_name, parameters)
-    add_analysis_run_parameters(analysis_class_parser)
+    add_run_group(analysis_class_parser)
 
-    # adds only if save does not exist
+    # adds only if `save` method does not exist
     if not getattr(parameters['callable'], 'save', False):
         add_output_group(analysis_class_parser)
 
-    # add universes stuff
-    _ = get_args_name_type(parameters['positional'])
-    pos_args_code = get_universe_atomgroup_cli_code(_)
-
-    print(interface_name, pos_args_code)
-
-    # Code works until this point. We have detected the number 
-    # of universes and atomgroups
-
-    # TODO: 
-    # * How to detect where to put the argument. In the positional or the 
-    #   optional group. Is thre a optional atomgroup for example?
-    # * Do the actual creation using the sceleton functions in liblci...
-
-    _sig_types[pos_args_code](analysis_class_parser)
-
-    #if pos_args_code[0]:
-    #    add_universe_group(analysis_class_parser)
-    #elif not pos_args_code[0] and pos_args_code[1]:
-    #    add_atomgroups_u(analysis_class_parser)
-
-
-    # others
+    # add positional and optional arguments
     pos_ = sorted(list(parameters["positional"].items()), key=lambda x: x[0])
     opt_ = sorted(list(parameters["optional"].items()), key=lambda x: x[0])
 
@@ -210,6 +187,20 @@ def create_CLI(cli_parser, interface_name, parameters):
                 default=default,
                 help=description + " Use a MDAnalysis selection string."
                 )
+
+            # Create one reference Universe argument for atom selection
+            try:
+                universe_group
+            except NameError:
+                universe_group = analysis_class_parser.add_argument_group(
+                    title="Universe Parameters",
+                    description="Parameters specific for loading the topology and"
+                                " trajectory used for atom selection."
+                )
+                add_cli_universe(universe_group)
+
+        elif issubclass(type_, mda.Universe):
+            add_cli_universe(group, name)
         else:
             group.add_argument(
                 name_par,
@@ -240,39 +231,6 @@ def add_parser(cli_parser, interface_name, parameters):  # str, dict -> None
     analysis_class_parser.set_defaults(analysis_callable=parameters["callable"])
 
     return analysis_class_parser
-
-
-
-def get_universe_atomgroup_cli_code(pos_args):
-    """."""
-    universe_types = (
-        'Universe',
-        'MDAnalysis.core.universe.Universe'
-        )
-
-    atom_group_types = (
-        'AtomGroup',
-        )
-
-    atom_group_multiple = (
-        'tuple',
-        'list',
-        'iterable',
-        )
-
-    universes = 0
-    atomgroups = 0
-    for posarg in pos_args:
-        if posarg[1] in universe_types:
-            universes += 1
-        elif posarg[1] in atom_group_types:
-            atomgroups += 1
-
-    return (universes, atomgroups)
-
-
-def get_args_name_type(ddict):
-    return [(name, d['type']) for name, d in ddict.items()]
 
 
 def create_universe(topology,

@@ -17,14 +17,12 @@ import MDAnalysis as mda
 from MDAnalysis.analysis.base import AnalysisBase
 
 
-# UNIVERSES = defaultdict(dict)
-
-
 def store_universe(name):
-    class StoreUniverse(argprase.Action):
-        def __call__(self, parser, namespace, value, option_string=None):
-            UNIVERSES[name][self.dest] = value
-    return StoreUniverse
+    pass
+    # class StoreUniverse(argprase.Action):
+    #     def __call__(self, parser, namespace, value, option_string=None):
+    #         UNIVERSES[name][self.dest] = value
+    # return StoreUniverse
 
 
 class KwargsDict(argparse.Action):
@@ -129,7 +127,8 @@ def split_argparse_into_groups(parser, namespace):
     return arg_grouped_dict
 
 
-def add_analysis_run_parameters(analysis_class_parser):
+def add_run_group(analysis_class_parser):
+    """."""
     run_group = analysis_class_parser.add_argument_group(
         title="Analysis Run Parameters",
         description="Genereal parameters specific for running the analysis"
@@ -166,6 +165,7 @@ def add_analysis_run_parameters(analysis_class_parser):
         )
 
 def add_output_group(analysis_class_parser):
+    """."""
     output_group = analysis_class_parser.add_argument_group(
         title="Output Parameters",
         )
@@ -193,7 +193,7 @@ def add_cli_universe(parser, name=''):
     name = f'-{name}' if name else ''
     parser.add_argument(
         f"-s{name}",
-        dest="topology",
+        dest="topology{name}",
         type=str,
         default="topol.tpr",
         action=store_universe(name),
@@ -204,7 +204,7 @@ def add_cli_universe(parser, name=''):
 
     parser.add_argument(
         f"-top{name}",
-        dest="topology_format",
+        dest="topology_format{name}",
         type=str,
         action=store_universe(name),
         default=None,
@@ -213,7 +213,7 @@ def add_cli_universe(parser, name=''):
 
     parser.add_argument(
         f"-atom_style{name}",
-        dest="atom_style",
+        dest="atom_style{name}",
         type=str,
         action=store_universe(name),
         default=None,
@@ -222,7 +222,7 @@ def add_cli_universe(parser, name=''):
 
     parser.add_argument(
         f"-f{name}",
-        dest="coordinates",
+        dest="coordinates{name}",
         type=str,
         default=None,
         action=store_universe(name),
@@ -234,7 +234,7 @@ def add_cli_universe(parser, name=''):
 
     parser.add_argument(
         f"-traj{name}",
-        dest="trajectory_format",
+        dest="trajectory_format{name}",
         type=str,
         action=store_universe(name),
         default=None,
@@ -242,34 +242,3 @@ def add_cli_universe(parser, name=''):
         "See trajectory for implemented formats.")
 
     return
-
-
-def add_cli_atom_group(parser, name=''):
-    """."""
-    add_cli_universe(parser, name=name)
-
-    parser.add_argument(
-        '-selection',
-        dest="selection",
-        type=str,
-        default="all",
-        help="Atom selection to create MDAnalysis AtomGroup.",
-        )
-
-    return
-
-
-def add_cli_single_atom_group():
-    pass
-
-
-def add_cli_single_universe():
-    pass
-
-
-def add_cli_several_universes():
-    pass
-
-
-def add_cli_several_atomgroups():
-    pass
