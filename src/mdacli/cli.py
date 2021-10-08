@@ -190,15 +190,15 @@ def create_CLI(cli_parser, interface_name, parameters):
 
             # Create one reference Universe argument for atom selection
             try:
-                universe_group
+                reference_universe_group
             except NameError:
-                universe_group = analysis_class_parser.add_argument_group(
+                reference_universe_group = analysis_class_parser.add_argument_group(
                     title="Reference Universe Parameters",
                     description="Parameters specific for loading the reference"
                                 "topology and trajectory used for atom "
                                 "selection."
                 )
-                add_cli_universe(universe_group)
+                add_cli_universe(reference_universe_group)
 
         elif issubclass(type_, mda.Universe):
             add_cli_universe(group, name)
@@ -327,24 +327,27 @@ def run_analsis(analysis_callable,
 
     verbose = run_parameters.pop("verbose", False)
 
-    print(reference_universe_parameters)
     if reference_universe_parameters is not None:
         reference_universe = create_universe(**reference_universe_parameters)
     else:
         reference_universe = None
 
     # Initilize analysis callable
-    convert_analysis_parameters(analysis_callable,
-                                mandatory_analysis_parameters,
-                                reference_universe)
+    universe = convert_analysis_parameters(analysis_callable,
+                                           mandatory_analysis_parameters,
+                                           reference_universe)
 
-    # TODO: Select a Universe from the arguments of no reference Universe 
-    #       is created.
+    universe = convert_analysis_parameters(analysis_callable,
+                                           optional_analysis_parameters,
+                                           reference_universe)
 
-    convert_analysis_parameters(universe,
-                                analysis_callable,
-                                optional_analysis_parameters,
-                                reference_universe)
+    # Set reference Univserse as universe for run parameters if no universe
+    # is present in mandatory or optional parameters.
+    if universe is None:
+        universe = reference_universe
+
+    # TODO: still some attribute problems here 
+    # f.e. Error: 'NoneType' object has no attribute 'trajectory'.... in EINSTEINMSD
 
     ac = analysis_callable(**mandatory_analysis_parameters,
                            **optional_analysis_parameters)
@@ -395,14 +398,28 @@ def convert_analysis_parameters(analysis_callable,
     reference_universe : `MDAnalysis.Universe`
         Universe from which the AtomGroup selection are done.
 
+    Returns
+    -------
+    universe : Universe
+        The universe created from the anaylysis parameters or None 
+        of no ine is created
+
     Raises
     ------
     ValueError
         If an Atomgroup does not contain any atoms
     """
     params = parse_docs(analysis_callable)[2]
+    universe = None
+
+    # If a Universe is part of the parameters several extra arguments with 
+    # non matching names were created. We seperate them by their connecting 
+    # character.
+    analysis_parameters_keys = [p.split("-")[-1] for p 
+                                        in analysis_parameters.keys()]
+
     for param_name, dictionary in params.items():
-        if param_name in analysis_parameters.keys():
+        if param_name in analysis_parameters_keys:
             if "AtomGroup" in dictionary['type']:
                 sel = reference_universe.select_atoms(analysis_parameters[param_name])
                 if sel:
@@ -413,10 +430,17 @@ def convert_analysis_parameters(analysis_callable,
                                      f" `{analysis_parameters[param_name]}`"
                                      f" does not contain any atoms")
             elif "Universe" in dictionary['type']:
-                # TODO: Add logic here
-                # * pop all arguments with the name of the argument and 
-                # create a Universe from them.
-                analysis_parameters[param_name] = None
+                universe = create_universe(
+                    topology=analysis_parameters.pop(f"topology-{param_name}"),
+                    coordinates=analysis_parameters.pop(f"coordinates-{param_name}"),
+                    topology_format=analysis_parameters.pop(f"topology_format-{param_name}"),
+                    atom_style=analysis_parameters.pop(f"atom_style-{param_name}"),
+                    trajectory_format=analysis_parameters.pop(f"trajectory_format-{param_name}"))
+
+                analysis_parameters[param_name] = universe
+
+    return universe
+    
 
 
 def setup_clients(ap, title, members):
