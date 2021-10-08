@@ -17,7 +17,7 @@ import MDAnalysis as mda
 from MDAnalysis.analysis.base import AnalysisBase
 
 
-UNIVERSES = defaultdict(dict)
+# UNIVERSES = defaultdict(dict)
 
 
 def store_universe(name):
@@ -202,7 +202,7 @@ def add_cli_universe(parser, name=''):
         "".format(", ".join(mda._PARSERS.keys())),
         )
 
-    group.add_argument(
+    parser.add_argument(
         f"-top{name}",
         dest="topology_format",
         type=str,
@@ -211,7 +211,7 @@ def add_cli_universe(parser, name=''):
         help="Override automatic topology type detection. "
         "See topology for implemented formats.")
 
-    group.add_argument(
+    parser.add_argument(
         f"-atom_style{name}",
         dest="atom_style",
         type=str,
@@ -220,7 +220,7 @@ def add_cli_universe(parser, name=''):
         help="Manually set the atom_style information"
         "(currently only LAMMPS parser). E.g. atom_style='id type x y z'.")
 
-    group.add_argument(
+    parser.add_argument(
         f"-f{name}",
         dest="coordinates",
         type=str,
@@ -232,7 +232,7 @@ def add_cli_universe(parser, name=''):
         "".format(", ".join(mda._READERS.keys())),
         )
 
-    universe_group.add_argument(
+    parser.add_argument(
         f"-traj{name}",
         dest="trajectory_format",
         type=str,
@@ -244,7 +244,7 @@ def add_cli_universe(parser, name=''):
     return
 
 
-def add_cli_atom_group(parser, name='')
+def add_cli_atom_group(parser, name=''):
     """."""
     add_cli_universe(parser, name=name)
 
@@ -257,3 +257,19 @@ def add_cli_atom_group(parser, name='')
         )
 
     return
+
+
+def add_cli_single_atom_group():
+    pass
+
+
+def add_cli_single_universe():
+    pass
+
+
+def add_cli_several_universes():
+    pass
+
+
+def add_cli_several_atomgroups():
+    pass

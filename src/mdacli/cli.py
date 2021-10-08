@@ -12,7 +12,6 @@ Main entry point for the MDAnalysis CLI interface.
 This also demonstrates how other third party libraries could incorporate
 this functionality.
 """
-from pprint import pprint
 import argparse
 import logging
 import os
@@ -60,12 +59,12 @@ STR_TYPE_DICT = {
     }
 
 
-_sig_types = {
-    (0, 1): add_cli_single_atom_group,
-    (1, 0): add_cli_single_universe,
-    (2, 0): add_cli_several_universes,
-    (0, 2): add_cli_several_atomgroups,
-    }
+# _sig_types = {
+#     (0, 1): add_cli_single_atom_group,
+#     (1, 0): add_cli_single_universe,
+#     (2, 0): add_cli_several_universes,
+#     (0, 2): add_cli_several_atomgroups,
+#     }
 
 
 def _warning(message, *args, **kwargs):
@@ -127,6 +126,15 @@ def create_CLI(cli_parser, interface_name, parameters):
     _ = get_args_name_type(parameters['positional'])
     pos_args_code = get_universe_atomgroup_cli_code(_)
 
+    print(interface_name, pos_args_code)
+
+    # Code works until this point. We have detected the number 
+    # of universes and atomgroups
+
+    # TODO: 
+    # * How to detect where to put the argument. In the positional or the 
+    #   optional group. Is thre a optional atomgroup for example?
+    # * Do the actual creation using the sceleton functions in liblci...
 
     _sig_types[pos_args_code](analysis_class_parser)
 
@@ -265,6 +273,7 @@ def get_universe_atomgroup_cli_code(pos_args):
 
 def get_args_name_type(ddict):
     return [(name, d['type']) for name, d in ddict.items()]
+
 
 def create_universe(topology,
                     coordinates=None,
@@ -526,29 +535,30 @@ def main():
         # Ignore all warnings if not in debug mode
         warnings.filterwarnings("ignore")
 
-    # Execute the main client interface.
-    try:
-        analysis_callable = args.analysis_callable
+    with setup_logging(logger, logfile=args.logfile, debug=args.debug):
+        # Execute the main client interface.
+        try:
+            analysis_callable = args.analysis_callable
 
-        # Get the correct ArgumentParser instance from all subparsers
-        # `[0]` selects the first subparser where our analysises live in.
-        _key = analysis_callable.__name__
-        ap_sup = ap._subparsers._group_actions[0].choices[_key]
-        arg_grouped_dict = split_argparse_into_groups(ap_sup, args)
+            # Get the correct ArgumentParser instance from all subparsers
+            # `[0]` selects the first subparser where our analysises live in.
+            _key = analysis_callable.__name__
+            ap_sup = ap._subparsers._group_actions[0].choices[_key]
+            arg_grouped_dict = split_argparse_into_groups(ap_sup, args)
 
-        # Optional parameters may not exist
+            # Optional parameters may not exist
 
-        arg_grouped_dict.setdefault("Optional Parameters", {})
-        print(arg_grouped_dict)
+            arg_grouped_dict.setdefault("Optional Parameters", {})
+            print(arg_grouped_dict)
 
-        run_analsis(analysis_callable,
-                    arg_grouped_dict["Universe Parameters"],
-                    arg_grouped_dict["Mandatory Parameters"],
-                    arg_grouped_dict["Optional Parameters"],
-                    arg_grouped_dict["Analysis Run Parameters"],
-                    arg_grouped_dict["Output Parameters"])
-    except Exception as e:
-        if args.debug:
-            traceback.print_exc()
-        else:
-            sys.exit(Emphasise.error(f"Error: {e}"))
+            run_analsis(analysis_callable,
+                        arg_grouped_dict["Universe Parameters"],
+                        arg_grouped_dict["Mandatory Parameters"],
+                        arg_grouped_dict["Optional Parameters"],
+                        arg_grouped_dict["Analysis Run Parameters"],
+                        arg_grouped_dict["Output Parameters"])
+        except Exception as e:
+            if args.debug:
+                traceback.print_exc()
+            else:
+                sys.exit(Emphasise.error(f"Error: {e}"))
