@@ -128,26 +128,20 @@ class Test_convert_analysis_parameters:
     def test_Atomgroup(self, universe):
         """Test AtomGroup conversion."""
         analysis_parameters = {"atomgroup": "all"}
-        convert_analysis_parameters(universe,
-                                    RMSF,
-                                    analysis_parameters)
+        convert_analysis_parameters(
+            analysis_callable=RMSF,
+            analysis_parameters=analysis_parameters,
+            reference_universe=universe)
         assert analysis_parameters["atomgroup"] == universe.atoms
-
-    def test_Universe(self, universe):
-        """Test Universe conversion."""
-        analysis_parameters = {"universe": None}
-        convert_analysis_parameters(universe,
-                                    GNMAnalysis,
-                                    analysis_parameters)
-        assert analysis_parameters["universe"] == universe
 
     def test_zero_atoms(self, universe):
         """Test error if zero atoms are present after conversion."""
         analysis_parameters = {"atomgroup": "name foo"}
         with pytest.raises(ValueError, match="AtomGroup `-atomgroup` with "):
-            convert_analysis_parameters(universe,
-                                        RMSF,
-                                        analysis_parameters)
+            convert_analysis_parameters(
+                analysis_callable=RMSF,
+                analysis_parameters=analysis_parameters,
+                reference_universe=universe)
 
     def test_only_set_if_key_exists(self, universe):
         """
@@ -157,9 +151,10 @@ class Test_convert_analysis_parameters:
         arguments. So we only should set the value if it is inside the dict.
         """
         analysis_parameters = {}
-        convert_analysis_parameters(universe,
-                                    RMSF,
-                                    analysis_parameters)
+        convert_analysis_parameters(
+            analysis_callable=RMSF,
+            analysis_parameters=analysis_parameters,
+            reference_universe=universe)
         assert not analysis_parameters
 
 
@@ -167,7 +162,7 @@ class Test_run_analsis:
     """Test class for analyze_data."""
 
     @pytest.fixture()
-    def universe_parameters(self):
+    def reference_universe_parameters(self):
         """Universe fixture."""
         kwargs = {}
         kwargs["topology"] = TPR
@@ -186,31 +181,31 @@ class Test_run_analsis:
         return kwargs
 
     def test_default(self,
-                     universe_parameters,
+                     reference_universe_parameters,
                      mandatory_parameters,
                      tmpdir):
         """Test with default arguments."""
         with tmpdir.as_cwd():
             run_analsis(analysis_callable=InterRDF,
-                        universe_parameters=universe_parameters,
+                        reference_universe_parameters=reference_universe_parameters,
                         mandatory_analysis_parameters=mandatory_parameters)
 
     def test_optional_paramaters(self,
-                                 universe_parameters,
+                                 reference_universe_parameters,
                                  mandatory_parameters,
                                  tmpdir):
         """Test with optional parameters given."""
         opt_params = {"nbins": 100}
         with tmpdir.as_cwd():
             a = run_analsis(analysis_callable=InterRDF,
-                            universe_parameters=universe_parameters,
+                            reference_universe_parameters=reference_universe_parameters,
                             mandatory_analysis_parameters=mandatory_parameters,
                             optional_analysis_parameters=opt_params)
 
         assert a.rdf_settings["bins"] == opt_params["nbins"]
 
     def test_verbose(self,
-                     universe_parameters,
+                     reference_universe_parameters,
                      mandatory_parameters,
                      tmpdir,
                      caplog):
@@ -219,13 +214,13 @@ class Test_run_analsis:
         caplog.set_level(logging.INFO)
         with tmpdir.as_cwd():
             run_analsis(analysis_callable=InterRDF,
-                        universe_parameters=universe_parameters,
+                        reference_universe_parameters=reference_universe_parameters,
                         mandatory_analysis_parameters=mandatory_parameters,
                         run_parameters=run_parameters)
-        assert "Loading trajectory..." in caplog.text
+        assert "INFO     " in caplog.text
 
     def test_custom_output(self,
-                           universe_parameters,
+                           reference_universe_parameters,
                            mandatory_parameters,
                            tmpdir):
         """Test for custom output."""
@@ -235,7 +230,7 @@ class Test_run_analsis:
         with tmpdir.as_cwd():
             os.mkdir("foo")
             run_analsis(analysis_callable=InterRDF,
-                        universe_parameters=universe_parameters,
+                        reference_universe_parameters=reference_universe_parameters,
                         mandatory_analysis_parameters=mandatory_parameters,
                         output_parameters=output_parameters)
 
@@ -243,7 +238,7 @@ class Test_run_analsis:
                                         "bar_InterRDF_count_bins_rdf.csv"))
 
     def test_output_directory(self,
-                              universe_parameters,
+                              reference_universe_parameters,
                               mandatory_parameters,
                               tmpdir):
         """Test for custom output directory."""
@@ -251,14 +246,14 @@ class Test_run_analsis:
         with tmpdir.as_cwd():
             os.mkdir("foo")
             run_analsis(analysis_callable=InterRDF,
-                        universe_parameters=universe_parameters,
+                        reference_universe_parameters=reference_universe_parameters,
                         mandatory_analysis_parameters=mandatory_parameters,
                         output_parameters=output_parameters)
 
             os.path.isfile(os.path.join("foo", "InterRDF_count_bins_rdf.csv"))
 
     def test_output_prefix(self,
-                           universe_parameters,
+                           reference_universe_parameters,
                            mandatory_parameters,
                            tmpdir):
         """Test for custom prefix."""
@@ -266,7 +261,7 @@ class Test_run_analsis:
         with tmpdir.as_cwd():
             os.mkdir("foo")
             run_analsis(analysis_callable=InterRDF,
-                        universe_parameters=universe_parameters,
+                        reference_universe_parameters=reference_universe_parameters,
                         mandatory_analysis_parameters=mandatory_parameters,
                         output_parameters=output_parameters)
 
