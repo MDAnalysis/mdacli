@@ -115,3 +115,15 @@ def test_split_argparse_into_groups():
 
     assert arg_grouped_dict["group1"]["test1"] == "one"
     assert arg_grouped_dict["group2"]["test2"] == "two"
+
+
+def test_add_run_group():
+    pass
+
+
+def test_add_output_group():
+    pass
+
+
+def test_add_cli_universe():
+    pass

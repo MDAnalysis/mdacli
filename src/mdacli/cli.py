@@ -374,7 +374,7 @@ def convert_analysis_parameters(analysis_callable,
                                 analysis_parameters,
                                 reference_universe=None):
     """
-    Convert parameters from the command line suitbale for anlysis.
+    Convert parameters from the command line suitable for anlysis.
 
     Special types (i.e AtomGroups, Universes) are converted from the command
     line strings into the correct format. Parameters are changed inplace.

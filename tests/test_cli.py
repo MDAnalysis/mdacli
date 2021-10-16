@@ -15,9 +15,9 @@ from io import StringIO
 from unittest.mock import patch
 
 import pytest
-from MDAnalysis.analysis.gnm import GNMAnalysis
 from MDAnalysis.analysis.rdf import InterRDF
 from MDAnalysis.analysis.rms import RMSF
+from MDAnalysis.analysis.msd import EinsteinMSD
 from MDAnalysis.core.universe import Universe
 from MDAnalysisTests.core.test_universe import CHOL_GRO
 from MDAnalysisTests.datafiles import TPR, XTC
@@ -82,6 +82,10 @@ def test_setup_clients(opt, dest, val):
         assert t(getattr(args, dest)) == val
 
 
+def test__exit_if_a_is_b():
+    pass
+
+
 class Test_create_Universe:
     """Test initilizing mda universes."""
 
@@ -117,6 +121,14 @@ class Test_create_Universe:
         assert u.atoms[0].mass == 28.0
 
 
+class Test_add_parser:
+    pass
+
+
+class Test_init_base_argparse:
+    pass
+
+
 class Test_convert_analysis_parameters:
     """Test class for converting analysis parameters."""
 
@@ -128,10 +140,13 @@ class Test_convert_analysis_parameters:
     def test_Atomgroup(self, universe):
         """Test AtomGroup conversion."""
         analysis_parameters = {"atomgroup": "all"}
-        convert_analysis_parameters(
+        test_Universe = convert_analysis_parameters(
             analysis_callable=RMSF,
             analysis_parameters=analysis_parameters,
             reference_universe=universe)
+
+        # `None` is returned if no Universe is created
+        assert test_Universe is None
         assert analysis_parameters["atomgroup"] == universe.atoms
 
     def test_zero_atoms(self, universe):
@@ -142,6 +157,28 @@ class Test_convert_analysis_parameters:
                 analysis_callable=RMSF,
                 analysis_parameters=analysis_parameters,
                 reference_universe=universe)
+
+    def test_Universe_creation(self, universe):
+        
+        analysis_parameters = {}
+        analysis_parameters["topology-u"] = TPR
+        analysis_parameters["topology_format-u"] = None
+        analysis_parameters["coordinates-u"] = XTC
+        analysis_parameters["trajectory_format-u"] = None
+        analysis_parameters["atom_style-u"] = None
+        
+        test_univserse = convert_analysis_parameters(
+                analysis_callable=EinsteinMSD,
+                analysis_parameters=analysis_parameters,
+                reference_universe=None)
+
+        # Extra parameters should be removed
+        assert len(analysis_parameters.keys()) == 1
+        assert analysis_parameters["u"] is test_univserse
+
+        # We can not test accros several universes so we just compare 
+        # the atomic positions
+        assert (universe.atoms.positions == test_univserse.atoms.positions).all()
 
     def test_only_set_if_key_exists(self, universe):
         """
