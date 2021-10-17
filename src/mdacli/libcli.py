@@ -120,11 +120,20 @@ def split_argparse_into_groups(parser, namespace):
 
 
 def add_run_group(analysis_class_parser):
-    """."""
+    """Add run group parameters to an given argparse.ArgumentParser instance.
+    The run group adds the parameters `start`, `stop`, `step`, `verbose` to the
+    parser.
+
+    Parameters
+    ----------
+    analysis_class_parser : argparse.ArgumentParser
+        The ArgumentsParser instance to which the run grorup is added
+    """
+
     run_group = analysis_class_parser.add_argument_group(
         title="Analysis Run Parameters",
-        description="Genereal parameters specific for running the analysis"
-        )
+        description="Genereal parameters specific for running the analysis")
+
     run_group.add_argument(
         "-b",
         dest="start",
@@ -158,10 +167,20 @@ def add_run_group(analysis_class_parser):
 
 
 def add_output_group(analysis_class_parser):
-    """."""
+    """Add output group parameters to an given argparse.ArgumentParser 
+    instance. The run group adds the parameters `output_prefix` and
+    `output_directory` to the parser.
+
+    Parameters
+    ----------
+    analysis_class_parser : argparse.ArgumentParser
+        The ArgumentsParser instance to which the run grorup is added
+    """
+
     output_group = analysis_class_parser.add_argument_group(
         title="Output Parameters",
-        )
+        description="Genereal parameters specific for the result output.")
+
     output_group.add_argument(
         "-pre",
         dest="output_prefix",
@@ -182,8 +201,20 @@ def add_output_group(analysis_class_parser):
 
 
 def add_cli_universe(parser, name=''):
-    """."""
-    name = f'-{name}' if name else ''
+    """Add universe parameters to an given argparse.ArgumentParser 
+    instance. The parameters `topology`, `topology_format`, `atom_style`,
+    `coordinates` and `trajectory_format` are added to the parse.
+
+    Parameters
+    ----------
+    analysis_class_parser : argparse.ArgumentParser
+        The ArgumentsParser instance to which the run grorup is added
+    name : str
+        suffix for the argument names
+    """
+
+    name = f'_{name}' if name else ''
+
     parser.add_argument(
         f"-s{name}",
         dest=f"topology{name}",
