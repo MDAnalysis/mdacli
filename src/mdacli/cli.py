@@ -413,7 +413,7 @@ def convert_analysis_parameters(analysis_callable,
     # If a Universe is part of the parameters several extra arguments with
     # non matching names were created. We seperate them by their connecting
     # character.
-    analysis_parameters_keys = [p.split("-")[-1] for p
+    analysis_parameters_keys = [p.split("_")[-1] for p
                                 in analysis_parameters.keys()]
 
     for param_name, dictionary in params.items():
