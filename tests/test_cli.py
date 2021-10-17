@@ -29,6 +29,7 @@ from mdacli.cli import (
     create_universe,
     run_analsis,
     setup_clients,
+    _exit_if_a_is_b
     )
 from mdacli.libcli import find_AnalysisBase_members_ignore_warnings
 
@@ -83,7 +84,9 @@ def test_setup_clients(opt, dest, val):
 
 
 def test__exit_if_a_is_b():
-    pass
+    with pytest.raises(SystemExit, match="foo") as pytest_wrapped_e:
+        _exit_if_a_is_b(1, 1, msg="foo")
+    assert pytest_wrapped_e.type == SystemExit
 
 
 class Test_create_Universe:
