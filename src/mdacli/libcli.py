@@ -121,6 +121,7 @@ def split_argparse_into_groups(parser, namespace):
 
 def add_run_group(analysis_class_parser):
     """Add run group parameters to an given argparse.ArgumentParser instance.
+
     The run group adds the parameters `start`, `stop`, `step`, `verbose` to the
     parser.
 
@@ -129,7 +130,6 @@ def add_run_group(analysis_class_parser):
     analysis_class_parser : argparse.ArgumentParser
         The ArgumentsParser instance to which the run grorup is added
     """
-
     run_group = analysis_class_parser.add_argument_group(
         title="Analysis Run Parameters",
         description="Genereal parameters specific for running the analysis")
@@ -167,8 +167,9 @@ def add_run_group(analysis_class_parser):
 
 
 def add_output_group(analysis_class_parser):
-    """Add output group parameters to an given argparse.ArgumentParser 
-    instance. The run group adds the parameters `output_prefix` and
+    """Add output group parameters to argparse.ArgumentParser instance.
+
+    The run group adds the parameters `output_prefix` and
     `output_directory` to the parser.
 
     Parameters
@@ -176,7 +177,6 @@ def add_output_group(analysis_class_parser):
     analysis_class_parser : argparse.ArgumentParser
         The ArgumentsParser instance to which the run grorup is added
     """
-
     output_group = analysis_class_parser.add_argument_group(
         title="Output Parameters",
         description="Genereal parameters specific for the result output.")
@@ -201,7 +201,8 @@ def add_output_group(analysis_class_parser):
 
 
 def add_cli_universe(parser, name=''):
-    """Add universe parameters to an given argparse.ArgumentParser 
+    """Add universe parameters to an given argparse.ArgumentParser.
+
     instance. The parameters `topology`, `topology_format`, `atom_style`,
     `coordinates` and `trajectory_format` are added to the parse.
 
@@ -212,7 +213,6 @@ def add_cli_universe(parser, name=''):
     name : str
         suffix for the argument names
     """
-
     name = f'_{name}' if name else ''
 
     parser.add_argument(

@@ -74,7 +74,7 @@ def _warning(message, *args, **kwargs):
 warnings.showwarning = _warning
 
 
-def create_CLI(cli_parser, interface_name, parameters):
+def create_CLI(sub_parser, interface_name, parameters):
     """
     Add subparsers to `cli_parser`.
 
@@ -101,8 +101,8 @@ def create_CLI(cli_parser, interface_name, parameters):
 
     Parameters
     ----------
-    cli_parser : argparse.sub_parser
-        The main parser where the new parser will be added.
+    sub_parser : argparse.sub_parser
+        A sub parser where the new parser will be added.
 
     interface_name : str
         Name of the interface name.
@@ -115,7 +115,19 @@ def create_CLI(cli_parser, interface_name, parameters):
     -------
     None
     """
-    analysis_class_parser = add_parser(cli_parser, interface_name, parameters)
+    # creates the subparser
+    analysis_class_parser = sub_parser.add_parser(
+        interface_name,
+        help=parameters["desc"],
+        description=f"{parameters['desc']}\n\n{parameters['desc_long']}",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        )
+
+    # Add run_analsis function as the default func parameter.
+    # this is possible because the run_analsis function is equal to all
+    # Analysis Classes
+    analysis_class_parser.set_defaults(
+        analysis_callable=parameters["callable"])
     add_run_group(analysis_class_parser)
 
     # adds only if `save` method does not exist
@@ -212,29 +224,6 @@ def create_CLI(cli_parser, interface_name, parameters):
                 help=f"{description} (default: %(default)s)"
                 )
     return
-
-
-def add_parser(cli_parser, interface_name, parameters):
-    """Add the parser.
-
-    str, dict -> None
-    ...
-    """
-    # creates the subparser
-    analysis_class_parser = cli_parser.add_parser(
-        interface_name,
-        help=parameters["desc"],
-        description=f"{parameters['desc']}\n\n{parameters['desc_long']}",
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        )
-
-    # Add run_analsis function as the default func parameter.
-    # this is possible because the run_analsis function is equal to all
-    # Analysis Classes
-    analysis_class_parser.set_defaults(
-        analysis_callable=parameters["callable"])
-
-    return analysis_class_parser
 
 
 def create_universe(topology,
@@ -439,7 +428,7 @@ def convert_analysis_parameters(analysis_callable,
 
                 for k in universe_parameters.keys():
                     universe_parameters[k] = analysis_parameters.pop(
-                        f"{k}-{param_name}")
+                        f"{k}_{param_name}")
 
                 universe = create_universe(**universe_parameters)
                 analysis_parameters[param_name] = universe
@@ -473,14 +462,33 @@ def setup_clients(ap, title, members):
         create_CLI(cli_subparser, interface_name, parameters)
 
 
-def init_base_argparse():
-    """Create basic argument parser."""
+def init_base_argparse(name, version):
+    """Create a basic `ArgumentParser`.
+
+    The parser has options for printing the version, running in debug mode
+    and with a logfile. Note that the funtion only adds the options to
+    the parser but not the logic for actually running in debug mode nor
+    how to store the log file.
+
+    Parameters
+    ----------
+
+    name : str
+        Name of the cli program
+
+    version : str
+        Version of the cli program
+
+    Returns
+    -------
+    `ArgumentParser`
+    """
     ap = argparse.ArgumentParser()
 
     ap.add_argument(
         '--version',
         action='version',
-        version="mdacli {}".format(__version__),
+        version=f"{name} {version}",
         )
 
     ap.add_argument(
@@ -507,7 +515,7 @@ def main():
     modules = find_AnalysisBase_members_ignore_warnings(_relevant_modules)
     _exit_if_a_is_b(modules, None, "No analysis modules founds.")
 
-    ap = init_base_argparse()
+    ap = init_base_argparse(name="mdacli", version=__version__)
 
     if len(sys.argv) < 2:
         ap.error("A subcommand is required.")

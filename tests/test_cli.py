@@ -15,25 +15,24 @@ from io import StringIO
 from unittest.mock import patch
 
 import pytest
+from MDAnalysis.analysis.msd import EinsteinMSD
 from MDAnalysis.analysis.rdf import InterRDF
 from MDAnalysis.analysis.rms import RMSF
-from MDAnalysis.analysis.msd import EinsteinMSD
 from MDAnalysis.core.universe import Universe
 from MDAnalysisTests.core.test_universe import CHOL_GRO
 from MDAnalysisTests.datafiles import TPR, XTC
 from MDAnalysisTests.topology.test_lammpsdata import LAMMPS_NORESID
 
 from mdacli.cli import (
+    _exit_if_a_is_b,
     _relevant_modules,
-    init_base_argparse,
     convert_analysis_parameters,
     create_universe,
+    init_base_argparse,
     run_analsis,
     setup_clients,
-    _exit_if_a_is_b
     )
 from mdacli.libcli import find_AnalysisBase_members_ignore_warnings
-from mdacli.utils import parse_callable_signature
 
 
 _relev_mod = list(_relevant_modules)
@@ -130,9 +129,10 @@ class Test_create_Universe:
 
 class Test_init_base_argparse():
     """Test for basic argument parser."""
+
     @pytest.fixture()
     def ap(self):
-        """Returns the basic parser."""
+        """Return the basic parser."""
         return init_base_argparse(name="foo", version="0.0.0")
 
     def test_version(self, ap, capsys):
@@ -188,26 +188,26 @@ class Test_convert_analysis_parameters:
                 reference_universe=universe)
 
     def test_Universe_creation(self, universe):
-        
+        """Test the universe creation from different parameters."""
         analysis_parameters = {}
-        analysis_parameters["topology-u"] = TPR
-        analysis_parameters["topology_format-u"] = None
-        analysis_parameters["coordinates-u"] = XTC
-        analysis_parameters["trajectory_format-u"] = None
-        analysis_parameters["atom_style-u"] = None
-        
-        test_univserse = convert_analysis_parameters(
-                analysis_callable=EinsteinMSD,
-                analysis_parameters=analysis_parameters,
-                reference_universe=None)
+        analysis_parameters["topology_u"] = TPR
+        analysis_parameters["topology_format_u"] = None
+        analysis_parameters["coordinates_u"] = XTC
+        analysis_parameters["trajectory_format_u"] = None
+        analysis_parameters["atom_style_u"] = None
+
+        test_u = convert_analysis_parameters(
+            analysis_callable=EinsteinMSD,
+            analysis_parameters=analysis_parameters,
+            reference_universe=None)
 
         # Extra parameters should be removed
         assert len(analysis_parameters.keys()) == 1
-        assert analysis_parameters["u"] is test_univserse
+        assert analysis_parameters["u"] is test_u
 
-        # We can not test accros several universes so we just compare 
+        # We can not test accros several universes so we just compare
         # the atomic positions
-        assert (universe.atoms.positions == test_univserse.atoms.positions).all()
+        assert (universe.atoms.positions == test_u.atoms.positions).all()
 
     def test_only_set_if_key_exists(self, universe):
         """
@@ -252,9 +252,10 @@ class Test_run_analsis:
                      tmpdir):
         """Test with default arguments."""
         with tmpdir.as_cwd():
-            run_analsis(analysis_callable=InterRDF,
-                        reference_universe_parameters=reference_universe_parameters,
-                        mandatory_analysis_parameters=mandatory_parameters)
+            run_analsis(
+                analysis_callable=InterRDF,
+                reference_universe_parameters=reference_universe_parameters,
+                mandatory_analysis_parameters=mandatory_parameters)
 
     def test_optional_paramaters(self,
                                  reference_universe_parameters,
@@ -263,10 +264,11 @@ class Test_run_analsis:
         """Test with optional parameters given."""
         opt_params = {"nbins": 100}
         with tmpdir.as_cwd():
-            a = run_analsis(analysis_callable=InterRDF,
-                            reference_universe_parameters=reference_universe_parameters,
-                            mandatory_analysis_parameters=mandatory_parameters,
-                            optional_analysis_parameters=opt_params)
+            a = run_analsis(
+                analysis_callable=InterRDF,
+                reference_universe_parameters=reference_universe_parameters,
+                mandatory_analysis_parameters=mandatory_parameters,
+                optional_analysis_parameters=opt_params)
 
         assert a.rdf_settings["bins"] == opt_params["nbins"]
 
@@ -279,10 +281,11 @@ class Test_run_analsis:
         run_parameters = {"verbose": True}
         caplog.set_level(logging.INFO)
         with tmpdir.as_cwd():
-            run_analsis(analysis_callable=InterRDF,
-                        reference_universe_parameters=reference_universe_parameters,
-                        mandatory_analysis_parameters=mandatory_parameters,
-                        run_parameters=run_parameters)
+            run_analsis(
+                analysis_callable=InterRDF,
+                reference_universe_parameters=reference_universe_parameters,
+                mandatory_analysis_parameters=mandatory_parameters,
+                run_parameters=run_parameters)
         assert "INFO     " in caplog.text
 
     def test_custom_output(self,
@@ -295,10 +298,11 @@ class Test_run_analsis:
 
         with tmpdir.as_cwd():
             os.mkdir("foo")
-            run_analsis(analysis_callable=InterRDF,
-                        reference_universe_parameters=reference_universe_parameters,
-                        mandatory_analysis_parameters=mandatory_parameters,
-                        output_parameters=output_parameters)
+            run_analsis(
+                analysis_callable=InterRDF,
+                reference_universe_parameters=reference_universe_parameters,
+                mandatory_analysis_parameters=mandatory_parameters,
+                output_parameters=output_parameters)
 
             os.path.isfile(os.path.join("foo",
                                         "bar_InterRDF_count_bins_rdf.csv"))
@@ -311,10 +315,11 @@ class Test_run_analsis:
         output_parameters = {"output_directory": "foo"}
         with tmpdir.as_cwd():
             os.mkdir("foo")
-            run_analsis(analysis_callable=InterRDF,
-                        reference_universe_parameters=reference_universe_parameters,
-                        mandatory_analysis_parameters=mandatory_parameters,
-                        output_parameters=output_parameters)
+            run_analsis(
+                analysis_callable=InterRDF,
+                reference_universe_parameters=reference_universe_parameters,
+                mandatory_analysis_parameters=mandatory_parameters,
+                output_parameters=output_parameters)
 
             os.path.isfile(os.path.join("foo", "InterRDF_count_bins_rdf.csv"))
 
@@ -326,9 +331,10 @@ class Test_run_analsis:
         output_parameters = {"output_prefix": "foo"}
         with tmpdir.as_cwd():
             os.mkdir("foo")
-            run_analsis(analysis_callable=InterRDF,
-                        reference_universe_parameters=reference_universe_parameters,
-                        mandatory_analysis_parameters=mandatory_parameters,
-                        output_parameters=output_parameters)
+            run_analsis(
+                analysis_callable=InterRDF,
+                reference_universe_parameters=reference_universe_parameters,
+                mandatory_analysis_parameters=mandatory_parameters,
+                output_parameters=output_parameters)
 
             os.path.isfile("foo_InterRDF_count_bins_rdf.csv")

@@ -116,6 +116,7 @@ def test_split_argparse_into_groups():
     assert arg_grouped_dict["group1"]["test1"] == "one"
     assert arg_grouped_dict["group2"]["test2"] == "two"
 
+
 @pytest.mark.parametrize(
     'dest, default',
     [("start", "0"), ("stop", "-1"), ("step", "1"), ("verbose", False)])
@@ -174,10 +175,10 @@ def test_add_output_group_group(capsys):
 @pytest.mark.parametrize(
     'dest, default',
     [("topology", "topol.tpr"),
-    ("topology_format", None),
-    ("coordinates", None),
-    ("trajectory_format", None),
-    ("atom_style", None),])
+     ("topology_format", None),
+     ("coordinates", None),
+     ("trajectory_format", None),
+     ("atom_style", None)])
 def test_add_cli_universe(name, dest, default):
     """Test for added output arguments."""
     parser = argparse.ArgumentParser()
