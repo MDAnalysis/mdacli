@@ -25,6 +25,7 @@ from MDAnalysisTests.topology.test_lammpsdata import LAMMPS_NORESID
 
 from mdacli.cli import (
     _relevant_modules,
+    init_base_argparse,
     convert_analysis_parameters,
     create_universe,
     run_analsis,
@@ -32,6 +33,7 @@ from mdacli.cli import (
     _exit_if_a_is_b
     )
 from mdacli.libcli import find_AnalysisBase_members_ignore_warnings
+from mdacli.utils import parse_callable_signature
 
 
 _relev_mod = list(_relevant_modules)
@@ -84,9 +86,11 @@ def test_setup_clients(opt, dest, val):
 
 
 def test__exit_if_a_is_b():
-    with pytest.raises(SystemExit, match="foo") as pytest_wrapped_e:
-        _exit_if_a_is_b(1, 1, msg="foo")
-    assert pytest_wrapped_e.type == SystemExit
+    """Test for a SystemExit using pytest.raises."""
+    msg = "foo"
+    with pytest.raises(SystemExit, match=msg) as error:
+        _exit_if_a_is_b(1, 1, msg=msg)
+    assert error.type == SystemExit
 
 
 class Test_create_Universe:
@@ -124,12 +128,34 @@ class Test_create_Universe:
         assert u.atoms[0].mass == 28.0
 
 
-class Test_add_parser:
-    pass
+class Test_init_base_argparse():
+    """Test for basic argument parser."""
+    @pytest.fixture()
+    def ap(self):
+        """Returns the basic parser."""
+        return init_base_argparse(name="foo", version="0.0.0")
 
+    def test_version(self, ap, capsys):
+        """Test version option."""
+        with pytest.raises(SystemExit) as error:
+            ap.parse_args(["--version"])
 
-class Test_init_base_argparse:
-    pass
+        assert error.type == SystemExit
+
+        captured = capsys.readouterr()
+        assert "foo 0.0.0\n" == captured.out
+
+    @pytest.mark.parametrize(
+        'dest, default',
+        [("debug", False), ("logfile", None)])
+    def test_args(self, ap, dest, default):
+        """Test for added run arguments."""
+        args = ap.parse_known_args()[0]
+
+        if default is not None:
+            assert args.__dict__[dest] == default
+        else:
+            assert args.__dict__[dest] is None
 
 
 class Test_convert_analysis_parameters:
