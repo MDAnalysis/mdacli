@@ -162,7 +162,7 @@ def add_run_group(analysis_class_parser):
         "-v",
         dest="verbose",
         help="Be loud and noisy",
-        action="store_true"
+        action="store_true",
         )
 
 

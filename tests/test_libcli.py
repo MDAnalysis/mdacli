@@ -124,13 +124,8 @@ def test_add_run_group_args(dest, default):
     """Test for added run arguments."""
     parser = argparse.ArgumentParser()
     libcli.add_run_group(parser)
-
-    args = parser.parse_known_args()[0]
-
-    if default is not None:
-        assert args.__dict__[dest] == default
-    else:
-        assert args.__dict__[dest] is None
+    args = parser.parse_args([])
+    assert args.__dict__[dest] == default
 
 
 def test_add_run_group_group(capsys):
