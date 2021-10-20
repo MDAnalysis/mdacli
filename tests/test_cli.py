@@ -139,7 +139,9 @@ class Test_init_base_argparse():
     @pytest.fixture()
     def ap(self):
         """Return the basic parser."""
-        return init_base_argparse(name="foo", version="0.0.0")
+        return init_base_argparse(name="foo",
+                                  version="0.0.0",
+                                  description="bar")
 
     def test_version(self, ap, capsys):
         """Test version option."""
@@ -150,6 +152,16 @@ class Test_init_base_argparse():
 
         captured = capsys.readouterr()
         assert "foo 0.0.0\n" == captured.out
+
+    def test_description(self, ap, capsys):
+        """Test version option."""
+        with pytest.raises(SystemExit) as error:
+            ap.parse_args(["--help"])
+
+        assert error.type == SystemExit
+
+        captured = capsys.readouterr()
+        assert "bar" in captured.out
 
     @pytest.mark.parametrize(
         'dest, default',
