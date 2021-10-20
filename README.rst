@@ -9,10 +9,9 @@ A simple command line interface (CLI) to the analysis classes of `MDAnalysis`_
 using argparse_. This project is in an **early development stage** and 
 work in progress. Contributions are welcome!
 
-Provided you have `MDAnalysis installed`_, get the mdacli source from 
-https://github.com/MDAnalysis/mdacli and install ``mdacli`` with the following::
+Install ``mdacli`` with the following::
 
-   python setup.py develop
+   pip3 install mdacli
 
 and run::
 
