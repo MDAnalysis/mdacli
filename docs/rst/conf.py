@@ -47,7 +47,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 project = 'mdacli'
 year = '2021'
-author = 'Philip Lecko and Joao MC Teixeira'
+author = 'Philip Loche and Joao MC Teixeira'
 copyright = '{0}, {1}'.format(year, author)
 version = release = '0.1.0'
 
@@ -69,7 +69,7 @@ linkcheck_ignore = [
 html_theme = "sphinx_py3doc_enhanced_theme"
 html_theme_path = [sphinx_py3doc_enhanced_theme.get_html_theme_path()]
 html_theme_options = {
-    'githuburl': 'https://github.com/PicoCentauri/mda_cli',
+    'githuburl': 'https://github.com/MDAnalysis/mdacli',
     }
 
 html_use_smartypants = True
@@ -83,3 +83,9 @@ html_short_title = '%s-%s' % (project, version)
 napoleon_use_ivar = True
 napoleon_use_rtype = False
 napoleon_use_param = False
+
+# Configuration for intersphinx: refer to the Python standard library
+# and other packages used by mdacli
+intersphinx_mapping = {'https://docs.python.org/': None,
+                       'https://www.mdanalysis.org/docs/': None,
+                       }

@@ -7,10 +7,18 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 """
-Main entry point for the MDAnalysis CLI interface.
+A command line interface (CLI) to the analysis modules of MDAnalysis.
 
-This also demonstrates how other third party libraries could incorporate
-this functionality.
+The modules are all structured as part of a single mdacli wrapper, and invoked
+with commands like `mda RMSD`. This command uses the class
+:class:`MDAnalysis.analysis.rms.RMSD` for calculating the RMSD.
+Documentation for each module can be found at the respective sections on the
+`MDAnalysis Analysis Documentation`_, as well as
+`mdacli command -h`.
+
+
+.. _`MDAnalysis Documentation`:
+   https://docs.mdanalysis.org/stable/documentation_pages/analysis_modules.html
 """
 import argparse
 import logging
@@ -464,7 +472,7 @@ def setup_clients(ap, title, members):
                    parameters=parameters)
 
 
-def init_base_argparse(name, version):
+def init_base_argparse(name, version, description):
     """Create a basic `ArgumentParser`.
 
     The parser has options for printing the version, running in debug mode
@@ -481,11 +489,16 @@ def init_base_argparse(name, version):
     version : str
         Version of the cli program
 
+    description : str
+        Description of the cli program
+
     Returns
     -------
     `ArgumentParser`
     """
-    ap = argparse.ArgumentParser()
+    ap = argparse.ArgumentParser(
+        description=description,
+        formatter_class=argparse.RawDescriptionHelpFormatter)
 
     ap.add_argument(
         '--version',
@@ -517,7 +530,9 @@ def main():
     modules = find_AnalysisBase_members_ignore_warnings(_relevant_modules)
     _exit_if_a_is_b(modules, None, "No analysis modules founds.")
 
-    ap = init_base_argparse(name="mdacli", version=__version__)
+    ap = init_base_argparse(name="mdacli",
+                            version=__version__,
+                            description=__doc__)
 
     if len(sys.argv) < 2:
         ap.error("A subcommand is required.")
