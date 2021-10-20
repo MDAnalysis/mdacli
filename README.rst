@@ -105,3 +105,8 @@ page or at the `MDAnalysis documentation`_.
  .. |test_py39| image:: https://github.com/MDAnalysis/mdacli/actions/workflows/py39.yml/badge.svg?branch=main
    :alt: Github Actions Build Status
    :target: https://github.com/MDAnalysis/mdacli/actions/workflows/py39.yml
+
+.. |codecov| image:: https://codecov.io/gh/MDAnalysis/mdacli/branch/main/graph/badge.svg?token=ets2mZ6xJD
+  :alt: Codecov mdacli
+  :target: https://codecov.io/gh/MDAnalysis/mdacli
+    
