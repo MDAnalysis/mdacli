@@ -528,7 +528,7 @@ def main():
     modules = find_AnalysisBase_members_ignore_warnings(_relevant_modules)
     _exit_if_a_is_b(modules, None, "No analysis modules founds.")
 
-    ap = init_base_argparse(name="mdacli", 
+    ap = init_base_argparse(name="mdacli",
                             version=__version__,
                             description=__doc__)
 

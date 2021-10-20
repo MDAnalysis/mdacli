@@ -133,7 +133,7 @@ class Test_init_base_argparse():
     @pytest.fixture()
     def ap(self):
         """Return the basic parser."""
-        return init_base_argparse(name="foo", 
+        return init_base_argparse(name="foo",
                                   version="0.0.0",
                                   description="bar")
 
