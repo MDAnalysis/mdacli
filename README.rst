@@ -1,23 +1,24 @@
 MDAnalysis command line interface
 =================================
 
-|mdanalysis| 
+|mdanalysis|
 
-|test_py37| |test_py38| |test_py39| 
+|test_py37| |test_py38| |test_py39|
 
 A simple command line interface (CLI) to the analysis classes of `MDAnalysis`_
-using argparse_. This project is in an **early development stage** and 
+using argparse_. This project is in an **early development stage** and
 work in progress. Contributions are welcome!
 
-Install ``mdacli`` with the following::
+Provided you have `MDAnalysis installed`_, get the mdacli source from
+https://github.com/MDAnalysis/mdacli and install ``mdacli`` with the following::
 
-   pip3 install mdacli
+   python setup.py develop
 
 and run::
 
    mda -h
 
-for a help and an overview of the supported modules. A help 
+for a help and an overview of the supported modules. A help
 message for each module is available using::
 
    mda module -h
@@ -31,45 +32,44 @@ Currentlty the following analysis modules are available
 
    * - Module Name
      - Description
-  
-   * - AlignTraj           
+
+   * - AlignTraj
      - RMS-align trajectory to a reference structure using a selection.
-   * - AverageStructure    
+   * - AverageStructure
      - RMS-align trajectory to a reference structure using a selection,
-   * - Contacts            
+   * - Contacts
      - Calculate contacts based observables.
-   * - DensityAnalysis     
+   * - DensityAnalysis
      - Volumetric density analysis.
-   * - DistanceMatrix      
+   * - DistanceMatrix
      - Calculate the pairwise distance between each frame in a trajectory
-   * - Janin               
-     - Calculate :math:`\chi_1` and :math:`\chi_2` dihedral angles of selected 
-       group
-   * - Ramachandran        
-     - Calculate :math:`\phi` and :math:`\psi` dihedral angles of selected group
-   * - GNMAnalysis         
+   * - Janin
+     - Calculate χ_1 and χ_2 dihedral angles of selected group
+   * - Ramachandran
+     - Calculate ϕ and ψ dihedral angles of selected group
+   * - GNMAnalysis
      - Basic tool for GNM analysis.
    * - closeContactGNMAnalysis
      - GNMAnalysis only using close contacts.
-   * - HELANAL             
+   * - HELANAL
      - Perform HELANAL helix analysis on your trajectory.
-   * - HoleAnalysis        
+   * - HoleAnalysis
      - Run program `hole` on a trajectory.
-   * - LinearDensity       
+   * - LinearDensity
      - Linear density profile
-   * - EinsteinMSD         
+   * - EinsteinMSD
      - Class to calculate Mean Squared Displacement by the Einstein relation.
-   * - PCA                 
+   * - PCA
      - Principal component analysis on an MD trajectory.
-   * - InterRDF            
+   * - InterRDF
      - Intermolecular pair distribution function
-   * - RMSD                  
+   * - RMSD
      - Class to perform RMSD analysis on a trajectory.
-   * - RMSF                
+   * - RMSF
      - Calculate RMSF of given atoms across a trajectory.
 
-More information about each module is available through the help 
-page or at the `MDAnalysis documentation`_. 
+More information about each module is available through the help
+page or at the `MDAnalysis documentation`_.
 
 .. _argparse: https://docs.python.org/3/library/argparse.html
 .. _MDAnalysis: https://www.mdanalysis.org
