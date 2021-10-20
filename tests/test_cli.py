@@ -7,6 +7,7 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 """Test mdacli cli."""
 import argparse
+import logging
 import os
 import subprocess
 import sys
@@ -14,7 +15,7 @@ from io import StringIO
 from unittest.mock import patch
 
 import pytest
-from MDAnalysis.analysis.gnm import GNMAnalysis
+from MDAnalysis.analysis.msd import EinsteinMSD
 from MDAnalysis.analysis.rdf import InterRDF
 from MDAnalysis.analysis.rms import RMSF
 from MDAnalysis.core.universe import Universe
@@ -23,9 +24,11 @@ from MDAnalysisTests.datafiles import TPR, XTC
 from MDAnalysisTests.topology.test_lammpsdata import LAMMPS_NORESID
 
 from mdacli.cli import (
+    _exit_if_a_is_b,
     _relevant_modules,
     convert_analysis_parameters,
     create_universe,
+    init_base_argparse,
     run_analsis,
     setup_clients,
     )
@@ -38,19 +41,19 @@ _relev_mod = list(_relevant_modules)
 def test_required_args():
     """Test that there is a module given."""
     with pytest.raises(subprocess.CalledProcessError):
-        subprocess.check_call(['mdacli'])
+        subprocess.check_call(['mda'])
 
 
 def test_wrong_module():
     """Test for a non existent module."""
     with pytest.raises(subprocess.CalledProcessError):
-        subprocess.check_call(['mdacli', 'foo'])
+        subprocess.check_call(['mda', 'foo'])
 
 
-@pytest.mark.parametrize('args', ("version", "help"))
+@pytest.mark.parametrize('args', ("version", "debug", "help"))
 def test_extra_options(args):
     """Test for a ab extra option."""
-    subprocess.check_call(['mdacli', '--' + args])
+    subprocess.check_call(['mda', '--' + args])
 
 
 @pytest.mark.parametrize(
@@ -79,6 +82,14 @@ def test_setup_clients(opt, dest, val):
         args = ap.parse_args()
         t = type(val)
         assert t(getattr(args, dest)) == val
+
+
+def test__exit_if_a_is_b():
+    """Test for a SystemExit using pytest.raises."""
+    msg = "foo"
+    with pytest.raises(SystemExit, match=msg) as error:
+        _exit_if_a_is_b(1, 1, msg=msg)
+    assert error.type == SystemExit
 
 
 class Test_create_Universe:
@@ -116,6 +127,49 @@ class Test_create_Universe:
         assert u.atoms[0].mass == 28.0
 
 
+class Test_init_base_argparse():
+    """Test for basic argument parser."""
+
+    @pytest.fixture()
+    def ap(self):
+        """Return the basic parser."""
+        return init_base_argparse(name="foo", 
+                                  version="0.0.0",
+                                  description="bar")
+
+    def test_version(self, ap, capsys):
+        """Test version option."""
+        with pytest.raises(SystemExit) as error:
+            ap.parse_args(["--version"])
+
+        assert error.type == SystemExit
+
+        captured = capsys.readouterr()
+        assert "foo 0.0.0\n" == captured.out
+
+    def test_description(self, ap, capsys):
+        """Test version option."""
+        with pytest.raises(SystemExit) as error:
+            ap.parse_args(["--help"])
+
+        assert error.type == SystemExit
+
+        captured = capsys.readouterr()
+        assert "bar" in captured.out
+
+    @pytest.mark.parametrize(
+        'dest, default',
+        [("debug", False), ("logfile", None)])
+    def test_args(self, ap, dest, default):
+        """Test for added run arguments."""
+        args = ap.parse_known_args()[0]
+
+        if default is not None:
+            assert args.__dict__[dest] == default
+        else:
+            assert args.__dict__[dest] is None
+
+
 class Test_convert_analysis_parameters:
     """Test class for converting analysis parameters."""
 
@@ -127,26 +181,45 @@ class Test_convert_analysis_parameters:
     def test_Atomgroup(self, universe):
         """Test AtomGroup conversion."""
         analysis_parameters = {"atomgroup": "all"}
-        convert_analysis_parameters(universe,
-                                    RMSF,
-                                    analysis_parameters)
-        assert analysis_parameters["atomgroup"] == universe.atoms
+        test_Universe = convert_analysis_parameters(
+            analysis_callable=RMSF,
+            analysis_parameters=analysis_parameters,
+            reference_universe=universe)
 
-    def test_Universe(self, universe):
-        """Test Universe conversion."""
-        analysis_parameters = {"universe": None}
-        convert_analysis_parameters(universe,
-                                    GNMAnalysis,
-                                    analysis_parameters)
-        assert analysis_parameters["universe"] == universe
+        # `None` is returned if no Universe is created
+        assert test_Universe is None
+        assert analysis_parameters["atomgroup"] == universe.atoms
 
     def test_zero_atoms(self, universe):
         """Test error if zero atoms are present after conversion."""
         analysis_parameters = {"atomgroup": "name foo"}
         with pytest.raises(ValueError, match="AtomGroup `-atomgroup` with "):
-            convert_analysis_parameters(universe,
-                                        RMSF,
-                                        analysis_parameters)
+            convert_analysis_parameters(
+                analysis_callable=RMSF,
+                analysis_parameters=analysis_parameters,
+                reference_universe=universe)
+
+    def test_Universe_creation(self, universe):
+        """Test the universe creation from different parameters."""
+        analysis_parameters = {}
+        analysis_parameters["topology_u"] = TPR
+        analysis_parameters["topology_format_u"] = None
+        analysis_parameters["coordinates_u"] = XTC
+        analysis_parameters["trajectory_format_u"] = None
+        analysis_parameters["atom_style_u"] = None
+
+        test_u = convert_analysis_parameters(
+            analysis_callable=EinsteinMSD,
+            analysis_parameters=analysis_parameters,
+            reference_universe=None)
+
+        # Extra parameters should be removed
+        assert len(analysis_parameters.keys()) == 1
+        assert analysis_parameters["u"] is test_u
+
+        # We can not test accros several universes so we just compare
+        # the atomic positions
+        assert (universe.atoms.positions == test_u.atoms.positions).all()
 
     def test_only_set_if_key_exists(self, universe):
         """
@@ -156,9 +229,10 @@ class Test_convert_analysis_parameters:
         arguments. So we only should set the value if it is inside the dict.
         """
         analysis_parameters = {}
-        convert_analysis_parameters(universe,
-                                    RMSF,
-                                    analysis_parameters)
+        convert_analysis_parameters(
+            analysis_callable=RMSF,
+            analysis_parameters=analysis_parameters,
+            reference_universe=universe)
         assert not analysis_parameters
 
 
@@ -166,7 +240,7 @@ class Test_run_analsis:
     """Test class for analyze_data."""
 
     @pytest.fixture()
-    def universe_parameters(self):
+    def reference_universe_parameters(self):
         """Universe fixture."""
         kwargs = {}
         kwargs["topology"] = TPR
@@ -185,46 +259,49 @@ class Test_run_analsis:
         return kwargs
 
     def test_default(self,
-                     universe_parameters,
+                     reference_universe_parameters,
                      mandatory_parameters,
                      tmpdir):
         """Test with default arguments."""
         with tmpdir.as_cwd():
-            run_analsis(analysis_callable=InterRDF,
-                        universe_parameters=universe_parameters,
-                        mandatory_analysis_parameters=mandatory_parameters)
+            run_analsis(
+                analysis_callable=InterRDF,
+                reference_universe_parameters=reference_universe_parameters,
+                mandatory_analysis_parameters=mandatory_parameters)
 
     def test_optional_paramaters(self,
-                                 universe_parameters,
+                                 reference_universe_parameters,
                                  mandatory_parameters,
                                  tmpdir):
         """Test with optional parameters given."""
         opt_params = {"nbins": 100}
         with tmpdir.as_cwd():
-            a = run_analsis(analysis_callable=InterRDF,
-                            universe_parameters=universe_parameters,
-                            mandatory_analysis_parameters=mandatory_parameters,
-                            optional_analysis_parameters=opt_params)
+            a = run_analsis(
+                analysis_callable=InterRDF,
+                reference_universe_parameters=reference_universe_parameters,
+                mandatory_analysis_parameters=mandatory_parameters,
+                optional_analysis_parameters=opt_params)
 
         assert a.rdf_settings["bins"] == opt_params["nbins"]
 
     def test_verbose(self,
-                     universe_parameters,
+                     reference_universe_parameters,
                      mandatory_parameters,
                      tmpdir,
-                     capsys):
+                     caplog):
         """Test for being verbose."""
         run_parameters = {"verbose": True}
+        caplog.set_level(logging.INFO)
         with tmpdir.as_cwd():
-            run_analsis(analysis_callable=InterRDF,
-                        universe_parameters=universe_parameters,
-                        mandatory_analysis_parameters=mandatory_parameters,
-                        run_parameters=run_parameters)
-        captured = capsys.readouterr()
-        assert "Loading trajectory..." in captured.out
+            run_analsis(
+                analysis_callable=InterRDF,
+                reference_universe_parameters=reference_universe_parameters,
+                mandatory_analysis_parameters=mandatory_parameters,
+                run_parameters=run_parameters)
+        assert "INFO     " in caplog.text
 
     def test_custom_output(self,
-                           universe_parameters,
+                           reference_universe_parameters,
                            mandatory_parameters,
                            tmpdir):
         """Test for custom output."""
@@ -233,40 +310,43 @@ class Test_run_analsis:
 
         with tmpdir.as_cwd():
             os.mkdir("foo")
-            run_analsis(analysis_callable=InterRDF,
-                        universe_parameters=universe_parameters,
-                        mandatory_analysis_parameters=mandatory_parameters,
-                        output_parameters=output_parameters)
+            run_analsis(
+                analysis_callable=InterRDF,
+                reference_universe_parameters=reference_universe_parameters,
+                mandatory_analysis_parameters=mandatory_parameters,
+                output_parameters=output_parameters)
 
             os.path.isfile(os.path.join("foo",
                                         "bar_InterRDF_count_bins_rdf.csv"))
 
     def test_output_directory(self,
-                              universe_parameters,
+                              reference_universe_parameters,
                               mandatory_parameters,
                               tmpdir):
         """Test for custom output directory."""
         output_parameters = {"output_directory": "foo"}
         with tmpdir.as_cwd():
             os.mkdir("foo")
-            run_analsis(analysis_callable=InterRDF,
-                        universe_parameters=universe_parameters,
-                        mandatory_analysis_parameters=mandatory_parameters,
-                        output_parameters=output_parameters)
+            run_analsis(
+                analysis_callable=InterRDF,
+                reference_universe_parameters=reference_universe_parameters,
+                mandatory_analysis_parameters=mandatory_parameters,
+                output_parameters=output_parameters)
 
             os.path.isfile(os.path.join("foo", "InterRDF_count_bins_rdf.csv"))
 
     def test_output_prefix(self,
-                           universe_parameters,
+                           reference_universe_parameters,
                            mandatory_parameters,
                            tmpdir):
         """Test for custom prefix."""
         output_parameters = {"output_prefix": "foo"}
         with tmpdir.as_cwd():
             os.mkdir("foo")
-            run_analsis(analysis_callable=InterRDF,
-                        universe_parameters=universe_parameters,
-                        mandatory_analysis_parameters=mandatory_parameters,
-                        output_parameters=output_parameters)
+            run_analsis(
+                analysis_callable=InterRDF,
+                reference_universe_parameters=reference_universe_parameters,
+                mandatory_analysis_parameters=mandatory_parameters,
+                output_parameters=output_parameters)
 
             os.path.isfile("foo_InterRDF_count_bins_rdf.csv")

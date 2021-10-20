@@ -115,3 +115,75 @@ def test_split_argparse_into_groups():
 
     assert arg_grouped_dict["group1"]["test1"] == "one"
     assert arg_grouped_dict["group2"]["test2"] == "two"
+
+
+@pytest.mark.parametrize(
+    'dest, default',
+    [("start", "0"), ("stop", "-1"), ("step", "1"), ("verbose", False)])
+def test_add_run_group_args(dest, default):
+    """Test for added run arguments."""
+    parser = argparse.ArgumentParser()
+    libcli.add_run_group(parser)
+    args = parser.parse_args([])
+    assert args.__dict__[dest] == default
+
+
+def test_add_run_group_group(capsys):
+    """Test is a run group is added."""
+    parser = argparse.ArgumentParser()
+    libcli.add_run_group(parser)
+
+    parser.print_help()
+    captured = capsys.readouterr()
+
+    assert "Analysis Run Parameters:" in captured.out
+
+
+@pytest.mark.parametrize(
+    'dest, default',
+    [("output_prefix", ""), ("output_directory", ".")])
+def test_add_output_group_arguments(default, dest):
+    """Test for added output arguments."""
+    parser = argparse.ArgumentParser()
+    libcli.add_output_group(parser)
+
+    args = parser.parse_known_args()[0]
+
+    if default is not None:
+        assert args.__dict__[dest] == default
+    else:
+        assert args.__dict__[dest] is None
+
+
+def test_add_output_group_group(capsys):
+    """Test is a output group is added."""
+    parser = argparse.ArgumentParser()
+    libcli.add_output_group(parser)
+
+    parser.print_help()
+    captured = capsys.readouterr()
+
+    assert "Output Parameters:" in captured.out
+
+
+@pytest.mark.parametrize("name", ["", "u"])
+@pytest.mark.parametrize(
+    'dest, default',
+    [("topology", "topol.tpr"),
+     ("topology_format", None),
+     ("coordinates", None),
+     ("trajectory_format", None),
+     ("atom_style", None)])
+def test_add_cli_universe(name, dest, default):
+    """Test for added output arguments."""
+    parser = argparse.ArgumentParser()
+    libcli.add_cli_universe(parser, name)
+
+    args = parser.parse_known_args()[0]
+
+    name = f'_{name}' if name else ''
+
+    if default is not None:
+        assert args.__dict__[f"{dest}{name}"] == default
+    else:
+        assert args.__dict__[f"{dest}{name}"] is None

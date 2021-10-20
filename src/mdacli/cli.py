@@ -21,6 +21,7 @@ Documentation for each module can be found at the respective sections on the
    https://docs.mdanalysis.org/stable/documentation_pages/analysis_modules.html
 """
 import argparse
+import logging
 import os
 import sys
 import traceback
@@ -33,18 +34,29 @@ from mdacli import __version__
 from mdacli.colors import Emphasise
 from mdacli.libcli import (
     KwargsDict,
+    add_cli_universe,
+    add_output_group,
+    add_run_group,
     find_AnalysisBase_members_ignore_warnings,
     split_argparse_into_groups,
     )
+from mdacli.logger import setup_logging
 from mdacli.save import save_results
 from mdacli.utils import convert_str_time, parse_callable_signature, parse_docs
 
+
+logger = logging.getLogger(__name__)
 
 # modules in MDAnalysis.analysis packages that are ignored by mdacli
 # relevant modules used in this CLI factory
 # hydro* are removed here because they have a different folder/file structure
 # and need to be investigated separately
-_skip_mods = ('base', 'hydrogenbonds', 'hbonds')
+_skip_mods = ['base', 'hydrogenbonds', 'hbonds']
+
+# skip modules that contain lists as parameters for AtomGroups since
+# we can not parse them correctly so far.
+_skip_mods += ['Contacts', 'Dihedral', 'PersistenceLength', 'InterRDF_s']
+
 _relevant_modules = (mod for mod in __all__ if mod not in _skip_mods)
 
 # serves CLI factory
@@ -59,25 +71,22 @@ STR_TYPE_DICT = {
     "complex": complex,
     "NoneType": type(None),
     "AtomGroup": mda.AtomGroup,
+    "Universe": mda.Universe,
     }
 
 
 def _warning(message, *args, **kwargs):
-    print(Emphasise.warning(f"Warning: {message}"))
+    logger.warning(Emphasise.warning(message))
 
 
 warnings.showwarning = _warning
 
 
-def create_CLI(cli_parser, interface_name, parameters):
+def create_CLI(sub_parser, interface_name, parameters):
     """
     Add subparsers to `cli_parser`.
 
     Subparsers parameters are divided in the following categories:
-
-    1. Universe Parameters
-        Common to all generated CLIs, to create the Univserse example:
-            * topology, trajectory
 
     2. Analysis Run parameters
          time frame as begin, end, step and vebosity
@@ -92,12 +101,16 @@ def create_CLI(cli_parser, interface_name, parameters):
     5. Optional Parameters
         Named parameters in the Analysis class
 
+    6. Reference Universe Parameters
+        A reference Universe for selection commands. Only is created if
+        AtomGroup arguments exist.
+
     All CLI's parameters are named parameters.
 
     Parameters
     ----------
-    cli_parser : argparse.sub_parser
-        The main parser where the new parser will be added.
+    sub_parser : argparse.sub_parser
+        A sub parser where the new parser will be added.
 
     interface_name : str
         Name of the interface name.
@@ -111,7 +124,7 @@ def create_CLI(cli_parser, interface_name, parameters):
     None
     """
     # creates the subparser
-    analysis_class_parser = cli_parser.add_parser(
+    analysis_class_parser = sub_parser.add_parser(
         interface_name,
         help=parameters["desc"],
         description=f"{parameters['desc']}\n\n{parameters['desc_long']}",
@@ -123,117 +136,13 @@ def create_CLI(cli_parser, interface_name, parameters):
     # Analysis Classes
     analysis_class_parser.set_defaults(
         analysis_callable=parameters["callable"])
+    add_run_group(analysis_class_parser)
 
-    universe_group = analysis_class_parser.add_argument_group(
-        title="Universe Parameters",
-        description="Parameters specific for loading the topology and"
-                    " trajectory"
-        )
+    # adds only if `save` method does not exist
+    if not getattr(parameters['callable'], 'save', False):
+        add_output_group(analysis_class_parser)
 
-    universe_group.add_argument(
-        "-s",
-        dest="topology",
-        type=str,
-        default="topol.tpr",
-        help="The topolgy file. "
-        "The FORMATs {} are implemented in MDAnalysis."
-        "".format(", ".join(mda._PARSERS.keys())),
-        )
-
-    universe_group.add_argument(
-        "-top",
-        dest="topology_format",
-        type=str,
-        default=None,
-        help="Override automatic topology type detection. "
-        "See topology for implemented formats.")
-
-    universe_group.add_argument(
-        "-atom_style",
-        dest="atom_style",
-        type=str,
-        default=None,
-        help="Manually set the atom_style information"
-        "(currently only LAMMPS parser). E.g. atom_style='id type x y z'.")
-
-    universe_group.add_argument(
-        "-f",
-        dest="coordinates",
-        type=str,
-        default=None,
-        nargs="+",
-        help="A single or multiple coordinate files. "
-        "The FORMATs {} are implemented in MDAnalysis."
-        "".format(", ".join(mda._READERS.keys())),
-        )
-
-    universe_group.add_argument(
-        "-traj",
-        dest="trajectory_format",
-        type=str,
-        default=None,
-        help="Override automatic trajectory type detection. "
-        "See trajectory for implemented formats.")
-
-    run_group = analysis_class_parser.add_argument_group(
-        title="Analysis Run Parameters",
-        description="Genereal parameters specific for running the analysis"
-        )
-    run_group.add_argument(
-        "-b",
-        dest="start",
-        type=str,
-        default="0",
-        help="frame or start time for evaluation. (default: %(default)s)"
-        )
-
-    run_group.add_argument(
-        "-e",
-        dest="stop",
-        type=str,
-        default="-1",
-        help="frame or end time for evaluation. (default: %(default)s)"
-        )
-
-    run_group.add_argument(
-        "-dt",
-        dest="step",
-        type=str,
-        default="1",
-        help="step or time step for evaluation. (default: %(default)s)"
-        )
-
-    run_group.add_argument(
-        "-v",
-        dest="verbose",
-        help="Be loud and noisy",
-        action="store_true"
-        )
-
-    # TODO: Should only be added if class does not have save_results
-    # function. However we only have a dict here and can not check this
-    # currently...
-    output_group = analysis_class_parser.add_argument_group(
-        title="Output Parameters",
-        )
-    output_group.add_argument(
-        "-pre",
-        dest="output_prefix",
-        type=str,
-        default="",
-        help="Additional prefix for all output files. Files will be "
-             " automatically named by the used module (default: %(default)s)"
-        )
-
-    output_group.add_argument(
-        "-o",
-        dest="output_directory",
-        type=str,
-        default=".",
-        help="Directory in which the output files produced will be stored."
-             "(default: %(default)s)"
-        )
-
+    # add positional and optional arguments
     pos_ = sorted(list(parameters["positional"].items()), key=lambda x: x[0])
     opt_ = sorted(list(parameters["optional"].items()), key=lambda x: x[0])
 
@@ -299,6 +208,21 @@ def create_CLI(cli_parser, interface_name, parameters):
                 default=default,
                 help=description + " Use a MDAnalysis selection string."
                 )
+
+            # Create one reference Universe argument for atom selection
+            try:
+                reference_universe_group
+            except NameError:
+                reference_universe_group = \
+                    analysis_class_parser.add_argument_group(
+                        title="Reference Universe Parameters",
+                        description="Parameters specific for loading "
+                                    "the reference topology and trajectory"
+                                    " used for atom selection.")
+                add_cli_universe(reference_universe_group)
+
+        elif issubclass(type_, mda.Universe):
+            add_cli_universe(group, name)
         else:
             group.add_argument(
                 name_par,
@@ -367,9 +291,9 @@ def create_universe(topology,
 
 
 def run_analsis(analysis_callable,
-                universe_parameters,
                 mandatory_analysis_parameters,
                 optional_analysis_parameters=None,
+                reference_universe_parameters=None,
                 run_parameters=None,
                 output_parameters=None):
     """Perform main client logic.
@@ -403,22 +327,22 @@ def run_analsis(analysis_callable,
 
     verbose = run_parameters.pop("verbose", False)
 
-    # Initilize Universe
-    if verbose:
-        print("Loading trajectory...", end="")
-    universe = create_universe(**universe_parameters)
-    if verbose:
-        print("Done!\n")
-        sys.stdout.flush()
+    if reference_universe_parameters is not None:
+        reference_universe = create_universe(**reference_universe_parameters)
+    else:
+        reference_universe = None
 
     # Initilize analysis callable
-    convert_analysis_parameters(universe,
-                                analysis_callable,
-                                mandatory_analysis_parameters)
+    universe = convert_analysis_parameters(analysis_callable,
+                                           mandatory_analysis_parameters,
+                                           reference_universe)
 
-    convert_analysis_parameters(universe,
-                                analysis_callable,
-                                optional_analysis_parameters)
+    convert_analysis_parameters(analysis_callable,
+                                optional_analysis_parameters,
+                                reference_universe)
+
+    if universe is None:
+        universe = reference_universe
 
     ac = analysis_callable(**mandatory_analysis_parameters,
                            **optional_analysis_parameters)
@@ -443,14 +367,14 @@ def run_analsis(analysis_callable,
     return ac
 
 
-def convert_analysis_parameters(universe,
-                                analysis_callable,
-                                analysis_parameters):
+def convert_analysis_parameters(analysis_callable,
+                                analysis_parameters,
+                                reference_universe=None):
     """
-    Convert parameters from the command line suitbale for anlysis.
+    Convert parameters from the command line suitable for anlysis.
 
-    Special types (i.e AtomGroups) are converted from the command line
-    strings into the correct format. Parameters are changed inplace.
+    Special types (i.e AtomGroups, Universes) are converted from the command
+    line strings into the correct format. Parameters are changed inplace.
     Note that only keys are converted and no new key are added if
     present in the doc of the `analysis_callable` but not
     in the `analysis_parameters` dict.
@@ -458,16 +382,22 @@ def convert_analysis_parameters(universe,
     The following types are converted:
 
     * AtomGroup: Select atoms based on ``universe.select_atoms``
-    * Universe: Assign the given universe.
+    * Universe: Created from parameters.
 
     Parameters
     ----------
-    universe : `MDAnalysis.Universe`
-        Universe for which the kwargs are related to
     analysis_callable : function
         Analysis class for which the analysis should be performed.
     analysis_parameters : dict
         parameters to be processed
+    reference_universe : `MDAnalysis.Universe`
+        Universe from which the AtomGroup selection are done.
+
+    Returns
+    -------
+    universe : Universe
+        The universe created from the anaylysis parameters or None
+        of no ine is created
 
     Raises
     ------
@@ -475,10 +405,19 @@ def convert_analysis_parameters(universe,
         If an Atomgroup does not contain any atoms
     """
     params = parse_docs(analysis_callable)[2]
+    universe = None
+
+    # If a Universe is part of the parameters several extra arguments with
+    # non matching names were created. We seperate them by their connecting
+    # character.
+    analysis_parameters_keys = [p.split("_")[-1] for p
+                                in analysis_parameters.keys()]
+
     for param_name, dictionary in params.items():
-        if param_name in analysis_parameters.keys():
+        if param_name in analysis_parameters_keys:
             if "AtomGroup" in dictionary['type']:
-                sel = universe.select_atoms(analysis_parameters[param_name])
+                sel = reference_universe.select_atoms(
+                    analysis_parameters[param_name])
                 if sel:
                     analysis_parameters[param_name] = sel
                 else:
@@ -487,7 +426,22 @@ def convert_analysis_parameters(universe,
                                      f" `{analysis_parameters[param_name]}`"
                                      f" does not contain any atoms")
             elif "Universe" in dictionary['type']:
+
+                # All Universe parameters
+                universe_parameters = {"topology": None,
+                                       "coordinates": None,
+                                       "topology_format": None,
+                                       "atom_style": None,
+                                       "trajectory_format": None}
+
+                for k in universe_parameters.keys():
+                    universe_parameters[k] = analysis_parameters.pop(
+                        f"{k}_{param_name}")
+
+                universe = create_universe(**universe_parameters)
                 analysis_parameters[param_name] = universe
+
+    return universe
 
 
 def setup_clients(ap, title, members):
@@ -503,45 +457,90 @@ def setup_clients(ap, title, members):
     members : list
         list containing Analysis classes for setting up the parser
     """
-    cli_parser = ap.add_subparsers(title=title)
+    cli_subparser = ap.add_subparsers(title=title)
 
     analysis_interfaces = {
         member.__name__: parse_callable_signature(member)
         for member in members
         }
 
-    # adds each Analysis class/function as a CLI under 'cli_parser'
+    # adds each Analysis class/function as a CLI under 'cli_subparser'
     # to be writen
     for interface_name, parameters in analysis_interfaces.items():
-        create_CLI(cli_parser, interface_name, parameters)
+        create_CLI(cli_subparser, interface_name, parameters)
+
+
+def init_base_argparse(name, version, description):
+    """Create a basic `ArgumentParser`.
+
+    The parser has options for printing the version, running in debug mode
+    and with a logfile. Note that the funtion only adds the options to
+    the parser but not the logic for actually running in debug mode nor
+    how to store the log file.
+
+    Parameters
+    ----------
+
+    name : str
+        Name of the cli program
+
+    version : str
+        Version of the cli program
+
+    description : str
+        Description of the cli program
+
+    Returns
+    -------
+    `ArgumentParser`
+    """
+    ap = argparse.ArgumentParser(
+        description=description,
+        formatter_class=argparse.RawDescriptionHelpFormatter)
+
+    ap.add_argument(
+        '--version',
+        action='version',
+        version=f"{name} {version}",
+        )
+
+    ap.add_argument(
+        '--debug',
+        action='store_true',
+        help="Run with debug options.",
+        )
+
+    ap.add_argument('--logfile',
+                    dest='logfile',
+                    action='store',
+                    help='Logfile (optional)')
+    return ap
+
+
+def _exit_if_a_is_b(obj1, obj2, msg):
+    """Exit if `obj1` and `obj2` are the same."""
+    if obj1 is obj2:
+        sys.exit(msg)
 
 
 def main():
     """Execute main CLI entry point."""
-    members = find_AnalysisBase_members_ignore_warnings(_relevant_modules)
+    modules = find_AnalysisBase_members_ignore_warnings(_relevant_modules)
+    _exit_if_a_is_b(modules, None, "No analysis modules founds.")
 
-    if members is None:
-        sys.exit("No analysis modules found.")
+    ap = init_base_argparse(name="mdacli", 
+                            version=__version__,
+                            description=__doc__)
 
-    ap = argparse.ArgumentParser(
-        description=__doc__,
-        formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument('--version',
-                    action='version',
-                    version="mdacli {}".format(__version__))
-    ap.add_argument('--debug',
-                    action='store_true',
-                    help="Run with debug options.")
+    if len(sys.argv) < 2:
+        ap.error("A subcommand is required.")
 
     # There is to much useless code execution done here:
     # 1. We do not have to setup all possible clients all the time.
     #    i.e. for `mdacli RMSD` only the RMSD client should be build.
     # 2. for something like `mdacli -h` We do not have to build every
     #   sub parser in complete detail.
-    setup_clients(ap, title="MDAnalysis Analysis CLI", members=members)
-
-    if len(sys.argv) < 2:
-        ap.error("A subcommand is required.")
+    setup_clients(ap, title="MDAnalysis Analysis Clients", members=modules)
 
     args = ap.parse_args()
 
@@ -551,27 +550,29 @@ def main():
         # Ignore all warnings if not in debug mode
         warnings.filterwarnings("ignore")
 
-    # Execute the main client interface.
-    try:
-        analysis_callable = args.analysis_callable
+    with setup_logging(logger, logfile=args.logfile, debug=args.debug):
+        # Execute the main client interface.
+        try:
+            analysis_callable = args.analysis_callable
 
-        # Get the correct ArgumentParser instance from all subparsers
-        # `[0]` selects the first subparser where our analysises live in.
-        ap_sup = ap._subparsers._group_actions[0].choices[
-            analysis_callable.__name__]
-        arg_grouped_dict = split_argparse_into_groups(ap_sup, args)
+            # Get the correct ArgumentParser instance from all subparsers
+            # `[0]` selects the first subparser where our analysises live in.
+            _key = analysis_callable.__name__
+            ap_sup = ap._subparsers._group_actions[0].choices[_key]
+            arg_grouped_dict = split_argparse_into_groups(ap_sup, args)
 
-        # Optional parameters may not exist
-        arg_grouped_dict.setdefault("Optional Parameters", {})
+            # Some parameters may not exist
+            arg_grouped_dict.setdefault("Optional Parameters", {})
+            arg_grouped_dict.setdefault("Reference Universe Parameters", None)
 
-        run_analsis(analysis_callable,
-                    arg_grouped_dict["Universe Parameters"],
-                    arg_grouped_dict["Mandatory Parameters"],
-                    arg_grouped_dict["Optional Parameters"],
-                    arg_grouped_dict["Analysis Run Parameters"],
-                    arg_grouped_dict["Output Parameters"])
-    except Exception as e:
-        if args.debug:
-            traceback.print_exc()
-        else:
-            sys.exit(Emphasise.error(f"Error: {e}"))
+            run_analsis(analysis_callable,
+                        arg_grouped_dict["Mandatory Parameters"],
+                        arg_grouped_dict["Optional Parameters"],
+                        arg_grouped_dict["Reference Universe Parameters"],
+                        arg_grouped_dict["Analysis Run Parameters"],
+                        arg_grouped_dict["Output Parameters"])
+        except Exception as e:
+            if args.debug:
+                traceback.print_exc()
+            else:
+                sys.exit(Emphasise.error(f"Error: {e}"))

@@ -58,7 +58,6 @@ setup(
         'Operating System :: MacOS',
         'Operating System :: Microsoft',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
@@ -75,7 +74,7 @@ setup(
     keywords=[
         # eg: 'keyword1', 'keyword2', 'keyword3',
         ],
-    python_requires='>=3.6, <3.10',
+    python_requires='>=3.7, <3.10',
     install_requires=[
         # 'click',
         # eg: 'aspectlib==1.1.1', 'six>=1.7',
@@ -91,7 +90,7 @@ setup(
         ],
     entry_points={
         'console_scripts': [
-            'mdacli= mdacli.cli:main',
+            'mda= mdacli.cli:main',
             ]
         #
         },
