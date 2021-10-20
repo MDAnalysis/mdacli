@@ -44,10 +44,10 @@ Currentlty the following analysis modules are available
    * - DistanceMatrix
      - Calculate the pairwise distance between each frame in a trajectory
    * - Janin
-     - Calculate :math:`\chi_1` and :math:`\chi_2` dihedral angles of selected
+     - Calculate χ_1 and χ_2 dihedral angles of selected
        group
    * - Ramachandran
-     - Calculate :math:`\phi` and :math:`\psi` dihedral angles of selected group
+     - Calculate ϕ and ψ dihedral angles of selected group
    * - GNMAnalysis
      - Basic tool for GNM analysis.
    * - closeContactGNMAnalysis
