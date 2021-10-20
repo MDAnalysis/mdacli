@@ -113,7 +113,7 @@ def create_CLI(sub_parser, interface_name, parameters):
         A sub parser where the new parser will be added.
 
     interface_name : str
-        Name of the interface name.
+        Name of the interface.
 
     parameters : dict
         Parameters needed to fill the argparse requirements for the
@@ -466,8 +466,10 @@ def setup_clients(ap, title, members):
 
     # adds each Analysis class/function as a CLI under 'cli_subparser'
     # to be writen
-    for interface_name, parameters in analysis_interfaces.items():
-        create_CLI(cli_subparser, interface_name, parameters)
+    for member_name, parameters in analysis_interfaces.items():
+        create_CLI(sub_parser=cli_subparser,
+                   interface_name=member_name.lower(),
+                   parameters=parameters)
 
 
 def init_base_argparse(name, version, description):
@@ -542,6 +544,9 @@ def main():
     #   sub parser in complete detail.
     setup_clients(ap, title="MDAnalysis Analysis Clients", members=modules)
 
+    # Be case insensitive for the subcommand
+    sys.argv[1] = sys.argv[1].lower()
+
     args = ap.parse_args()
 
     if args.debug:
@@ -557,7 +562,7 @@ def main():
 
             # Get the correct ArgumentParser instance from all subparsers
             # `[0]` selects the first subparser where our analysises live in.
-            _key = analysis_callable.__name__
+            _key = analysis_callable.__name__.lower()
             ap_sup = ap._subparsers._group_actions[0].choices[_key]
             arg_grouped_dict = split_argparse_into_groups(ap_sup, args)
 
