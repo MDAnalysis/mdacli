@@ -1,7 +1,7 @@
 MDAnalysis command line interface
 =================================
 
-|pypi| |build| |mdanalysis| |codecov|
+|pypi| |mdanalysis| |codecov|
 
 |test_py37| |test_py38| |test_py39|
 
@@ -109,4 +109,3 @@ page or at the `MDAnalysis documentation`_.
  .. |codecov| image:: https://codecov.io/gh/MDAnalysis/mdacli/branch/main/graph/badge.svg?token=ets2mZ6xJD
     :alt: Codecov mdacli
     :target: https://codecov.io/gh/MDAnalysis/mdacli
-    
