@@ -10,9 +10,16 @@
 
 import inspect
 import re
+import sys
 from collections import defaultdict
 
 import MDAnalysis as mda
+
+
+def _exit_if_a_is_b(obj1, obj2, msg):
+    """Exit if `obj1` and `obj2` are the same."""
+    if obj1 is obj2:
+        sys.exit(msg)
 
 
 def convert_str_time(x, dt):

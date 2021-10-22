@@ -11,7 +11,7 @@ import contextlib
 import logging
 import sys
 
-from mdacli.colors import Emphasise
+from .colors import Emphasise
 
 
 @contextlib.contextmanager

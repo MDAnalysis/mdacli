@@ -9,7 +9,7 @@ Contents
    installation
    usage
    contributing
-   reference/index
+   api
    changelog
    authors
 
