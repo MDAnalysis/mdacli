@@ -45,7 +45,7 @@ The core of the wrapper is a docstring parser in combination
 with an argument inspection using the `inspect` library. Based on 
 a created dictionary containing
 each parameter of the class with its docstring and type, the actual command
-line interface is build using `argparse`. 
+line interface is build using :py:mod:`argparse`. 
 
 The interface also provides a
 way to save the data using that all analysis results of an AnalysisBase
