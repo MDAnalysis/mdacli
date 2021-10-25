@@ -7,8 +7,11 @@ open your terminal and run::
 
  mda -h
 
-This command will provide a list of all available modules. To calculate
-a radial distribution function (RDF) between two groups use::
+This command will provide a list of all available modules. A list of the 
+:ref:`Available modules` is also available on the page of the documentation.
+
+To calculate a radial distribution function (RDF) between two groups use for 
+example::
 
  mda interrdf -h
 
