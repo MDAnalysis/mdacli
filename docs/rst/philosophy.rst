@@ -42,10 +42,13 @@ MDA codebase they are just they will show up without
 any adjustments to `mdacli` itself.
 
 The core of the wrapper is a docstring parser in combination
-with an argument inspection using the `inspect` library. Based on 
+with an argument inspection using the `inspect` library. Based on
 a created dictionary containing
 each parameter of the class with its docstring and type, the actual command
-line interface is build using :py:mod:`argparse`. 
+line interface is build using :py:mod:`argparse`. The syntax of the
+topology and the trajectory flags (`-f`, `-s`, ...) is inspired by the
+`GROMACS CLI <https://manual.gromacs.org/documentation/current/user-guide/cmdline.html>`_
+syntax.
 
 The interface also provides a
 way to save the data using that all analysis results of an AnalysisBase
