@@ -238,7 +238,8 @@ def create_universe(topology,
                     coordinates=None,
                     topology_format=None,
                     atom_style=None,
-                    trajectory_format=None):
+                    trajectory_format=None,
+                    dimensions=None):
     """
     Initilize a MDAnalysis universe instance.
 
@@ -275,6 +276,15 @@ def create_universe(topology,
     atom_style : str
         Customised LAMMPS `atom_style` information. Only works with
         `topology_format = data`
+    dimensions : iterable of floats
+        vector that contains unit cell lengths and probable angles.
+        Expected shapes are eithere (6, 0) or (1, 6) or for
+        shapes of (3, 0) or (1, 3) all angles are set to 90 degrees.
+
+    Raises
+    ------
+    IndexError
+        If the dimesions of the `dimensions` argument are not 3 or 6.
 
     Returns
     -------
@@ -286,6 +296,17 @@ def create_universe(topology,
 
     if coordinates is not None:
         universe.load_new(coordinates, format=trajectory_format)
+
+    if dimensions is not None:
+        if len(dimensions) == 3:
+            universe.dimensions = [*dimensions, 90, 90, 90]
+        elif len(dimensions) != 6:
+            raise IndexError(
+                "The dimensions must contain at least 3 entries for "
+                "the box length and possibly 3 more entries for the angles.")
+
+        trans = mda.transformations.boxdimensions.set_dimensions(dimensions)
+        universe.trajectory.add_transformations(trans)
 
     return universe
 
@@ -432,7 +453,8 @@ def convert_analysis_parameters(analysis_callable,
                                        "coordinates": None,
                                        "topology_format": None,
                                        "atom_style": None,
-                                       "trajectory_format": None}
+                                       "trajectory_format": None,
+                                       "dimensions": None}
 
                 for k in universe_parameters.keys():
                     universe_parameters[k] = analysis_parameters.pop(

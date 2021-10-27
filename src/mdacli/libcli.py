@@ -259,3 +259,15 @@ def add_cli_universe(parser, name=''):
         default=None,
         help="Override automatic trajectory type detection. "
         "See trajectory for implemented formats.")
+
+    parser.add_argument(
+        f"-dimensions{name}",
+        dest=f"dimensions{name}",
+        type=float,
+        default=None,
+        nargs="+",
+        help="Manually set/overwrite the simulation box dimensions to a "
+        "vector containing unit cell dimensions [a, b, c, α, β, γ], "
+        "lengths a, b, c are in Å, and angles α, β, γ are in degrees. "
+        "Providing only three parameters will assume a rectengular simulation "
+        "box (α = β = γ = 90°).")
