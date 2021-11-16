@@ -17,6 +17,7 @@ import warnings
 
 import MDAnalysis as mda
 from MDAnalysis.analysis.base import AnalysisBase
+from MDAnalysis.transformations.boxdimensions import set_dimensions
 
 from .colors import Emphasise
 from .save import save_results
@@ -307,6 +308,7 @@ def add_cli_universe(parser, name=''):
         "Providing only three parameters will assume a rectengular simulation "
         "box (α = β = γ = 90°).")
 
+
 def create_CLI(sub_parser, interface_name, parameters):
     """
     Add subparsers to `cli_parser`.
@@ -523,15 +525,14 @@ def create_universe(topology,
         universe.load_new(coordinates, format=trajectory_format)
 
     if dimensions is not None:
-         if len(dimensions) == 3:
-             universe.dimensions = [*dimensions, 90, 90, 90]
-         elif len(dimensions) != 6:
-             raise IndexError(
-                 "The dimensions must contain at least 3 entries for "
-                 "the box length and possibly 3 more entries for the angles.")
+        if len(dimensions) == 3:
+            dimensions = [*dimensions, 90, 90, 90]
+        elif len(dimensions) != 6:
+            raise IndexError(
+                "The dimensions must contain at least 3 entries for "
+                "the box length and possibly 3 more entries for the angles.")
 
-         trans = mda.transformations.boxdimensions.set_dimensions(dimensions)
-         universe.trajectory.add_transformations(trans)
+        universe.trajectory.add_transformations(set_dimensions(dimensions))
 
     return universe
 

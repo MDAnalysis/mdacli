@@ -26,6 +26,7 @@ from MDAnalysis.core.universe import Universe
 from MDAnalysisTests.core.test_universe import CHOL_GRO
 from MDAnalysisTests.datafiles import TPR, XTC
 from MDAnalysisTests.topology.test_lammpsdata import LAMMPS_NORESID
+from numpy.testing import assert_equal
 
 from mdacli.libcli import (
     KwargsDict,
@@ -196,8 +197,9 @@ def test_add_output_group_group(capsys):
     [("topology", "topol.tpr"),
      ("topology_format", None),
      ("coordinates", None),
+     ("atom_style", None),
      ("trajectory_format", None),
-     ("atom_style", None)])
+     ("dimensions", None)])
 def test_add_cli_universe(name, dest, default):
     """Test for added output arguments."""
     parser = argparse.ArgumentParser()
@@ -220,6 +222,7 @@ def test_add_cli_universe(name, dest, default):
      ('-f', "coordinates", ["foo", "bar"]),
      ('-traj', "trajectory_format", "foo"),
      ('-atom_style', "atom_style", "foo"),
+     ('-dimensions', "dimensions", ["10", "10", "10"]),
      ('-b', "start", 42),
      ('-e', "stop", 42),
      ('-dt', "step", 42)))
@@ -258,7 +261,7 @@ class Test_create_Universe:
         u = create_universe(StringIO(CHOL_GRO), topology_format="GRO")
         assert len(u.atoms) == 8
 
-    def test_create_universe_no_traj(self):
+    def test_no_traj(self):
         """Test non trajectpry parsed."""
         u = create_universe(TPR)
         assert not hasattr(u, "trajectory")
@@ -271,12 +274,30 @@ class Test_create_Universe:
                             trajectory_format="GRO")
         assert len(u.atoms) == 8
 
-    def test_create_universe_atom_style(self):
+    def test_atom_style(self):
         """Test custom atom style."""
         u = create_universe(topology=StringIO(LAMMPS_NORESID),
                             topology_format="data",
                             atom_style="id type x y z")
         assert u.atoms[0].mass == 28.0
+
+    def test_dimensions(self):
+        """Test dimensions overwrite."""
+        dimensions = [10, 10, 10, 20, 90, 10]
+        u = create_universe(TPR, XTC, dimensions=dimensions)
+        assert_equal(u.dimensions, dimensions)
+
+    def test_dimensions_no_angles(self):
+        """Test dimesions overwrite without giving angles."""
+        dimensions = [10, 10, 10]
+        u = create_universe(TPR, XTC, dimensions=dimensions)
+        assert_equal(u.dimensions, dimensions + [90, 90, 90])
+
+    def test_dimensions_length_error(self):
+        """Test dimesions overwrite with wrong number of indices."""
+        dimensions = [10, 10]
+        with pytest.raises(IndexError, match="at least 3 entries"):
+            create_universe(TPR, XTC, dimensions=dimensions)
 
 
 class Test_init_base_argparse():
