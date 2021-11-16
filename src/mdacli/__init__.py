@@ -7,4 +7,8 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 """Command line interfaces for MDAnalysis analysis classes."""
 
+from mdacli.cli import cli
+
+__all__ = ["cli"]
+
 __version__ = '0.0.0'

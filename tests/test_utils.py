@@ -8,7 +8,15 @@
 """Test mdacli utils."""
 import pytest
 
-from mdacli.cli import convert_str_time
+from mdacli.utils import _exit_if_a_is_b, convert_str_time
+
+
+def test__exit_if_a_is_b():
+    """Test for a SystemExit using pytest.raises."""
+    msg = "foo"
+    with pytest.raises(SystemExit, match=msg) as error:
+        _exit_if_a_is_b(1, 1, msg=msg)
+    assert error.type == SystemExit
 
 
 @pytest.mark.parametrize('x, frame',
