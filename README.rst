@@ -24,7 +24,10 @@ message for each module is available using::
    mda module -h
 
 
-Currentlty the following analysis modules are available
+Available modules
+-----------------
+
+Currently the following analysis modules are available
 
 .. list-table::
    :widths: 25 50
