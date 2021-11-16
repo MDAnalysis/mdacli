@@ -68,11 +68,11 @@ def cli(name,
                     'InterRDF_s']
 
         mdacli.cli(name="MDAnalysis",
-                module_list=__all__,
-                version=mdacli.__version__,
-                description=__doc__,
-                skip_modules=skip_mods,
-                ignore_warnings=True)
+                   module_list=__all__,
+                   version=mdacli.__version__,
+                   description=__doc__,
+                   skip_modules=skip_mods,
+                   ignore_warnings=True)
     """
     modules = find_AnalysisBase_members(module_list,
                                         ignore_warnings=ignore_warnings)

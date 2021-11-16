@@ -110,7 +110,7 @@ def find_classes_in_modules(klass, *module_names):
 def find_AnalysisBase_members(modules,
                               ignore_warnings=False):
     """Find Analysis Base members in modules.
-    
+
     Parameters
     ----------
     modules : list

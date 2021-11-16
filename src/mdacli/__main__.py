@@ -13,7 +13,7 @@ The modules are all structured as part of a single mdacli wrapper, and invoked
 with commands like `mda RMSD`. This command uses the class
 :class:`MDAnalysis.analysis.rms.RMSD` for calculating the RMSD.
 Documentation for each module can be found at the respective sections on the
-`MDAnalysis Analysis Documentation`_, as well as
+`MDAnalysis Documentation`_, as well as
 `mda command -h`.
 
 .. _`MDAnalysis Documentation`:
