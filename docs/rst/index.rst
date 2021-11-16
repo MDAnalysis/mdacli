@@ -7,6 +7,7 @@ Contents
 
    readme
    installation
+   philosophy
    usage
    contributing
    api
