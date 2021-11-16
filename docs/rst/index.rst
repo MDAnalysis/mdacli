@@ -7,9 +7,10 @@ Contents
 
    readme
    installation
+   philosophy
    usage
    contributing
-   reference/index
+   api
    changelog
    authors
 

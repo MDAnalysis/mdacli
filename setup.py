@@ -85,6 +85,8 @@ setup(
         'MDAnalysis>=2.0.0',
         ],
     entry_points={
-        'console_scripts': ['mda = mdacli.cli:main', ]
+        'console_scripts': [
+            'mda= mdacli.__main__:main',
+            ]
         },
     )

@@ -33,6 +33,9 @@ message for each module is available using::
    mda module -h
 
 
+Available modules
+-----------------
+
 Currently the following analysis modules are available
 
 .. list-table::
