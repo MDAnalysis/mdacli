@@ -1,6 +1,6 @@
 # tests required for Pull Requests
 # but should not run after push to main
-name: build python package
+name: test build
 
 on:
   pull_request:
