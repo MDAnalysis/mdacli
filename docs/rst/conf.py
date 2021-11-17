@@ -3,19 +3,23 @@
 from __future__ import unicode_literals
 
 import os
-# import mock
-# import sys
+import mock
+import sys
 
 import sphinx_py3doc_enhanced_theme
 
 
-# activate if there are dependencies
-# mock_modules = [
-#     'matplotlib',
-#     ]
-#
-# for modulename in mock_modules:
-#     sys.modules[modulename] = mock.Mock()
+#activate if there are dependencies
+mock_modules = [
+    'matplotlib',
+    'MDAnalysis',
+    'MDAnalysis.analysis',
+    'MDAnalysis.analysis.base',
+    'numpy',
+    ]
+
+for modulename in mock_modules:
+    sys.modules[modulename] = mock.Mock()
 
 extensions = [
     'sphinx.ext.autodoc',
