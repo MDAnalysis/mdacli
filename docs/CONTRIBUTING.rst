@@ -1,7 +1,11 @@
 Contributing
 ============
 
-How to contribute to this project.
+Contributions are always welcome. Not only in the form of
+code contributions via pull requests but also issues, especially
+since the project is in an early development phase.
+
+For adding new code you can follow the little introduction given below.
 
 Fork this repository
 --------------------
@@ -148,9 +152,9 @@ Also, you can run individual environments if you wish to test only specific func
 
 
 .. _Tox: https://tox.readthedocs.io/en/latest/
-.. _MANIFEST.in: https://github.com/PicoCentauri/mda_cli/blob/main/MANIFEST.in
-.. _Fork this repository before contributing: https://github.com/PicoCentauri/mda_cli/network/members
-.. _Pull Request: https://github.com/PicoCentauri/mda_cli/pulls
-.. _PULLREQUEST.rst: https://github.com/PicoCentauri/mda_cli/blob/main/docs/PULLREQUEST.rst
+.. _MANIFEST.in: https://github.com/MDAnalysis/mdacli/blob/main/MANIFEST.in
+.. _Fork this repository before contributing: https://github.com/MDAnalysis/mdacli/network/members
+.. _Pull Request: https://github.com/MDAnalysis/mdacli/pulls
+.. _PULLREQUEST.rst: https://github.com/MDAnalysis/mdacli/blob/main/docs/PULLREQUEST.rst
 .. _Installing packages using pip and virtual environments: https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment
 .. _Anaconda: https://www.anaconda.com/
