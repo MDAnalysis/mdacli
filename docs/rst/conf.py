@@ -59,8 +59,8 @@ version = release = '0.0.0'
 pygments_style = 'trac'
 templates_path = ['.']
 extlinks = {
-    'issue': ('https://github.com/PicoCentauri/mda_cli/cissues/%s', '#'),  # noqa: E501
-    'pr': ('https://github.com/PicoCentauri/mda_cli/pull/%s', 'PR #'),  # noqa: E501
+    'issue': ('https://github.com/MDAnalysis/mdacli/cissues/%s', '#'),  # noqa: E501
+    'pr': ('https://github.com/MDAnalysis/mdacli/pull/%s', 'PR #'),  # noqa: E501
     }
 
 # codecov io closes connection if host is accessed too repetitively.
