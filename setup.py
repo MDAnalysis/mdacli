@@ -73,7 +73,7 @@ setup(
         'Documentation': 'https://readthedocs.org/projectsi/mdacli',
         'Changelog': 'https://github.com/MDAnalysis/mdacli/blob/main/docs/CHANGELOG.rst',
         'Issue Tracker': 'https://github.com/MDAnalysis/mdacli/issues',
-        #'Discussion Forum': '',
+        # 'Discussion Forum': '',
         },
     keywords=[
         'Science',
