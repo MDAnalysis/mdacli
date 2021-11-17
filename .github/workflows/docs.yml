@@ -14,15 +14,15 @@ jobs:
         shell: bash -l {0}
     steps:
     - uses: actions/checkout@v2
-    - uses: conda-incubator/setup-miniconda@v2
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v2.2.2
       with:
-        activate-environment: test
         python-version: 3.7
-        channels: conda-forge
 
     - name: Install dependencies
       run: |
-        conda install pip setuptools wheel tox
+        python -m pip install --upgrade pip setuptools wheel
+        pip install virtualenv tox
 
     - name: Test with tox
       run: tox -e docs
