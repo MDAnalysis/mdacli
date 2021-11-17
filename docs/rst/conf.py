@@ -9,7 +9,7 @@ import sys
 import sphinx_py3doc_enhanced_theme
 
 
-#activate if there are dependencies
+# activate if there are dependencies
 mock_modules = [
     'matplotlib',
     'MDAnalysis',
