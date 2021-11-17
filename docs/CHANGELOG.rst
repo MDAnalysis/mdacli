@@ -2,6 +2,6 @@
 Changelog
 =========
 
-v0.1.0
--------
+new_version
+-----------
 * Initial release
