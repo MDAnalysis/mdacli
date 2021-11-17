@@ -70,7 +70,7 @@ setup(
         ],
     project_urls={
         'GitHub': 'https://github.com/MDAnalysis/mdacli',
-        'Documentation': 'https://readthedocs.org/projectsi/mdacli',
+        'Documentation': 'https://mdacli.readthedocs.io/en/latest/',
         'Changelog': 'https://github.com/MDAnalysis/mdacli/blob/main/docs/CHANGELOG.rst',
         'Issue Tracker': 'https://github.com/MDAnalysis/mdacli/issues',
         # 'Discussion Forum': '',
