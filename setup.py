@@ -49,7 +49,7 @@ setup(
     include_package_data=True,
     zip_safe=False,
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Environment :: Console',
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Intended Audience :: Science/Research',
@@ -69,11 +69,11 @@ setup(
         'Topic :: System :: Shells',
         ],
     project_urls={
-        'webpage': '',
-        'Documentation': '',
-        'Changelog': '',
-        'Issue Tracker': '',
-        'Discussion Forum': '',
+        'GitHub': 'https://github.com/MDAnalysis/mdacli',
+        'Documentation': 'https://readthedocs.org/projectsi/mdacli',
+        'Changelog': 'https://github.com/MDAnalysis/mdacli/blob/main/docs/CHANGELOG.rst',
+        'Issue Tracker': 'https://github.com/MDAnalysis/mdacli/issues',
+        #'Discussion Forum': '',
         },
     keywords=[
         'Science',
