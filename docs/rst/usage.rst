@@ -8,9 +8,16 @@ open your terminal and run::
  mda -h
 
 This command will provide a list of all available modules. A list of the 
-:ref:`Available modules` is also available on the page of the documentation.
+:ref:`Available modules` is also available on the page of the documentation. Ask
+help `-h` in each module available for detailed instruction on how to use each
+module command-line client.
 
-To calculate a radial distribution function (RDF) between two groups use for 
+`mdacli` modules' parameters emulate the parameters of the `Analysis` classes
+from `MDAnalysis`. So, each module will have its own requirements. Some will
+require two trajectories, others `AtomGroup` selections, etc. You will see that
+all is explained in each client `-h` option.
+
+For example, to calculate a radial distribution function (RDF) between two groups use for 
 example::
 
  mda interrdf -h
@@ -23,7 +30,7 @@ rdf can be calculated using::
 
  mda interrdf -s topol.tpr -f traj.trr -g1 "name OW" -g2 "name OW"
 
-The oxygens are selected with the `-g1` and `-g2` flags. 
+The oxygen atoms are selected with the `-g1` and `-g2` flags. 
 
 A more verbose output is achieved by using the `-v` flag. Even more 
 information is provided with the `--debug` flag. 
@@ -44,7 +51,7 @@ of `InterRDF_count_bins_rdf.csv`. The header rows of each file provide
 information about the stored data. Simple results such as bare numbers or 
 strings are stored as `JSON` dumps. More complex data such as 
 4 or higher-dimensional arrays are saved as a bunch of CSV files zipped
-together.
+together. A similar procedure will happen for each module.
 
 .. _online: https://github.com/MDAnalysis/mdacli/tree/main/data
 
