@@ -5,6 +5,5 @@ Thank you for contributing to this project! Before you submit a Pull Request:
 * if no issue exists, directly describe the problem in your Pull Request
 * summarize the approach used to address the issue
 
-
-.. _contribution guidelines: https://github.com/PicoCentauri/mda_cli/blob/main/docs/CONTRIBUTING.rst
-.. _issue: https://github.com/PicoCentauri/mda_cli/issues
+.. _contribution guidelines: https://github.com/MDAnalysis/mdacli/blob/main/docs/CONTRIBUTING.rst
+.. _issue: https://github.com/MDAnalysis/mdacli/issues

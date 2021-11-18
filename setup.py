@@ -37,71 +37,59 @@ setup(
     description='A command line client for MDAnalysis Analysis classes.',
     long_description=long_description,
     long_description_content_type='text/x-rst',
-    license='GPLv2',
+    license='GPLv3',
     author='PicoCentauri, joaomcteixeira',
     author_email='philip-loche@gmx.de, joaomcteixeira@gmail.com',
     maintainer='PicoCentauri, joaomcteixeira, MDA devs',
     maintainer_email='philip-loche@gmx.de, joaomcteixeira@gmail.com, mdanalysis@numfocus.org',
-    url='https://www.mdanalysis.org/',
+    url='https://github.com/MDAnalysis/mdacli',
     packages=find_packages('src'),
     package_dir={'': 'src'},
     py_modules=[splitext(basename(i))[0] for i in glob("src/*.py")],
     include_package_data=True,
     zip_safe=False,
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Environment :: Console',
-        'License :: OSI Approved :: GNU General Public License v2 (GPLv2)',
+        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Intended Audience :: Science/Research',
         'Natural Language :: English',
         'Operating System :: POSIX',
-        'Operating System :: MacOS',
-        'Operating System :: Microsoft',
+        'Operating System :: MacOS :: MacOS X',
+        'Operating System :: Microsoft :: Windows ',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
+        'Topic :: Scientific/Engineering',
         'Topic :: Scientific/Engineering :: Bio-Informatics',
         'Topic :: Scientific/Engineering :: Chemistry',
+        'Topic :: Scientific/Engineering :: Physics',
+        'Topic :: Software Development :: Libraries :: Python Modules',
+        'Topic :: System :: Shells',
         ],
     project_urls={
-        'webpage': '',
-        'Documentation': '',
-        'Changelog': '',
-        'Issue Tracker': '',
-        'Discussion Forum': '',
+        'Source': 'https://github.com/MDAnalysis/mdacli',
+        'Documentation': 'https://mdacli.readthedocs.io/en/latest/',
+        'Changelog': 'https://github.com/MDAnalysis/mdacli/blob/main/docs/CHANGELOG.rst',
+        'Issue Tracker': 'https://github.com/MDAnalysis/mdacli/issues',
+        'Discord': 'https://discord.com/channels/807348386012987462/',
+        'Blog': 'https://www.mdanalysis.org/blog/',
+        'Twitter': 'https://twitter.com/mdanalysis',
+        # 'Discussion Forum': '',
         },
     keywords=[
-        # eg: 'keyword1', 'keyword2', 'keyword3',
+        'Science',
+        'Molecular Dynamics',
+        'MDAnalysis',
         ],
-    python_requires='>=3.7, <3.10',
+    python_requires='>=3.7',
     install_requires=[
-        # 'click',
-        # eg: 'aspectlib==1.1.1', 'six>=1.7',
-        ],
-    extras_require={
-        # eg:
-        #   'rst': ['docutils>=0.11'],
-        #   ':python_version=="2.6"': ['argparse'],
-        },
-    setup_requires=[
-        #   'pytest-runner',
-        #   'setuptools_scm>=3.3.1',
+        'MDAnalysis>=2.0.0',
         ],
     entry_points={
         'console_scripts': [
             'mda= mdacli.__main__:main',
             ]
-        #
         },
-    # cmdclass={'build_ext': optional_build_ext},
-    # ext_modules=[
-    #    Extension(
-    #        splitext(relpath(path, 'src').replace(os.sep, '.'))[0],
-    #        sources=[path],
-    #        include_dirs=[dirname(path)]
-    #    )
-    #    for root, _, _ in os.walk('src')
-    #    for path in glob(join(root, '*.c'))
-    # ],
     )
