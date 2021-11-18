@@ -3,19 +3,23 @@
 from __future__ import unicode_literals
 
 import os
-# import mock
-# import sys
+import mock
+import sys
 
 import sphinx_py3doc_enhanced_theme
 
 
 # activate if there are dependencies
-# mock_modules = [
-#     'matplotlib',
-#     ]
-#
-# for modulename in mock_modules:
-#     sys.modules[modulename] = mock.Mock()
+mock_modules = [
+    'matplotlib',
+    'MDAnalysis',
+    'MDAnalysis.analysis',
+    'MDAnalysis.analysis.base',
+    'numpy',
+    ]
+
+for modulename in mock_modules:
+    sys.modules[modulename] = mock.Mock()
 
 extensions = [
     'sphinx.ext.autodoc',
@@ -50,13 +54,13 @@ project = 'mdacli'
 year = '2021'
 author = 'Philip Loche and Joao MC Teixeira'
 copyright = '{0}, {1}'.format(year, author)
-version = release = '0.0.0'
+version = release = '0.1.0'
 
 pygments_style = 'trac'
 templates_path = ['.']
 extlinks = {
-    'issue': ('https://github.com/PicoCentauri/mda_cli/cissues/%s', '#'),  # noqa: E501
-    'pr': ('https://github.com/PicoCentauri/mda_cli/pull/%s', 'PR #'),  # noqa: E501
+    'issue': ('https://github.com/MDAnalysis/mdacli/cissues/%s', '#'),  # noqa: E501
+    'pr': ('https://github.com/MDAnalysis/mdacli/pull/%s', 'PR #'),  # noqa: E501
     }
 
 # codecov io closes connection if host is accessed too repetitively.

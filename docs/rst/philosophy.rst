@@ -3,7 +3,7 @@ Philosophy and approach
 =======================
 
 The mdacli project evolved from our experiences in
-`taurendmd <https://github.com/joaomcteixeira/dropped_TaurenMD>`_ and
+`taurenmd <https://github.com/joaomcteixeira/taurenmd>`_ and
 `maicos <https://gitlab.com/maicos-devel/maicos>`_ which
 both build a CLI interface on the fly.
 
@@ -28,9 +28,9 @@ MDA-users since they just stay within their known universe
 with known selection commands and results structures.
 An existing framework makes it also more attractive for users
 and developers to write their analysis using the
-base.AnalysisBase.
+`base.AnalysisBase`.
 
-Starting from `taurendmd` and `maicos` we
+Starting from `taurenmd` and `maicos` we
 developed a general CLI for any
 :class:`MDAnalysis.analysis.base.AnalysisBase` class.
 mdacli detects all analysis classes located inside the

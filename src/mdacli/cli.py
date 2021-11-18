@@ -33,7 +33,7 @@ def cli(name,
         description="",
         skip_modules=None,
         ignore_warnings=False):
-    """Create the command linee interface.
+    """Create the command-line interface.
 
     This function creates a command line interface with a given `name` based
     on a module list.
