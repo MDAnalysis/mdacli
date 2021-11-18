@@ -2,6 +2,12 @@
 Changelog
 =========
 
+new_version
+-----------
+
+* Simplified CI testing
+* Added link to discussion forum
+
 v0.1.2 (2021-11-18)
 ------------------------------------------
 

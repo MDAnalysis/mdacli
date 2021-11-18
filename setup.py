@@ -72,6 +72,7 @@ setup(
         'Source': 'https://github.com/MDAnalysis/mdacli',
         'Documentation': 'https://mdacli.readthedocs.io/en/latest/',
         'Changelog': 'https://github.com/MDAnalysis/mdacli/blob/main/docs/CHANGELOG.rst',
+        'User Group': 'https://groups.google.com/g/mdnalysis-discussion/',
         'Issue Tracker': 'https://github.com/MDAnalysis/mdacli/issues',
         'Discord': 'https://discord.com/channels/807348386012987462/',
         'Blog': 'https://www.mdanalysis.org/blog/',

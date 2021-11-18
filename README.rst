@@ -1,9 +1,7 @@
 MDAnalysis command line interface
 =================================
 
-|pypi| |mdanalysis| |codecov| |docs|
-
-|test_py37| |test_py38| |test_py39|
+|pypi| |mdanalysis| |codecov| |docs| |test|
 
 ``mdacli`` is a simple command line interface (CLI) to the analysis classes of `MDAnalysis`_
 using argparse_. This project is in an **early development stage** and
@@ -89,17 +87,9 @@ page or at the `MDAnalysis documentation`_.
    :alt: Documentation Status
    :target: https://mdacli.readthedocs.io/en/latest/?badge=latest
 
- .. |test_py37| image:: https://github.com/MDAnalysis/mdacli/actions/workflows/py37.yml/badge.svg?branch=main
+ .. |test| image:: https://github.com/MDAnalysis/mdacli/actions/workflows/test.yml/badge.svg?branch=main
    :alt: Github Actions Build Status
-   :target: https://github.com/MDAnalysis/mdacli/actions/workflows/py37.yml
-
- .. |test_py38| image:: https://github.com/MDAnalysis/mdacli/actions/workflows/py38.yml/badge.svg?branch=main
-   :alt: Github Actions Build Status
-   :target: https://github.com/MDAnalysis/mdacli/actions/workflows/py38.yml
-
- .. |test_py39| image:: https://github.com/MDAnalysis/mdacli/actions/workflows/py39.yml/badge.svg?branch=main
-   :alt: Github Actions Build Status
-   :target: https://github.com/MDAnalysis/mdacli/actions/workflows/py39.yml
+   :target: https://github.com/MDAnalysis/mdacli/actions/workflows/test.yml
 
  .. |codecov| image:: https://codecov.io/gh/MDAnalysis/mdacli/branch/main/graph/badge.svg?token=ets2mZ6xJD
     :alt: Codecov mdacli

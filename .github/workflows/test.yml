@@ -1,4 +1,4 @@
-name: test_py38
+name: test_py37
 
 on:
   push:
@@ -12,6 +12,8 @@ jobs:
     strategy:
       matrix:
         platform: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: [3.7, 3.8, 3.9]
+
     defaults:
       run:
         shell: bash -l {0}
@@ -20,7 +22,7 @@ jobs:
     - uses: conda-incubator/setup-miniconda@v2
       with:
         activate-environment: test
-        python-version: 3.8
+        python-version: ${{ python-version }}
         channels: conda-forge
 
     - name: Install dependencies
@@ -28,7 +30,7 @@ jobs:
         conda install pip setuptools wheel tox tox-conda coverage[toml]
 
     - name: Test with tox
-      run: tox -e py38
+      run: tox -e test
 
     #from https://github.com/codecov/codecov-action
     - name: Upload coverage to Codecov
