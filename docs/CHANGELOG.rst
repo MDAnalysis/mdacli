@@ -5,7 +5,7 @@ Changelog
 new_version
 -----------
 
-* Simplified CI testing
+* Use Github actions matrix for test
 * Added link to discussion forum
 
 v0.1.2 (2021-11-18)

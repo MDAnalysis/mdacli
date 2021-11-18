@@ -1,4 +1,4 @@
-name: test_py37
+name: test
 
 on:
   push:
