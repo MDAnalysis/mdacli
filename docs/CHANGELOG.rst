@@ -2,8 +2,8 @@
 Changelog
 =========
 
-new_version
------------
+v0.1.2 (2021-11-18)
+------------------------------------------
 
 * Added option to manually set box dimensions (#65)
 
