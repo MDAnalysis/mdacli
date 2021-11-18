@@ -2,6 +2,11 @@
 Changelog
 =========
 
+new_version
+-----------
+
+* Added link to discussion forum
+
 v0.1.1 (2021-11-18)
 ------------------------------------------
 
