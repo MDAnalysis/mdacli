@@ -7,6 +7,11 @@ new_version
 
 * Added link to discussion forum
 
+v0.1.2 (2021-11-18)
+------------------------------------------
+
+* Added option to manually set box dimensions (#65)
+
 v0.1.1 (2021-11-18)
 ------------------------------------------
 
