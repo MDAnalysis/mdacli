@@ -4,6 +4,10 @@ Contributing
 Contributing to this project is easy because we have set up a powerful
 CI environment. :relaxed: This document will guide you step-by-step.
 
+Contributions are always welcome. Not only in the form of
+code contributions via pull requests but also issues, especially
+since the project is in an early development phase.
+
 The way to interact with us is to `fork` the `mdacli` repository to your
 account, create a development branch in your fork, and finally pull
 request your changes to the main repository for review. Next, we present
