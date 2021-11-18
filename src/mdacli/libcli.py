@@ -673,14 +673,9 @@ def convert_analysis_parameters(analysis_callable,
                                      f" `{analysis_parameters[param_name]}`"
                                      f" does not contain any atoms")
             elif "Universe" in dictionary['type']:
-
-                # All Universe parameters
-                universe_parameters = {"topology": None,
-                                       "coordinates": None,
-                                       "topology_format": None,
-                                       "atom_style": None,
-                                       "trajectory_format": None,
-                                       "dimensions": None}
+                # Create universe parameter dictionary from signature
+                sig = inspect.signature(create_universe)
+                universe_parameters = dict(sig.parameters)
 
                 for k in universe_parameters.keys():
                     universe_parameters[k] = analysis_parameters.pop(

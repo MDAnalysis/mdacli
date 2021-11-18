@@ -222,7 +222,7 @@ def test_add_cli_universe(name, dest, default):
      ('-f', "coordinates", ["foo", "bar"]),
      ('-traj', "trajectory_format", "foo"),
      ('-atom_style', "atom_style", "foo"),
-     ('-dimensions', "dimensions", ["10", "10", "10"]),
+     ('-dimensions', "dimensions", [10., 10., 10.]),
      ('-b', "start", 42),
      ('-e', "stop", 42),
      ('-dt', "step", 42)))
@@ -380,6 +380,7 @@ class Test_convert_analysis_parameters:
         analysis_parameters["coordinates_u"] = XTC
         analysis_parameters["trajectory_format_u"] = None
         analysis_parameters["atom_style_u"] = None
+        analysis_parameters["dimensions_u"] = None
 
         test_u = convert_analysis_parameters(
             analysis_callable=EinsteinMSD,
