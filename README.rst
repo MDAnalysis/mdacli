@@ -5,32 +5,20 @@ MDAnalysis command line interface
 
 |test_py37| |test_py38| |test_py39|
 
-A simple command line interface (CLI) to the analysis classes of `MDAnalysis`_
+``mdacli`` is a simple command line interface (CLI) to the analysis classes of `MDAnalysis`_
 using argparse_. This project is in an **early development stage** and
-work in progress. Contributions are welcome!
+work in progress. `Contributions are welcome <https://github.com/MDAnalysis/mdacli/blob/main/docs/CONTRIBUTING.rst>`_!
 
-Install `mdacli` together with MDAnalysis 2 from PyPI::
-
-   pip3 install mdacli
-
-or, provided you have `MDAnalysis installed`_, you can install only `mdacli`::
-
-   pip3 install mdacli --no-deps
-
-If you skilled with GitHub and want to install it directly from source, clone
-the repository and install a `devel` version, use the `--no-deps` flag in case
-you already have MDAnalysis installed.
-
-   python setup.py develop [--no-deps]
+To install `mdacli` refer to the `INSTALL file <https://github.com/MDAnalysis/mdacli/blob/main/docs/rst/installation.rst>`_.
 
 Run `mdacli`::
 
    mda -h
 
-for a help and an overview of the supported modules. A help
+For a help and an overview of the supported modules. A help
 message for each module is available using::
 
-   mda module -h
+   mda <module> -h
 
 
 Available modules

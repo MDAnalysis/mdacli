@@ -1,102 +1,130 @@
 Contributing
 ============
 
-How to contribute to this project.
+Contributing to this project is easy because we have set up a powerful
+CI environment. :relaxed: This document will guide you step-by-step.
+
+The way to interact with us is to `fork` the `mdacli` repository to your
+account, create a development branch in your fork, and finally pull
+request your changes to the main repository for review. Next, we present
+you guidelines for this process. If you are a `git` pro you may wish to
+apply your own `git` method; if not, you are safe following ours.
 
 Fork this repository
---------------------
+-------------------------------------------------------------------------
 
 `Fork this repository before contributing`_.
 
-Clone your fork
----------------
+Clone the main project to your computer
+-------------------------------------------------------------------------
 
-Next, clone your fork to your local machine, keep it up to date with the upstream (see later), and update the online fork with those updates.
+Next, clone the main repository to your local machine.::
 
+    git clone https://github.com/MDAnalysis/mdacli.git
+    cd mdacli
+
+Add your fork as remote
+-------------------------------------------------------------------------
+
+You can't create a branch in the main repository :no_entry_sign:, you
+need to make it in your fork :smile: , first you need to add your fork
+as a `remote` in the cloned repository (following the previous commands)
 ::
 
-    git clone https://github.com/YOUR-USERNAME/mda_cli.git
-    cd mda_cli
-
-Keep your fork up to date
--------------------------
-
-It is important to keep your fork up-to-date with the main repository. Inside the forked project folder, every time you wish to update your fork with the main (upstream) repository do the following::
-
     git checkout main
+    git remote add myfork git://github.com/<your-username>/mdacli.git
+    git fetch myfork
 
-    # add the upstream only the very first time
-    git remote add upstream git://github.com/PicoCentauri/mda_cli.git
 
-    git fetch upstream
-    git merge upstream/main
-    git pull origin main
+Create a new branch and start developing
+-------------------------------------------------------------------------
 
-While you are developing on a branch, you can keep it up to date with the upstream main by repeating the above commands and replacing ``main`` by the name of your development branch.
+Now create a new branch and start developing::
+
+    git checkout -b <my-new-branch-with-a-nice-name>
+
+Develop your code. You should commit your changes to your fork in
+encapsulated steps. That is, when you finish doing some task, you should
+commit it.
+
+    git add <the new files>
+    git commit -m "<your good commit message>"
+    git push myfork <my-new-branch-with-a-nice-name>
+
+You will see that your changes are now in your fork and branch.
+
+Pull Request your changes
+----------------------------------
+
+Once you finish your changes create a Pull Request to the main `mdacli`
+repository so we can review your contribution, give you feedback, and
+hopefully accept it :relaxed:. However, before PR, continue reading this
+guideline!
 
 Install for developers
 ----------------------
 
-If you are contributing to ``madcli``, most likely you are already a contributor of ``MDAnalysis``. Nonetheless, here are some tips.
+If you are contributing to ``madcli``, most likely you are already a
+contributor of ``MDAnalysis v2``. If you already have `MDAnalysis v2`
+installed, install `mdacli` in the same Python environment. For that,
+inside `mdacli`'s repository::
 
-Create a dedicated Python environment where to develop the project.
+    python setup.py develop --no-deps
 
-If you are using :code:`pip` follow the official instructions on `Installing packages using pip and virtual environments`_, most likely what you want is:
+It is very important to use the `develop` flag, so that the changes you
+make in the code are always reflected (real time) in your installation.
+The `--no-deps` avoids installing `MDAnalysis` twice.
 
-::
+If you don't have `MDAnalysis v2` installed how did you run `mdacli` in
+the first place? Please refer to :ref:`Installation` before continuing.
 
-    python3 -m venv mdaclidev
-    source mdaclidev/bin/activate
+The whole `mdacli` Continuous Integration pipeline is based on `Tox_`.
+So you need to install `tox` to be our friend :smile_cat: ::
 
-If you are using `Anaconda`_ go for:
+    pip install tox tox-conda
+    # or
+    conda install tox tox-conda -c conda-forge
 
-::
 
-    conda create --name mdaclidev python=3.7
-    conda activate mdaclidec
+Running tests with tox
+---------------------------
 
-Where :code:`mdaclidev` is the name you wish to give to the environment dedicated to this project.
-
-Install ``MDAnalysis`` in your ``dev`` environment.
-
-Either under *pip* or *conda*, install the ``mdacli`` in :code:`develop` mode, and also :ref:`tox<Uniformed Tests with tox>`.
-
-From inside the repository main folder::
-
-    python setup.py develop
-    pip install tox
-
-Thanks to the ``develop`` flag, any changes in the code will be automatically reflected in the installed version.
-
-Make a new branch
------------------
-
-From the ``main`` branch create a new branch where to develop the new code.
+Before creating a Pull Request from your branch, certify that all the
+tests pass correctly by running:
 
 ::
 
-    git checkout main
-    git checkout -b new_branch
+    tox
 
+These are exactly the same tests that will be performed online in our
+Github Actions workflows. Possibly, some tests referring to specific
+Python versions may fail because the interpreter is not installed;
+ignored these tests.
 
-Develop the feature and keep regular pushes to your fork with comprehensible commit messages.
+Also, you can run individual environments if you wish to test only
+specific functionalities, for example:
 
 ::
 
-    git status
-    git add (the files you want)
-    git commit (add a nice commit message)
-    git push origin new_branch
+    tox -e lint  # code style
+    tox -e build  # packaging
+    tox -e docs  # only builds the documentation
+    tox -e py37
 
-While you are developing, you can execute ``tox`` as needed to run unittests or inspect lint, etc. See the last section of this page.
 
 Update CHANGELOG
 ----------------
 
-Update the changelog file under :code:`docs/CHANGELOG.rst` with an explanatory bullet list of your contribution. Add that list right after the main title and before the last version subtitle::
+Update the changelog file under :code:`docs/CHANGELOG.rst` with an
+explanatory bullet list of your contribution bellow a `new_version`
+title. Add that list right after the main title and before the last
+version subtitle::
 
     Changelog
     =========
+
+    new_version
+    ----------------
 
     * here goes my new additions
     * explain them shortly and well
@@ -109,48 +137,25 @@ Also add your name to the authors list at :code:`docs/AUTHORS.rst`.
 Pull Request
 ------------
 
-Once you are finished, you can Pull Request you additions to the main repository, and engage with the community. Please read the ``PULLREQUEST.rst`` guidelines first, you will see them when you open a PR.
+Once you are finished, you can Pull Request you additions to the main
+repository and engage with the community. Please read the `docs/PULLREQUEST.rst`
+guidelines first, you will see them when you open a PR.
 
-**Before submitting a Pull Request, verify your development branch passes all tests as** :ref:`described bellow<Uniformed Tests with tox>` **. If you are developing new code you should also implement new test cases.**
+**Before submitting a Pull Request, verify your development branch
+passes all tests as** :ref:`described<Running tests with tox>` **. If
+you are developing new code you should also implement new test cases.**
 
-Also, before PR, update your development branch to the upstream main branch.
+Also, before PR, update your development branch to the upstream main
+branch to certify there are no incompatibilities::
 
-Uniformed Tests with tox
-------------------------
+    git checkout main
+    git pull
+    git checkout <my-new-branch-with-a-nice-name>
+    git merge --no-ff main
 
-Thanks to `Tox`_ we can have a unified testing platform where all developers are forced to follow the same rules and, above all, all tests occur in a controlled Python environment. Install ``tox`` as follows:
 
-::
-
-    pip install tox tox-conda
-    # or
-    conda install tox tox-conda -c conda-forge
-
-You need to install ``tox-conda`` because that facilitates a lot the installation of MDAnalysis during testing.
-
-Before creating a Pull Request from your branch, certify that all the tests pass correctly by running:
-
-::
-
-    tox
-
-These are exactly the same tests that will be performed online in the Github Actions. Possibly, some tests referring to specific Python versions may fail because the interpreter is not installed. Ignored these tests.
-
-Also, you can run individual environments if you wish to test only specific functionalities, for example:
-
-::
-
-    tox -e lint  # code style
-    tox -e build  # packaging
-    tox -e docs  # only builds the documentation
-    tox -e prreq  # specific requests for PRs
-    tox -e py37
-
+Correct any conflicts that may appear. It there are no conflicts, you
+are good to go (Pull Request).
 
 .. _Tox: https://tox.readthedocs.io/en/latest/
-.. _MANIFEST.in: https://github.com/PicoCentauri/mda_cli/blob/main/MANIFEST.in
-.. _Fork this repository before contributing: https://github.com/PicoCentauri/mda_cli/network/members
-.. _Pull Request: https://github.com/PicoCentauri/mda_cli/pulls
-.. _PULLREQUEST.rst: https://github.com/PicoCentauri/mda_cli/blob/main/docs/PULLREQUEST.rst
-.. _Installing packages using pip and virtual environments: https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment
-.. _Anaconda: https://www.anaconda.com/
+.. _Fork this repository before contributing: https://github.com/MDAnalysis/mdacli/network/members
