@@ -504,14 +504,14 @@ def create_universe(topology,
         Customised LAMMPS `atom_style` information. Only works with
         `topology_format = data`
     dimensions : iterable of floats
-         vector that contains unit cell lengths and probable angles.
-         Expected shapes are eithere (6, 0) or (1, 6) or for
-         shapes of (3, 0) or (1, 3) all angles are set to 90 degrees.
+        vector that contains unit cell lengths and probable angles.
+        Expected shapes are eithere (6, 0) or (1, 6) or for
+        shapes of (3, 0) or (1, 3) all angles are set to 90 degrees.
 
-     Raises
-     ------
-     IndexError
-         If the dimesions of the `dimensions` argument are not 3 or 6.
+    Raises
+    ------
+    IndexError
+        If the dimesions of the `dimensions` argument are not 3 or 6.
 
     Returns
     -------
