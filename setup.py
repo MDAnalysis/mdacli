@@ -69,10 +69,13 @@ setup(
         'Topic :: System :: Shells',
         ],
     project_urls={
-        'GitHub': 'https://github.com/MDAnalysis/mdacli',
+        'Source': 'https://github.com/MDAnalysis/mdacli',
         'Documentation': 'https://mdacli.readthedocs.io/en/latest/',
         'Changelog': 'https://github.com/MDAnalysis/mdacli/blob/main/docs/CHANGELOG.rst',
         'Issue Tracker': 'https://github.com/MDAnalysis/mdacli/issues',
+        'Discord': 'https://discord.com/channels/807348386012987462/',
+        'Blog': 'https://www.mdanalysis.org/blog/',
+        'Twitter': 'https://twitter.com/mdanalysis',
         # 'Discussion Forum': '',
         },
     keywords=[
