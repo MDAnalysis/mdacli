@@ -128,13 +128,16 @@ version subtitle::
     =========
 
     new_version
-    ----------------
+    -----------
 
     * here goes my new additions
     * explain them shortly and well
 
     vX.X.X (1900-01-01)
     -------------------
+
+Note to add the correct amount of `---` dashes before the `new_version`
+subtitle.
 
 Also add your name to the authors list at :code:`docs/AUTHORS.rst`.
 
