@@ -2,8 +2,8 @@
 Changelog
 =========
 
-new_version
------------
+v0.1.1 (2021-11-18)
+------------------------------------------
 
 * corrects .bumpversion.cfg for CHANGELOG
 * updates docs/CONTRIBUTING.rst accordingly
