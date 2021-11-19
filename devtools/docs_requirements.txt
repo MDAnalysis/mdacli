@@ -1,5 +1,6 @@
 sphinx>=2.2
-sphinx-py3doc-enhanced-theme
+sphinx_rtd_theme
+sphinx_sitemap
 sphinx-argparse
 CommonMark
 mock
