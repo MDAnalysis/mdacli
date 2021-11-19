@@ -15,6 +15,8 @@ mock_modules = [
     'MDAnalysis',
     'MDAnalysis.analysis',
     'MDAnalysis.analysis.base',
+    'MDAnalysis.transformations',
+    'MDAnalysis.transformations.boxdimensions',
     'numpy',
     ]
 

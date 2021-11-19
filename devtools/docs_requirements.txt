@@ -1,6 +1,6 @@
 sphinx>=2.2
-sphinx_rtd_theme
-sphinx_sitemap
+sphinx-rtd-theme
+sphinx-sitemap
 sphinx-argparse
 CommonMark
 mock
