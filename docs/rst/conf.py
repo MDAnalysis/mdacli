@@ -59,7 +59,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 project = 'mdacli'
 year = '2021'
-author = 'Philip Loche and Joao MC Teixeira'
+author = 'Philip Loche, Joao MC Teixeira and Oliver Beckstein'
 copyright = '{0}, {1}'.format(year, author)
 version = release = '0.1.2'
 
