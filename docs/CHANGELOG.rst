@@ -8,6 +8,11 @@ new_version
 * Use Github actions matrix for test
 * Added link to discussion forum
 
+v0.1.3 (2021-11-24)
+------------------------------------------
+
+* MDA-style documentation pages (#70)
+
 v0.1.2 (2021-11-18)
 ------------------------------------------
 
