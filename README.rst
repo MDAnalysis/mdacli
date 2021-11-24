@@ -89,7 +89,7 @@ page or at the `MDAnalysis documentation`_.
 
  .. |test| image:: https://github.com/MDAnalysis/mdacli/actions/workflows/test.yml/badge.svg?branch=main
    :alt: Github Actions Build Status
-   :target: https://github.com/MDAnalysis/mdacli/actions/workflows/test.yml
+   :target: https://github.com/MDAnalysis/mdacli/actions/workflows/tests.yml
 
  .. |codecov| image:: https://codecov.io/gh/MDAnalysis/mdacli/branch/main/graph/badge.svg?token=ets2mZ6xJD
     :alt: Codecov mdacli
