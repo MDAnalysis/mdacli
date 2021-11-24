@@ -40,7 +40,7 @@ extensions = [
     ]
 
 # for sitemap with https://github.com/jdillard/sphinx-sitemap
-site_url = "https://www.mdanalysis.org/mdacli/"
+site_url = "https://www.mdacli.mdanalysis.org/"
 
 todo_include_todos = True
 
@@ -67,8 +67,8 @@ pygments_style = 'trac'
 templates_path = ['_templates']
 
 extlinks = {
-    'issue': ('https://github.com/MDAnalysis/mdacli/cissues/%s', '#'),  # noqa: E501
-    'pr': ('https://github.com/MDAnalysis/mdacli/pull/%s', 'PR #'),  # noqa: E501
+    'issue': ('https://github.com/MDAnalysis/mdacli/cissues/%s', '#'),
+    'pr': ('https://github.com/MDAnalysis/mdacli/pull/%s', 'PR #'),
     }
 
 # codecov io closes connection if host is accessed too repetitively.
@@ -76,7 +76,7 @@ extlinks = {
 # in the .travis.yml file
 # see https://github.com/codecov/codecov-python/issues/158
 linkcheck_ignore = [
-    r'https://codecov.io/gh/PicoCentauri/mda_cli/*',
+    r'https://codecov.io/gh/MDAnalysis/mdacli/*',
     ]
 
 html_theme = "sphinx_rtd_theme"
@@ -99,11 +99,12 @@ html_use_smartypants = True
 html_last_updated_fmt = '%b %d, %Y'
 html_split_index = False
 html_short_title = '%s-%s' % (project, version)
+html_baseurl = site_url
 html_logo = "_static/logos/mdacli-logo.png"
 html_favicon = "_static/logos/mdanalysis-logo.ico"
 html_static_path = ['_static']
 html_css_files = ['custom.css']
-html_use_opensearch = 'https://www.mdanalysis.org/pmdacli'
+html_use_opensearch = site_url
 
 napoleon_use_ivar = True
 napoleon_use_rtype = False

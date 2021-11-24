@@ -85,9 +85,9 @@ page or at the `MDAnalysis documentation`_.
    :alt: Powered by MDAnalysis
    :target: https://www.mdanalysis.org
 
- .. |docs| image:: https://readthedocs.org/projects/mdacli/badge/?version=latest
-   :alt: Documentation Status
-   :target: https://mdacli.readthedocs.io/en/latest/?badge=latest
+ .. |docs| image:: https://img.shields.io/badge/docs-latest-brightgreen.svg
+   :alt: Documentation (latest release)
+   :target: https://mdacli.mdanalysis.org
 
  .. |test_py37| image:: https://github.com/MDAnalysis/mdacli/actions/workflows/py37.yml/badge.svg?branch=main
    :alt: Github Actions Build Status
