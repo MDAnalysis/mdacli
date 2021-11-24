@@ -2,6 +2,11 @@
 Changelog
 =========
 
+new_version
+-----------
+
+* MDA-style documentation pages (#70)
+
 v0.1.2 (2021-11-18)
 ------------------------------------------
 
