@@ -99,12 +99,12 @@ html_use_smartypants = True
 html_last_updated_fmt = '%b %d, %Y'
 html_split_index = False
 html_short_title = '%s-%s' % (project, version)
-html_baseurl = 'https://www.mdacli.mdanalysis.org'
+html_baseurl = site_url
 html_logo = "_static/logos/mdacli-logo.png"
 html_favicon = "_static/logos/mdanalysis-logo.ico"
 html_static_path = ['_static']
 html_css_files = ['custom.css']
-html_use_opensearch = 'https://www.mdacli.mdanalysis.org'
+html_use_opensearch = site_url
 
 napoleon_use_ivar = True
 napoleon_use_rtype = False
