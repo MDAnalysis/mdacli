@@ -84,7 +84,7 @@ setup(
         'Molecular Dynamics',
         'MDAnalysis',
         ],
-    python_requires='>=3.7',
+    python_requires='>=3.7,<3.10',
     install_requires=[
         'MDAnalysis>=2.0.0',
         ],
