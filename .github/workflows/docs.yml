@@ -27,9 +27,6 @@ jobs:
     - name: Test with tox
       run: tox -e docs
 
-    - name: Install mdacli
-      run: python setup.py install
-
     - name: Deploy docs
       # if: github.event_name != 'pull_request'
       env:
@@ -43,7 +40,7 @@ jobs:
         # set up environment variables
         # export URL for the Python script $UPDATE_JSON
         export URL
-        export VERSION=$(python -c 'import mdacli; print(mdacli.__version__)')
+        export VERSION=$(grep __version__ src/mdacli/__init__.py | awk '{print $3}' | tr -d "'")
         UPDATE_JSON=$(pwd)/devtools/update_json_stubs_sitemap.py
         BRANCH="${GITHUB_REF#refs/heads/}"
 
