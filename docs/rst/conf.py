@@ -108,6 +108,10 @@ html_static_path = ['_static']
 html_css_files = ['custom.css']
 html_use_opensearch = site_url
 
+html_context = {
+    'versions_json_url': os.path.join(site_url, "versions.json")
+}
+
 napoleon_use_ivar = True
 napoleon_use_rtype = False
 napoleon_use_param = False
