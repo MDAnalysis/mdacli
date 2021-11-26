@@ -2,7 +2,7 @@
 Changelog
 =========
 
-v0.1.5 (2021-11-25)
+new_version
 -------------------
 
 * Add doc deployment to CI (#78)
