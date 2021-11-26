@@ -6,6 +6,7 @@ import os
 import mock
 import sys
 
+import msmb_theme
 import sphinx_rtd_theme
 
 
@@ -79,8 +80,9 @@ linkcheck_ignore = [
     r'https://codecov.io/gh/MDAnalysis/mdacli/*',
     ]
 
-html_theme = "sphinx_rtd_theme"
-html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+html_theme = "msmb_theme"
+html_theme_path = [msmb_theme.get_html_theme_path(),
+                   sphinx_rtd_theme.get_html_theme_path()]
 html_theme_options = {
     'canonical_url': '',
     'logo_only': True,
@@ -113,5 +115,5 @@ napoleon_use_param = False
 # Configuration for intersphinx: refer to the Python standard library
 # and other packages used by mdacli
 intersphinx_mapping = {'https://docs.python.org/': None,
-                       'https://www.mdanalysis.org/docs/': None,
+                       'https://docs.mdanalysis.org/stable/': None,
                        }
