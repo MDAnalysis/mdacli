@@ -3,11 +3,33 @@
 # Similarly by the terms of LGPL this is also in the public domain
 # Lily Wang, 2020
 #
-# This script is called by deploy_docs_via_travis.sh to:
-#  1. update versions.json
-#  2. Write some redirect stubs
-#  3. Write a sitemap.xml file for the root directory
-#
+# This is a hacky DIY of ReadTheDoc's versioned docs
+# First we use msmb_theme for the little versions up
+# This relies on a `versions.json` at the root or `base_url`
+# e.g. mdacli.mdanalysis.org/versions.json
+# versions.json consists of a List[Dict[str, str]] with the following keys:
+# version: version label
+# display: how to display in version popup
+# url: URL to documentation for that version (a subfolder)
+# latest: whether it's the latest version
+
+# The docs are pushed to the gh-pages branch
+# In the CI we make a version subfolder and
+# move the built documentation into the folder.
+# In this Python script we then update versions.json
+# with the version URL. We also determine if this is
+# the latest or development version.
+
+# If so, we copy the docs to a new subfolder:
+# stable/ or dev/ . That's so we have a stable endpoint
+# for the most up-to-date documentation at any point.
+# For stable, we also write root-level redirects.
+# i.e. mdacli.mdanalysis.org/index.html will redirect
+#      to mdacli.mdanalysis.org/stable/index.html
+
+# Finally, we create a sitemap index of
+# all the individual version sitemaps.
+
 
 import json
 import os
@@ -18,7 +40,7 @@ import glob
 import textwrap
 import shutil
 import argparse
-from typing import Callable, Optional
+from typing import Callable, Optional, Any
 
 try:
     from urllib.request import Request, urlopen
@@ -39,7 +61,7 @@ class VersionJazz:
         self.base_url = base_url
         self.version = version
         self.devlabel = devlabel
-        self.is_latest = not devlabel in version
+        self.is_latest = devlabel not in version
 
         self.versions = self.get_web_file(filename="versions.json",
                                           callback=json.loads,
@@ -48,6 +70,16 @@ class VersionJazz:
         self.development_version = self.get_development_version()
 
     def update_versions(self):
+        """Update versions.json with new version
+        and add HTML redirects to version directories
+
+        The steps followed here are:
+
+        1. Add current version to ``self.versions``
+        2. Sort versions
+        3. Add redirect stubs to latest and development versions
+        4. Write file out to versions.json
+        """
         # add new version
         self.add_current_version()
         self.latest_version = self.get_latest_version()
@@ -57,9 +89,17 @@ class VersionJazz:
         self.add_redirect_stubs_to_stable_and_dev()
         self.dump_versions()
 
-    def get_web_file(self, filename: str,
-                     callback: Callable = json.loads, default=None):
-        """Get file at URL, applying a callback to it to return"""
+    def get_web_file(
+            self,
+            filename: str,
+            callback: Callable = json.loads,
+            default: Any = None,
+            ) -> Any:
+        """Get file at URL, applying a callback to it to return data
+
+        If an error is raised, the ``default`` is returned.
+        The URL is created from ``self.base_url`` and ``filename``.
+        """
         url = os.path.join(self.base_url, filename)
         try:
             page = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
@@ -75,10 +115,13 @@ class VersionJazz:
         else:
             return callback(data)
 
-    def write_redirect(self, source_version: str,
-                       source_file: str = "",
-                       target: Optional[str] = None):
-        """Write HTML redirect stub from source_version/source_file to target"""
+    def write_redirect(
+            self,
+            source_version: str,
+            source_file: str = "",
+            target: Optional[str] = None,
+            ):
+        """Write HTML redirect from source_version/source_file to target"""
 
         if target is None:
             target = source_file
@@ -94,8 +137,8 @@ class VersionJazz:
             f.write(REDIRECT)
         print(f"Wrote redirect from {url} to {target}")
 
-    def get_version_by_criteria(self, callable: Callable) -> str:
-        """Find version satisfying particular criteria, or return last version"""
+    def get_version_by_criteria(self, callable: Callable) -> Optional[str]:
+        """Find version satisfying criteria, or return last version"""
         for ver in self.versions[::-1]:
             if callable(ver):
                 return ver["version"]
@@ -104,10 +147,10 @@ class VersionJazz:
         except IndexError:
             return None
 
-    def get_latest_version(self) -> str:
+    def get_latest_version(self) -> Optional[str]:
         return self.get_version_by_criteria(lambda x: x["latest"])
 
-    def get_development_version(self) -> str:
+    def get_development_version(self) -> Optional[str]:
         def is_dev(x):
             return (self.devlabel in x["version"]
                     and not x["version"] == self.devlabel)
@@ -117,7 +160,7 @@ class VersionJazz:
         """Update version dictionary **in place**"""
         existing = [item["version"] for item in self.versions]
 
-        if not self.version in existing:
+        if self.version not in existing:
             if self.is_latest:
                 # mark old versions *not* latest
                 for ver in self.versions:
@@ -129,7 +172,7 @@ class VersionJazz:
                 "latest": self.is_latest
                 })
 
-    def redirect_sitemap(self, target="stable"):
+    def redirect_sitemap(self, target: str = "stable"):
         """Replace paths in copied sitemap.xml with new directory path
 
         Sitemaps can only contain URLs 'within' that directory structure.
@@ -150,7 +193,7 @@ class VersionJazz:
             f.write(redirected)
         print(f"Redirected URLs in {sitemap} from {old_url} to {new_url}")
 
-    def add_or_update_version(self, version):
+    def add_or_update_version(self, version: str):
         """Add or update the version path to self.versions **in-place**"""
         for ver in self.versions:
             if ver["version"] == version:
@@ -164,15 +207,17 @@ class VersionJazz:
                 "latest": False
                 })
 
-    def copy_version(self, target="stable"):
+    def copy_version(self, target: str = "stable"):
         """Copy a version directory to target and update sitemap URLs"""
+
         shutil.copytree(self.version, target)
         print(f"Copied {self.version} to {target}")
         self.redirect_sitemap(target)
         self.add_or_update_version(target)
 
-    def write_root_redirects_to_target(self, target="stable"):
+    def write_root_redirects_to_target(self, target: str = "stable"):
         """Redirect base.url/file to base.url/target/file"""
+
         html_files = glob.glob(f"{target}/**/*.html", recursive=True)
         for file in html_files:
             # below should be true because we only globbed stable/* paths
@@ -195,6 +240,7 @@ class VersionJazz:
 
     def add_redirect_stubs_to_stable_and_dev(self):
         """Add the stable, latest, development docs by copying"""
+
         if self.is_latest:
             self.copy_version("stable")
             self.write_root_redirects_to_target("stable")
@@ -204,7 +250,7 @@ class VersionJazz:
                                 source_file="index.html",
                                 target="latest/index.html")
 
-        if self.development_version and self.development_version == self.version:
+        if self.development_version == self.version:
             self.copy_version("dev")
 
         self.write_redirect(source_version="stable",
@@ -215,7 +261,7 @@ class VersionJazz:
         with open("versions.json", "w") as f:
             json.dump(self.versions, f, indent=2)
 
-    def write_overall_sitemap(self, filename="sitemap_index.xml"):
+    def write_overall_sitemap(self, filename: str = "sitemap_index.xml"):
         """Write sitemap index for individual version sitemaps"""
         ET.register_namespace('xhtml', "http://www.w3.org/1999/xhtml")
 
