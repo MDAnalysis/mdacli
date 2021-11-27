@@ -28,12 +28,13 @@ jobs:
       run: tox -e docs
 
     - name: Deploy docs
+      if: github.event_name != 'pull_request'
       env:
         GH_USER: github-actions
         GH_EMAIL: "github-action@users.noreply.github.com"
         GH_REPOSITORY: "github.com/${{ github.repository }}.git"
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        URL: https://mdacli.minium.com.au/
+        URL: https://mdacli.mdanalysis.org
 
       run: |
         # set up environment variables
