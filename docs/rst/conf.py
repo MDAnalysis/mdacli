@@ -41,7 +41,7 @@ extensions = [
     ]
 
 # for sitemap with https://github.com/jdillard/sphinx-sitemap
-site_url = "https://www.mdacli.mdanalysis.org/"
+site_url = "https://mdacli.mdanalysis.org/"
 
 todo_include_todos = True
 
