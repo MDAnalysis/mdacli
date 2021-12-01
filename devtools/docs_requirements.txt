@@ -4,3 +4,4 @@ sphinx-sitemap
 sphinx-argparse
 CommonMark
 mock
+msmb_theme
