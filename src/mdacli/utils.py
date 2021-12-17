@@ -226,6 +226,7 @@ def parse_docs(klass):
     desc_tmp = []
 
     # regex to find parameter types
+    # TODO: CHANGE regex to allow types such like list[AtomGroup]
     type_regex = re.compile(r'^(\w+|\{.*\})|(?<=\`\~)(.*?)(?=\`)')
 
     # goes back to front to register descriptions first ;-)

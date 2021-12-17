@@ -38,6 +38,7 @@ STR_TYPE_DICT = {
     "complex": complex,
     "NoneType": type(None),
     "AtomGroup": mda.AtomGroup,
+    "list[AtomGroup]": list[mda.AtomGroup],
     "Universe": mda.Universe,
     }
 
@@ -401,40 +402,20 @@ def create_CLI(sub_parser, interface_name, parameters):
         except KeyError:
             default = None
 
-        name_par = "-" + name
         description = args_dict["desc"]
-        if issubclass(type_, (list, tuple)):
-            group.add_argument(
-                name_par,
-                dest=name,
-                default=default,
-                nargs="+",
-                help="{} (default: %(default)s)".format(description)
-                )
-        elif issubclass(type_, dict):
-            group.add_argument(
-                name_par,
-                dest=name,
-                default=None,
-                action=KwargsDict,
-                help=description,
-                )
+        arg_params = dict(help=description,
+                          default=default)
+        if issubclass(type_, dict):
+            arg_params["default"] = None
+            arg_params["action"] = KwargsDict
         elif type_ is bool:
-            group.add_argument(
-                name_par,
-                dest=name,
-                action="store_false" if default else "store_true",
-                default=default,
-                help=description,
-                )
-        elif type_ is mda.AtomGroup:
-            group.add_argument(
-                name_par,
-                dest=name,
-                type=str,
-                default=default,
-                help=description + " Use a MDAnalysis selection string."
-                )
+            arg_params["action"] = "store_false" if default else "store_true"
+        elif type_ in (mda.AtomGroup, list[mda.AtomGroup]):
+            if type_ == list[mda.AtomGroup]:
+                arg_params["nargs"] = "+"
+            
+            arg_params["type"] = str
+            arg_params["help"] += " Use a MDAnalysis selection string."
 
             # Create one reference Universe argument for atom selection
             try:
@@ -450,14 +431,13 @@ def create_CLI(sub_parser, interface_name, parameters):
 
         elif issubclass(type_, mda.Universe):
             add_cli_universe(group, name)
+            continue
         else:
-            group.add_argument(
-                name_par,
-                dest=name,
-                type=type_,
-                default=default,
-                help=f"{description} (default: %(default)s)"
-                )
+            if issubclass(type_, (list, tuple)):
+                arg_params["nargs"] = "+"
+            arg_params["help"] = "{} (default: %(default)s)".format(description)
+
+        group.add_argument("-" + name, dest=name, **arg_params)
     return
 
 
@@ -672,6 +652,16 @@ def convert_analysis_parameters(analysis_callable,
                                      f" with selection"
                                      f" `{analysis_parameters[param_name]}`"
                                      f" does not contain any atoms")
+            elif "list[AtomGroup]" in dictionary['type']:
+                for i, sel_str in enumerate(analysis_parameters[param_name]):
+                    sel = reference_universe.select_atoms(sel_str)
+                    if sel:
+                        analysis_parameters[param_name][i] = sel
+                    else:
+                        raise ValueError(f"AtomGroup `-{sel_str}`"
+                                         f" with selection `"
+                                         f"{analysis_parameters[param_name][i]}"
+                                         f"`does not contain any atoms")
             elif "Universe" in dictionary['type']:
                 # Create universe parameter dictionary from signature
                 sig = inspect.signature(create_universe)
