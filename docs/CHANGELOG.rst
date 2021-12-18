@@ -2,8 +2,8 @@
 Changelog
 =========
 
-new_version
------------
+v0.1.7 (2021-12-18)
+------------------------------------------
 * Improves regex to convert from time to frame (#81)
 
 v0.1.6 (2021-12-01)
