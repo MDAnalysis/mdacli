@@ -6,11 +6,13 @@
 # Released under the GNU Public Licence, v2 or any higher version
 # SPDX-License-Identifier: GPL-2.0-or-later
 """Test mdacli utils."""
+from collections import defaultdict
 from math import isclose
 
 import pytest
 
-from mdacli.utils import _exit_if_a_is_b, convert_str_time, split_time_unit
+from mdacli.utils import _exit_if_a_is_b, convert_str_time, split_time_unit, \
+                         parse_docs
 
 
 def test__exit_if_a_is_b():
@@ -94,3 +96,54 @@ def test_string_to_timestep_wrong(s):
     """Test correct conversion."""
     with pytest.raises(IndexError):
         split_time_unit(s)
+
+def complete_docstring(p1="foo", p2=True):
+    """One-line description.
+
+    Multi-
+    line-
+    description.
+
+    Parameters
+    ----------
+    p1 : str or int
+        Param 1 description.
+    p2 : bool
+        Param 2
+        description.
+    p3 : list[int]
+        param 3
+    """
+    summary= 'One-line description.'
+    summary_extended= 'Multi-\nline-\ndescription.'
+    params= defaultdict(dict,
+            {'p2': {'type': 'bool', 'desc': 'Param 2 description.'},
+             'p1': {'type': 'str', 'desc': 'Param 1 description.'},
+             'p3': {'type': 'list[int]', 'desc': 'param 3'}})
+    return summary, summary_extended, params
+
+
+def no_long_docstring(p1="foo", p2=True):
+    """One-line description.
+
+    Parameters
+    ----------
+    p1 : str or int
+        Param 1 description.
+    p2 : bool
+        Param 2
+        description.
+    p3 : list[int]
+        param 3
+    """
+    summary= 'One-line description.'
+    summary_extended= ''
+    params= defaultdict(dict,
+            {'p2': {'type': 'bool', 'desc': 'Param 2 description.'},
+             'p1': {'type': 'str', 'desc': 'Param 1 description.'},
+             'p3': {'type': 'list[int]', 'desc': 'param 3'}})
+    return summary, summary_extended, params
+
+@pytest.mark.parametrize("func", (complete_docstring, no_long_docstring))
+def test_parse_docstring(func):
+    assert func() == parse_docs(func)

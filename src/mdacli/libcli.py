@@ -643,25 +643,23 @@ def convert_analysis_parameters(analysis_callable,
     for param_name, dictionary in params.items():
         if param_name in analysis_parameters_keys:
             if "AtomGroup" in dictionary['type']:
-                sel = reference_universe.select_atoms(
-                    analysis_parameters[param_name])
-                if sel:
-                    analysis_parameters[param_name] = sel
+                sel = analysis_parameters[param_name]
+                atomgrp = reference_universe.select_atoms(sel)
+                if atomgrp:
+                    analysis_parameters[param_name] = atomgrp
                 else:
-                    raise ValueError(f"AtomGroup `-{param_name}`"
-                                     f" with selection"
-                                     f" `{analysis_parameters[param_name]}`"
-                                     f" does not contain any atoms")
+                    raise ValueError(f"AtomGroup `-{param_name}` with "
+                                     f"string of the selection {sel}` "
+                                     f"does not contain any atoms.")
             elif "list[AtomGroup]" in dictionary['type']:
-                for i, sel_str in enumerate(analysis_parameters[param_name]):
-                    sel = reference_universe.select_atoms(sel_str)
-                    if sel:
-                        analysis_parameters[param_name][i] = sel
+                for i, sel in enumerate(analysis_parameters[param_name]):
+                    atomgrp = reference_universe.select_atoms(sel)
+                    if atomgrp:
+                        analysis_parameters[param_name][i] = atomgrp
                     else:
-                        raise ValueError(f"AtomGroup `-{sel_str}`"
-                                         f" with selection `"
-                                         f"{analysis_parameters[param_name][i]}"
-                                         f"`does not contain any atoms")
+                        raise ValueError(f"AtomGroup `-{param_name}` with "
+                                         f"string of the selection {sel}` "
+                                         f"does not contain any atoms.")
             elif "Universe" in dictionary['type']:
                 # Create universe parameter dictionary from signature
                 sig = inspect.signature(create_universe)
