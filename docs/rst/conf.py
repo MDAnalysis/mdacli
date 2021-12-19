@@ -6,6 +6,7 @@ import os
 import mock
 import sys
 
+import msmb_theme
 import sphinx_rtd_theme
 
 
@@ -40,7 +41,7 @@ extensions = [
     ]
 
 # for sitemap with https://github.com/jdillard/sphinx-sitemap
-site_url = "https://www.mdacli.mdanalysis.org/"
+site_url = "https://mdacli.mdanalysis.org/"
 
 todo_include_todos = True
 
@@ -61,7 +62,7 @@ project = 'mdacli'
 year = '2021'
 author = 'Philip Loche, Joao MC Teixeira and Oliver Beckstein'
 copyright = '{0}, {1}'.format(year, author)
-version = release = '0.1.4'
+version = release = '0.1.7'
 
 pygments_style = 'trac'
 templates_path = ['_templates']
@@ -79,8 +80,9 @@ linkcheck_ignore = [
     r'https://codecov.io/gh/MDAnalysis/mdacli/*',
     ]
 
-html_theme = "sphinx_rtd_theme"
-html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+html_theme = "msmb_theme"
+html_theme_path = [msmb_theme.get_html_theme_path(),
+                   sphinx_rtd_theme.get_html_theme_path()]
 html_theme_options = {
     'canonical_url': '',
     'logo_only': True,
@@ -106,6 +108,10 @@ html_static_path = ['_static']
 html_css_files = ['custom.css']
 html_use_opensearch = site_url
 
+html_context = {
+    'versions_json_url': os.path.join(site_url, "versions.json")
+}
+
 napoleon_use_ivar = True
 napoleon_use_rtype = False
 napoleon_use_param = False
@@ -113,5 +119,5 @@ napoleon_use_param = False
 # Configuration for intersphinx: refer to the Python standard library
 # and other packages used by mdacli
 intersphinx_mapping = {'https://docs.python.org/': None,
-                       'https://www.mdanalysis.org/docs/': None,
+                       'https://docs.mdanalysis.org/stable/': None,
                        }

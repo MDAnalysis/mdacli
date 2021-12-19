@@ -22,12 +22,36 @@ def _exit_if_a_is_b(obj1, obj2, msg):
         sys.exit(msg)
 
 
-def convert_str_time(x, dt):
+def split_time_unit(s):
+    """
+    Split time and units.
+
+    Follows the regex:: https://regex101.com/r/LZAbil/2
+
+    Returns
+    -------
+    tuple (float, str)
+        Value as float, units as str.
+
+    Raises
+    ------
+    IndexError
+        Tuple could not be found. This happens when a number is not
+        present in the start of the string.
+    """
+    type_regex = re.compile(r'^(\-?\d+\.?\d*|\-?\.\d+|\-?\.?\d+[eE]\-?\d+|-?\d+\.?\d*[eE]\d+)($|[a-z]*$)')  # noqa: E501
+    value, unit = type_regex.findall(s)[0]
+    return float(value), unit
+
+
+def convert_str_time(x, dt, base_unit='ps'):
     """
     Convert a string `x` into a frame number based on given `dt`.
 
     If `x` does not contain any units its assumed to be a frame number
     already.
+
+    See :func:`split_time_unit`.
 
     Parameters
     ----------
@@ -46,24 +70,17 @@ def convert_str_time(x, dt):
     ValueError
         The input does not contain any units but is not an integer.
     """
-    # regex to split value and units while handling scientific input
-    type_regex = re.compile(r'((-?\d{1,}e?E?-?\d*)|[a-z]*$)')
-    val_, unit_, *_ = type_regex.findall(x)
-
-    try:
-        val, unit = float(val_[0]), unit_[0]
-        if unit != "":
-            val = mda.units.convert(val, unit, "ps")
-            frame = int(val // dt)
-        else:
-            frame = int(val)
-    except (TypeError, ValueError):
+    val, unit = split_time_unit(x)
+    if unit != "":
+        val = mda.units.convert(val, unit, "ps")
+        return int(val // dt)
+    elif val % 1 != 0:  # the number is not int'able
         raise ValueError(
             "Only integers or time step combinations (´12ps´) "
             "are valid for frame selection"
             )
-
-    return frame
+    else:
+        return int(val)
 
 
 def parse_callable_signature(callable_obj):
