@@ -38,7 +38,7 @@ def main():
                  'InterRDF_s']
 
     mdacli.cli(name="MDAnalysis",
-               module_list=__all__,
+               module_list=[f'MDAnalysis.analysis.{m}' for m in __all__],
                version=mdacli.__version__,
                description=__doc__,
                skip_modules=skip_mods,

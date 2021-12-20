@@ -20,7 +20,7 @@ from MDAnalysis.analysis.base import AnalysisBase
 from MDAnalysis.transformations.boxdimensions import set_dimensions
 
 from .colors import Emphasise
-from .save import save_results
+from .save import save
 from .utils import convert_str_time, parse_callable_signature, parse_docs
 
 
@@ -124,7 +124,7 @@ def find_AnalysisBase_members(modules,
         if not ignore_warnings:
             warnings.simplefilter('ignore')
         members = find_classes_in_modules(
-            AnalysisBase, *[f'MDAnalysis.analysis.{m}' for m in modules])
+            AnalysisBase, *[m for m in modules])
     return members
 
 
@@ -368,7 +368,12 @@ def create_CLI(sub_parser, interface_name, parameters):
 
     # adds only if `save` method does not exist
     if not getattr(parameters['callable'], 'save', False):
+        logger.debug("No save method found. Use generic one.")
+        # TODO: add our save function as method. Avoids try except later...
         add_output_group(analysis_class_parser)
+    else:
+        # TODO: add parameters from save function to parser
+        pass
 
     # add positional and optional arguments
     pos_ = sorted(list(parameters["positional"].items()), key=lambda x: x[0])
@@ -582,14 +587,14 @@ def run_analsis(analysis_callable,
 
     # Save results
     try:
-        ac.save_results()
+        ac.save()
 
     except AttributeError:
         directory = output_parameters.get("output_directory", "")
         fname = output_parameters.get("output_prefix", "")
         fname = f"{fname}_{analysis_callable.__name__}" if fname \
             else analysis_callable.__name__
-        save_results(ac.results, os.path.join(directory, fname))
+        save(ac.results, os.path.join(directory, fname))
 
     return ac
 
@@ -642,7 +647,7 @@ def convert_analysis_parameters(analysis_callable,
 
     for param_name, dictionary in params.items():
         if param_name in analysis_parameters_keys:
-            if "AtomGroup" in dictionary['type']:
+            if "AtomGroup" == dictionary['type']:
                 sel = analysis_parameters[param_name]
                 atomgrp = reference_universe.select_atoms(sel)
                 if atomgrp:
@@ -651,7 +656,7 @@ def convert_analysis_parameters(analysis_callable,
                     raise ValueError(f"AtomGroup `-{param_name}` with "
                                      f"string of the selection {sel}` "
                                      f"does not contain any atoms.")
-            elif "list[AtomGroup]" in dictionary['type']:
+            elif "list[AtomGroup]" == dictionary['type']:
                 for i, sel in enumerate(analysis_parameters[param_name]):
                     atomgrp = reference_universe.select_atoms(sel)
                     if atomgrp:
@@ -660,7 +665,8 @@ def convert_analysis_parameters(analysis_callable,
                         raise ValueError(f"AtomGroup `-{param_name}` with "
                                          f"string of the selection {sel}` "
                                          f"does not contain any atoms.")
-            elif "Universe" in dictionary['type']:
+
+            elif "Universe" == dictionary['type']:
                 # Create universe parameter dictionary from signature
                 sig = inspect.signature(create_universe)
                 universe_parameters = dict(sig.parameters)

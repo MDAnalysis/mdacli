@@ -77,6 +77,7 @@ def cli(name,
     modules = find_AnalysisBase_members(module_list,
                                         ignore_warnings=ignore_warnings)
 
+    skip_modules = [] if skip_modules is None else skip_modules
     modules = [mod for mod in modules if mod.__name__ not in skip_modules]
     _exit_if_a_is_b(modules, None, "No analysis modules founds.")
 
@@ -119,6 +120,7 @@ def cli(name,
             # Some parameters may not exist
             arg_grouped_dict.setdefault("Optional Parameters", {})
             arg_grouped_dict.setdefault("Reference Universe Parameters", None)
+            arg_grouped_dict.setdefault("Output Parameters", {})
 
             run_analsis(analysis_callable,
                         arg_grouped_dict["Mandatory Parameters"],

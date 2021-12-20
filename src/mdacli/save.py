@@ -17,7 +17,7 @@ import numpy as np
 from MDAnalysis.analysis.base import Results
 
 
-def save_results(results, fprefix="mdacli_results"):
+def save(results, fprefix="mdacli_results"):
     """
     Save the attributes of a results instance to disk.
 
