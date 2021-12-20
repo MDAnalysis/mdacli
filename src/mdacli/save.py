@@ -277,7 +277,7 @@ def save_Results_object(results, fprefix='results', remove=True):
     keys = []
     for key, value in results.items():
         if isinstance(value, Results):
-            save_results(f"{fprefix}_{key}", value)
+            save(f"{fprefix}_{key}", value)
             keys.append(key)
 
     return return_with_remove(results, keys, remove)

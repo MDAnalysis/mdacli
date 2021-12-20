@@ -94,7 +94,7 @@ def find_classes_in_modules(cls, *module_names):
 
     Returns
     -------
-    list 
+    list
     list of found class objects. If no classes are found, return None.
     """
     # Convert all cls to tuples
@@ -422,7 +422,7 @@ def create_CLI(sub_parser, interface_name, parameters):
         elif type_ in (mda.AtomGroup, list[mda.AtomGroup]):
             if type_ == list[mda.AtomGroup]:
                 arg_params["nargs"] = "+"
-            
+
             arg_params["type"] = str
             arg_params["help"] += " Use a MDAnalysis selection string."
 
@@ -444,7 +444,7 @@ def create_CLI(sub_parser, interface_name, parameters):
         else:
             if issubclass(type_, (list, tuple)):
                 arg_params["nargs"] = "+"
-            arg_params["help"] = "{} (default: %(default)s)".format(description)
+            arg_params["help"] = f"{description} (default: %(default)s)"
 
         group.add_argument("-" + name, dest=name, **arg_params)
     return
