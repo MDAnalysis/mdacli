@@ -19,7 +19,6 @@ Documentation for each module can be found at the respective sections on the
 .. _`MDAnalysis Documentation`:
    https://docs.mdanalysis.org/stable/documentation_pages/analysis_modules.html
 """
-
 from MDAnalysis.analysis import __all__
 
 import mdacli

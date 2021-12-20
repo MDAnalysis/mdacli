@@ -16,7 +16,6 @@ import os
 import warnings
 
 import MDAnalysis as mda
-from MDAnalysis.analysis.base import AnalysisBase
 from MDAnalysis.transformations.boxdimensions import set_dimensions
 
 from .colors import Emphasise
@@ -78,15 +77,15 @@ class KwargsDict(argparse.Action):
         setattr(namespace, self.dest, jdict)
 
 
-def find_classes_in_modules(klass, *module_names):
+def find_classes_in_modules(cls, *module_names):
     """
-    Find classes in modules.
+    Find classes that belong to cls in modules.
 
     A series of names can be given as arguments.
 
     Parameters
     ----------
-    klass : class type
+    cls : single class or list of classes
         The class type to search for.
 
     module_names : str
@@ -95,26 +94,32 @@ def find_classes_in_modules(klass, *module_names):
 
     Returns
     -------
-    list of found class objects.
-    If no classes are found, return None.
+    list 
+    list of found class objects. If no classes are found, return None.
     """
+    # Convert all cls to tuples
+    if type(cls) not in (list, tuple):
+        cls = [cls]
     members = []
     for name in module_names:
         module = importlib.import_module(name)
         for _, member in inspect.getmembers(module):
-            if inspect.isclass(member) and issubclass(member, klass) \
-               and member is not klass:
+            if inspect.isclass(member) and issubclass(member, tuple(cls)) \
+               and member not in cls:
                 members.append(member)
 
     return members or None
 
 
-def find_AnalysisBase_members(modules,
-                              ignore_warnings=False):
-    """Find Analysis Base members in modules.
+def find_cls_members(cls,
+                     modules,
+                     ignore_warnings=False):
+    """Find members of a certain class in modules.
 
     Parameters
     ----------
+    cls : class or list of classes
+        class to list of classes to be searched for
     modules : list
         list of modules for which members should be searched for
     ignore_warnings : bool
@@ -123,8 +128,7 @@ def find_AnalysisBase_members(modules,
     with warnings.catch_warnings():
         if not ignore_warnings:
             warnings.simplefilter('ignore')
-        members = find_classes_in_modules(
-            AnalysisBase, *[m for m in modules])
+        members = find_classes_in_modules(cls, *[m for m in modules])
     return members
 
 
