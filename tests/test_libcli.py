@@ -35,8 +35,8 @@ from mdacli.libcli import (
     add_run_group,
     convert_analysis_parameters,
     create_universe,
-    find_AnalysisBase_members,
     find_classes_in_modules,
+    find_cls_members,
     init_base_argparse,
     run_analsis,
     setup_clients,
@@ -101,23 +101,38 @@ def test_KwargsDict_error(s, error, msg):
         ap.parse_args(s.split())
 
 
-def test_find_AnalysisBase_members():
+def test_find_cls_members():
     """Test several input modules."""
     names = ["helix_analysis", "lineardensity"]
-    members = find_AnalysisBase_members(names)
+    members = find_cls_members(AnalysisBase,
+                               [f'MDAnalysis.analysis.{m}' for m in names])
     assert members[0] is HELANAL
     assert members[1] is LinearDensity
 
 
-def test_find_AnalysisBase_members_single():
+@pytest.mark.parametrize(
+    'cls',
+    [AnalysisBase, [AnalysisBase, AnalysisBase], (AnalysisBase, AnalysisBase)])
+def test_find_cls_members_single(cls):
     """Test one input module."""
-    members = find_AnalysisBase_members(['rdf'])
+    members = find_cls_members(cls, ['MDAnalysis.analysis.rdf'])
 
     assert members[0] is InterRDF
     assert members[1] is InterRDF_s
 
 
-def test_find_AnalysisBase_members_None():
+@pytest.mark.parametrize(
+    'cls',
+    [AnalysisBase, [AnalysisBase, AnalysisBase], (AnalysisBase, AnalysisBase)])
+def test_find_classes_in_modules(cls):
+    """Test for finding classes in modules."""
+    members = find_classes_in_modules(cls, 'MDAnalysis.analysis.rdf')
+
+    assert members[0] is InterRDF
+    assert members[1] is InterRDF_s
+
+
+def test_find_classes_in_modules_None():
     """Test that no module is found."""
     members = find_classes_in_modules(AnalysisBase, "MDAnalysis")
 
@@ -235,7 +250,9 @@ def test_setup_clients(opt, dest, val):
     else:
         testargs.append(str(val))
 
-    members = find_AnalysisBase_members(__all__)
+    members = find_cls_members(modules=[f'MDAnalysis.analysis.{m}'
+                                        for m in __all__],
+                               cls=AnalysisBase)
     actual_mods = ["RMSF", "InterRDF", "LinearDensity"]
     members = [mem for mem in members if mem.__name__ in actual_mods]
 
@@ -524,3 +541,9 @@ class Test_run_analsis:
                 output_parameters=output_parameters)
 
             os.path.isfile("foo_InterRDF_count_bins_rdf.csv")
+
+
+class Test_create_CLI():
+    """Test class for CLI creation."""
+
+    pass

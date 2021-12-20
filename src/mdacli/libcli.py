@@ -86,7 +86,7 @@ def find_classes_in_modules(cls, *module_names):
     Parameters
     ----------
     cls : single class or list of classes
-        The class type to search for.
+        parent reference class type to search for
 
     module_names : str
         module to import import in absolute or relative terms
@@ -119,7 +119,7 @@ def find_cls_members(cls,
     Parameters
     ----------
     cls : class or list of classes
-        class to list of classes to be searched for
+        parent reference class or list of classes to be searched for
     modules : list
         list of modules for which members should be searched for
     ignore_warnings : bool
