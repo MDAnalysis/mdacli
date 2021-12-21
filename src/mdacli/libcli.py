@@ -14,6 +14,7 @@ import json
 import logging
 import os
 import warnings
+from typing import List
 
 import MDAnalysis as mda
 from MDAnalysis.transformations.boxdimensions import set_dimensions
@@ -35,9 +36,9 @@ STR_TYPE_DICT = {
     "int": int,
     "float": float,
     "complex": complex,
-    "NoneType": type(None),
+    "NoneType": None,
     "AtomGroup": mda.AtomGroup,
-    "list[AtomGroup]": list[mda.AtomGroup],
+    "list[AtomGroup]": List[mda.AtomGroup],
     "Universe": mda.Universe,
     }
 
@@ -414,13 +415,13 @@ def create_CLI(sub_parser, interface_name, parameters):
         description = args_dict["desc"]
         arg_params = dict(help=description,
                           default=default)
-        if issubclass(type_, dict):
+        if type_ is dict:
             arg_params["default"] = None
             arg_params["action"] = KwargsDict
         elif type_ is bool:
             arg_params["action"] = "store_false" if default else "store_true"
-        elif type_ in (mda.AtomGroup, list[mda.AtomGroup]):
-            if type_ == list[mda.AtomGroup]:
+        elif type_ in (mda.AtomGroup, List[mda.AtomGroup]):
+            if type_ == List[mda.AtomGroup]:
                 arg_params["nargs"] = "+"
 
             arg_params["type"] = str
@@ -438,11 +439,11 @@ def create_CLI(sub_parser, interface_name, parameters):
                                     " used for atom selection.")
                 add_cli_universe(reference_universe_group)
 
-        elif issubclass(type_, mda.Universe):
+        elif type_ is mda.Universe:
             add_cli_universe(group, name)
             continue
         else:
-            if issubclass(type_, (list, tuple)):
+            if type_ in (list, tuple):
                 arg_params["nargs"] = "+"
             arg_params["help"] = f"{description} (default: %(default)s)"
 
