@@ -2,6 +2,11 @@
 Changelog
 =========
 
+new_version
+------------------------------------------
+
+* Improved help for run parameters (#83)
+
 v0.1.7 (2021-12-18)
 ------------------------------------------
 * Improves regex to convert from time to frame (#81)

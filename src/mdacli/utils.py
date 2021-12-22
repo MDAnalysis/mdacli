@@ -44,7 +44,7 @@ def split_time_unit(s):
     return float(value), unit
 
 
-def convert_str_time(x, dt, base_unit='ps'):
+def convert_str_time(x, dt):
     """
     Convert a string `x` into a frame number based on given `dt`.
 
