@@ -34,8 +34,8 @@ from mdacli.libcli import (
     add_output_group,
     add_run_group,
     convert_analysis_parameters,
-    create_universe,
     create_cli,
+    create_universe,
     find_classes_in_modules,
     find_cls_members,
     init_base_argparse,
@@ -551,26 +551,31 @@ class Test_create_cli():
 
     @pytest.fixture()
     def subparser(self):
+        """Create basic subparser."""
         ap = argparse.ArgumentParser()
         return ap.add_subparsers()
 
     @pytest.fixture()
     def callable_signature(self):
+        """Signature and docstring dictionary of `complete_docstring`."""
         return parse_callable_signature(complete_docstring)
 
     @pytest.fixture
     def cli(self, subparser, callable_signature):
+        """Inject argument into subparser."""
         create_cli(sub_parser=subparser,
-                          interface_name="foo",
-                          parameters=callable_signature)
+                   interface_name="foo",
+                   parameters=callable_signature)
         return subparser.choices["foo"]
 
     def test_description(self, cli, callable_signature):
-        desc = callable_signature["desc"] 
+        """Test parser description."""
+        desc = callable_signature["desc"]
         desc += "\n\n" + callable_signature["desc_long"]
         assert cli.description == desc
 
     def test_args(self, cli):
+        """Test if parser arguments exist and if their type is correct."""
         args = cli.parse_known_args()[0]
 
         # Test for specific arguments
