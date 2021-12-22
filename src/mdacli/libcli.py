@@ -315,7 +315,7 @@ def add_cli_universe(parser, name=''):
         "box (α = β = γ = 90°).")
 
 
-def create_CLI(sub_parser, interface_name, parameters):
+def create_cli(sub_parser, interface_name, parameters):
     """
     Add subparsers to `cli_parser`.
 
@@ -709,7 +709,7 @@ def setup_clients(ap, title, members):
     # adds each Analysis class/function as a CLI under 'cli_subparser'
     # to be writen
     for member_name, parameters in analysis_interfaces.items():
-        create_CLI(sub_parser=cli_subparser,
+        create_cli(sub_parser=cli_subparser,
                    interface_name=member_name.lower(),
                    parameters=parameters)
 

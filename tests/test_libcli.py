@@ -543,7 +543,10 @@ class Test_run_analsis:
             os.path.isfile("foo_InterRDF_count_bins_rdf.csv")
 
 
-class Test_create_CLI():
+class Test_create_cli():
     """Test class for CLI creation."""
 
-    pass
+    @pytest.fixture()
+    def subparser():
+        ap = argparse.ArgumentParser()
+        return ap.add_subparsers()
