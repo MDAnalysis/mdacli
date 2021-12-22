@@ -35,6 +35,7 @@ from mdacli.libcli import (
     add_run_group,
     convert_analysis_parameters,
     create_universe,
+    create_cli,
     find_classes_in_modules,
     find_cls_members,
     init_base_argparse,
@@ -42,8 +43,10 @@ from mdacli.libcli import (
     setup_clients,
     split_argparse_into_groups,
     )
+from mdacli.utils import parse_callable_signature
 
 from . import example_json
+from .test_utils import complete_docstring
 
 
 @pytest.mark.parametrize(
@@ -547,6 +550,34 @@ class Test_create_cli():
     """Test class for CLI creation."""
 
     @pytest.fixture()
-    def subparser():
+    def subparser(self):
         ap = argparse.ArgumentParser()
         return ap.add_subparsers()
+
+    @pytest.fixture()
+    def callable_signature(self):
+        return parse_callable_signature(complete_docstring)
+
+    @pytest.fixture
+    def cli(self, subparser, callable_signature):
+        create_cli(sub_parser=subparser,
+                          interface_name="foo",
+                          parameters=callable_signature)
+        return subparser.choices["foo"]
+
+    def test_description(self, cli, callable_signature):
+        desc = callable_signature["desc"] 
+        desc += "\n\n" + callable_signature["desc_long"]
+        assert cli.description == desc
+
+    def test_args(self, cli):
+        args = cli.parse_known_args()[0]
+
+        # Test for specific arguments
+        assert args.p0 is None
+        assert args.p1 == "foo"
+
+        # Test for default arguments
+        args.start
+        args.verbose
+        args.output_prefix
