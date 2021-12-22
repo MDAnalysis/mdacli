@@ -429,6 +429,26 @@ class Test_convert_analysis_parameters:
             reference_universe=universe)
         assert not analysis_parameters
 
+    def test_multi_atomgroup(self, universe):
+        selection_keywords = ["name OW", "name HW*"]
+        analysis_parameters = {"p0": ["name OW", "name HW*"]}
+
+        convert_analysis_parameters(analysis_callable=complete_docstring,
+                                    analysis_parameters=analysis_parameters,
+                                    reference_universe=universe)
+
+        for i, sel in enumerate(selection_keywords):
+            assert universe.select_atoms(sel) == analysis_parameters["p0"][i]
+
+
+    def test_multi_atomgroup_fail(self, universe):
+        analysis_parameters = {"p0": ["name foo",]}
+
+        with pytest.raises(ValueError, match="AtomGroup `-p0` with "):
+            convert_analysis_parameters(
+                analysis_callable=complete_docstring,
+                analysis_parameters=analysis_parameters,
+                reference_universe=universe)
 
 class Test_run_analsis:
     """Test class for analyze_data."""

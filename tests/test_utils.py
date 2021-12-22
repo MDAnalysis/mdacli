@@ -112,7 +112,7 @@ def complete_docstring(p0, p1="foo", p2=True):
 
     Parameters
     ----------
-    p0 : list[int]
+    p0 : list[AtomGroup]
         Param 0 is a list
     p1 : str or int
         Param 1 description.
@@ -126,7 +126,7 @@ def complete_docstring(p0, p1="foo", p2=True):
                                        'desc': 'Param 2 description.'},
                                 'p1': {'type': 'str',
                                        'desc': 'Param 1 description.'},
-                                'p0': {'type': 'list[int]',
+                                'p0': {'type': 'list[AtomGroup]',
                                        'desc': 'Param 0 is a list'}})
     return summary, summary_extended, params
 
@@ -136,7 +136,7 @@ def no_long_docstring(p0, p1="foo", p2=True):
 
     Parameters
     ----------
-    p0 : list[int]
+    p0 : list[AtomGroup]
         Param 0 is a list
     p1 : str or int
         Param 1 description.
@@ -150,7 +150,7 @@ def no_long_docstring(p0, p1="foo", p2=True):
                                        'desc': 'Param 2 description.'},
                                 'p1': {'type': 'str',
                                        'desc': 'Param 1 description.'},
-                                'p0': {'type': 'list[int]',
+                                'p0': {'type': 'list[AtomGroup]',
                                        'desc': 'Param 0 is a list'}})
     return summary, summary_extended, params
 
