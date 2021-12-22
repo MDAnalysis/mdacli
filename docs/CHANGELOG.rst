@@ -5,7 +5,7 @@ Changelog
 new_version
 -----------
 
-* Use Github actions matrix for test
+* Use Github actions matrix for tests
 * Added link to discussion forum
 
 v0.1.3 (2021-11-24)
