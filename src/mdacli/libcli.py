@@ -420,6 +420,7 @@ def create_cli(sub_parser, interface_name, parameters):
             arg_params["action"] = KwargsDict
         elif type_ is bool:
             arg_params["action"] = "store_false" if default else "store_true"
+            arg_params["help"] = f"{description} (default: %(default)s)"
         elif type_ in (mda.AtomGroup, List[mda.AtomGroup]):
             if type_ == List[mda.AtomGroup]:
                 arg_params["nargs"] = "+"
@@ -446,6 +447,7 @@ def create_cli(sub_parser, interface_name, parameters):
             if type_ in (list, tuple):
                 arg_params["nargs"] = "+"
             arg_params["help"] = f"{description} (default: %(default)s)"
+            arg_params["type"] = type_
 
         group.add_argument("-" + name, dest=name, **arg_params)
     return
