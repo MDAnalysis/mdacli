@@ -603,6 +603,8 @@ class Test_create_cli():
         # Test for specific arguments
         assert args.p0 is None
         assert args.p1 == "foo"
+        assert args.p2 == True
+        assert args.p3 == 42
 
         # Test for default arguments
         args.start

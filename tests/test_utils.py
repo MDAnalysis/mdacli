@@ -103,7 +103,7 @@ def test_string_to_timestep_wrong(s):
         split_time_unit(s)
 
 
-def complete_docstring(p0, p1="foo", p2=True):
+def complete_docstring(p0, p1="foo", p2=True, p3=42):
     """One-line description.
 
     Multi-
@@ -119,10 +119,15 @@ def complete_docstring(p0, p1="foo", p2=True):
     p2 : bool
         Param 2
         description.
+    p3 : int
+        Param 3
+        description.
     """
     summary = 'One-line description.'
     summary_extended = 'Multi-\nline-\ndescription.'
-    params = defaultdict(dict, {'p2': {'type': 'bool',
+    params = defaultdict(dict, {'p3': {'type': 'int',
+                                       'desc': 'Param 3 description.'},
+                                'p2': {'type': 'bool',
                                        'desc': 'Param 2 description.'},
                                 'p1': {'type': 'str',
                                        'desc': 'Param 1 description.'},
@@ -173,6 +178,7 @@ def test_parse_callable_signature():
     optional = {'p1': params['p1'], 'p2': params['p2']}
     optional["p1"]["default"] = "foo"
     optional["p2"]["default"] = True
+    optional["p3"]["default"] = int
 
     assert parameters['callable'] == complete_docstring
     assert parameters['positional'] == {'p0': params['p0']}
