@@ -6,6 +6,7 @@ import os
 import mock
 import sys
 
+import msmb_theme
 import sphinx_rtd_theme
 
 
@@ -40,7 +41,7 @@ extensions = [
     ]
 
 # for sitemap with https://github.com/jdillard/sphinx-sitemap
-site_url = "https://www.mdanalysis.org/mdacli/"
+site_url = "https://mdacli.mdanalysis.org/"
 
 todo_include_todos = True
 
@@ -61,14 +62,14 @@ project = 'mdacli'
 year = '2021'
 author = 'Philip Loche, Joao MC Teixeira and Oliver Beckstein'
 copyright = '{0}, {1}'.format(year, author)
-version = release = '0.1.3'
+version = release = '0.1.7'
 
 pygments_style = 'trac'
 templates_path = ['_templates']
 
 extlinks = {
-    'issue': ('https://github.com/MDAnalysis/mdacli/cissues/%s', '#'),  # noqa: E501
-    'pr': ('https://github.com/MDAnalysis/mdacli/pull/%s', 'PR #'),  # noqa: E501
+    'issue': ('https://github.com/MDAnalysis/mdacli/cissues/%s', '#'),
+    'pr': ('https://github.com/MDAnalysis/mdacli/pull/%s', 'PR #'),
     }
 
 # codecov io closes connection if host is accessed too repetitively.
@@ -76,11 +77,12 @@ extlinks = {
 # in the .travis.yml file
 # see https://github.com/codecov/codecov-python/issues/158
 linkcheck_ignore = [
-    r'https://codecov.io/gh/PicoCentauri/mda_cli/*',
+    r'https://codecov.io/gh/MDAnalysis/mdacli/*',
     ]
 
-html_theme = "sphinx_rtd_theme"
-html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+html_theme = "msmb_theme"
+html_theme_path = [msmb_theme.get_html_theme_path(),
+                   sphinx_rtd_theme.get_html_theme_path()]
 html_theme_options = {
     'canonical_url': '',
     'logo_only': True,
@@ -99,11 +101,16 @@ html_use_smartypants = True
 html_last_updated_fmt = '%b %d, %Y'
 html_split_index = False
 html_short_title = '%s-%s' % (project, version)
+html_baseurl = site_url
 html_logo = "_static/logos/mdacli-logo.png"
 html_favicon = "_static/logos/mdanalysis-logo.ico"
 html_static_path = ['_static']
 html_css_files = ['custom.css']
-html_use_opensearch = 'https://www.mdanalysis.org/pmdacli'
+html_use_opensearch = site_url
+
+html_context = {
+    'versions_json_url': os.path.join(site_url, "versions.json")
+}
 
 napoleon_use_ivar = True
 napoleon_use_rtype = False
@@ -112,5 +119,5 @@ napoleon_use_param = False
 # Configuration for intersphinx: refer to the Python standard library
 # and other packages used by mdacli
 intersphinx_mapping = {'https://docs.python.org/': None,
-                       'https://www.mdanalysis.org/docs/': None,
+                       'https://docs.mdanalysis.org/stable/': None,
                        }

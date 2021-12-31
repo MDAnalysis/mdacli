@@ -8,6 +8,26 @@ new_version
 * Use Github actions matrix for tests
 * Added link to discussion forum
 
+v0.1.7 (2021-12-18)
+------------------------------------------
+* Improves regex to convert from time to frame (#81)
+
+v0.1.6 (2021-12-01)
+-------------------------------------------
+
+* Fixed URL in docs (#80)
+
+v0.1.5 (2021-12-01)
+--------------------------------------------------
+
+* Add doc deployment to CI (#78)
+
+v0.1.4 (2021-11-24)
+-------------------------------------------------------------------------
+
+* Link docs to mdacli.mdanalysis.org (#75)
+>>>>>>> main
+
 v0.1.3 (2021-11-24)
 ------------------------------------------
 
