@@ -678,7 +678,7 @@ class Test_create_cli():
         parameters["optional"] = opt_params
 
         cli = self.cli(parameters)
-        
+
         titles = [a.title for a in cli._action_groups]
         assert "Reference Universe Parameters" in titles
 
