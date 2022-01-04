@@ -175,10 +175,10 @@ def test_parse_callable_signature():
     """Test callable signature parsing."""
     parameters = parse_callable_signature(complete_docstring)
     summary, summary_extended, params = parse_docs(complete_docstring)
-    optional = {'p1': params['p1'], 'p2': params['p2']}
+    optional = {'p1': params['p1'], 'p2': params['p2'], 'p3': params['p3']}
     optional["p1"]["default"] = "foo"
     optional["p2"]["default"] = True
-    optional["p3"]["default"] = int
+    optional["p3"]["default"] = 42
 
     assert parameters['callable'] == complete_docstring
     assert parameters['positional'] == {'p0': params['p0']}

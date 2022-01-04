@@ -43,7 +43,6 @@ from mdacli.libcli import (
     setup_clients,
     split_argparse_into_groups,
     )
-from mdacli.utils import parse_callable_signature
 
 from . import example_json
 from .test_utils import complete_docstring
@@ -571,42 +570,126 @@ class Test_run_analsis:
 class Test_create_cli():
     """Test class for CLI creation."""
 
-    @pytest.fixture()
-    def subparser(self):
-        """Create basic subparser."""
-        ap = argparse.ArgumentParser()
-        return ap.add_subparsers()
-
-    @pytest.fixture()
-    def callable_signature(self):
-        """Signature and docstring dictionary of `complete_docstring`."""
-        return parse_callable_signature(complete_docstring)
-
     @pytest.fixture
-    def cli(self, subparser, callable_signature):
+    def parameters(self):
+        """Inject key,value pair into parameter dictionary."""
+        p = {'callable': lambda x: x,
+             'desc': "foo",
+             "desc_long": "bar",
+             "positional": {"pp": {'desc': 'pp desc'}},
+             "optional": {"po": {'desc': 'po desc'}}
+             }
+        return p
+
+    def cli(self, parameters):
         """Inject argument into subparser."""
+        ap = argparse.ArgumentParser()
+        subparser = ap.add_subparsers()
+
         create_cli(sub_parser=subparser,
                    interface_name="foo",
-                   parameters=callable_signature)
+                   parameters=parameters)
         return subparser.choices["foo"]
 
-    def test_description(self, cli, callable_signature):
+    def test_description(self, parameters):
         """Test parser description."""
-        desc = callable_signature["desc"]
-        desc += "\n\n" + callable_signature["desc_long"]
+        cli = self.cli(parameters)
+
+        desc = parameters["desc"]
+        desc += "\n\n" + parameters["desc_long"]
         assert cli.description == desc
 
-    def test_args(self, cli):
-        """Test if parser arguments exist and if their type is correct."""
+    @pytest.mark.parametrize(
+        "attr",
+        ["start", "stop", "step", "verbose",
+         "output_prefix", "output_directory"])
+    def test_common_args(self, parameters, attr):
+        """Test common cli parameters."""
+        cli = self.cli(parameters)
+
         args = cli.parse_known_args()[0]
 
-        # Test for specific arguments
-        assert args.p0 is None
-        assert args.p1 == "foo"
-        assert args.p2 == True
-        assert args.p3 == 42
+        getattr(args, attr)
 
-        # Test for default arguments
-        args.start
-        args.verbose
-        args.output_prefix
+    def test_add_output_group(self, parameters):
+        """Test if `save` not added."""
+        callable = type('', (), {})()
+        callable.save = True
+        parameters["callable"] = callable
+
+        cli = self.cli(parameters)
+        args = cli.parse_known_args()[0]
+
+        with pytest.raises(AttributeError):
+            args.output_directory
+
+    @pytest.mark.parametrize("argument", ("positional", "optional"))
+    @pytest.mark.parametrize("val_type, arg_type, value",
+                             [("bool", None, False),
+                              ("str", str, "foo"),
+                              ("list", list, None),
+                              ("tuple", tuple, None),
+                              ("dict", None, None),
+                              ("int", int, 42),
+                              ("float", float, 1.1),
+                              ("complex", complex, 1j),
+                              ("NoneType", None, None),
+                              ("Atomgroup", str, None),
+                              ("list[Atomgroup]", str, None)])
+    def test_arguments(self, parameters, argument, val_type, arg_type, value):
+        """Test for existance and default value of arguments."""
+        help = 'p0 desc'
+        opt_params = {"p0": {'type': val_type, 'desc': help}}
+        if argument == "optional":
+            opt_params["p0"]["default"] = value
+        parameters[argument] = opt_params
+
+        cli = self.cli(parameters)
+        # last or pre last element in list is p0
+        if argument == "optional":
+            action = cli._actions[-1]
+        else:
+            action = cli._actions[-2]
+
+        assert action.dest == "p0"
+        assert action.option_strings[0] == "-p0"
+        assert help in action.help
+        assert action.type == arg_type
+        if argument == "optional":
+            assert action.default == value
+
+    def test_true_bool_argument(self, parameters):
+        """Test if no is added for bool that if swapped from true to false."""
+        opt_params = {"p0": {'type': "bool",
+                             'desc': 'p0 desc',
+                             "default": True}}
+        parameters["optional"] = opt_params
+
+        cli = self.cli(parameters)
+        action = cli._actions[-1]
+
+        assert action.option_strings[0] == "-no-p0"
+
+    def test_atomgroup_extra_argument(self, parameters):
+        """Test if a universe group is added."""
+        opt_params = {"p0": {'type': "AtomGroup",
+                             'desc': 'p0 desc',
+                             "default": None}}
+        parameters["optional"] = opt_params
+
+        cli = self.cli(parameters)
+        
+        titles = [a.title for a in cli._action_groups]
+        assert "Reference Universe Parameters" in titles
+
+    def test_universe_argument(self, parameters):
+        """Test if universe arguments are added."""
+        opt_params = {"p0": {'type': "Universe",
+                             'desc': 'p0 desc',
+                             "default": None}}
+        parameters["optional"] = opt_params
+
+        cli = self.cli(parameters)
+        args = cli.parse_known_args()[0]
+
+        args.topology_p0

@@ -413,14 +413,20 @@ def create_cli(sub_parser, interface_name, parameters):
             default = None
 
         description = args_dict["desc"]
-        arg_params = dict(help=description,
-                          default=default)
+        flag = f"-{name}"
+        arg_params = dict(dest=name,
+                          help=description,
+                          default=default,
+                          )
         if type_ is dict:
             arg_params["default"] = None
             arg_params["action"] = KwargsDict
         elif type_ is bool:
-            arg_params["action"] = "store_false" if default else "store_true"
-            arg_params["help"] = f"{description} (default: %(default)s)"
+            if default:
+                flag = f"-no-{name}"
+                arg_params["action"] = "store_false"
+            else:
+                arg_params["action"] = "store_true"
         elif type_ in (mda.AtomGroup, List[mda.AtomGroup]):
             if type_ == List[mda.AtomGroup]:
                 arg_params["nargs"] = "+"
@@ -446,10 +452,10 @@ def create_cli(sub_parser, interface_name, parameters):
         else:
             if type_ in (list, tuple):
                 arg_params["nargs"] = "+"
-            arg_params["help"] = f"{description} (default: %(default)s)"
             arg_params["type"] = type_
+            arg_params["help"] += " (default: %(default)s)"
 
-        group.add_argument("-" + name, dest=name, **arg_params)
+        group.add_argument(flag, **arg_params)
     return
 
 
