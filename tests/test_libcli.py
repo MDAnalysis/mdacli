@@ -634,8 +634,8 @@ class Test_create_cli():
                               ("float", float, 1.1),
                               ("complex", complex, 1j),
                               ("NoneType", None, None),
-                              ("Atomgroup", str, None),
-                              ("list[Atomgroup]", str, None)])
+                              ("AtomGroup", str, None),
+                              ("list[AtomGroup]", str, None)])
     def test_arguments(self, parameters, argument, val_type, arg_type, value):
         """Test for existance and default value of arguments."""
         help = 'p0 desc'
@@ -693,3 +693,15 @@ class Test_create_cli():
         args = cli.parse_known_args()[0]
 
         args.topology_p0
+
+    @pytest.mark.parametrize("val_type",
+                             ["list", "tuple", "list[AtomGroup]"])
+    def test_iterable(self, parameters, val_type):
+        """Test if iterable types has nargs='+' attribute."""
+        opt_params = {"p0": {'type': val_type, 'desc': ""}}
+        parameters["positional"] = opt_params
+
+        cli = self.cli(parameters)
+        action = cli._actions[-2]
+
+        assert action.nargs == "+"
