@@ -83,5 +83,3 @@ jobs:
         # then push to gh-pages for build
         git diff-index --quiet HEAD -- || git commit -m "rebuilt html docs for version ${VERSION} from branch ${BRANCH} with sphinx at ${REV}"
         git push -q upstream HEAD:gh-pages
-
-
