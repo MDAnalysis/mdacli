@@ -1,11 +1,13 @@
-========
-Contents
-========
+.. include:: ../../README.rst
+
+.. ========
+.. Contents
+.. ========
 
 .. toctree::
    :maxdepth: 2
+   :hidden:	      
 
-   readme
    installation
    philosophy
    usage
@@ -14,10 +16,4 @@ Contents
    changelog
    authors
 
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
 

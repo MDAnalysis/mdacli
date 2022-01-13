@@ -33,7 +33,7 @@ long_description = '{}\n{}'.format(
 
 setup(
     name='mdacli',
-    version='0.1.2',
+    version='0.1.7',
     description='A command line client for MDAnalysis Analysis classes.',
     long_description=long_description,
     long_description_content_type='text/x-rst',
@@ -58,6 +58,7 @@ setup(
         'Operating System :: MacOS :: MacOS X',
         'Operating System :: Microsoft :: Windows ',
         'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
@@ -84,7 +85,7 @@ setup(
         'Molecular Dynamics',
         'MDAnalysis',
         ],
-    python_requires='>=3.7',
+    python_requires='>=3.6,<3.10',
     install_requires=[
         'MDAnalysis>=2.0.0',
         ],

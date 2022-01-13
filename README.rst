@@ -83,13 +83,13 @@ page or at the `MDAnalysis documentation`_.
    :alt: Powered by MDAnalysis
    :target: https://www.mdanalysis.org
 
- .. |docs| image:: https://readthedocs.org/projects/mdacli/badge/?version=latest
-   :alt: Documentation Status
-   :target: https://mdacli.readthedocs.io/en/latest/?badge=latest
+ .. |docs| image:: https://img.shields.io/badge/docs-latest-brightgreen.svg
+   :alt: Documentation (latest release)
+   :target: https://mdacli.mdanalysis.org
 
  .. |test| image:: https://github.com/MDAnalysis/mdacli/actions/workflows/test.yml/badge.svg?branch=main
    :alt: Github Actions Build Status
-   :target: https://github.com/MDAnalysis/mdacli/actions/workflows/test.yml
+   :target: https://github.com/MDAnalysis/mdacli/actions/workflows/tests.yml
 
  .. |codecov| image:: https://codecov.io/gh/MDAnalysis/mdacli/branch/main/graph/badge.svg?token=ets2mZ6xJD
     :alt: Codecov mdacli
