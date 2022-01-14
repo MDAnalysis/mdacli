@@ -24,14 +24,13 @@ jobs:
         channels: conda-forge
 
     - name: Install dependencies
-      run: |
-        conda install pip setuptools wheel tox coverage[toml]
+      run: conda install pip setuptools wheel virtualenv tox coverage[toml]
 
     - name: Fix Conda permissions on macOS
       if: runner.os == 'macOS'
       run: sudo chown -R $UID $CONDA
 
-    - name: Test Unittests
+    - name: Test Python unittests
       run: tox -e test
 
     #from https://github.com/codecov/codecov-action
