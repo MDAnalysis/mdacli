@@ -58,7 +58,6 @@ setup(
         'Operating System :: MacOS :: MacOS X',
         'Operating System :: Microsoft :: Windows ',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
@@ -78,14 +77,13 @@ setup(
         'Discord': 'https://discord.com/channels/807348386012987462/',
         'Blog': 'https://www.mdanalysis.org/blog/',
         'Twitter': 'https://twitter.com/mdanalysis',
-        # 'Discussion Forum': '',
         },
     keywords=[
         'Science',
         'Molecular Dynamics',
         'MDAnalysis',
         ],
-    python_requires='>3.7',
+    python_requires='>=3.7',
     install_requires=[
         'MDAnalysis>=2.0.0',
         ],

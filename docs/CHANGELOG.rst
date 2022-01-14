@@ -5,8 +5,8 @@ Changelog
 new_version
 -----------
 
-* Use Github actions matrix for tests
-* Added link to discussion forum
+* Use Github actions matrix for tests (#68)
+* Fix Conda permissions on macosx (#68)
 
 v0.1.7 (2021-12-18)
 ------------------------------------------

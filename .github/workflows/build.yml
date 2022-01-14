@@ -27,5 +27,9 @@ jobs:
         python -m pip install --upgrade pip setuptools wheel
         pip install virtualenv tox
 
+    - name: Fix Conda permissions on macOS
+      if: runner.os == 'macOS'
+      run: sudo chown -R $UID $CONDA
+
     - name: Test Build
       run: tox -e build

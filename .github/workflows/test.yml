@@ -27,7 +27,11 @@ jobs:
       run: |
         conda install pip setuptools wheel tox coverage[toml]
 
-    - name: Test Python unittests
+    - name: Fix Conda permissions on macOS
+      if: runner.os == 'macOS'
+      run: sudo chown -R $UID $CONDA
+
+    - name: Test Unittests
       run: tox -e test
 
     #from https://github.com/codecov/codecov-action
