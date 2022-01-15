@@ -6,7 +6,8 @@ new_version
 -----------
 
 * Use Github actions matrix for tests (#68)
-* Fix Conda permissions on macosx (#68)
+* Fix Conda permissions on MacOS (#68)
+* Fix Tests failing on Windows (#68)
 
 v0.1.7 (2021-12-18)
 ------------------------------------------
