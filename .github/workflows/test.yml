@@ -20,6 +20,9 @@ jobs:
     - uses: conda-incubator/setup-miniconda@v2
       with:
         activate-environment: test
+        auto-update-conda: true
+        auto-activate-base: true
+        activate-environment: ""
         python-version: ${{ matrix.python-version }}
         channels: conda-forge
 
@@ -30,14 +33,11 @@ jobs:
       if: runner.os == 'macOS'
       run: sudo chown -R $UID $CONDA
 
-    # GH actions on Windows and PY3.9 using conda are currently broken 
     - name: Test Python unittests
-      if: runner.os != 'Windows' && ${{ matrix.python-version }} != 3.9
       run: tox -e test
 
     #from https://github.com/codecov/codecov-action
     - name: Upload coverage to Codecov
-      if: runner.os != 'Windows' && ${{ matrix.python-version }} != 3.9
       uses: codecov/codecov-action@v2
       with:
         env_vars: OS,PYTHON
