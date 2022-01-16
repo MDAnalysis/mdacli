@@ -1,4 +1,4 @@
-name: test
+name: foo
 
 on:
   push:
@@ -20,18 +20,18 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    # - name: Activate Conda MacOS & Linux
-    # - if: runner.os != "Windows" 
-    # - uses: conda-incubator/setup-miniconda@v2
-    #   with:
-    #     auto-update-conda: true
-    #     auto-activate-base: true
-    #     activate-environment: true
-    #     python-version: ${{ matrix.python-version }}
-    #     channels: conda-forge
+    - name: Activate conda on MacOS & Linux
+    - if: runner.os != "Windows"
+    - uses: conda-incubator/setup-miniconda@v2
+      with:
+        auto-update-conda: true
+        auto-activate-base: true
+        activate-environment: true
+        python-version: ${{ matrix.python-version }}
+        channels: conda-forge
 
-    - name: Activate Conda Windows
-    #- if: runner.os == "Windows" 
+    - name: Activate conda on Windows
+    - if: runner.os == "Windows"
     - uses: conda-incubator/setup-miniconda@v2
       with:
         auto-update-conda: true
