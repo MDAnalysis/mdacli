@@ -33,7 +33,7 @@ long_description = '{}\n{}'.format(
 
 setup(
     name='mdacli',
-    version='0.1.8',
+    version='0.1.9',
     description='A command line client for MDAnalysis Analysis classes.',
     long_description=long_description,
     long_description_content_type='text/x-rst',
