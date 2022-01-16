@@ -83,9 +83,9 @@ page or at the `MDAnalysis documentation`_.
    :alt: Powered by MDAnalysis
    :target: https://www.mdanalysis.org
 
- .. |docs| image:: https://img.shields.io/badge/docs-latest-brightgreen.svg
-   :alt: Documentation (latest release)
-   :target: https://mdacli.mdanalysis.org
+ .. |docs| image:: https://readthedocs.org/projects/mdacli/badge/?version=latest
+   :target: https://mdacli.readthedocs.io/en/latest/?badge=latest
+   :alt: Documentation Status
 
  .. |test| image:: https://github.com/MDAnalysis/mdacli/actions/workflows/test.yml/badge.svg?branch=main
    :alt: Github Actions Build Status
