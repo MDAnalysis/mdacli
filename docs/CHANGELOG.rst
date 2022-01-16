@@ -2,8 +2,8 @@
 Changelog
 =========
 
-new_version
------------
+v0.1.8 (2022-01-16)
+------------------------------------------
 
 * Use Github actions matrix for tests (#68)
 * Fix Conda permissions on MacOS (#68)
