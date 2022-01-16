@@ -19,9 +19,21 @@ jobs:
         shell: bash -l {0}
     steps:
     - uses: actions/checkout@v2
+
+    - name: Activate conda on MacOS and Linux
+    - if: runner.os != "Windows"
     - uses: conda-incubator/setup-miniconda@v2
       with:
-        activate-environment: test
+        auto-update-conda: true
+        auto-activate-base: true
+        activate-environment: true
+        python-version: ${{ matrix.python-version }}
+        channels: conda-forge
+
+    - name: Activate conda on Windows
+    - if: runner.os == "Windows"
+    - uses: conda-incubator/setup-miniconda@v2
+      with:
         auto-update-conda: true
         auto-activate-base: true
         activate-environment: ""
@@ -38,7 +50,6 @@ jobs:
     - name: Test Python unittests
       run: tox -e test
 
-    #from https://github.com/codecov/codecov-action
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v2
       with:
