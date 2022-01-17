@@ -304,7 +304,8 @@ def add_cli_universe(parser, name=''):
         nargs="+",
         help="Manually set/overwrite the simulation box dimensions to a "
         "vector containing unit cell dimensions [a, b, c, alpha, beta, gamma], "
-        "lengths a, b, c are in angstrom, and angles alpha, beta, gamma are in degrees. "
+        "lengths a, b, c are in angstrom, and angles alpha, beta, gamma "
+        "are in degrees. "
         "Providing only three parameters will assume a rectengular simulation "
         "box (alpha = beta = gamma = 90°).")
 

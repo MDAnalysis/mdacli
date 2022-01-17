@@ -27,9 +27,5 @@ jobs:
       run: |
         python -m pip install --upgrade pip setuptools wheel virtualenv tox
 
-    - name: Fix Conda permissions on macOS
-      if: runner.os == 'macOS'
-      run: sudo chown -R $UID $CONDA
-
     - name: Test Lint
       run: tox -e lint
