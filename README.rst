@@ -88,7 +88,7 @@ page or at the `MDAnalysis documentation`_.
    :alt: Documentation Status
 
  .. |test| image:: https://github.com/MDAnalysis/mdacli/actions/workflows/test.yml/badge.svg?branch=main
-   :alt: Github Actions Build Status
+   :alt: Github Actions Test Status
    :target: https://github.com/MDAnalysis/mdacli/actions/workflows/test.yml
 
  .. |codecov| image:: https://codecov.io/gh/MDAnalysis/mdacli/branch/main/graph/badge.svg?token=ets2mZ6xJD
