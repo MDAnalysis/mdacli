@@ -303,10 +303,11 @@ def add_cli_universe(parser, name=''):
         default=None,
         nargs="+",
         help="Manually set/overwrite the simulation box dimensions to a "
-        "vector containing unit cell dimensions [a, b, c, α, β, γ], "
-        "lengths a, b, c are in Å, and angles α, β, γ are in degrees. "
+        "vector containing unit cell dimensions "
+        "[a, b, c, alpha, beta, gamma], lengths a, b, c are in angstrom, "
+        "and angles alpha, beta, gamma are in degrees. "
         "Providing only three parameters will assume a rectengular simulation "
-        "box (α = β = γ = 90°).")
+        "box (alpha = beta = gamma = 90°).")
 
 
 def create_CLI(sub_parser, interface_name, parameters):
