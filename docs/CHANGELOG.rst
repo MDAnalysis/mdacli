@@ -2,18 +2,16 @@
 Changelog
 =========
 
-<<<<<<< HEAD
 new_version
 ------------------------------------------
 
 * Support list of AtomGroups as parameters (#82)
-* Simplifies `add_argument` logic in `create_CLI` (#82)
+* Simplify `add_argument` logic in `create_CLI` (#82)
 * Allow list of reference classes in module detection (#82)
 * Support for generic classes as reference in module detection (#82)
 * Rename `save_results`` to `save` (#82)
 * More tests for docstring parsing and CLI creation (#82)
 
-=======
 v0.1.10 (2022-01-18)
 ------------------------------------------
 
@@ -30,7 +28,6 @@ v0.1.8 (2022-01-16)
 * Use Github actions matrix for tests (#68)
 * Fix Conda permissions on MacOS (#68)
 * Fix Tests failing on Windows (#68)
->>>>>>> main
 
 v0.1.7 (2021-12-18)
 ------------------------------------------
