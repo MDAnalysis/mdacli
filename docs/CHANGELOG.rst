@@ -5,7 +5,7 @@ Changelog
 new_version
 -----------
 
-* Fix test.yml (#86)
+* Removed conda dependency from CI and tox (#86)
 
 v0.1.9 (2022-01-16)
 ------------------------------------------
