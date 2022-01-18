@@ -113,7 +113,7 @@ specific functionalities, for example:
     tox -e lint  # code style
     tox -e build  # packaging
     tox -e docs  # only builds the documentation
-    tox -e py37
+    tox -e test  # testing
 
 
 Update CHANGELOG

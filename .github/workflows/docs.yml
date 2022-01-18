@@ -1,4 +1,4 @@
-name: test_docs
+name: docs
 
 on:
   push:
@@ -7,24 +7,18 @@ on:
     branches: [main]
 
 jobs:
-  build:
+  docs:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash -l {0}
+
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python 3.7
-      uses: actions/setup-python@v2.2.2
+      uses: actions/setup-python@v2
       with:
         python-version: 3.7
+    - run: pip install tox
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip setuptools wheel
-        pip install virtualenv tox
-
-    - name: Test with tox
+    - name: Build docs
       run: tox -e docs
 
     - name: Deploy docs
@@ -83,5 +77,3 @@ jobs:
         # then push to gh-pages for build
         git diff-index --quiet HEAD -- || git commit -m "rebuilt html docs for version ${VERSION} from branch ${BRANCH} with sphinx at ${REV}"
         git push -q upstream HEAD:gh-pages
-
-

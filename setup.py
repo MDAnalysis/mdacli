@@ -33,7 +33,7 @@ long_description = '{}\n{}'.format(
 
 setup(
     name='mdacli',
-    version='0.1.7',
+    version='0.1.10',
     description='A command line client for MDAnalysis Analysis classes.',
     long_description=long_description,
     long_description_content_type='text/x-rst',
@@ -72,11 +72,11 @@ setup(
         'Source': 'https://github.com/MDAnalysis/mdacli',
         'Documentation': 'https://mdacli.readthedocs.io/en/latest/',
         'Changelog': 'https://github.com/MDAnalysis/mdacli/blob/main/docs/CHANGELOG.rst',
+        'User Group': 'https://groups.google.com/g/mdnalysis-discussion/',
         'Issue Tracker': 'https://github.com/MDAnalysis/mdacli/issues',
         'Discord': 'https://discord.com/channels/807348386012987462/',
         'Blog': 'https://www.mdanalysis.org/blog/',
         'Twitter': 'https://twitter.com/mdanalysis',
-        # 'Discussion Forum': '',
         },
     keywords=[
         'Science',
