@@ -168,8 +168,8 @@ def add_run_group(analysis_class_parser):
     """
     run_group = analysis_class_parser.add_argument_group(
         title="Analysis Run Parameters",
-        description="Genereal parameters specific for running the analysis."
-                    "Parameters can be given in terms of frames (e.g. 12) or"
+        description="Genereal parameters specific for running the analysis. "
+                    "Parameters can be given in terms of frames (e.g. 12) "
                     "or as a time ('12ps'). Allowed time units are "
                     "'ps', 'fs' and 'ns'.")
 
