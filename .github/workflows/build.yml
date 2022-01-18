@@ -1,8 +1,8 @@
-# tests required for Pull Requests
-# but should not run after push to main
-name: test build
+name: build
 
 on:
+  push:
+    branches: [main]
   pull_request:
     branches: [main]
 
@@ -21,11 +21,7 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
+    - run: pip install tox
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip setuptools wheel
-        pip install virtualenv tox
-
-    - name: Test Lint
+    - name: Test Build
       run: tox -e build
