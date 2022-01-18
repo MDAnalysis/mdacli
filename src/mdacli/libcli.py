@@ -178,7 +178,7 @@ def add_run_group(analysis_class_parser):
         dest="start",
         type=str,
         default="0",
-        help="start frame or end time for evaluation. (default: %(default)s)"
+        help="start frame or time for evaluation (default: %(default)s)"
         )
 
     run_group.add_argument(
@@ -186,7 +186,7 @@ def add_run_group(analysis_class_parser):
         dest="stop",
         type=str,
         default="-1",
-        help="end frame or end time for evaluation. (default: %(default)s)"
+        help="end frame or time for evaluation (default: %(default)s)"
         )
 
     run_group.add_argument(
@@ -194,7 +194,7 @@ def add_run_group(analysis_class_parser):
         dest="step",
         type=str,
         default="1",
-        help="step or time step for evaluation. (default: %(default)s)"
+        help="step or time step for evaluation (default: %(default)s)"
         )
 
     run_group.add_argument(
