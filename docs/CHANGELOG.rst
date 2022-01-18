@@ -2,8 +2,8 @@
 Changelog
 =========
 
-new_version
------------
+v0.1.10 (2022-01-18)
+------------------------------------------
 
 * Removed conda dependency from CI and tox (#86)
 
