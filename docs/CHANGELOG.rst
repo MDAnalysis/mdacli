@@ -12,6 +12,11 @@ new_version
 * Rename `save_results`` to `save` (#82)
 * More tests for docstring parsing and CLI creation (#82)
 
+v0.1.11 (2022-01-19)
+-------------------------------------------------------------------------
+
+* Improved help for run parameters (#83)
+
 v0.1.10 (2022-01-18)
 ------------------------------------------
 
