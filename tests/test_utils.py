@@ -6,11 +6,18 @@
 # Released under the GNU Public Licence, v2 or any higher version
 # SPDX-License-Identifier: GPL-2.0-or-later
 """Test mdacli utils."""
+from collections import defaultdict
 from math import isclose
 
 import pytest
 
-from mdacli.utils import _exit_if_a_is_b, convert_str_time, split_time_unit
+from mdacli.utils import (
+    _exit_if_a_is_b,
+    convert_str_time,
+    parse_callable_signature,
+    parse_docs,
+    split_time_unit,
+    )
 
 
 def test__exit_if_a_is_b():
@@ -94,3 +101,87 @@ def test_string_to_timestep_wrong(s):
     """Test correct conversion."""
     with pytest.raises(IndexError):
         split_time_unit(s)
+
+
+def complete_docstring(p0, p1="foo", p2=True, p3=42):
+    """One-line description.
+
+    Multi-
+    line-
+    description.
+
+    Parameters
+    ----------
+    p0 : list[AtomGroup]
+        Param 0 is a list
+    p1 : str or int
+        Param 1 description.
+    p2 : bool
+        Param 2
+        description.
+    p3 : int
+        Param 3
+        description.
+    """
+    summary = 'One-line description.'
+    summary_extended = 'Multi-\nline-\ndescription.'
+    params = defaultdict(dict, {'p3': {'type': 'int',
+                                       'desc': 'Param 3 description.'},
+                                'p2': {'type': 'bool',
+                                       'desc': 'Param 2 description.'},
+                                'p1': {'type': 'str',
+                                       'desc': 'Param 1 description.'},
+                                'p0': {'type': 'list[AtomGroup]',
+                                       'desc': 'Param 0 is a list'}})
+    return summary, summary_extended, params
+
+
+def no_long_docstring(p0, p1="foo", p2=True):
+    """One-line description.
+
+    Parameters
+    ----------
+    p0 : list[AtomGroup]
+        Param 0 is a list
+    p1 : str or int
+        Param 1 description.
+    p2 : bool
+        Param 2
+        description.
+    """
+    summary = 'One-line description.'
+    summary_extended = ''
+    params = defaultdict(dict, {'p2': {'type': 'bool',
+                                       'desc': 'Param 2 description.'},
+                                'p1': {'type': 'str',
+                                       'desc': 'Param 1 description.'},
+                                'p0': {'type': 'list[AtomGroup]',
+                                       'desc': 'Param 0 is a list'}})
+    return summary, summary_extended, params
+
+
+@pytest.mark.parametrize("func", (complete_docstring, no_long_docstring))
+def test_parse_docstring(func):
+    """Test doc string parsing."""
+    summary, summary_extended, params = func(1)
+    summary_parse, summary_extended_parse, params_parse = parse_docs(func)
+
+    assert summary == summary_parse
+    assert summary_extended == summary_extended_parse
+    assert params == params_parse
+
+
+def test_parse_callable_signature():
+    """Test callable signature parsing."""
+    parameters = parse_callable_signature(complete_docstring)
+    summary, summary_extended, params = parse_docs(complete_docstring)
+    optional = {'p1': params['p1'], 'p2': params['p2'], 'p3': params['p3']}
+    optional["p1"]["default"] = "foo"
+    optional["p2"]["default"] = True
+    optional["p3"]["default"] = 42
+
+    assert parameters['callable'] == complete_docstring
+    assert parameters['positional'] == {'p0': params['p0']}
+    assert parameters['optional'] == optional
+    assert parameters['desc'] == summary
+    assert parameters['desc_long'] == summary_extended

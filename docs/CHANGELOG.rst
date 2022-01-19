@@ -2,6 +2,16 @@
 Changelog
 =========
 
+new_version
+------------------------------------------
+
+* Support list of AtomGroups as parameters (#82)
+* Simplify `add_argument` logic in `create_CLI` (#82)
+* Allow list of reference classes in module detection (#82)
+* Support for generic classes as reference in module detection (#82)
+* Rename `save_results`` to `save` (#82)
+* More tests for docstring parsing and CLI creation (#82)
+
 v0.1.11 (2022-01-19)
 -------------------------------------------------------------------------
 

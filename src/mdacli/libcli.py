@@ -14,13 +14,13 @@ import json
 import logging
 import os
 import warnings
+from typing import List
 
 import MDAnalysis as mda
-from MDAnalysis.analysis.base import AnalysisBase
 from MDAnalysis.transformations.boxdimensions import set_dimensions
 
 from .colors import Emphasise
-from .save import save_results
+from .save import save
 from .utils import convert_str_time, parse_callable_signature, parse_docs
 
 
@@ -36,8 +36,9 @@ STR_TYPE_DICT = {
     "int": int,
     "float": float,
     "complex": complex,
-    "NoneType": type(None),
+    "NoneType": None,
     "AtomGroup": mda.AtomGroup,
+    "list[AtomGroup]": List[mda.AtomGroup],
     "Universe": mda.Universe,
     }
 
@@ -77,16 +78,16 @@ class KwargsDict(argparse.Action):
         setattr(namespace, self.dest, jdict)
 
 
-def find_classes_in_modules(klass, *module_names):
+def find_classes_in_modules(cls, *module_names):
     """
-    Find classes in modules.
+    Find classes that belong to cls in modules.
 
     A series of names can be given as arguments.
 
     Parameters
     ----------
-    klass : class type
-        The class type to search for.
+    cls : single class or list of classes
+        parent reference class type to search for
 
     module_names : str
         module to import import in absolute or relative terms
@@ -94,26 +95,32 @@ def find_classes_in_modules(klass, *module_names):
 
     Returns
     -------
-    list of found class objects.
-    If no classes are found, return None.
+    list
+    list of found class objects. If no classes are found, return None.
     """
+    # Convert all cls to tuples
+    if type(cls) not in (list, tuple):
+        cls = [cls]
     members = []
     for name in module_names:
         module = importlib.import_module(name)
         for _, member in inspect.getmembers(module):
-            if inspect.isclass(member) and issubclass(member, klass) \
-               and member is not klass:
+            if inspect.isclass(member) and issubclass(member, tuple(cls)) \
+               and member not in cls:
                 members.append(member)
 
     return members or None
 
 
-def find_AnalysisBase_members(modules,
-                              ignore_warnings=False):
-    """Find Analysis Base members in modules.
+def find_cls_members(cls,
+                     modules,
+                     ignore_warnings=False):
+    """Find members of a certain class in modules.
 
     Parameters
     ----------
+    cls : class or list of classes
+        parent reference class or list of classes to be searched for
     modules : list
         list of modules for which members should be searched for
     ignore_warnings : bool
@@ -122,8 +129,7 @@ def find_AnalysisBase_members(modules,
     with warnings.catch_warnings():
         if not ignore_warnings:
             warnings.simplefilter('ignore')
-        members = find_classes_in_modules(
-            AnalysisBase, *[f'MDAnalysis.analysis.{m}' for m in modules])
+        members = find_classes_in_modules(cls, *[m for m in modules])
     return members
 
 
@@ -313,7 +319,7 @@ def add_cli_universe(parser, name=''):
         "box (alpha = beta = gamma = 90°).")
 
 
-def create_CLI(sub_parser, interface_name, parameters):
+def create_cli(sub_parser, interface_name, parameters):
     """
     Add subparsers to `cli_parser`.
 
@@ -371,7 +377,12 @@ def create_CLI(sub_parser, interface_name, parameters):
 
     # adds only if `save` method does not exist
     if not getattr(parameters['callable'], 'save', False):
+        logger.debug("No save method found. Use generic one.")
+        # TODO: add our save function as method. Avoids try except later...
         add_output_group(analysis_class_parser)
+    else:
+        # TODO: add parameters from save function to parser
+        pass
 
     # add positional and optional arguments
     pos_ = sorted(list(parameters["positional"].items()), key=lambda x: x[0])
@@ -405,40 +416,27 @@ def create_CLI(sub_parser, interface_name, parameters):
         except KeyError:
             default = None
 
-        name_par = "-" + name
         description = args_dict["desc"]
-        if issubclass(type_, (list, tuple)):
-            group.add_argument(
-                name_par,
-                dest=name,
-                default=default,
-                nargs="+",
-                help="{} (default: %(default)s)".format(description)
-                )
-        elif issubclass(type_, dict):
-            group.add_argument(
-                name_par,
-                dest=name,
-                default=None,
-                action=KwargsDict,
-                help=description,
-                )
+        flag = f"-{name}"
+        arg_params = dict(dest=name,
+                          help=description,
+                          default=default,
+                          )
+        if type_ is dict:
+            arg_params["default"] = None
+            arg_params["action"] = KwargsDict
         elif type_ is bool:
-            group.add_argument(
-                name_par,
-                dest=name,
-                action="store_false" if default else "store_true",
-                default=default,
-                help=description,
-                )
-        elif type_ is mda.AtomGroup:
-            group.add_argument(
-                name_par,
-                dest=name,
-                type=str,
-                default=default,
-                help=description + " Use a MDAnalysis selection string."
-                )
+            if default:
+                flag = f"-no-{name}"
+                arg_params["action"] = "store_false"
+            else:
+                arg_params["action"] = "store_true"
+        elif type_ in (mda.AtomGroup, List[mda.AtomGroup]):
+            if type_ == List[mda.AtomGroup]:
+                arg_params["nargs"] = "+"
+
+            arg_params["type"] = str
+            arg_params["help"] += " Use a MDAnalysis selection string."
 
             # Create one reference Universe argument for atom selection
             try:
@@ -452,16 +450,16 @@ def create_CLI(sub_parser, interface_name, parameters):
                                     " used for atom selection.")
                 add_cli_universe(reference_universe_group)
 
-        elif issubclass(type_, mda.Universe):
+        elif type_ is mda.Universe:
             add_cli_universe(group, name)
+            continue
         else:
-            group.add_argument(
-                name_par,
-                dest=name,
-                type=type_,
-                default=default,
-                help=f"{description} (default: %(default)s)"
-                )
+            if type_ in (list, tuple):
+                arg_params["nargs"] = "+"
+            arg_params["type"] = type_
+            arg_params["help"] += " (default: %(default)s)"
+
+        group.add_argument(flag, **arg_params)
     return
 
 
@@ -606,14 +604,14 @@ def run_analsis(analysis_callable,
 
     # Save results
     try:
-        ac.save_results()
+        ac.save()
 
     except AttributeError:
         directory = output_parameters.get("output_directory", "")
         fname = output_parameters.get("output_prefix", "")
         fname = f"{fname}_{analysis_callable.__name__}" if fname \
             else analysis_callable.__name__
-        save_results(ac.results, os.path.join(directory, fname))
+        save(ac.results, os.path.join(directory, fname))
 
     return ac
 
@@ -666,17 +664,26 @@ def convert_analysis_parameters(analysis_callable,
 
     for param_name, dictionary in params.items():
         if param_name in analysis_parameters_keys:
-            if "AtomGroup" in dictionary['type']:
-                sel = reference_universe.select_atoms(
-                    analysis_parameters[param_name])
-                if sel:
-                    analysis_parameters[param_name] = sel
+            if "AtomGroup" == dictionary['type']:
+                sel = analysis_parameters[param_name]
+                atomgrp = reference_universe.select_atoms(sel)
+                if atomgrp:
+                    analysis_parameters[param_name] = atomgrp
                 else:
-                    raise ValueError(f"AtomGroup `-{param_name}`"
-                                     f" with selection"
-                                     f" `{analysis_parameters[param_name]}`"
-                                     f" does not contain any atoms")
-            elif "Universe" in dictionary['type']:
+                    raise ValueError(f"AtomGroup `-{param_name}` with "
+                                     f"string of the selection {sel}` "
+                                     f"does not contain any atoms.")
+            elif "list[AtomGroup]" == dictionary['type']:
+                for i, sel in enumerate(analysis_parameters[param_name]):
+                    atomgrp = reference_universe.select_atoms(sel)
+                    if atomgrp:
+                        analysis_parameters[param_name][i] = atomgrp
+                    else:
+                        raise ValueError(f"AtomGroup `-{param_name}` with "
+                                         f"string of the selection {sel}` "
+                                         f"does not contain any atoms.")
+
+            elif "Universe" == dictionary['type']:
                 # Create universe parameter dictionary from signature
                 sig = inspect.signature(create_universe)
                 universe_parameters = dict(sig.parameters)
@@ -714,7 +721,7 @@ def setup_clients(ap, title, members):
     # adds each Analysis class/function as a CLI under 'cli_subparser'
     # to be writen
     for member_name, parameters in analysis_interfaces.items():
-        create_CLI(sub_parser=cli_subparser,
+        create_cli(sub_parser=cli_subparser,
                    interface_name=member_name.lower(),
                    parameters=parameters)
 

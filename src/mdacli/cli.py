@@ -12,9 +12,11 @@ import sys
 import traceback
 import warnings
 
+from MDAnalysis.analysis.base import AnalysisBase
+
 from .colors import Emphasise
 from .libcli import (
-    find_AnalysisBase_members,
+    find_cls_members,
     init_base_argparse,
     run_analsis,
     setup_clients,
@@ -29,6 +31,7 @@ logger = logging.getLogger(__name__)
 
 def cli(name,
         module_list,
+        base_class=AnalysisBase,
         version="",
         description="",
         skip_modules=None,
@@ -44,6 +47,8 @@ def cli(name,
         name of the interface
     module_list : list
         list of module from which the cli is build up.
+    base_class : cls
+        Class or list of classes that the Anaylsis modules belong to
     description : str
         description of the cli
     skip_modules : list
@@ -68,15 +73,17 @@ def cli(name,
                     'InterRDF_s']
 
         mdacli.cli(name="MDAnalysis",
-                   module_list=__all__,
+                   module_list=[f'MDAnalysis.analysis.{m}' for m in __all__],
                    version=mdacli.__version__,
                    description=__doc__,
                    skip_modules=skip_mods,
                    ignore_warnings=True)
     """
-    modules = find_AnalysisBase_members(module_list,
-                                        ignore_warnings=ignore_warnings)
+    modules = find_cls_members(base_class,
+                               module_list,
+                               ignore_warnings=ignore_warnings)
 
+    skip_modules = [] if skip_modules is None else skip_modules
     modules = [mod for mod in modules if mod.__name__ not in skip_modules]
     _exit_if_a_is_b(modules, None, "No analysis modules founds.")
 
@@ -119,6 +126,7 @@ def cli(name,
             # Some parameters may not exist
             arg_grouped_dict.setdefault("Optional Parameters", {})
             arg_grouped_dict.setdefault("Reference Universe Parameters", None)
+            arg_grouped_dict.setdefault("Output Parameters", {})
 
             run_analsis(analysis_callable,
                         arg_grouped_dict["Mandatory Parameters"],

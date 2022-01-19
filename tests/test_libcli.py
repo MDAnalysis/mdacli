@@ -34,9 +34,10 @@ from mdacli.libcli import (
     add_output_group,
     add_run_group,
     convert_analysis_parameters,
+    create_cli,
     create_universe,
-    find_AnalysisBase_members,
     find_classes_in_modules,
+    find_cls_members,
     init_base_argparse,
     run_analsis,
     setup_clients,
@@ -44,6 +45,7 @@ from mdacli.libcli import (
     )
 
 from . import example_json
+from .test_utils import complete_docstring
 
 
 @pytest.mark.parametrize(
@@ -101,23 +103,38 @@ def test_KwargsDict_error(s, error, msg):
         ap.parse_args(s.split())
 
 
-def test_find_AnalysisBase_members():
+def test_find_cls_members():
     """Test several input modules."""
     names = ["helix_analysis", "lineardensity"]
-    members = find_AnalysisBase_members(names)
+    members = find_cls_members(AnalysisBase,
+                               [f'MDAnalysis.analysis.{m}' for m in names])
     assert members[0] is HELANAL
     assert members[1] is LinearDensity
 
 
-def test_find_AnalysisBase_members_single():
+@pytest.mark.parametrize(
+    'cls',
+    [AnalysisBase, [AnalysisBase, AnalysisBase], (AnalysisBase, AnalysisBase)])
+def test_find_cls_members_single(cls):
     """Test one input module."""
-    members = find_AnalysisBase_members(['rdf'])
+    members = find_cls_members(cls, ['MDAnalysis.analysis.rdf'])
 
     assert members[0] is InterRDF
     assert members[1] is InterRDF_s
 
 
-def test_find_AnalysisBase_members_None():
+@pytest.mark.parametrize(
+    'cls',
+    [AnalysisBase, [AnalysisBase, AnalysisBase], (AnalysisBase, AnalysisBase)])
+def test_find_classes_in_modules(cls):
+    """Test for finding classes in modules."""
+    members = find_classes_in_modules(cls, 'MDAnalysis.analysis.rdf')
+
+    assert members[0] is InterRDF
+    assert members[1] is InterRDF_s
+
+
+def test_find_classes_in_modules_None():
     """Test that no module is found."""
     members = find_classes_in_modules(AnalysisBase, "MDAnalysis")
 
@@ -235,7 +252,9 @@ def test_setup_clients(opt, dest, val):
     else:
         testargs.append(str(val))
 
-    members = find_AnalysisBase_members(__all__)
+    members = find_cls_members(modules=[f'MDAnalysis.analysis.{m}'
+                                        for m in __all__],
+                               cls=AnalysisBase)
     actual_mods = ["RMSF", "InterRDF", "LinearDensity"]
     members = [mem for mem in members if mem.__name__ in actual_mods]
 
@@ -409,6 +428,28 @@ class Test_convert_analysis_parameters:
             reference_universe=universe)
         assert not analysis_parameters
 
+    def test_multi_atomgroup(self, universe):
+        """Test conversion of a list containing multiple AtomGroups."""
+        selection_keywords = ["name OW", "name HW*"]
+        analysis_parameters = {"p0": ["name OW", "name HW*"]}
+
+        convert_analysis_parameters(analysis_callable=complete_docstring,
+                                    analysis_parameters=analysis_parameters,
+                                    reference_universe=universe)
+
+        for i, sel in enumerate(selection_keywords):
+            assert universe.select_atoms(sel) == analysis_parameters["p0"][i]
+
+    def test_multi_atomgroup_fail(self, universe):
+        """Test error raise for empty atomgroup for multiple AtomGroups."""
+        analysis_parameters = {"p0": ["name foo"]}
+
+        with pytest.raises(ValueError, match="AtomGroup `-p0` with "):
+            convert_analysis_parameters(
+                analysis_callable=complete_docstring,
+                analysis_parameters=analysis_parameters,
+                reference_universe=universe)
+
 
 class Test_run_analsis:
     """Test class for analyze_data."""
@@ -524,3 +565,143 @@ class Test_run_analsis:
                 output_parameters=output_parameters)
 
             os.path.isfile("foo_InterRDF_count_bins_rdf.csv")
+
+
+class Test_create_cli():
+    """Test class for CLI creation."""
+
+    @pytest.fixture
+    def parameters(self):
+        """Inject key,value pair into parameter dictionary."""
+        p = {'callable': lambda x: x,
+             'desc': "foo",
+             "desc_long": "bar",
+             "positional": {"pp": {'desc': 'pp desc'}},
+             "optional": {"po": {'desc': 'po desc'}}
+             }
+        return p
+
+    def cli(self, parameters):
+        """Inject argument into subparser."""
+        ap = argparse.ArgumentParser()
+        subparser = ap.add_subparsers()
+
+        create_cli(sub_parser=subparser,
+                   interface_name="foo",
+                   parameters=parameters)
+        return subparser.choices["foo"]
+
+    def test_description(self, parameters):
+        """Test parser description."""
+        cli = self.cli(parameters)
+
+        desc = parameters["desc"]
+        desc += "\n\n" + parameters["desc_long"]
+        assert cli.description == desc
+
+    @pytest.mark.parametrize(
+        "attr",
+        ["start", "stop", "step", "verbose",
+         "output_prefix", "output_directory"])
+    def test_common_args(self, parameters, attr):
+        """Test common cli parameters."""
+        cli = self.cli(parameters)
+
+        args = cli.parse_known_args()[0]
+
+        getattr(args, attr)
+
+    def test_add_output_group(self, parameters):
+        """Test if `save` not added."""
+        callable = type('', (), {})()
+        callable.save = True
+        parameters["callable"] = callable
+
+        cli = self.cli(parameters)
+        args = cli.parse_known_args()[0]
+
+        with pytest.raises(AttributeError):
+            args.output_directory
+
+    @pytest.mark.parametrize("argument", ("positional", "optional"))
+    @pytest.mark.parametrize("val_type, arg_type, value",
+                             [("bool", None, False),
+                              ("str", str, "foo"),
+                              ("list", list, None),
+                              ("tuple", tuple, None),
+                              ("dict", None, None),
+                              ("int", int, 42),
+                              ("float", float, 1.1),
+                              ("complex", complex, 1j),
+                              ("NoneType", None, None),
+                              ("AtomGroup", str, None),
+                              ("list[AtomGroup]", str, None)])
+    def test_arguments(self, parameters, argument, val_type, arg_type, value):
+        """Test for existance and default value of arguments."""
+        help = 'p0 desc'
+        opt_params = {"p0": {'type': val_type, 'desc': help}}
+        if argument == "optional":
+            opt_params["p0"]["default"] = value
+        parameters[argument] = opt_params
+
+        cli = self.cli(parameters)
+        # last or pre last element in list is p0
+        if argument == "optional":
+            action = cli._actions[-1]
+        else:
+            action = cli._actions[-2]
+
+        assert action.dest == "p0"
+        assert action.option_strings[0] == "-p0"
+        assert help in action.help
+        assert action.type == arg_type
+        if argument == "optional":
+            assert action.default == value
+
+    def test_true_bool_argument(self, parameters):
+        """Test if no is added for bool that if swapped from true to false."""
+        opt_params = {"p0": {'type': "bool",
+                             'desc': 'p0 desc',
+                             "default": True}}
+        parameters["optional"] = opt_params
+
+        cli = self.cli(parameters)
+        action = cli._actions[-1]
+
+        assert action.option_strings[0] == "-no-p0"
+
+    def test_atomgroup_extra_argument(self, parameters):
+        """Test if a universe group is added."""
+        opt_params = {"p0": {'type': "AtomGroup",
+                             'desc': 'p0 desc',
+                             "default": None}}
+        parameters["optional"] = opt_params
+
+        cli = self.cli(parameters)
+
+        titles = [a.title for a in cli._action_groups]
+        assert "Reference Universe Parameters" in titles
+
+    def test_universe_argument(self, parameters):
+        """Test if universe arguments are added."""
+        opt_params = {"p0": {'type': "Universe",
+                             'desc': 'p0 desc',
+                             "default": None}}
+        parameters["optional"] = opt_params
+
+        cli = self.cli(parameters)
+        args = cli.parse_known_args()[0]
+
+        args.topology_p0
+
+    @pytest.mark.parametrize("val_type",
+                             ["list", "tuple", "list[AtomGroup]"])
+    def test_iterable(self, parameters, val_type):
+        """Test if iterable types has nargs='+' attribute."""
+        opt_params = {"p0": {'type': val_type, 'desc': ""}}
+        parameters["positional"] = opt_params
+
+        cli = self.cli(parameters)
+        action = cli._actions[-2]
+
+        assert action.nargs == "+"
