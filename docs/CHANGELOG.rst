@@ -2,8 +2,8 @@
 Changelog
 =========
 
-new_version
-------------------------------------------
+v0.1.12 (2022-01-19)
+-------------------------------------------------------------------------
 
 * Support list of AtomGroups as parameters (#82)
 * Simplify `add_argument` logic in `create_CLI` (#82)
