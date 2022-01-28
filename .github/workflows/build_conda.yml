@@ -7,16 +7,14 @@ on:
   pull_request:
     branches: [main]
 
+# Only build with Linux since Anaconda will
+# build an architecture independent package
 jobs:
   build:
-    runs-on: ${{ matrix.platform }}
+    runs-on: ubuntu-latest
     defaults:
        run:
          shell: bash -l {0}
-    strategy:
-      matrix:
-        platform: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: [3.7, 3.8, 3.9]
 
     steps:
     - uses: actions/checkout@v2
@@ -24,9 +22,8 @@ jobs:
     - uses: conda-incubator/setup-miniconda@v2
       with:
         activate-environment: test
-        python-version: ${{ matrix.python-version }}
+        python-version: 3.7
         auto-update-conda: true
-        auto-activate-base: true
         channels: conda-forge
 
     - name: Fix Conda permissions on macOS
