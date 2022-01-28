@@ -1,8 +1,9 @@
+# Build tests run on PR
+# but should not run after push to main because reporting these after push 
+# is meaningless since final build process is done separately.
 name: build conda
 
 on:
-  push:
-    branches: [main]
   pull_request:
     branches: [main]
 
@@ -15,7 +16,7 @@ jobs:
     strategy:
       matrix:
         platform: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: [3.7, 3.8]
+        python-version: [3.7, 3.8, 3.9]
 
     steps:
     - uses: actions/checkout@v2
@@ -32,7 +33,7 @@ jobs:
       if: runner.os == 'macOS'
       run: sudo chown -R $UID $CONDA
 
-    - run: conda install tox-conda
+    - run: conda install tox tox-conda
 
     - name: Test Build
       run: tox -e build_conda

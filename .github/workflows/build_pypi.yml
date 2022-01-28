@@ -1,8 +1,9 @@
+# Build tests run on PR
+# but should not run after push to main because reporting these after push 
+# is meaningless since final build process is done separately.
 name: build pypi
 
 on:
-  push:
-    branches: [main]
   pull_request:
     branches: [main]
 
