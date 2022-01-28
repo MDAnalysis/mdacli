@@ -9,6 +9,7 @@ exclude .codacy.yaml
 exclude .coveragerc
 exclude .readthedocs.yml
 exclude .codeclimate.yml
+exclude meta.yaml
 exclude tox.ini
 
 prune devtools
