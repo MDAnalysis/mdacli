@@ -33,7 +33,7 @@ jobs:
       if: runner.os == 'macOS'
       run: sudo chown -R $UID $CONDA
 
-    - run: conda install tox tox-conda
+    - run: conda install tox-conda
 
     - name: Test Build
       run: tox -e build_conda
