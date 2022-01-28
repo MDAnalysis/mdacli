@@ -1,4 +1,4 @@
-name: build
+name: build pypi
 
 on:
   push:
@@ -24,4 +24,4 @@ jobs:
     - run: pip install tox
 
     - name: Test Build
-      run: tox -e build
+      run: tox -e build_pypi

@@ -9,6 +9,9 @@ jobs:
   bump-version:
 
     runs-on: ubuntu-latest
+    defaults:
+       run:
+         shell: bash -l {0}
     if: "!startsWith(github.event.head_commit.message, '[SKIP]')"
 
     steps:
@@ -18,7 +21,7 @@ jobs:
         token: ${{ secrets.AC_GITHUB_TOKEN }}
 
     - name: Set up Python
-      uses: actions/setup-python@v2.2.2
+      uses: actions/setup-python@v2
       with:
         python-version: '3.x'
 
@@ -69,10 +72,25 @@ jobs:
       run: |
         git push --follow-tags
 
-    - name: Build and publish
+    - name: Build and publish to PYPI
       env:
         TWINE_USERNAME: ${{ secrets.PYPI_USER }}
         TWINE_PASSWORD: ${{ secrets.PYPI_PASS }}
       run: |
         python setup.py sdist bdist_wheel
         twine upload --verbose dist/*
+
+    - uses: conda-incubator/setup-miniconda@v2
+      with:
+         activate-environment: ""
+         auto-update-conda: true
+         auto-activate-base: true
+         channels: conda-forge
+
+    - run: conda install conda-build anaconda-client
+
+    - name: Build and publish to ANACONDA
+      run: |
+        conda-build .
+        anaconda login --username ${{ secrets.CONDA_USER }} --password ${{ secrets.CONDA_PASS }}
+        anaconda --verbose upload --all ~/miniconda/conda-bld/linux-64/*

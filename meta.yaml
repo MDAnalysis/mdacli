@@ -12,6 +12,8 @@ source:
 # version increase this number. Should be reset to 0 after a new release
 build:
   number: 0
+  entry_points:
+    - mda = mdacli.__main__:main
 
 requirements:
   build:
