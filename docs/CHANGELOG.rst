@@ -2,8 +2,8 @@
 Changelog
 =========
 
-new_version
------------
+v0.1.13 (2022-02-16)
+------------------------------------------
 
 * Added conda package install instructions (#88)
 
