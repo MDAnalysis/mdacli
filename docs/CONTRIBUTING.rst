@@ -120,24 +120,18 @@ Update CHANGELOG
 ----------------
 
 Update the changelog file under :code:`docs/CHANGELOG.rst` with an
-explanatory bullet list of your contribution bellow a `new_version`
+explanatory bullet list of your contribution bellow the `CHANGELOG`
 title. Add that list right after the main title and before the last
 version subtitle::
 
     Changelog
     =========
 
-    new_version
-    -----------
-
     * here goes my new additions
     * explain them shortly and well
 
     vX.X.X (1900-01-01)
     -------------------
-
-Note to add the correct amount of `---` dashes before the `new_version`
-subtitle.
 
 Also add your name to the authors list at :code:`docs/AUTHORS.rst`.
 

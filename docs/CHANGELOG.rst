@@ -2,6 +2,8 @@
 Changelog
 =========
 
+* corrects bump2version changelog update
+
 v0.1.13 (2022-02-16)
 ------------------------------------------
 
