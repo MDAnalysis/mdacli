@@ -628,13 +628,13 @@ def convert_analysis_parameters(analysis_callable,
     present in the doc of the `analysis_callable` but not
     in the `analysis_parameters` dict.
 
-    AtomGroup selection with type None are ignored since these could be 
+    AtomGroup selection with type None are ignored since these could be
     default arguments.
 
     The following types are converted:
 
     * AtomGroup: Select atoms based on ``universe.select_atoms``
-    * list[AtomGroup]: Select atoms based on ``universe.select_atoms`` 
+    * list[AtomGroup]: Select atoms based on ``universe.select_atoms``
       for every element in list
     * Universe: Created from parameters.
 

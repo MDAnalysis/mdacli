@@ -393,7 +393,7 @@ class Test_convert_analysis_parameters:
 
     def test_None(self, universe):
         """Test that `None` objects are NOT converted.
-        
+
         Could be default arguments
         """
         analysis_parameters = {"atomgroup": None}
@@ -465,7 +465,7 @@ class Test_convert_analysis_parameters:
 
     def test_multi_atomgroup_None(self, universe):
         """Test that `None` objects are NOT converted.
-        
+
         Could be default arguments
         """
         analysis_parameters = {"p0": None}
