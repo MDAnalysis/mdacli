@@ -391,6 +391,19 @@ class Test_convert_analysis_parameters:
                 analysis_parameters=analysis_parameters,
                 reference_universe=universe)
 
+    def test_None(self, universe):
+        """Test that `None` objects are NOT converted.
+        
+        Could be default arguments
+        """
+        analysis_parameters = {"atomgroup": None}
+        convert_analysis_parameters(
+            analysis_callable=RMSF,
+            analysis_parameters=analysis_parameters,
+            reference_universe=universe)
+
+        assert analysis_parameters["atomgroup"] is None
+
     def test_Universe_creation(self, universe):
         """Test the universe creation from different parameters."""
         analysis_parameters = {}
@@ -449,6 +462,20 @@ class Test_convert_analysis_parameters:
                 analysis_callable=complete_docstring,
                 analysis_parameters=analysis_parameters,
                 reference_universe=universe)
+
+    def test_multi_atomgroup_None(self, universe):
+        """Test that `None` objects are NOT converted.
+        
+        Could be default arguments
+        """
+        analysis_parameters = {"p0": None}
+
+        convert_analysis_parameters(
+            analysis_callable=complete_docstring,
+            analysis_parameters=analysis_parameters,
+            reference_universe=universe)
+
+        assert analysis_parameters["p0"] is None
 
 
 class Test_run_analsis:
