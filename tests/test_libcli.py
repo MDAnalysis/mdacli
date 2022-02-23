@@ -658,7 +658,7 @@ class Test_create_cli():
         if argument == "optional":
             assert action.default == value
         elif argument == "positional":
-            assert action.required == True
+            assert action.required
 
     def test_true_bool_argument(self, parameters):
         """Test if no is added for bool that if swapped from true to false."""
