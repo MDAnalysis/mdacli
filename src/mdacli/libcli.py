@@ -325,20 +325,20 @@ def create_cli(sub_parser, interface_name, parameters):
 
     Subparsers parameters are divided in the following categories:
 
-    2. Analysis Run parameters
+    1. Analysis Run parameters
          time frame as begin, end, step and vebosity
 
-    3. Saving Parameters
+    2. Saving Parameters
         output_prefix and output_directory
 
-    4. Mandatory Parameters
+    3. Mandatory Parameters
         mandatory parameters are defined in the CLI as named parameters
         as per design
 
-    5. Optional Parameters
+    4. Optional Parameters
         Named parameters in the Analysis class
 
-    6. Reference Universe Parameters
+    5. Reference Universe Parameters
         A reference Universe for selection commands. Only is created if
         AtomGroup arguments exist.
 
@@ -422,6 +422,8 @@ def create_cli(sub_parser, interface_name, parameters):
                           help=description,
                           default=default,
                           )
+        if group.title == "Mandatory Parameters":
+            arg_params["required"] = True
         if type_ is dict:
             arg_params["default"] = None
             arg_params["action"] = KwargsDict
