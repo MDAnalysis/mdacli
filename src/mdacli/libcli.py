@@ -389,8 +389,10 @@ def create_cli(sub_parser, interface_name, parameters):
     opt_ = sorted(list(parameters["optional"].items()), key=lambda x: x[0])
 
     parameters_to_parse = pos_ + opt_
+
+    MANDATORY_TITLE = "Mandatory Parameters"
     mandatory_parameters_group = analysis_class_parser.add_argument_group(
-        title="Mandatory Parameters",
+        title=MANDATORY_TITLE,
         description="Mandatory parameters of this Analysis",
         )
     groups = len(pos_) * [mandatory_parameters_group]
@@ -422,7 +424,7 @@ def create_cli(sub_parser, interface_name, parameters):
                           help=description,
                           default=default,
                           )
-        if group.title == "Mandatory Parameters":
+        if group.title == MANDATORY_TITLE:
             arg_params["required"] = True
         if type_ is dict:
             arg_params["default"] = None
