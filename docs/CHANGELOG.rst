@@ -2,6 +2,10 @@
 Changelog
 =========
 
+
+v0.1.15 (2022-02-25)
+------------------------------------------
+
 * Set positional arguments as required in cli
 
 v0.1.14 (2022-02-17)
