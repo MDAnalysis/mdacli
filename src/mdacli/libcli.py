@@ -632,9 +632,14 @@ def convert_analysis_parameters(analysis_callable,
     present in the doc of the `analysis_callable` but not
     in the `analysis_parameters` dict.
 
+    AtomGroup selection with type None are ignored since these could be
+    default arguments.
+
     The following types are converted:
 
     * AtomGroup: Select atoms based on ``universe.select_atoms``
+    * list[AtomGroup]: Select atoms based on ``universe.select_atoms``
+      for every element in list
     * Universe: Created from parameters.
 
     Parameters
@@ -670,6 +675,10 @@ def convert_analysis_parameters(analysis_callable,
         if param_name in analysis_parameters_keys:
             if "AtomGroup" == dictionary['type']:
                 sel = analysis_parameters[param_name]
+                # Do not try to parse `None` value
+                # They could be default arguments of a function
+                if sel is None:
+                    continue
                 atomgrp = reference_universe.select_atoms(sel)
                 if atomgrp:
                     analysis_parameters[param_name] = atomgrp
@@ -678,6 +687,8 @@ def convert_analysis_parameters(analysis_callable,
                                      f"string of the selection {sel}` "
                                      f"does not contain any atoms.")
             elif "list[AtomGroup]" == dictionary['type']:
+                if analysis_parameters[param_name] is None:
+                    continue
                 for i, sel in enumerate(analysis_parameters[param_name]):
                     atomgrp = reference_universe.select_atoms(sel)
                     if atomgrp:
