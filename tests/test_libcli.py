@@ -245,7 +245,7 @@ def test_add_cli_universe(name, dest, default):
      ('-dt', "step", 42)))
 def test_setup_clients(opt, dest, val):
     """Test all additional arguments."""
-    testargs = ["mdacli", "rmsf", opt]
+    testargs = ["mdacli", "rmsf", "-atomgroup", "all", opt]
     if type(val) == list:
         for i in val:
             testargs.append(str(i))
@@ -607,7 +607,7 @@ class Test_create_cli():
         """Test common cli parameters."""
         cli = self.cli(parameters)
 
-        args = cli.parse_known_args()[0]
+        args = cli.parse_known_args(["-pp", "foo"])[0]
 
         getattr(args, attr)
 
@@ -618,7 +618,7 @@ class Test_create_cli():
         parameters["callable"] = callable
 
         cli = self.cli(parameters)
-        args = cli.parse_known_args()[0]
+        args = cli.parse_known_args(["-pp", "foo"])[0]
 
         with pytest.raises(AttributeError):
             args.output_directory
@@ -657,6 +657,8 @@ class Test_create_cli():
         assert action.type == arg_type
         if argument == "optional":
             assert action.default == value
+        elif argument == "positional":
+            assert action.required
 
     def test_true_bool_argument(self, parameters):
         """Test if no is added for bool that if swapped from true to false."""
@@ -690,7 +692,7 @@ class Test_create_cli():
         parameters["optional"] = opt_params
 
         cli = self.cli(parameters)
-        args = cli.parse_known_args()[0]
+        args = cli.parse_known_args(["-pp", "foo"])[0]
 
         args.topology_p0
 
