@@ -672,6 +672,7 @@ def convert_analysis_parameters(analysis_callable,
             if "AtomGroup" == dictionary['type']:
                 sel = analysis_parameters[param_name]
                 # Do not try to parse `None` value
+                # They could be default arguments of a function
                 if sel is None:
                     continue
                 atomgrp = reference_universe.select_atoms(sel)
