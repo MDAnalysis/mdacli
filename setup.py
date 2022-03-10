@@ -85,7 +85,7 @@ setup(
         ],
     python_requires='>=3.7',
     install_requires=[
-        'MDAnalysis>=2.0.0',
+        'MDAnalysis>=2.1.0',
         ],
     entry_points={
         'console_scripts': [

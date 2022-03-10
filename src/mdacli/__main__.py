@@ -32,7 +32,6 @@ def main():
                  'HydrogenBondAnalysis',
                  'WaterBridgeAnalysis',
                  'Contacts',
-                 'Dihedral',
                  'PersistenceLength',
                  'InterRDF_s']
 
