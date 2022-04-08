@@ -35,17 +35,21 @@ Currently the following analysis modules are available
      - RMS-align trajectory to a reference structure using a selection.
    * - AverageStructure
      - RMS-align trajectory to a reference structure using a selection,
+       and calculate the average coordinates of the trajectory.
    * - Contacts
      - Calculate contacts based observables.
    * - DensityAnalysis
      - Volumetric density analysis.
    * - DistanceMatrix
      - Calculate the pairwise distance between each frame in a trajectory
+   * - Dihedral
+     - Calculate dihedral angles for specified atomgroups.
    * - Janin
-     - Calculate χ_1 and χ_2 dihedral angles of selected
-       group
+     - Calculate χ_1 and χ_2 dihedral angles of selected group
    * - Ramachandran
      - Calculate ϕ and ψ dihedral angles of selected group
+   * - DielectricConstant
+     - Computes the average dipole moment.
    * - GNMAnalysis
      - Basic tool for GNM analysis.
    * - closeContactGNMAnalysis
@@ -53,7 +57,7 @@ Currently the following analysis modules are available
    * - HELANAL
      - Perform HELANAL helix analysis on your trajectory.
    * - HoleAnalysis
-     - Run program `hole` on a trajectory.
+     - Run `hole` program on a trajectory.
    * - LinearDensity
      - Linear density profile
    * - EinsteinMSD
