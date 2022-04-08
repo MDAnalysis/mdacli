@@ -245,7 +245,7 @@ def test_add_cli_universe(name, dest, default):
      ('-dt', "step", 42)))
 def test_setup_clients(opt, dest, val):
     """Test all additional arguments."""
-    testargs = ["mdacli", "rmsf", opt]
+    testargs = ["mdacli", "rmsf", "-atomgroup", "all", opt]
     if type(val) == list:
         for i in val:
             testargs.append(str(i))
@@ -391,6 +391,19 @@ class Test_convert_analysis_parameters:
                 analysis_parameters=analysis_parameters,
                 reference_universe=universe)
 
+    def test_None(self, universe):
+        """Test that `None` objects are NOT converted.
+
+        Could be default arguments
+        """
+        analysis_parameters = {"atomgroup": None}
+        convert_analysis_parameters(
+            analysis_callable=RMSF,
+            analysis_parameters=analysis_parameters,
+            reference_universe=universe)
+
+        assert analysis_parameters["atomgroup"] is None
+
     def test_Universe_creation(self, universe):
         """Test the universe creation from different parameters."""
         analysis_parameters = {}
@@ -449,6 +462,20 @@ class Test_convert_analysis_parameters:
                 analysis_callable=complete_docstring,
                 analysis_parameters=analysis_parameters,
                 reference_universe=universe)
+
+    def test_multi_atomgroup_None(self, universe):
+        """Test that `None` objects are NOT converted.
+
+        Could be default arguments
+        """
+        analysis_parameters = {"p0": None}
+
+        convert_analysis_parameters(
+            analysis_callable=complete_docstring,
+            analysis_parameters=analysis_parameters,
+            reference_universe=universe)
+
+        assert analysis_parameters["p0"] is None
 
 
 class Test_run_analsis:
@@ -607,7 +634,7 @@ class Test_create_cli():
         """Test common cli parameters."""
         cli = self.cli(parameters)
 
-        args = cli.parse_known_args()[0]
+        args = cli.parse_known_args(["-pp", "foo"])[0]
 
         getattr(args, attr)
 
@@ -618,7 +645,7 @@ class Test_create_cli():
         parameters["callable"] = callable
 
         cli = self.cli(parameters)
-        args = cli.parse_known_args()[0]
+        args = cli.parse_known_args(["-pp", "foo"])[0]
 
         with pytest.raises(AttributeError):
             args.output_directory
@@ -657,6 +684,8 @@ class Test_create_cli():
         assert action.type == arg_type
         if argument == "optional":
             assert action.default == value
+        elif argument == "positional":
+            assert action.required
 
     def test_true_bool_argument(self, parameters):
         """Test if no is added for bool that if swapped from true to false."""
@@ -690,7 +719,7 @@ class Test_create_cli():
         parameters["optional"] = opt_params
 
         cli = self.cli(parameters)
-        args = cli.parse_known_args()[0]
+        args = cli.parse_known_args(["-pp", "foo"])[0]
 
         args.topology_p0
 

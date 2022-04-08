@@ -4,6 +4,21 @@ Changelog
 
 * Update README.rst for MDAnalysis 2.1.0 modules
 
+v0.1.17 (2022-04-07)
+------------------------------------------
+
+* Added dihedral module
+
+v0.1.16 (2022-02-25)
+------------------------------------------
+
+* Do not convert None types
+
+v0.1.15 (2022-02-25)
+------------------------------------------
+
+* Set positional arguments as required in cli
+
 v0.1.14 (2022-02-17)
 ------------------------------------------
 

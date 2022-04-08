@@ -33,7 +33,7 @@ long_description = '{}\n{}'.format(
 
 setup(
     name='mdacli',
-    version='0.1.14',
+    version='0.1.17',
     description='A command line client for MDAnalysis Analysis classes.',
     long_description=long_description,
     long_description_content_type='text/x-rst',
@@ -85,7 +85,7 @@ setup(
         ],
     python_requires='>=3.7',
     install_requires=[
-        'MDAnalysis>=2.0.0',
+        'MDAnalysis>=2.1.0',
         ],
     entry_points={
         'console_scripts': [

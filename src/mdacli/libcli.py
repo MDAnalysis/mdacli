@@ -325,20 +325,20 @@ def create_cli(sub_parser, interface_name, parameters):
 
     Subparsers parameters are divided in the following categories:
 
-    2. Analysis Run parameters
+    1. Analysis Run parameters
          time frame as begin, end, step and vebosity
 
-    3. Saving Parameters
+    2. Saving Parameters
         output_prefix and output_directory
 
-    4. Mandatory Parameters
+    3. Mandatory Parameters
         mandatory parameters are defined in the CLI as named parameters
         as per design
 
-    5. Optional Parameters
+    4. Optional Parameters
         Named parameters in the Analysis class
 
-    6. Reference Universe Parameters
+    5. Reference Universe Parameters
         A reference Universe for selection commands. Only is created if
         AtomGroup arguments exist.
 
@@ -389,8 +389,10 @@ def create_cli(sub_parser, interface_name, parameters):
     opt_ = sorted(list(parameters["optional"].items()), key=lambda x: x[0])
 
     parameters_to_parse = pos_ + opt_
+
+    MANDATORY_TITLE = "Mandatory Parameters"
     mandatory_parameters_group = analysis_class_parser.add_argument_group(
-        title="Mandatory Parameters",
+        title=MANDATORY_TITLE,
         description="Mandatory parameters of this Analysis",
         )
     groups = len(pos_) * [mandatory_parameters_group]
@@ -422,6 +424,8 @@ def create_cli(sub_parser, interface_name, parameters):
                           help=description,
                           default=default,
                           )
+        if group.title == MANDATORY_TITLE:
+            arg_params["required"] = True
         if type_ is dict:
             arg_params["default"] = None
             arg_params["action"] = KwargsDict
@@ -628,9 +632,14 @@ def convert_analysis_parameters(analysis_callable,
     present in the doc of the `analysis_callable` but not
     in the `analysis_parameters` dict.
 
+    AtomGroup selection with type None are ignored since these could be
+    default arguments.
+
     The following types are converted:
 
     * AtomGroup: Select atoms based on ``universe.select_atoms``
+    * list[AtomGroup]: Select atoms based on ``universe.select_atoms``
+      for every element in list
     * Universe: Created from parameters.
 
     Parameters
@@ -666,6 +675,10 @@ def convert_analysis_parameters(analysis_callable,
         if param_name in analysis_parameters_keys:
             if "AtomGroup" == dictionary['type']:
                 sel = analysis_parameters[param_name]
+                # Do not try to parse `None` value
+                # They could be default arguments of a function
+                if sel is None:
+                    continue
                 atomgrp = reference_universe.select_atoms(sel)
                 if atomgrp:
                     analysis_parameters[param_name] = atomgrp
@@ -674,6 +687,8 @@ def convert_analysis_parameters(analysis_callable,
                                      f"string of the selection {sel}` "
                                      f"does not contain any atoms.")
             elif "list[AtomGroup]" == dictionary['type']:
+                if analysis_parameters[param_name] is None:
+                    continue
                 for i, sel in enumerate(analysis_parameters[param_name]):
                     atomgrp = reference_universe.select_atoms(sel)
                     if atomgrp:
