@@ -7,6 +7,11 @@ Changelog
 * Introduce new setup.cfg and pyproject.toml
 * Update __authors__
 
+v0.1.19 (2022-04-12)
+------------------------------------------
+
+* Update README.rst for MDAnalysis 2.1.0 modules
+
 v0.1.18 (2022-04-12)
 ------------------------------------------
 
