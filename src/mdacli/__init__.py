@@ -11,4 +11,4 @@ from mdacli.cli import cli
 
 __all__ = ["cli"]
 
-__version__ = '0.1.17'
+__version__ = '0.1.18'
