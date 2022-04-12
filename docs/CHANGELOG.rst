@@ -2,6 +2,7 @@
 Changelog
 =========
 
+* Update README.rst for MDAnalysis 2.1.0 modules
 
 v0.1.18 (2022-04-12)
 ------------------------------------------
