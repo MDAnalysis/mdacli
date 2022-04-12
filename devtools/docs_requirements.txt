@@ -5,4 +5,3 @@ sphinx-argparse
 CommonMark
 mock
 msmb_theme
-MDAnalysis>=2.1.0
