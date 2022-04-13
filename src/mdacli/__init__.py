@@ -9,6 +9,7 @@
 
 from mdacli.cli import cli
 
-__all__ = ["cli"]
 
+__all__ = ["cli"]
 __version__ = '0.1.19'
+__authors__ = 'MDAnalysis Development Team and contributors'

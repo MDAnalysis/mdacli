@@ -2,6 +2,10 @@
 Changelog
 =========
 
+* Fix isort dependency
+* Added tests for Python 3.10
+* Introduce new setup.cfg and pyproject.toml
+* Update __authors__
 
 v0.1.19 (2022-04-12)
 ------------------------------------------
