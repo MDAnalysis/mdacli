@@ -183,7 +183,7 @@ def add_run_group(analysis_class_parser):
         "-b",
         dest="start",
         type=str,
-        default="0",
+        default=None,
         help="start frame or time for evaluation (default: %(default)s)"
         )
 
@@ -191,7 +191,7 @@ def add_run_group(analysis_class_parser):
         "-e",
         dest="stop",
         type=str,
-        default="-1",
+        default=None,
         help="end frame or time for evaluation (default: %(default)s)"
         )
 
@@ -602,7 +602,8 @@ def run_analsis(analysis_callable,
 
     # Run the analysis
     for key, value in run_parameters.items():
-        run_parameters[key] = convert_str_time(value, universe.trajectory.dt)
+        run_parameters[key] = \
+            convert_str_time(value, universe.trajectory.dt) if value else value
 
     ac.run(verbose=verbose, **run_parameters)
 
