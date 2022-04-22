@@ -2,6 +2,10 @@
 Changelog
 =========
 
+
+v0.1.21 (2022-04-22)
+------------------------------------------
+
 * Allow None as start/stop values (need for 1 frame trajectories)
 
 v0.1.20 (2022-04-13)
