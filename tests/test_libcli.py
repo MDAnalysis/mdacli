@@ -161,7 +161,7 @@ def test_split_argparse_into_groups():
 
 @pytest.mark.parametrize(
     'dest, default',
-    [("start", "0"), ("stop", "-1"), ("step", "1"), ("verbose", False)])
+    [("start", None), ("stop", None), ("step", "1"), ("verbose", False)])
 def test_add_run_group_args(dest, default):
     """Test for added run arguments."""
     parser = argparse.ArgumentParser()
