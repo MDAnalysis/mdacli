@@ -3,6 +3,24 @@ Changelog
 =========
 
 
+v0.1.20 (2022-04-13)
+------------------------------------------
+
+* Fix isort dependency
+* Added tests for Python 3.10
+* Introduce new setup.cfg and pyproject.toml
+* Update __authors__
+
+v0.1.19 (2022-04-12)
+------------------------------------------
+
+* Update README.rst for MDAnalysis 2.1.0 modules
+
+v0.1.18 (2022-04-12)
+------------------------------------------
+
+* Fixed typo in libcli.py
+
 v0.1.17 (2022-04-07)
 ------------------------------------------
 
