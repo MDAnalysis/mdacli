@@ -204,6 +204,13 @@ def add_run_group(analysis_class_parser):
         )
 
     run_group.add_argument(
+        "-nt",
+        dest="num_threads",
+        type=int,
+        default=0,
+        help="Total number of threads to start (0 is guess)")
+
+    run_group.add_argument(
         "-v",
         dest="verbose",
         help="Be loud and noisy",
