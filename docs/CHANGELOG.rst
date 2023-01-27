@@ -2,6 +2,7 @@
 Changelog
 =========
 
+* Limit number of threads used by analysis
 
 v0.1.21 (2022-04-22)
 ------------------------------------------
