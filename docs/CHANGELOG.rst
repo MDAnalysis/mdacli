@@ -2,6 +2,8 @@
 Changelog
 =========
 
+* Disable docs deploy on Github Pages
+* Add Python 3.11 to CI matrix
 
 v0.1.22 (2023-01-27)
 ------------------------------------------
