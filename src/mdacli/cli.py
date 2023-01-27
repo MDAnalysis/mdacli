@@ -13,6 +13,7 @@ import traceback
 import warnings
 
 from MDAnalysis.analysis.base import AnalysisBase
+from threadpoolctl import threadpool_limits
 
 from .colors import Emphasise
 from .libcli import (
@@ -128,12 +129,13 @@ def cli(name,
             arg_grouped_dict.setdefault("Reference Universe Parameters", None)
             arg_grouped_dict.setdefault("Output Parameters", {})
 
-            run_analsis(analysis_callable,
-                        arg_grouped_dict["Mandatory Parameters"],
-                        arg_grouped_dict["Optional Parameters"],
-                        arg_grouped_dict["Reference Universe Parameters"],
-                        arg_grouped_dict["Analysis Run Parameters"],
-                        arg_grouped_dict["Output Parameters"])
+            with threadpool_limits(limits=args.num_threads):
+                run_analsis(analysis_callable,
+                            arg_grouped_dict["Mandatory Parameters"],
+                            arg_grouped_dict["Optional Parameters"],
+                            arg_grouped_dict["Reference Universe Parameters"],
+                            arg_grouped_dict["Analysis Run Parameters"],
+                            arg_grouped_dict["Output Parameters"])
         except Exception as e:
             if args.debug:
                 traceback.print_exc()
