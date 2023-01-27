@@ -2,7 +2,18 @@
 Changelog
 =========
 
-* Remove docs deploy on gh pages
+* Fix classifier in setup.cfg
+
+v0.1.23 (2023-01-27)
+------------------------------------------
+
+* Disable docs deploy on Github Pages
+* Add Python 3.11 to CI matrix
+
+v0.1.22 (2023-01-27)
+------------------------------------------
+
+* Limit number of threads used by analysis
 
 v0.1.21 (2022-04-22)
 ------------------------------------------
