@@ -2,6 +2,7 @@
 Changelog
 =========
 
+* set `long-description` to single file
 
 v0.1.24 (2023-01-27)
 ------------------------------------------
