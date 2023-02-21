@@ -10,6 +10,7 @@
 import subprocess
 
 import pytest
+from MDAnalysisTests.datafiles import TPR, XTC
 
 
 def test_required_args():
@@ -34,3 +35,9 @@ def test_extra_options(args):
 def test_case_insensitive(args):
     """Test for beeing case insensitive."""
     subprocess.check_call(['mda', args, "-h"])
+
+
+def test_running_analysis():
+    """Test running a complete analysis."""
+    subprocess.check_call(
+        ['mda', "rmsf", "-s", TPR, "-f", XTC, "-atomgroup", "all"])
