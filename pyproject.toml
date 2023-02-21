@@ -59,3 +59,41 @@ mda = "mdacli.__main__:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.flake8]
+max_line_length = 80
+hang-closing = true
+ignore = [
+    "W293",
+    "W503",
+    "D412",
+    "D105",
+]
+docstring-convention = "numpy"
+
+[tool.isort]
+line_length = 80
+indent = 4
+multi_line_output = 8
+include_trailing_comma = true
+lines_after_imports = 2
+sections = "FUTURE,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
+known_first_party = "mdacli"
+known_third_party = [
+    "MDAnalysis",
+    "hypothesis",
+    "matplotlib",
+    "numpy",
+    "pytest",
+]
+
+[tool.pytest.ini_options]
+addopts = "-p pytest_cov"
+python_files = [
+    "test_*.py",
+    "*_test.py",
+    "tests.py",
+]
+testpaths = [
+    "tests"
+]
