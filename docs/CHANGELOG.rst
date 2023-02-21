@@ -2,6 +2,7 @@
 Changelog
 =========
 
+* Add integration test running a complete analysis.
 * Rename run_analsis to run_analysis
 * Move `-nt` to base args (Fixes #109)
 * set `long-description` to single file
