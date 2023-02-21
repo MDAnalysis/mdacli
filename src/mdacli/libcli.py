@@ -204,13 +204,6 @@ def add_run_group(analysis_class_parser):
         )
 
     run_group.add_argument(
-        "-nt",
-        dest="num_threads",
-        type=int,
-        default=0,
-        help="Total number of threads to start (0 is guess)")
-
-    run_group.add_argument(
         "-v",
         dest="verbose",
         help="Be loud and noisy",
@@ -375,8 +368,8 @@ def create_cli(sub_parser, interface_name, parameters):
         formatter_class=argparse.RawDescriptionHelpFormatter,
         )
 
-    # Add run_analsis function as the default func parameter.
-    # this is possible because the run_analsis function is equal to all
+    # Add run_analysis function as the default func parameter.
+    # this is possible because the run_analysis function is equal to all
     # Analysis Classes
     analysis_class_parser.set_defaults(
         analysis_callable=parameters["callable"])
@@ -550,12 +543,12 @@ def create_universe(topology,
     return universe
 
 
-def run_analsis(analysis_callable,
-                mandatory_analysis_parameters,
-                optional_analysis_parameters=None,
-                reference_universe_parameters=None,
-                run_parameters=None,
-                output_parameters=None):
+def run_analysis(analysis_callable,
+                 mandatory_analysis_parameters,
+                 optional_analysis_parameters=None,
+                 reference_universe_parameters=None,
+                 run_parameters=None,
+                 output_parameters=None):
     """Perform main client logic.
 
     Parameters
@@ -785,6 +778,13 @@ def init_base_argparse(name, version, description):
         action='store_true',
         help="Run with debug options.",
         )
+
+    ap.add_argument(
+        "-nt",
+        dest="num_threads",
+        type=int,
+        default=0,
+        help="Total number of threads to start (0 is guess)")
 
     ap.add_argument('--logfile',
                     dest='logfile',

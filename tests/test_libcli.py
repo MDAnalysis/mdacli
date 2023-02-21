@@ -39,7 +39,7 @@ from mdacli.libcli import (
     find_classes_in_modules,
     find_cls_members,
     init_base_argparse,
-    run_analsis,
+    run_analysis,
     setup_clients,
     split_argparse_into_groups,
     )
@@ -478,7 +478,7 @@ class Test_convert_analysis_parameters:
         assert analysis_parameters["p0"] is None
 
 
-class Test_run_analsis:
+class Test_run_analysis:
     """Test class for analyze_data."""
 
     @pytest.fixture()
@@ -506,7 +506,7 @@ class Test_run_analsis:
                      tmpdir):
         """Test with default arguments."""
         with tmpdir.as_cwd():
-            run_analsis(
+            run_analysis(
                 analysis_callable=InterRDF,
                 reference_universe_parameters=reference_universe_parameters,
                 mandatory_analysis_parameters=mandatory_parameters)
@@ -518,7 +518,7 @@ class Test_run_analsis:
         """Test with optional parameters given."""
         opt_params = {"nbins": 100}
         with tmpdir.as_cwd():
-            a = run_analsis(
+            a = run_analysis(
                 analysis_callable=InterRDF,
                 reference_universe_parameters=reference_universe_parameters,
                 mandatory_analysis_parameters=mandatory_parameters,
@@ -535,7 +535,7 @@ class Test_run_analsis:
         run_parameters = {"verbose": True}
         caplog.set_level(logging.INFO)
         with tmpdir.as_cwd():
-            run_analsis(
+            run_analysis(
                 analysis_callable=InterRDF,
                 reference_universe_parameters=reference_universe_parameters,
                 mandatory_analysis_parameters=mandatory_parameters,
@@ -552,7 +552,7 @@ class Test_run_analsis:
 
         with tmpdir.as_cwd():
             os.mkdir("foo")
-            run_analsis(
+            run_analysis(
                 analysis_callable=InterRDF,
                 reference_universe_parameters=reference_universe_parameters,
                 mandatory_analysis_parameters=mandatory_parameters,
@@ -569,7 +569,7 @@ class Test_run_analsis:
         output_parameters = {"output_directory": "foo"}
         with tmpdir.as_cwd():
             os.mkdir("foo")
-            run_analsis(
+            run_analysis(
                 analysis_callable=InterRDF,
                 reference_universe_parameters=reference_universe_parameters,
                 mandatory_analysis_parameters=mandatory_parameters,
@@ -585,7 +585,7 @@ class Test_run_analsis:
         output_parameters = {"output_prefix": "foo"}
         with tmpdir.as_cwd():
             os.mkdir("foo")
-            run_analsis(
+            run_analysis(
                 analysis_callable=InterRDF,
                 reference_universe_parameters=reference_universe_parameters,
                 mandatory_analysis_parameters=mandatory_parameters,

@@ -19,7 +19,7 @@ from .colors import Emphasise
 from .libcli import (
     find_cls_members,
     init_base_argparse,
-    run_analsis,
+    run_analysis,
     setup_clients,
     split_argparse_into_groups,
     )
@@ -130,12 +130,12 @@ def cli(name,
             arg_grouped_dict.setdefault("Output Parameters", {})
 
             with threadpool_limits(limits=args.num_threads):
-                run_analsis(analysis_callable,
-                            arg_grouped_dict["Mandatory Parameters"],
-                            arg_grouped_dict["Optional Parameters"],
-                            arg_grouped_dict["Reference Universe Parameters"],
-                            arg_grouped_dict["Analysis Run Parameters"],
-                            arg_grouped_dict["Output Parameters"])
+                run_analysis(analysis_callable,
+                             arg_grouped_dict["Mandatory Parameters"],
+                             arg_grouped_dict["Optional Parameters"],
+                             arg_grouped_dict["Reference Universe Parameters"],
+                             arg_grouped_dict["Analysis Run Parameters"],
+                             arg_grouped_dict["Output Parameters"])
         except Exception as e:
             if args.debug:
                 traceback.print_exc()
