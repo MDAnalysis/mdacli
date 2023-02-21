@@ -3,3 +3,59 @@
 # https://pip.pypa.io/en/stable/reference/pip/#pep-517-and-518-support
 requires = ["setuptools>=43.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "mdacli"
+description = "A command line client for MDAnalysis Analysis classes."
+authors = [
+    {name = "MDAnalysis Development Team and contributors", email = "mdanalysis@numfocus.org"},
+]
+readme = "README.rst"
+requires-python = ">=3.8"
+keywords = ["Science", "Molecular Dynamics", "MDAnalysis"]
+license = {text = "GPL-3.0-or-later"}
+
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Intended Audience :: Science/Research",
+    "Natural Language :: English",
+    "Operating System :: POSIX",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Topic :: Scientific/Engineering :: Chemistry",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: System :: Shells",
+]
+
+dependencies = [
+    "MDAnalysis>=2.1.0",
+    "threadpoolctl",
+]
+dynamic = ["version"]
+
+[project.urls]
+homepage = "https://github.com/MDAnalysis/mdacli"
+documentation = "https://mdacli.readthedocs.io/en/latest"
+repository = "https://github.com/MDAnalysis/mdacli"
+changelog = "https://github.com/MDAnalysis/mdacli/blob/main/docs/CHANGELOG.rst"
+issues = "https://github.com/MDAnalysis/mdacli/issues/"
+discord = "https://discord.com/channels/807348386012987462"
+twitter = "https://twitter.com/mdanalysis"
+blog = "https://www.mdanalysis.org/blog"
+user_group = " https://groups.google.com/g/mdnalysis-discussion"
+
+[project.scripts]
+mda = "mdacli.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

@@ -13,8 +13,14 @@ For a basic installation just type the command::
 
 """
 
+import re
+
 # Always prefer setuptools over distutils
 from setuptools import setup
 
 
-setup()
+VERSION = re.search(
+    r'__version__\s*=\s*[\'"]([^\'"]*)[\'"]', open("src/mdacli/__init__.py").read()
+    ).group(1)
+
+setup(version=VERSION)
