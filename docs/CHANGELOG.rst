@@ -2,6 +2,10 @@
 Changelog
 =========
 
+
+v0.1.25 (2023-02-21)
+------------------------------------------
+
 * Add integration test running a complete analysis.
 * Rename run_analsis to run_analysis
 * Move `-nt` to base args (Fixes #109)
