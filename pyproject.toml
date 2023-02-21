@@ -13,7 +13,17 @@ authors = [
 ]
 readme = "README.rst"
 requires-python = ">=3.8"
-keywords = ["Science", "Molecular Dynamics", "MDAnalysis"]
+keywords = [
+    "python",
+    "cli",
+    "science",
+    "command-line",
+    "molecular-dynamics",
+    "computational-chemistry",
+    "molecular-dynamics-simulation",
+    "command-line-tool",
+    "trajectory-analysis mdanalysis",
+]
 license = {text = "GPL-3.0-or-later"}
 
 classifiers = [
