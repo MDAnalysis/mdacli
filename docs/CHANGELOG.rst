@@ -2,6 +2,10 @@
 Changelog
 =========
 
+
+v0.1.25 (2023-02-21)
+------------------------------------------
+
 * set `long-description` to single file
 * remove Py3.8
 * Fixing codecov upload
