@@ -37,7 +37,8 @@ def test_case_insensitive(args):
     subprocess.check_call(['mda', args, "-h"])
 
 
-def test_running_analysis():
+def test_running_analysis(tmpdir):
     """Test running a complete analysis."""
-    subprocess.check_call(
-        ['mda', "rmsf", "-s", TPR, "-f", XTC, "-atomgroup", "all"])
+    with tmpdir.as_cwd():
+        subprocess.check_call(
+            ['mda', "rmsf", "-s", TPR, "-f", XTC, "-atomgroup", "all"])
