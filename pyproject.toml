@@ -6,6 +6,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mdacli"
+version = "0.1.24"
 description = "A command line client for MDAnalysis Analysis classes."
 authors = [
     {name = "MDAnalysis Development Team and contributors", email = "mdanalysis@numfocus.org"},
@@ -41,7 +42,6 @@ dependencies = [
     "MDAnalysis>=2.1.0",
     "threadpoolctl",
 ]
-dynamic = ["version"]
 
 [project.urls]
 homepage = "https://github.com/MDAnalysis/mdacli"
