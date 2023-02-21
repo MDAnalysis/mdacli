@@ -778,7 +778,7 @@ def init_base_argparse(name, version, description):
         action='store_true',
         help="Run with debug options.",
         )
-    
+
     ap.add_argument(
         "-nt",
         dest="num_threads",
