@@ -2,11 +2,16 @@
 Changelog
 =========
 
+* Rename run_analsis to run_analysis
+* Move `-nt` to base args (Fixes #109)
+
 v0.1.25 (2023-02-20)
 ------------------------------------------
 
-* Rename run_analsis to run_analysis
-* Move `-nt` to base args (Fixes #109)
+* set `long-description` to single file
+* remove Py3.8
+* Fixing codecov upload
+* Translate ``setup.py`` into ``pyproject.toml``
 
 v0.1.24 (2023-01-27)
 ------------------------------------------

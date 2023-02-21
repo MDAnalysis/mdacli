@@ -752,13 +752,10 @@ def init_base_argparse(name, version, description):
 
     Parameters
     ----------
-
     name : str
         Name of the cli program
-
     version : str
         Version of the cli program
-
     description : str
         Description of the cli program
 
