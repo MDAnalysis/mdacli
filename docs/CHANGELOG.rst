@@ -2,6 +2,10 @@
 Changelog
 =========
 
+* set `long-description` to single file
+* remove Py3.8
+* Fixing codecov upload
+* Translate ```setup.py`` into ``pyproject.toml``
 
 v0.1.24 (2023-01-27)
 ------------------------------------------
