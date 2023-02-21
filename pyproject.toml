@@ -44,8 +44,8 @@ dependencies = [
 ]
 
 [project.urls]
-homepage = "https://github.com/MDAnalysis/mdacli"
-documentation = "https://mdacli.readthedocs.io/en/latest"
+homepage = "https://mdacli.mdanalysis.org"
+documentation = "https://mdacli.mdanalysis.org"
 repository = "https://github.com/MDAnalysis/mdacli"
 changelog = "https://github.com/MDAnalysis/mdacli/blob/main/docs/CHANGELOG.rst"
 issues = "https://github.com/MDAnalysis/mdacli/issues/"
