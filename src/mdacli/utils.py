@@ -243,7 +243,7 @@ def parse_docs(klass):
     desc_tmp = []
 
     # regex to find parameter types
-    type_regex = re.compile(r'^([\[\]\w]+|\{.*\})|(?<=\`\~)(.*?)(?=\`)')
+    type_regex = re.compile(r'^([\[\]\w\.]+|\{.*\})|(?<=\`\~)(.*?)(?=\`)')
 
     # goes back to front to register descriptions first ;-)
     # considers only the Parameters section

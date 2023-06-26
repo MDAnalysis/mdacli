@@ -38,7 +38,9 @@ STR_TYPE_DICT = {
     "complex": complex,
     "NoneType": None,
     "AtomGroup": mda.AtomGroup,
+    "MDAnalysis.core.groups.AtomGroup": mda.AtomGroup,
     "list[AtomGroup]": List[mda.AtomGroup],
+    "MDAnalysis.core.universe.Universe": mda.Universe,
     "Universe": mda.Universe,
     }
 

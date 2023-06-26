@@ -2,6 +2,7 @@
 Changelog
 =========
 
+* Make the canonical names of mda types parsable.
 
 v0.1.25 (2023-02-21)
 ------------------------------------------

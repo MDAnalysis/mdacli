@@ -662,6 +662,7 @@ class Test_create_cli():
                               ("complex", complex, 1j),
                               ("NoneType", None, None),
                               ("AtomGroup", str, None),
+                              ('MDAnalysis.core.groups.AtomGroup', str, None),
                               ("list[AtomGroup]", str, None)])
     def test_arguments(self, parameters, argument, val_type, arg_type, value):
         """Test for existance and default value of arguments."""
