@@ -676,7 +676,8 @@ def convert_analysis_parameters(analysis_callable,
 
     for param_name, dictionary in params.items():
         if param_name in analysis_parameters_keys:
-            if "AtomGroup" == dictionary['type']:
+            if dictionary['type'] in ["AtomGroup",
+                                      "MDAnalysis.core.groups.AtomGroup"]:
                 sel = analysis_parameters[param_name]
                 # Do not try to parse `None` value
                 # They could be default arguments of a function
@@ -701,7 +702,8 @@ def convert_analysis_parameters(analysis_callable,
                                          f"string of the selection {sel}` "
                                          f"does not contain any atoms.")
 
-            elif "Universe" == dictionary['type']:
+            elif dictionary['type'] in ["Universe",
+                                        "MDAnalysis.core.universe.Universe"]:
                 # Create universe parameter dictionary from signature
                 sig = inspect.signature(create_universe)
                 universe_parameters = dict(sig.parameters)
