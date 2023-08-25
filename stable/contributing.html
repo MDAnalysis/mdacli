@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Contributing &mdash; mdacli 0.1.17 documentation</title>
+  <title>Contributing &mdash; mdacli 0.1.26 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/msmb.css" type="text/css" />
       <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -14,14 +14,15 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=785bba28"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="_static/js/versions.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within mdacli 0.1.17 documentation"
+          title="Search within mdacli 0.1.26 documentation"
           href="_static/opensearch.xml"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -34,15 +35,19 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search"  style="background: white" >
-            <a href="index.html">
-            <img src="_static/mdacli-logo.png" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/mdacli-logo.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.1.17
+                0.1.26
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -82,8 +87,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Contributing</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Contributing</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/contributing.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -94,7 +99,7 @@
            <div itemprop="articleBody">
              
   <section id="contributing">
-<h1>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline"></a></h1>
+<h1>Contributing<a class="headerlink" href="#contributing" title="Link to this heading"></a></h1>
 <p>Contributing to this project is easy because we have set up a powerful
 CI environment. :relaxed: This document will guide you step-by-step.</p>
 <p>Contributions are always welcome. Not only in the form of
@@ -106,11 +111,11 @@ request your changes to the main repository for review. Next, we present
 you guidelines for this process. If you are a <cite>git</cite> pro you may wish to
 apply your own <cite>git</cite> method; if not, you are safe following ours.</p>
 <section id="fork-this-repository">
-<h2>Fork this repository<a class="headerlink" href="#fork-this-repository" title="Permalink to this headline"></a></h2>
+<h2>Fork this repository<a class="headerlink" href="#fork-this-repository" title="Link to this heading"></a></h2>
 <p><a class="reference external" href="https://github.com/MDAnalysis/mdacli/network/members">Fork this repository before contributing</a>.</p>
 </section>
 <section id="clone-the-main-project-to-your-computer">
-<h2>Clone the main project to your computer<a class="headerlink" href="#clone-the-main-project-to-your-computer" title="Permalink to this headline"></a></h2>
+<h2>Clone the main project to your computer<a class="headerlink" href="#clone-the-main-project-to-your-computer" title="Link to this heading"></a></h2>
 <p>Next, clone the main repository to your local machine.:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">MDAnalysis</span><span class="o">/</span><span class="n">mdacli</span><span class="o">.</span><span class="n">git</span>
 <span class="n">cd</span> <span class="n">mdacli</span>
@@ -118,7 +123,7 @@ apply your own <cite>git</cite> method; if not, you are safe following ours.</p>
 </div>
 </section>
 <section id="add-your-fork-as-remote">
-<h2>Add your fork as remote<a class="headerlink" href="#add-your-fork-as-remote" title="Permalink to this headline"></a></h2>
+<h2>Add your fork as remote<a class="headerlink" href="#add-your-fork-as-remote" title="Link to this heading"></a></h2>
 <p>You can’t create a branch in the main repository :no_entry_sign:, you
 need to make it in your fork :smile: , first you need to add your fork
 as a <cite>remote</cite> in the cloned repository (following the previous commands)</p>
@@ -129,7 +134,7 @@ as a <cite>remote</cite> in the cloned repository (following the previous comman
 </div>
 </section>
 <section id="create-a-new-branch-and-start-developing">
-<h2>Create a new branch and start developing<a class="headerlink" href="#create-a-new-branch-and-start-developing" title="Permalink to this headline"></a></h2>
+<h2>Create a new branch and start developing<a class="headerlink" href="#create-a-new-branch-and-start-developing" title="Link to this heading"></a></h2>
 <p>Now create a new branch and start developing:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">checkout</span> <span class="o">-</span><span class="n">b</span> <span class="o">&lt;</span><span class="n">my</span><span class="o">-</span><span class="n">new</span><span class="o">-</span><span class="n">branch</span><span class="o">-</span><span class="k">with</span><span class="o">-</span><span class="n">a</span><span class="o">-</span><span class="n">nice</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span>
 </pre></div>
@@ -145,14 +150,14 @@ git push myfork &lt;my-new-branch-with-a-nice-name&gt;</p>
 <p>You will see that your changes are now in your fork and branch.</p>
 </section>
 <section id="pull-request-your-changes">
-<h2>Pull Request your changes<a class="headerlink" href="#pull-request-your-changes" title="Permalink to this headline"></a></h2>
+<h2>Pull Request your changes<a class="headerlink" href="#pull-request-your-changes" title="Link to this heading"></a></h2>
 <p>Once you finish your changes create a Pull Request to the main <cite>mdacli</cite>
 repository so we can review your contribution, give you feedback, and
 hopefully accept it :relaxed:. However, before PR, continue reading this
 guideline!</p>
 </section>
 <section id="install-for-developers">
-<h2>Install for developers<a class="headerlink" href="#install-for-developers" title="Permalink to this headline"></a></h2>
+<h2>Install for developers<a class="headerlink" href="#install-for-developers" title="Link to this heading"></a></h2>
 <p>If you are contributing to <code class="docutils literal notranslate"><span class="pre">madcli</span></code>, most likely you are already a
 contributor of <code class="docutils literal notranslate"><span class="pre">MDAnalysis</span> <span class="pre">v2</span></code>. If you already have <cite>MDAnalysis v2</cite>
 installed, install <cite>mdacli</cite> in the same Python environment. For that,
@@ -174,7 +179,7 @@ So you need to install <cite>tox</cite> to be our friend :smile_cat:</p>
 </div>
 </section>
 <section id="running-tests-with-tox">
-<h2>Running tests with tox<a class="headerlink" href="#running-tests-with-tox" title="Permalink to this headline"></a></h2>
+<h2>Running tests with tox<a class="headerlink" href="#running-tests-with-tox" title="Link to this heading"></a></h2>
 <p>Before creating a Pull Request from your branch, certify that all the
 tests pass correctly by running:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tox</span>
@@ -194,7 +199,7 @@ specific functionalities, for example:</p>
 </div>
 </section>
 <section id="update-changelog">
-<h2>Update CHANGELOG<a class="headerlink" href="#update-changelog" title="Permalink to this headline"></a></h2>
+<h2>Update CHANGELOG<a class="headerlink" href="#update-changelog" title="Link to this heading"></a></h2>
 <p>Update the changelog file under <code class="code docutils literal notranslate"><span class="pre">docs/CHANGELOG.rst</span></code> with an
 explanatory bullet list of your contribution bellow the <cite>CHANGELOG</cite>
 title. Add that list right after the main title and before the last
@@ -212,7 +217,7 @@ version subtitle:</p>
 <p>Also add your name to the authors list at <code class="code docutils literal notranslate"><span class="pre">docs/AUTHORS.rst</span></code>.</p>
 </section>
 <section id="pull-request">
-<h2>Pull Request<a class="headerlink" href="#pull-request" title="Permalink to this headline"></a></h2>
+<h2>Pull Request<a class="headerlink" href="#pull-request" title="Link to this heading"></a></h2>
 <p>Once you are finished, you can Pull Request you additions to the main
 repository and engage with the community. Please read the <cite>docs/PULLREQUEST.rst</cite>
 guidelines first, you will see them when you open a PR.</p>
@@ -244,7 +249,7 @@ are good to go (Pull Request).</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2021, Philip Loche, Joao MC Teixeira and Oliver Beckstein.
-      <span class="lastupdated">Last updated on Apr 08, 2022.
+      <span class="lastupdated">Last updated on Aug 25, 2023.
       </span></p>
   </div>
 
@@ -271,7 +276,7 @@ are good to go (Pull Request).</p>
      aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
       <span class="fa fa-book"></span>
-        0.1.17
+        0.1.26
       <span class="fa fa-caret-down"></span>
     </span>
 

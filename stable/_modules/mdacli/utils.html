@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>mdacli.utils &mdash; mdacli 0.1.17 documentation</title>
+  <title>mdacli.utils &mdash; mdacli 0.1.26 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/msmb.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
@@ -13,14 +13,15 @@
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=785bba28"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="../../_static/js/versions.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within mdacli 0.1.17 documentation"
+          title="Search within mdacli 0.1.26 documentation"
           href="../../_static/opensearch.xml"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -31,15 +32,19 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search"  style="background: white" >
-            <a href="../../index.html">
-            <img src="../../_static/mdacli-logo.png" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/mdacli-logo.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.1.17
+                0.1.26
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -68,9 +73,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../index.html">Module code</a> &raquo;</li>
-      <li>mdacli.utils</li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">mdacli.utils</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -99,13 +104,15 @@
 
 
 <span class="k">def</span> <span class="nf">_exit_if_a_is_b</span><span class="p">(</span><span class="n">obj1</span><span class="p">,</span> <span class="n">obj2</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Exit if `obj1` and `obj2` are the same.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Exit if `obj1` and `obj2` are the same.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">obj1</span> <span class="ow">is</span> <span class="n">obj2</span><span class="p">:</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="split_time_unit"><a class="viewcode-back" href="../../api/utils.html#mdacli.utils.split_time_unit">[docs]</a><span class="k">def</span> <span class="nf">split_time_unit</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="split_time_unit">
+<a class="viewcode-back" href="../../api/utils.html#mdacli.utils.split_time_unit">[docs]</a>
+<span class="k">def</span> <span class="nf">split_time_unit</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Split time and units.</span>
 
 <span class="sd">    Follows the regex:: https://regex101.com/r/LZAbil/2</span>
@@ -126,8 +133,11 @@
     <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">),</span> <span class="n">unit</span></div>
 
 
-<div class="viewcode-block" id="convert_str_time"><a class="viewcode-back" href="../../api/utils.html#mdacli.utils.convert_str_time">[docs]</a><span class="k">def</span> <span class="nf">convert_str_time</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="convert_str_time">
+<a class="viewcode-back" href="../../api/utils.html#mdacli.utils.convert_str_time">[docs]</a>
+<span class="k">def</span> <span class="nf">convert_str_time</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert a string `x` into a frame number based on given `dt`.</span>
 
 <span class="sd">    If `x` does not contain any units its assumed to be a frame number</span>
@@ -165,8 +175,11 @@
         <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">val</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="parse_callable_signature"><a class="viewcode-back" href="../../api/utils.html#mdacli.utils.parse_callable_signature">[docs]</a><span class="k">def</span> <span class="nf">parse_callable_signature</span><span class="p">(</span><span class="n">callable_obj</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="parse_callable_signature">
+<a class="viewcode-back" href="../../api/utils.html#mdacli.utils.parse_callable_signature">[docs]</a>
+<span class="k">def</span> <span class="nf">parse_callable_signature</span><span class="p">(</span><span class="n">callable_obj</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Parse a callable signature to a convenient dictionary for CLI creation.</span>
 
 <span class="sd">    The parameters used in the CLI are a combination of the callable</span>
@@ -262,8 +275,11 @@
     <span class="k">return</span> <span class="n">storage_dict</span></div>
 
 
-<div class="viewcode-block" id="parse_docs"><a class="viewcode-back" href="../../api/utils.html#mdacli.utils.parse_docs">[docs]</a><span class="k">def</span> <span class="nf">parse_docs</span><span class="p">(</span><span class="n">klass</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="parse_docs">
+<a class="viewcode-back" href="../../api/utils.html#mdacli.utils.parse_docs">[docs]</a>
+<span class="k">def</span> <span class="nf">parse_docs</span><span class="p">(</span><span class="n">klass</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Parse classes docstrings to a convenient dictionary.</span>
 
 <span class="sd">    This parser is based on NumpyDocString format, yet it is not so</span>
@@ -325,7 +341,7 @@
     <span class="n">desc_tmp</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="c1"># regex to find parameter types</span>
-    <span class="n">type_regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^([\[\]\w]+|\{.*\})|(?&lt;=\`\~)(.*?)(?=\`)&#39;</span><span class="p">)</span>
+    <span class="n">type_regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^([\[\]\w\.]+|\{.*\})|(?&lt;=\`\~)(.*?)(?=\`)&#39;</span><span class="p">)</span>
 
     <span class="c1"># goes back to front to register descriptions first ;-)</span>
     <span class="c1"># considers only the Parameters section</span>
@@ -340,6 +356,7 @@
             <span class="n">desc_tmp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">summary</span><span class="p">,</span> <span class="n">summary_extended</span><span class="p">,</span> <span class="n">params</span></div>
+
 </pre></div>
 
            </div>
@@ -350,7 +367,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright 2021, Philip Loche, Joao MC Teixeira and Oliver Beckstein.
-      <span class="lastupdated">Last updated on Apr 08, 2022.
+      <span class="lastupdated">Last updated on Aug 25, 2023.
       </span></p>
   </div>
 
@@ -377,7 +394,7 @@
      aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
       <span class="fa fa-book"></span>
-        0.1.17
+        0.1.26
       <span class="fa fa-caret-down"></span>
     </span>
 

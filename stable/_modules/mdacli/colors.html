@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>mdacli.colors &mdash; mdacli 0.1.17 documentation</title>
+  <title>mdacli.colors &mdash; mdacli 0.1.26 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/msmb.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
@@ -13,14 +13,15 @@
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=785bba28"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="../../_static/js/versions.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within mdacli 0.1.17 documentation"
+          title="Search within mdacli 0.1.26 documentation"
           href="../../_static/opensearch.xml"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -31,15 +32,19 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search"  style="background: white" >
-            <a href="../../index.html">
-            <img src="../../_static/mdacli-logo.png" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/mdacli-logo.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.1.17
+                0.1.26
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -68,9 +73,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../index.html">Module code</a> &raquo;</li>
-      <li>mdacli.colors</li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">mdacli.colors</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -95,8 +100,10 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 
-<div class="viewcode-block" id="Emphasise"><a class="viewcode-back" href="../../api/colors.html#mdacli.colors.Emphasise">[docs]</a><span class="k">class</span> <span class="nc">Emphasise</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Class for emphaising strings with colors etc.</span>
+<div class="viewcode-block" id="Emphasise">
+<a class="viewcode-back" href="../../api/colors.html#mdacli.colors.Emphasise">[docs]</a>
+<span class="k">class</span> <span class="nc">Emphasise</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class for emphaising strings with colors etc.</span>
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
@@ -134,9 +141,11 @@
     <span class="k">def</span> <span class="nf">_emphasise</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">style</span><span class="p">):</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">style</span><span class="si">}{</span><span class="nb">str</span><span class="si">}{</span><span class="bp">self</span><span class="o">.</span><span class="n">_endc</span><span class="si">}</span><span class="s2">&quot;</span>
 
-<div class="viewcode-block" id="Emphasise.emphasise"><a class="viewcode-back" href="../../api/colors.html#mdacli.colors.Emphasise.emphasise">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="Emphasise.emphasise">
+<a class="viewcode-back" href="../../api/colors.html#mdacli.colors.Emphasise.emphasise">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">emphasise</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">style</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Decorate a ``str`` with desired style.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Decorate a ``str`` with desired style.</span>
 
 <span class="sd">        The Style could be a color, bold or underline.</span>
 
@@ -154,9 +163,12 @@
         <span class="n">style_str</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">Emphasise</span><span class="p">,</span> <span class="n">style</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">Emphasise</span><span class="o">.</span><span class="n">_emphasise</span><span class="p">(</span><span class="n">Emphasise</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">style_str</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Emphasise.warning"><a class="viewcode-back" href="../../api/colors.html#mdacli.colors.Emphasise.warning">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Emphasise.warning">
+<a class="viewcode-back" href="../../api/colors.html#mdacli.colors.Emphasise.warning">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">warning</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return a yellow warning.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a yellow warning.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -174,9 +186,12 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">Emphasise</span><span class="o">.</span><span class="n">_emphasise</span><span class="p">(</span><span class="n">Emphasise</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">Emphasise</span><span class="o">.</span><span class="n">yellow</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Emphasise.error"><a class="viewcode-back" href="../../api/colors.html#mdacli.colors.Emphasise.error">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Emphasise.error">
+<a class="viewcode-back" href="../../api/colors.html#mdacli.colors.Emphasise.error">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">error</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return a red error.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a red error.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -194,9 +209,12 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">Emphasise</span><span class="o">.</span><span class="n">_emphasise</span><span class="p">(</span><span class="n">Emphasise</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">Emphasise</span><span class="o">.</span><span class="n">red</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Emphasise.ok"><a class="viewcode-back" href="../../api/colors.html#mdacli.colors.Emphasise.ok">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Emphasise.ok">
+<a class="viewcode-back" href="../../api/colors.html#mdacli.colors.Emphasise.ok">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">ok</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return a green ok.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a green ok.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -214,9 +232,12 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">Emphasise</span><span class="o">.</span><span class="n">_emphasise</span><span class="p">(</span><span class="n">Emphasise</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">Emphasise</span><span class="o">.</span><span class="n">green</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Emphasise.info"><a class="viewcode-back" href="../../api/colors.html#mdacli.colors.Emphasise.info">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Emphasise.info">
+<a class="viewcode-back" href="../../api/colors.html#mdacli.colors.Emphasise.info">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return a blue info.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a blue info.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -234,9 +255,12 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">Emphasise</span><span class="o">.</span><span class="n">_emphasise</span><span class="p">(</span><span class="n">Emphasise</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">Emphasise</span><span class="o">.</span><span class="n">blue</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Emphasise.header"><a class="viewcode-back" href="../../api/colors.html#mdacli.colors.Emphasise.header">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Emphasise.header">
+<a class="viewcode-back" href="../../api/colors.html#mdacli.colors.Emphasise.header">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">header</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return a pink header.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a pink header.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -254,9 +278,12 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">Emphasise</span><span class="o">.</span><span class="n">_emphasise</span><span class="p">(</span><span class="n">Emphasise</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">Emphasise</span><span class="o">.</span><span class="n">blue</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Emphasise.debug"><a class="viewcode-back" href="../../api/colors.html#mdacli.colors.Emphasise.debug">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Emphasise.debug">
+<a class="viewcode-back" href="../../api/colors.html#mdacli.colors.Emphasise.debug">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">debug</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return a turquoise debug message.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a turquoise debug message.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -272,7 +299,9 @@
 <span class="sd">        ------</span>
 <span class="sd">        &gt;&gt;&gt; print(bcolors.debug(&quot;a=1&quot;))</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">Emphasise</span><span class="o">.</span><span class="n">_emphasise</span><span class="p">(</span><span class="n">Emphasise</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">Emphasise</span><span class="o">.</span><span class="n">turquoise</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="n">Emphasise</span><span class="o">.</span><span class="n">_emphasise</span><span class="p">(</span><span class="n">Emphasise</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">Emphasise</span><span class="o">.</span><span class="n">turquoise</span><span class="p">)</span></div>
+</div>
+
 </pre></div>
 
            </div>
@@ -283,7 +312,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright 2021, Philip Loche, Joao MC Teixeira and Oliver Beckstein.
-      <span class="lastupdated">Last updated on Apr 08, 2022.
+      <span class="lastupdated">Last updated on Aug 25, 2023.
       </span></p>
   </div>
 
@@ -310,7 +339,7 @@
      aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
       <span class="fa fa-book"></span>
-        0.1.17
+        0.1.26
       <span class="fa fa-caret-down"></span>
     </span>
 

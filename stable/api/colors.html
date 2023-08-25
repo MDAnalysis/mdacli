@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Coloring &mdash; mdacli 0.1.17 documentation</title>
+  <title>Coloring &mdash; mdacli 0.1.26 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/msmb.css" type="text/css" />
       <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -14,14 +14,15 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/doctools.js"></script>
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=785bba28"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="../_static/js/versions.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within mdacli 0.1.17 documentation"
+          title="Search within mdacli 0.1.26 documentation"
           href="../_static/opensearch.xml"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -34,15 +35,19 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search"  style="background: white" >
-            <a href="../index.html">
-            <img src="../_static/mdacli-logo.png" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../index.html">
+            
+              <img src="../_static/mdacli-logo.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.1.17
+                0.1.26
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -57,7 +62,28 @@
 <li class="toctree-l2"><a class="reference internal" href="cli.html">High-Level API</a></li>
 <li class="toctree-l2"><a class="reference internal" href="libcli.html">Support functions for CLI</a></li>
 <li class="toctree-l2"><a class="reference internal" href="save.html">Results Saving</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Coloring</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Coloring</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.colors.Emphasise"><code class="docutils literal notranslate"><span class="pre">Emphasise</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mdacli.colors.Emphasise.blue"><code class="docutils literal notranslate"><span class="pre">Emphasise.blue</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mdacli.colors.Emphasise.bold"><code class="docutils literal notranslate"><span class="pre">Emphasise.bold</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mdacli.colors.Emphasise.debug"><code class="docutils literal notranslate"><span class="pre">Emphasise.debug()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mdacli.colors.Emphasise.emphasise"><code class="docutils literal notranslate"><span class="pre">Emphasise.emphasise()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mdacli.colors.Emphasise.error"><code class="docutils literal notranslate"><span class="pre">Emphasise.error()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mdacli.colors.Emphasise.gray"><code class="docutils literal notranslate"><span class="pre">Emphasise.gray</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mdacli.colors.Emphasise.green"><code class="docutils literal notranslate"><span class="pre">Emphasise.green</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mdacli.colors.Emphasise.header"><code class="docutils literal notranslate"><span class="pre">Emphasise.header()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mdacli.colors.Emphasise.info"><code class="docutils literal notranslate"><span class="pre">Emphasise.info()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mdacli.colors.Emphasise.ok"><code class="docutils literal notranslate"><span class="pre">Emphasise.ok()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mdacli.colors.Emphasise.pink"><code class="docutils literal notranslate"><span class="pre">Emphasise.pink</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mdacli.colors.Emphasise.red"><code class="docutils literal notranslate"><span class="pre">Emphasise.red</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mdacli.colors.Emphasise.turquoise"><code class="docutils literal notranslate"><span class="pre">Emphasise.turquoise</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mdacli.colors.Emphasise.underline"><code class="docutils literal notranslate"><span class="pre">Emphasise.underline</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mdacli.colors.Emphasise.warning"><code class="docutils literal notranslate"><span class="pre">Emphasise.warning()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mdacli.colors.Emphasise.yellow"><code class="docutils literal notranslate"><span class="pre">Emphasise.yellow</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="logger.html">Logging</a></li>
 <li class="toctree-l2"><a class="reference internal" href="utils.html">Utilities</a></li>
 </ul>
@@ -79,9 +105,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../api.html">API library documentation</a> &raquo;</li>
-      <li>Coloring</li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../api.html">API library documentation</a></li>
+      <li class="breadcrumb-item active">Coloring</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/api/colors.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -91,48 +117,48 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-mdacli.colors">
-<span id="coloring"></span><h1>Coloring<a class="headerlink" href="#module-mdacli.colors" title="Permalink to this headline"></a></h1>
-<p>Emphaising strings with colors etc.</p>
+  <section id="coloring">
+<h1>Coloring<a class="headerlink" href="#coloring" title="Link to this heading"></a></h1>
+<p id="module-mdacli.colors">Emphaising strings with colors etc.</p>
 <p>Taken from <a class="reference external" href="https://gist.github.com/tuvokki/14deb97bef6df9bc6553">https://gist.github.com/tuvokki/14deb97bef6df9bc6553</a>.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="mdacli.colors.Emphasise">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mdacli.colors.</span></span><span class="sig-name descname"><span class="pre">Emphasise</span></span><a class="reference internal" href="../_modules/mdacli/colors.html#Emphasise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.colors.Emphasise" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mdacli.colors.</span></span><span class="sig-name descname"><span class="pre">Emphasise</span></span><a class="reference internal" href="../_modules/mdacli/colors.html#Emphasise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.colors.Emphasise" title="Link to this definition"></a></dt>
 <dd><p>Class for emphaising strings with colors etc.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Variables</dt>
+<dt class="field-odd">Variables<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>bold</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – bold attribute</p></li>
-<li><p><strong>underline</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – underline attribute</p></li>
-<li><p><strong>gray</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – gray color</p></li>
-<li><p><strong>red</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – red color</p></li>
-<li><p><strong>green</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – green color</p></li>
-<li><p><strong>yellow</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – yellow color</p></li>
-<li><p><strong>blue</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – blue color</p></li>
-<li><p><strong>pink</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – pink color</p></li>
-<li><p><strong>turquoise</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – turquoise color</p></li>
+<li><p><strong>bold</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – bold attribute</p></li>
+<li><p><strong>underline</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – underline attribute</p></li>
+<li><p><strong>gray</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – gray color</p></li>
+<li><p><strong>red</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – red color</p></li>
+<li><p><strong>green</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – green color</p></li>
+<li><p><strong>yellow</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – yellow color</p></li>
+<li><p><strong>blue</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – blue color</p></li>
+<li><p><strong>pink</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – pink color</p></li>
+<li><p><strong>turquoise</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – turquoise color</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mdacli.colors.Emphasise.blue">
-<span class="sig-name descname"><span class="pre">blue</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[94m'</span></em><a class="headerlink" href="#mdacli.colors.Emphasise.blue" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">blue</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[94m'</span></em><a class="headerlink" href="#mdacli.colors.Emphasise.blue" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mdacli.colors.Emphasise.bold">
-<span class="sig-name descname"><span class="pre">bold</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[1m'</span></em><a class="headerlink" href="#mdacli.colors.Emphasise.bold" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">bold</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[1m'</span></em><a class="headerlink" href="#mdacli.colors.Emphasise.bold" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mdacli.colors.Emphasise.debug">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">debug</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/colors.html#Emphasise.debug"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.colors.Emphasise.debug" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">debug</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/colors.html#Emphasise.debug"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.colors.Emphasise.debug" title="Link to this definition"></a></dt>
 <dd><p>Return a turquoise debug message.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>message</strong> (<em>str</em>) – turquoise debug message to return</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>decorated_message</strong> (<em>str</em>) – decorated message</p>
 </dd>
 </dl>
@@ -144,11 +170,11 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mdacli.colors.Emphasise.emphasise">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">emphasise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">style</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/colors.html#Emphasise.emphasise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.colors.Emphasise.emphasise" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">emphasise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">style</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/colors.html#Emphasise.emphasise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.colors.Emphasise.emphasise" title="Link to this definition"></a></dt>
 <dd><p>Decorate a <code class="docutils literal notranslate"><span class="pre">str</span></code> with desired style.</p>
 <p>The Style could be a color, bold or underline.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>message</strong> (<em>str</em>) – message to print</p></li>
 <li><p><strong>style</strong> (<em>str</em>) – emphasising style. See class attributes for available styles</p></li>
@@ -163,13 +189,13 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mdacli.colors.Emphasise.error">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/colors.html#Emphasise.error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.colors.Emphasise.error" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/colors.html#Emphasise.error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.colors.Emphasise.error" title="Link to this definition"></a></dt>
 <dd><p>Return a red error.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>message</strong> (<em>str</em>) – red error to return</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>decorated_message</strong> (<em>str</em>) – decorated message</p>
 </dd>
 </dl>
@@ -181,23 +207,23 @@
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mdacli.colors.Emphasise.gray">
-<span class="sig-name descname"><span class="pre">gray</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[90m'</span></em><a class="headerlink" href="#mdacli.colors.Emphasise.gray" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">gray</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[90m'</span></em><a class="headerlink" href="#mdacli.colors.Emphasise.gray" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mdacli.colors.Emphasise.green">
-<span class="sig-name descname"><span class="pre">green</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[92m'</span></em><a class="headerlink" href="#mdacli.colors.Emphasise.green" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">green</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[92m'</span></em><a class="headerlink" href="#mdacli.colors.Emphasise.green" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mdacli.colors.Emphasise.header">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">header</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/colors.html#Emphasise.header"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.colors.Emphasise.header" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">header</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/colors.html#Emphasise.header"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.colors.Emphasise.header" title="Link to this definition"></a></dt>
 <dd><p>Return a pink header.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>message</strong> (<em>str</em>) – pink header to return</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>decorated_message</strong> (<em>str</em>) – decorated message</p>
 </dd>
 </dl>
@@ -209,13 +235,13 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mdacli.colors.Emphasise.info">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/colors.html#Emphasise.info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.colors.Emphasise.info" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/colors.html#Emphasise.info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.colors.Emphasise.info" title="Link to this definition"></a></dt>
 <dd><p>Return a blue info.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>message</strong> (<em>str</em>) – blue info to return</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>decorated_message</strong> (<em>str</em>) – decorated message</p>
 </dd>
 </dl>
@@ -227,13 +253,13 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mdacli.colors.Emphasise.ok">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ok</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/colors.html#Emphasise.ok"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.colors.Emphasise.ok" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ok</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/colors.html#Emphasise.ok"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.colors.Emphasise.ok" title="Link to this definition"></a></dt>
 <dd><p>Return a green ok.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>message</strong> (<em>str</em>) – green ok to return</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>decorated_message</strong> (<em>str</em>) – decorated message</p>
 </dd>
 </dl>
@@ -245,33 +271,33 @@
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mdacli.colors.Emphasise.pink">
-<span class="sig-name descname"><span class="pre">pink</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[95m'</span></em><a class="headerlink" href="#mdacli.colors.Emphasise.pink" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">pink</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[95m'</span></em><a class="headerlink" href="#mdacli.colors.Emphasise.pink" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mdacli.colors.Emphasise.red">
-<span class="sig-name descname"><span class="pre">red</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[91m'</span></em><a class="headerlink" href="#mdacli.colors.Emphasise.red" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">red</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[91m'</span></em><a class="headerlink" href="#mdacli.colors.Emphasise.red" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mdacli.colors.Emphasise.turquoise">
-<span class="sig-name descname"><span class="pre">turquoise</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[96m'</span></em><a class="headerlink" href="#mdacli.colors.Emphasise.turquoise" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">turquoise</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[96m'</span></em><a class="headerlink" href="#mdacli.colors.Emphasise.turquoise" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mdacli.colors.Emphasise.underline">
-<span class="sig-name descname"><span class="pre">underline</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[4m'</span></em><a class="headerlink" href="#mdacli.colors.Emphasise.underline" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">underline</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[4m'</span></em><a class="headerlink" href="#mdacli.colors.Emphasise.underline" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mdacli.colors.Emphasise.warning">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">warning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/colors.html#Emphasise.warning"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.colors.Emphasise.warning" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">warning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/colors.html#Emphasise.warning"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.colors.Emphasise.warning" title="Link to this definition"></a></dt>
 <dd><p>Return a yellow warning.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>message</strong> (<em>str</em>) – yellow warning to print</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>decorated_message</strong> (<em>str</em>) – decorated message</p>
 </dd>
 </dl>
@@ -283,7 +309,7 @@
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mdacli.colors.Emphasise.yellow">
-<span class="sig-name descname"><span class="pre">yellow</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[93m'</span></em><a class="headerlink" href="#mdacli.colors.Emphasise.yellow" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">yellow</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[93m'</span></em><a class="headerlink" href="#mdacli.colors.Emphasise.yellow" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -302,7 +328,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright 2021, Philip Loche, Joao MC Teixeira and Oliver Beckstein.
-      <span class="lastupdated">Last updated on Apr 08, 2022.
+      <span class="lastupdated">Last updated on Aug 25, 2023.
       </span></p>
   </div>
 
@@ -329,7 +355,7 @@
      aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
       <span class="fa fa-book"></span>
-        0.1.17
+        0.1.26
       <span class="fa fa-caret-down"></span>
     </span>
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>mdacli.cli &mdash; mdacli 0.1.17 documentation</title>
+  <title>mdacli.cli &mdash; mdacli 0.1.26 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/msmb.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
@@ -13,14 +13,15 @@
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=785bba28"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="../../_static/js/versions.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within mdacli 0.1.17 documentation"
+          title="Search within mdacli 0.1.26 documentation"
           href="../../_static/opensearch.xml"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -31,15 +32,19 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search"  style="background: white" >
-            <a href="../../index.html">
-            <img src="../../_static/mdacli-logo.png" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/mdacli-logo.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.1.17
+                0.1.26
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -68,9 +73,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../index.html">Module code</a> &raquo;</li>
-      <li>mdacli.cli</li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">mdacli.cli</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -95,12 +100,13 @@
 <span class="kn">import</span> <span class="nn">warnings</span>
 
 <span class="kn">from</span> <span class="nn">MDAnalysis.analysis.base</span> <span class="kn">import</span> <span class="n">AnalysisBase</span>
+<span class="kn">from</span> <span class="nn">threadpoolctl</span> <span class="kn">import</span> <span class="n">threadpool_limits</span>
 
 <span class="kn">from</span> <span class="nn">.colors</span> <span class="kn">import</span> <span class="n">Emphasise</span>
 <span class="kn">from</span> <span class="nn">.libcli</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">find_cls_members</span><span class="p">,</span>
     <span class="n">init_base_argparse</span><span class="p">,</span>
-    <span class="n">run_analsis</span><span class="p">,</span>
+    <span class="n">run_analysis</span><span class="p">,</span>
     <span class="n">setup_clients</span><span class="p">,</span>
     <span class="n">split_argparse_into_groups</span><span class="p">,</span>
     <span class="p">)</span>
@@ -111,14 +117,16 @@
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="cli"><a class="viewcode-back" href="../../api/cli.html#mdacli.cli.cli">[docs]</a><span class="k">def</span> <span class="nf">cli</span><span class="p">(</span><span class="n">name</span><span class="p">,</span>
+<div class="viewcode-block" id="cli">
+<a class="viewcode-back" href="../../api/cli.html#mdacli.cli.cli">[docs]</a>
+<span class="k">def</span> <span class="nf">cli</span><span class="p">(</span><span class="n">name</span><span class="p">,</span>
         <span class="n">module_list</span><span class="p">,</span>
         <span class="n">base_class</span><span class="o">=</span><span class="n">AnalysisBase</span><span class="p">,</span>
         <span class="n">version</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
         <span class="n">description</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
         <span class="n">skip_modules</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">ignore_warnings</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Create the command-line interface.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create the command-line interface.</span>
 
 <span class="sd">    This function creates a command line interface with a given `name` based</span>
 <span class="sd">    on a module list.</span>
@@ -210,17 +218,19 @@
             <span class="n">arg_grouped_dict</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;Reference Universe Parameters&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
             <span class="n">arg_grouped_dict</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;Output Parameters&quot;</span><span class="p">,</span> <span class="p">{})</span>
 
-            <span class="n">run_analsis</span><span class="p">(</span><span class="n">analysis_callable</span><span class="p">,</span>
-                        <span class="n">arg_grouped_dict</span><span class="p">[</span><span class="s2">&quot;Mandatory Parameters&quot;</span><span class="p">],</span>
-                        <span class="n">arg_grouped_dict</span><span class="p">[</span><span class="s2">&quot;Optional Parameters&quot;</span><span class="p">],</span>
-                        <span class="n">arg_grouped_dict</span><span class="p">[</span><span class="s2">&quot;Reference Universe Parameters&quot;</span><span class="p">],</span>
-                        <span class="n">arg_grouped_dict</span><span class="p">[</span><span class="s2">&quot;Analysis Run Parameters&quot;</span><span class="p">],</span>
-                        <span class="n">arg_grouped_dict</span><span class="p">[</span><span class="s2">&quot;Output Parameters&quot;</span><span class="p">])</span>
+            <span class="k">with</span> <span class="n">threadpool_limits</span><span class="p">(</span><span class="n">limits</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">num_threads</span><span class="p">):</span>
+                <span class="n">run_analysis</span><span class="p">(</span><span class="n">analysis_callable</span><span class="p">,</span>
+                             <span class="n">arg_grouped_dict</span><span class="p">[</span><span class="s2">&quot;Mandatory Parameters&quot;</span><span class="p">],</span>
+                             <span class="n">arg_grouped_dict</span><span class="p">[</span><span class="s2">&quot;Optional Parameters&quot;</span><span class="p">],</span>
+                             <span class="n">arg_grouped_dict</span><span class="p">[</span><span class="s2">&quot;Reference Universe Parameters&quot;</span><span class="p">],</span>
+                             <span class="n">arg_grouped_dict</span><span class="p">[</span><span class="s2">&quot;Analysis Run Parameters&quot;</span><span class="p">],</span>
+                             <span class="n">arg_grouped_dict</span><span class="p">[</span><span class="s2">&quot;Output Parameters&quot;</span><span class="p">])</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
                 <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">Emphasise</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span></div>
+
 </pre></div>
 
            </div>
@@ -231,7 +241,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright 2021, Philip Loche, Joao MC Teixeira and Oliver Beckstein.
-      <span class="lastupdated">Last updated on Apr 08, 2022.
+      <span class="lastupdated">Last updated on Aug 25, 2023.
       </span></p>
   </div>
 
@@ -258,7 +268,7 @@
      aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
       <span class="fa fa-book"></span>
-        0.1.17
+        0.1.26
       <span class="fa fa-caret-down"></span>
     </span>
 

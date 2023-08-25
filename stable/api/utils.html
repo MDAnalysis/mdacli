@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Utilities &mdash; mdacli 0.1.17 documentation</title>
+  <title>Utilities &mdash; mdacli 0.1.26 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/msmb.css" type="text/css" />
       <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -14,14 +14,15 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/doctools.js"></script>
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=785bba28"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="../_static/js/versions.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within mdacli 0.1.17 documentation"
+          title="Search within mdacli 0.1.26 documentation"
           href="../_static/opensearch.xml"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -34,15 +35,19 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search"  style="background: white" >
-            <a href="../index.html">
-            <img src="../_static/mdacli-logo.png" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../index.html">
+            
+              <img src="../_static/mdacli-logo.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.1.17
+                0.1.26
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -59,7 +64,13 @@
 <li class="toctree-l2"><a class="reference internal" href="save.html">Results Saving</a></li>
 <li class="toctree-l2"><a class="reference internal" href="colors.html">Coloring</a></li>
 <li class="toctree-l2"><a class="reference internal" href="logger.html">Logging</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Utilities</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Utilities</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.utils.convert_str_time"><code class="docutils literal notranslate"><span class="pre">convert_str_time()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.utils.parse_callable_signature"><code class="docutils literal notranslate"><span class="pre">parse_callable_signature()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.utils.parse_docs"><code class="docutils literal notranslate"><span class="pre">parse_docs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.utils.split_time_unit"><code class="docutils literal notranslate"><span class="pre">split_time_unit()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
@@ -79,9 +90,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../api.html">API library documentation</a> &raquo;</li>
-      <li>Utilities</li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../api.html">API library documentation</a></li>
+      <li class="breadcrumb-item active">Utilities</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/api/utils.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -91,44 +102,44 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-mdacli.utils">
-<span id="utilities"></span><h1>Utilities<a class="headerlink" href="#module-mdacli.utils" title="Permalink to this headline"></a></h1>
-<p>Useful helper functions for running the cli.</p>
+  <section id="utilities">
+<h1>Utilities<a class="headerlink" href="#utilities" title="Link to this heading"></a></h1>
+<p id="module-mdacli.utils">Useful helper functions for running the cli.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="mdacli.utils.convert_str_time">
-<span class="sig-prename descclassname"><span class="pre">mdacli.utils.</span></span><span class="sig-name descname"><span class="pre">convert_str_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/utils.html#convert_str_time"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.utils.convert_str_time" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">mdacli.utils.</span></span><span class="sig-name descname"><span class="pre">convert_str_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/utils.html#convert_str_time"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.utils.convert_str_time" title="Link to this definition"></a></dt>
 <dd><p>Convert a string <cite>x</cite> into a frame number based on given <cite>dt</cite>.</p>
 <p>If <cite>x</cite> does not contain any units its assumed to be a frame number
 already.</p>
 <p>See <a class="reference internal" href="#mdacli.utils.split_time_unit" title="mdacli.utils.split_time_unit"><code class="xref py py-func docutils literal notranslate"><span class="pre">split_time_unit()</span></code></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>x</strong> (<em>str</em>) – the input string</p></li>
 <li><p><strong>dt</strong> (<em>float</em>) – the time step in ps</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><em>int</em> – frame number</p>
 </dd>
-<dt class="field-odd">Raises</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.10)"><strong>ValueError</strong></a> – The input does not contain any units but is not an integer.</p>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.11)"><strong>ValueError</strong></a> – The input does not contain any units but is not an integer.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mdacli.utils.parse_callable_signature">
-<span class="sig-prename descclassname"><span class="pre">mdacli.utils.</span></span><span class="sig-name descname"><span class="pre">parse_callable_signature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callable_obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/utils.html#parse_callable_signature"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.utils.parse_callable_signature" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">mdacli.utils.</span></span><span class="sig-name descname"><span class="pre">parse_callable_signature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callable_obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/utils.html#parse_callable_signature"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.utils.parse_callable_signature" title="Link to this definition"></a></dt>
 <dd><p>Parse a callable signature to a convenient dictionary for CLI creation.</p>
 <p>The parameters used in the CLI are a combination of the callable
 signature and the information in the callable docstring.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>callable_obj</strong> (<em>callable</em>) – The callable object to inspect. Details of this object required
 for the creation of a CLI are added to the <cite>storage_dict</cite>.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><em>dict</em></p>
 </dd>
 </dl>
@@ -136,16 +147,16 @@ for the creation of a CLI are added to the <cite>storage_dict</cite>.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mdacli.utils.parse_docs">
-<span class="sig-prename descclassname"><span class="pre">mdacli.utils.</span></span><span class="sig-name descname"><span class="pre">parse_docs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">klass</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/utils.html#parse_docs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.utils.parse_docs" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">mdacli.utils.</span></span><span class="sig-name descname"><span class="pre">parse_docs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">klass</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/utils.html#parse_docs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.utils.parse_docs" title="Link to this definition"></a></dt>
 <dd><p>Parse classes docstrings to a convenient dictionary.</p>
 <p>This parser is based on NumpyDocString format, yet it is not so
 strict. Combined docstrings from class main docstring and <cite>__init__</cite>
 method.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>klass</strong> (<em>callable</em>) – A klass object from which a DOCSTRING can be extracted.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><p><em>tuple (str, str, dict of dict)</em> –</p>
 <ul class="simple">
 <li><p>One line summary description of the callable</p></li>
@@ -163,15 +174,15 @@ method.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mdacli.utils.split_time_unit">
-<span class="sig-prename descclassname"><span class="pre">mdacli.utils.</span></span><span class="sig-name descname"><span class="pre">split_time_unit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/utils.html#split_time_unit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.utils.split_time_unit" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">mdacli.utils.</span></span><span class="sig-name descname"><span class="pre">split_time_unit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/utils.html#split_time_unit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.utils.split_time_unit" title="Link to this definition"></a></dt>
 <dd><p>Split time and units.</p>
 <p>Follows the regex:: <a class="reference external" href="https://regex101.com/r/LZAbil/2">https://regex101.com/r/LZAbil/2</a></p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><em>tuple (float, str)</em> – Value as float, units as str.</p>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#IndexError" title="(in Python v3.10)"><strong>IndexError</strong></a> – Tuple could not be found. This happens when a number is not
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#IndexError" title="(in Python v3.11)"><strong>IndexError</strong></a> – Tuple could not be found. This happens when a number is not
     present in the start of the string.</p>
 </dd>
 </dl>
@@ -191,7 +202,7 @@ method.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2021, Philip Loche, Joao MC Teixeira and Oliver Beckstein.
-      <span class="lastupdated">Last updated on Apr 08, 2022.
+      <span class="lastupdated">Last updated on Aug 25, 2023.
       </span></p>
   </div>
 
@@ -218,7 +229,7 @@ method.</p>
      aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
       <span class="fa fa-book"></span>
-        0.1.17
+        0.1.26
       <span class="fa fa-caret-down"></span>
     </span>
 

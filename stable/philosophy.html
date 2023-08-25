@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Philosophy and approach &mdash; mdacli 0.1.17 documentation</title>
+  <title>Philosophy and approach &mdash; mdacli 0.1.26 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/msmb.css" type="text/css" />
       <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -14,14 +14,15 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=785bba28"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="_static/js/versions.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within mdacli 0.1.17 documentation"
+          title="Search within mdacli 0.1.26 documentation"
           href="_static/opensearch.xml"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -34,15 +35,19 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search"  style="background: white" >
-            <a href="index.html">
-            <img src="_static/mdacli-logo.png" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/mdacli-logo.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.1.17
+                0.1.26
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -71,8 +76,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Philosophy and approach</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Philosophy and approach</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/philosophy.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -83,7 +88,7 @@
            <div itemprop="articleBody">
              
   <section id="philosophy-and-approach">
-<h1>Philosophy and approach<a class="headerlink" href="#philosophy-and-approach" title="Permalink to this headline"></a></h1>
+<h1>Philosophy and approach<a class="headerlink" href="#philosophy-and-approach" title="Link to this heading"></a></h1>
 <p>The mdacli project evolved from our experiences in
 <a class="reference external" href="https://github.com/joaomcteixeira/taurenmd">taurenmd</a> and
 <a class="reference external" href="https://gitlab.com/maicos-devel/maicos">maicos</a> which
@@ -99,7 +104,7 @@ scripts and face the same challenges and problems i.e.</p>
 <li><p>…</p></li>
 </ul>
 <p>Some of these problems can be solved by using the
-<a class="reference external" href="https://docs.mdanalysis.org/stable/documentation_pages/analysis/base.html#MDAnalysis.analysis.base.AnalysisBase" title="(in MDAnalysis v2.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MDAnalysis.analysis.base.AnalysisBase</span></code></a> class of MDA. However,
+<a class="reference external" href="https://docs.mdanalysis.org/stable/documentation_pages/analysis/base.html#MDAnalysis.analysis.base.AnalysisBase" title="(in MDAnalysis v2.6.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MDAnalysis.analysis.base.AnalysisBase</span></code></a> class of MDA. However,
 this class is limited to python, and sometimes a direct CLI to these
 scripts is very helpful for the day-to-day analysis.
 A generic CLI wrapper for all classes based on the AnalysisBase could
@@ -112,11 +117,11 @@ and developers to write their analysis using the
 <cite>base.AnalysisBase</cite>.</p>
 <p>Starting from <cite>taurenmd</cite> and <cite>maicos</cite> we
 developed a general CLI for any
-<a class="reference external" href="https://docs.mdanalysis.org/stable/documentation_pages/analysis/base.html#MDAnalysis.analysis.base.AnalysisBase" title="(in MDAnalysis v2.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MDAnalysis.analysis.base.AnalysisBase</span></code></a> class.
+<a class="reference external" href="https://docs.mdanalysis.org/stable/documentation_pages/analysis/base.html#MDAnalysis.analysis.base.AnalysisBase" title="(in MDAnalysis v2.6.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MDAnalysis.analysis.base.AnalysisBase</span></code></a> class.
 mdacli detects all analysis classes located inside the
 MDA project and builds a CLI wrapper around them. The wrapper
 is generic so it also applies to any downstream
-project that uses the <a class="reference external" href="https://docs.mdanalysis.org/stable/documentation_pages/analysis/base.html#MDAnalysis.analysis.base.AnalysisBase" title="(in MDAnalysis v2.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MDAnalysis.analysis.base.AnalysisBase</span></code></a>
+project that uses the <a class="reference external" href="https://docs.mdanalysis.org/stable/documentation_pages/analysis/base.html#MDAnalysis.analysis.base.AnalysisBase" title="(in MDAnalysis v2.6.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MDAnalysis.analysis.base.AnalysisBase</span></code></a>
 as parent class. If new classes are added to the
 MDA codebase they are just they will show up without
 any adjustments to <cite>mdacli</cite> itself.</p>
@@ -124,7 +129,7 @@ any adjustments to <cite>mdacli</cite> itself.</p>
 with an argument inspection using the <cite>inspect</cite> library. Based on
 a created dictionary containing
 each parameter of the class with its docstring and type, the actual command
-line interface is build using <a class="reference external" href="https://docs.python.org/3/library/argparse.html#module-argparse" title="(in Python v3.10)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">argparse</span></code></a>. The syntax of the
+line interface is build using <a class="reference external" href="https://docs.python.org/3/library/argparse.html#module-argparse" title="(in Python v3.11)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">argparse</span></code></a>. The syntax of the
 topology and the trajectory flags (<cite>-f</cite>, <cite>-s</cite>, …) is inspired by the
 <a class="reference external" href="https://manual.gromacs.org/documentation/current/user-guide/cmdline.html">GROMACS CLI</a>
 syntax.</p>
@@ -148,7 +153,7 @@ for high higher-dimensional arrays.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2021, Philip Loche, Joao MC Teixeira and Oliver Beckstein.
-      <span class="lastupdated">Last updated on Apr 08, 2022.
+      <span class="lastupdated">Last updated on Aug 25, 2023.
       </span></p>
   </div>
 
@@ -175,7 +180,7 @@ for high higher-dimensional arrays.</p>
      aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
       <span class="fa fa-book"></span>
-        0.1.17
+        0.1.26
       <span class="fa fa-caret-down"></span>
     </span>
 
