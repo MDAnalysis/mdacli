@@ -2,6 +2,10 @@
 Changelog
 =========
 
+
+v0.1.27 (2023-08-25)
+------------------------------------------
+
 * Reenable docs on https://mdacli.mdanalysis.org
 
 v0.1.26 (2023-06-27)
