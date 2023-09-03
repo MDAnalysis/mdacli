@@ -88,7 +88,7 @@ html_baseurl = site_url
 html_logo = "_static/logos/mdacli-logo.png"
 html_favicon = "_static/logos/mdanalysis-logo.ico"
 html_static_path = ['_static']
-html_css_files = ['custom.css']
+html_css_files = []
 html_use_opensearch = site_url
 
 html_context = {
