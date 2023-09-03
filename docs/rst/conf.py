@@ -6,10 +6,6 @@ import os
 import mock
 import sys
 
-import msmb_theme
-import sphinx_rtd_theme
-
-
 # activate if there are dependencies
 mock_modules = [
     'matplotlib',
@@ -36,7 +32,6 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.viewcode',
     'sphinx.ext.autosectionlabel',
-    'sphinx_rtd_theme',
     'sphinx_sitemap',
     ]
 
@@ -80,22 +75,10 @@ linkcheck_ignore = [
     r'https://codecov.io/gh/MDAnalysis/mdacli/*',
     ]
 
-html_theme = "msmb_theme"
-html_theme_path = [msmb_theme.get_html_theme_path(),
-                   sphinx_rtd_theme.get_html_theme_path()]
+html_theme = "mdanalysis_sphinx_theme"
+# html_theme_path = []
 html_theme_options = {
-    'canonical_url': '',
-    'logo_only': True,
-    'display_version': True,
-    'prev_next_buttons_location': 'bottom',
-    'style_external_links': False,
-    'style_nav_header_background': 'white',
-    # Toc options
-    'collapse_navigation': True,
-    'sticky_navigation': True,
-    'navigation_depth': 4,
-    'includehidden': True,
-    'titles_only': False,
+    'mda_official': True,
 }
 html_use_smartypants = True
 html_last_updated_fmt = '%b %d, %Y'
@@ -118,6 +101,7 @@ napoleon_use_param = False
 
 # Configuration for intersphinx: refer to the Python standard library
 # and other packages used by mdacli
-intersphinx_mapping = {'https://docs.python.org/': None,
-                       'https://docs.mdanalysis.org/stable/': None,
-                       }
+intersphinx_mapping = {
+    'python': ('https://docs.python.org/3/', None),
+    'mdanalysis': ('https://docs.mdanalysis.org/stable/', None),
+}
