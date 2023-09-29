@@ -8,13 +8,13 @@
 
 """Functionalities that support the creation of the command lines interface."""
 import argparse
-import importlib
 import ast
-import re
+import importlib
 import inspect
 import json
 import logging
 import os
+import re
 import warnings
 from typing import List
 
@@ -419,17 +419,18 @@ def create_cli(sub_parser, interface_name, parameters):
 
         # numpydocs allows for choices. Check if this is the case.
         try:
-            match = re.search("\{(?P<CAST>[^\]]*)\}", args_dict["type"])
+            match = re.search(r"\{(?P<CAST>[^\]]*)\}", args_dict["type"])
         except KeyError:
             match = None
             type_ = str
 
         if match is not None:
             # Parameter can only assume one of a fixed set of values.
-            # No type is given in this format, so we use ast.literal_eval to 
+            # No type is given in this format, so we use ast.literal_eval to
             # infer the correct type.
             values = [
-                ast.literal_eval(obj.strip(" `")) for obj in match.group(1).split(",")
+                ast.literal_eval(obj.strip(" `"))
+                for obj in match.group(1).split(",")
             ]
             # prepare type for later
             type_ = 'enum'

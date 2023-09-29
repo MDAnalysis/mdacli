@@ -246,7 +246,7 @@ def test_add_cli_universe(name, dest, default):
 def test_setup_clients(opt, dest, val):
     """Test all additional arguments."""
     testargs = ["mdacli", "rmsf", "-atomgroup", "all", opt]
-    if type(val) == list:
+    if type(val) is list:
         for i in val:
             testargs.append(str(i))
     else:
