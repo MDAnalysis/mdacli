@@ -111,9 +111,9 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="support-functions-for-cli">
-<h1>Support functions for CLI<a class="headerlink" href="#support-functions-for-cli" title="Link to this heading"></a></h1>
-<p id="module-mdacli.libcli">Functionalities that support the creation of the command lines interface.</p>
+  <section id="module-mdacli.libcli">
+<span id="support-functions-for-cli"></span><h1>Support functions for CLI<a class="headerlink" href="#module-mdacli.libcli" title="Link to this heading"></a></h1>
+<p>Functionalities that support the creation of the command lines interface.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="mdacli.libcli.KwargsDict">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mdacli.libcli.</span></span><span class="sig-name descname"><span class="pre">KwargsDict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">option_strings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">choices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">required</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metavar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/libcli.html#KwargsDict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.libcli.KwargsDict" title="Link to this definition"></a></dt>
@@ -261,25 +261,25 @@ CLI interface.</p></li>
 define the list of atoms. If the file includes bond information,
 partial charges, atom masses, … then these data will be available to
 MDAnalysis. Alternatively, an existing
-<a class="reference external" href="https://docs.mdanalysis.org/stable/documentation_pages/core/topology.html#MDAnalysis.core.topology.Topology" title="(in MDAnalysis v2.6.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MDAnalysis.core.topology.Topology</span></code></a> instance may be given,
+<a class="reference external" href="https://docs.mdanalysis.org/stable/documentation_pages/core/topology.html#MDAnalysis.core.topology.Topology" title="(in MDAnalysis v2.6.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MDAnalysis.core.topology.Topology</span></code></a> instance may be given,
 numpy coordinates, or None for an empty universe.</p></li>
 <li><p><strong>coordinates</strong> (<em>str, stream, list of str, list of stream</em>) – Coordinates can be provided as files of
 a single frame (eg a PDB, CRD, or GRO file); a list of single
 frames; or a trajectory file (in CHARMM/NAMD/LAMMPS DCD, Gromacs
 XTC/TRR, or generic XYZ format). The coordinates must be
 ordered in the same way as the list of atoms in the topology.
-See <a class="reference external" href="https://docs.mdanalysis.org/stable/documentation_pages/coordinates/init.html#id2" title="(in MDAnalysis v2.6.0)"><span>Table of supported coordinate formats</span></a> for what can be read
+See <a class="reference external" href="https://docs.mdanalysis.org/stable/documentation_pages/coordinates/init.html#id2" title="(in MDAnalysis v2.6.1)"><span>Table of supported coordinate formats</span></a> for what can be read
 as coordinates. Alternatively, streams can be given.</p></li>
 <li><p><strong>topology_format</strong> (<em>str, None</em>) – Provide the file format of the topology file; <code class="docutils literal notranslate"><span class="pre">None</span></code> guesses it from
 the file extension. Can also pass a subclass of
-<a class="reference external" href="https://docs.mdanalysis.org/stable/documentation_pages/topology/base.html#MDAnalysis.topology.base.TopologyReaderBase" title="(in MDAnalysis v2.6.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MDAnalysis.topology.base.TopologyReaderBase</span></code></a> to define a custom
+<a class="reference external" href="https://docs.mdanalysis.org/stable/documentation_pages/topology/base.html#MDAnalysis.topology.base.TopologyReaderBase" title="(in MDAnalysis v2.6.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MDAnalysis.topology.base.TopologyReaderBase</span></code></a> to define a custom
 reader to be used on the topology file.</p></li>
 <li><p><strong>trajectory_format</strong> (<em>str or list or object</em>) – provide the file format of the coordinate or trajectory file;
 <code class="docutils literal notranslate"><span class="pre">None</span></code> guesses it from the file extension. Note that this
 keyword has no effect if a list of file names is supplied because
 the “chained” reader has to guess the file format for each
 individual list member [<code class="docutils literal notranslate"><span class="pre">None</span></code>]. Can also pass a subclass of
-<a class="reference external" href="https://docs.mdanalysis.org/stable/documentation_pages/coordinates/base.html#MDAnalysis.coordinates.base.ProtoReader" title="(in MDAnalysis v2.6.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MDAnalysis.coordinates.base.ProtoReader</span></code></a> to define a custom
+<a class="reference external" href="https://docs.mdanalysis.org/stable/documentation_pages/coordinates/base.html#MDAnalysis.coordinates.base.ProtoReader" title="(in MDAnalysis v2.6.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MDAnalysis.coordinates.base.ProtoReader</span></code></a> to define a custom
 reader to be used on the trajectory file.</p></li>
 <li><p><strong>atom_style</strong> (<em>str</em>) – Customised LAMMPS <cite>atom_style</cite> information. Only works with
 <cite>topology_format = data</cite></p></li>
@@ -425,7 +425,7 @@ only-parse-one-argument-groups-parameters-with-argparse</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2021, Philip Loche, Joao MC Teixeira and Oliver Beckstein.
-      <span class="lastupdated">Last updated on Aug 25, 2023.
+      <span class="lastupdated">Last updated on Sep 29, 2023.
       </span></p>
   </div>
 
