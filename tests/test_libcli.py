@@ -700,6 +700,22 @@ class Test_create_cli():
 
         assert action.option_strings[0] == "-no-p0"
 
+    @pytest.mark.parametrize("val, type, choices",
+                             [("{'1','2','-1'},", int, [1, 2, -1]),
+                              ("{'1E8','-1.4'},", float, [1e8, -1.4]),
+                              ("{ 'a', 'b','c' },", str, ['a', 'b', 'c'])])
+    def tests_choices(self, parameters, val, type, choices):
+        """Test choices get parsed correctly."""
+        opt_params = {"p0": {'type': "{ 'a', 'b','c' },",
+                             'desc': 'p0 desc',
+                             "default": True}}
+        parameters["optional"] = opt_params
+
+        cli = self.cli(parameters)
+        action = cli._actions[-1]
+        assert action.choices == ["a", "b", "c"]
+        assert action.type is str
+
     def test_atomgroup_extra_argument(self, parameters):
         """Test if a universe group is added."""
         opt_params = {"p0": {'type': "AtomGroup",
