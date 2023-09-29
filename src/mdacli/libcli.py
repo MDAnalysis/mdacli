@@ -9,6 +9,8 @@
 """Functionalities that support the creation of the command lines interface."""
 import argparse
 import importlib
+import ast
+import re
 import inspect
 import json
 import logging
@@ -415,6 +417,24 @@ def create_cli(sub_parser, interface_name, parameters):
         except KeyError:
             type_ = str
 
+        # numpydocs allows for choices. Check if this is the case.
+        try:
+            match = re.search("\{(?P<CAST>[^\]]*)\}", args_dict["type"])
+        except KeyError:
+            match = None
+            type_ = str
+
+        if match is not None:
+            # Parameter can only assume one of a fixed set of values.
+            # No type is given in this format, so we use ast.literal_eval to 
+            # infer the correct type.
+            values = [
+                ast.literal_eval(obj.strip(" `")) for obj in match.group(1).split(",")
+            ]
+            # prepare type for later
+            type_ = 'enum'
+            default = values[0]
+
         try:
             default = args_dict["default"]
         except KeyError:
@@ -459,6 +479,9 @@ def create_cli(sub_parser, interface_name, parameters):
         elif type_ is mda.Universe:
             add_cli_universe(group, name)
             continue
+        elif type_ == 'enum':
+            arg_params["choices"] = values
+            arg_params["type"] = type(values[0])
         else:
             if type_ in (list, tuple):
                 arg_params["nargs"] = "+"
