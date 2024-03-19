@@ -8,11 +8,13 @@
 
 """Functionalities that support the creation of the command lines interface."""
 import argparse
+import ast
 import importlib
 import inspect
 import json
 import logging
 import os
+import re
 import warnings
 from typing import List
 
@@ -38,7 +40,9 @@ STR_TYPE_DICT = {
     "complex": complex,
     "NoneType": None,
     "AtomGroup": mda.AtomGroup,
+    "MDAnalysis.core.groups.AtomGroup": mda.AtomGroup,
     "list[AtomGroup]": List[mda.AtomGroup],
+    "MDAnalysis.core.universe.Universe": mda.Universe,
     "Universe": mda.Universe,
     }
 
@@ -413,6 +417,25 @@ def create_cli(sub_parser, interface_name, parameters):
         except KeyError:
             type_ = str
 
+        # numpydocs allows for choices. Check if this is the case.
+        try:
+            match = re.search(r"\{(?P<CAST>[^\]]*)\}", args_dict["type"])
+        except KeyError:
+            match = None
+            type_ = str
+
+        if match is not None:
+            # Parameter can only assume one of a fixed set of values.
+            # No type is given in this format, so we use ast.literal_eval to
+            # infer the correct type.
+            values = [
+                ast.literal_eval(obj.strip(" `"))
+                for obj in match.group(1).split(",")
+            ]
+            # prepare type for later
+            type_ = 'enum'
+            default = values[0]
+
         try:
             default = args_dict["default"]
         except KeyError:
@@ -457,6 +480,9 @@ def create_cli(sub_parser, interface_name, parameters):
         elif type_ is mda.Universe:
             add_cli_universe(group, name)
             continue
+        elif type_ == 'enum':
+            arg_params["choices"] = values
+            arg_params["type"] = type(values[0])
         else:
             if type_ in (list, tuple):
                 arg_params["nargs"] = "+"
@@ -674,7 +700,8 @@ def convert_analysis_parameters(analysis_callable,
 
     for param_name, dictionary in params.items():
         if param_name in analysis_parameters_keys:
-            if "AtomGroup" == dictionary['type']:
+            if dictionary['type'] in ["AtomGroup",
+                                      "MDAnalysis.core.groups.AtomGroup"]:
                 sel = analysis_parameters[param_name]
                 # Do not try to parse `None` value
                 # They could be default arguments of a function
@@ -699,7 +726,8 @@ def convert_analysis_parameters(analysis_callable,
                                          f"string of the selection {sel}` "
                                          f"does not contain any atoms.")
 
-            elif "Universe" == dictionary['type']:
+            elif dictionary['type'] in ["Universe",
+                                        "MDAnalysis.core.universe.Universe"]:
                 # Create universe parameter dictionary from signature
                 sig = inspect.signature(create_universe)
                 universe_parameters = dict(sig.parameters)

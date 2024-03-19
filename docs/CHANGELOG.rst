@@ -4,6 +4,22 @@ Changelog
 
 * Reenable docs on https://mdacli.mdanalysis.org
 
+v0.1.28 (2023-09-29)
+------------------------------------------
+
+
+* Make choices style parsable (#114) 
+
+v0.1.27 (2023-08-25)
+------------------------------------------
+
+* Reenable docs on https://mdacli.mdanalysis.org
+
+v0.1.26 (2023-06-27)
+------------------------------------------
+
+* Make the canonical names of mda types parsable.
+
 v0.1.25 (2023-02-21)
 ------------------------------------------
 
