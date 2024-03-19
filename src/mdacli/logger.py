@@ -15,7 +15,7 @@ from .colors import Emphasise
 
 
 @contextlib.contextmanager
-def setup_logging(logobj, logfile=None, debug=False):
+def setup_logging(logobj, logfile=None, level=logging.INFO):
     """
     Create a logging environment for a given logobj.
 
@@ -25,19 +25,18 @@ def setup_logging(logobj, logfile=None, debug=False):
         A logging instance
     logfile : str
         Name of the log file
-    debug : bool
-        If ``True`` detailed debug logs inludcing filename and function name
-        are displayed. If ``False`` only the message logged from
-        errors, warnings and infos will be displayed.
+    level : int
+        Set the root logger level to the specified level. If for example set to
+        :py:obj:`logging.DEBUG` detailed debug logs inludcing filename and function name
+        are displayed. For :py:obj:`logging.INFO only the message logged from errors,
+        warnings and infos will be displayed.
     """
     try:
-        format = '{message}'
-        if debug:
+        if level == logging.DEBUG:
             format = "[{levelname}] {filename}:{name}:{funcName}:{lineno}: " \
                      + format
-            level = logging.DEBUG
         else:
-            level = logging.INFO
+            format = "{message}"
 
         logging.basicConfig(format=format,
                             handlers=[logging.StreamHandler(sys.stdout)],

@@ -8,6 +8,7 @@
 
 """The toplevel command line interface."""
 import logging
+from selectors import EpollSelector
 import sys
 import traceback
 import warnings
@@ -113,7 +114,12 @@ def cli(name,
         # Ignore all warnings if not in debug mode
         warnings.filterwarnings("ignore")
 
-    with setup_logging(logger, logfile=args.logfile, debug=args.debug):
+    if args.debug:
+        level = logging.DEBUG
+    else:
+        level = logging.INFO
+
+    with setup_logging(logger, logfile=args.logfile, level=level):
         # Execute the main client interface.
         try:
             analysis_callable = args.analysis_callable
