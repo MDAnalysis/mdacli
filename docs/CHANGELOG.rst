@@ -2,11 +2,11 @@
 Changelog
 =========
 
-* Reenable docs on https://mdacli.mdanalysis.org
+* Replace Boolean ``debug`` option in  ``setup_logging`` by more flexible integer
+  ``level`` parameter.
 
 v0.1.28 (2023-09-29)
 ------------------------------------------
-
 
 * Make choices style parsable (#114) 
 

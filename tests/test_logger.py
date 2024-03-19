@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- Mode: python; tab-width: 4; indent-tabs-mode:nil; coding:utf-8 -*-
 #
-# Copyright (c) 2021 Authors and contributors
+# Copyright (c) 2024 Authors and contributors
 #
 # Released under the GNU Public Licence, v2 or any higher version
 # SPDX-License-Identifier: GPL-2.0-or-later
@@ -20,7 +20,7 @@ class Test_setup_logger:
         logger = logging.getLogger("test")
         with mdacli.logger.setup_logging(logger,
                                          logfile=None,
-                                         debug=False):
+                                         level=logging.INFO):
             logger.info("foo")
             assert "foo" in caplog.text
 
@@ -33,7 +33,7 @@ class Test_setup_logger:
             # is created by the function.
             with mdacli.logger.setup_logging(logger,
                                              logfile="logfile",
-                                             debug=False):
+                                             level=logging.INFO):
                 logger.info("foo")
                 assert "foo" in caplog.text
             with open("logfile.log", "r") as f:
@@ -48,7 +48,7 @@ class Test_setup_logger:
         with tmpdir.as_cwd():
             with mdacli.logger.setup_logging(logger,
                                              logfile="logfile",
-                                             debug=True):
+                                             level=logging.DEBUG):
                 logger.info("foo")
                 assert "test:test_logger.py:52 foo\n" in caplog.text
 
