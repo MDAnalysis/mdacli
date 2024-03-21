@@ -2,6 +2,10 @@
 Changelog
 =========
 
+
+v0.1.29 (2024-03-21)
+------------------------------------------
+
 * Change handling of lowercase module names
 
 v0.1.28 (2023-09-29)

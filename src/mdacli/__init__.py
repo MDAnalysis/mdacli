@@ -11,5 +11,5 @@ from mdacli.cli import cli
 
 
 __all__ = ["cli"]
-__version__ = '0.1.28'
+__version__ = '0.1.29'
 __authors__ = 'MDAnalysis Development Team and contributors'
