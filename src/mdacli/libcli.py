@@ -767,7 +767,7 @@ def setup_clients(ap, title, members):
     # to be writen
     for member_name, parameters in analysis_interfaces.items():
         create_cli(sub_parser=cli_subparser,
-                   interface_name=member_name.lower(),
+                   interface_name=member_name,
                    parameters=parameters)
 
 
