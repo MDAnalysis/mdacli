@@ -36,6 +36,7 @@ def test_case_insensitive(args):
     """Test for beeing case insensitive."""
     subprocess.check_call(['mda', args, "-h"])
 
+
 @pytest.mark.parametrize('args', ("RMSF", "rmsf"))
 def test_case_insensitive_with_flags(args):
     """Test for module name being case insensitive with additional flags."""
