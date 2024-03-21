@@ -102,9 +102,6 @@ def cli(name,
     #   sub parser in complete detail.
     setup_clients(ap, title=f"{name} Analysis Modules", members=modules)
 
-    # Be case insensitive for the subcommand
-    sys.argv[1] = sys.argv[1].lower()
-
     args = ap.parse_args()
 
     if args.debug:
@@ -120,7 +117,7 @@ def cli(name,
 
             # Get the correct ArgumentParser instance from all subparsers
             # `[0]` selects the first subparser where our analysises live in.
-            _key = analysis_callable.__name__.lower()
+            _key = analysis_callable.__name__
             ap_sup = ap._subparsers._group_actions[0].choices[_key]
             arg_grouped_dict = split_argparse_into_groups(ap_sup, args)
 
