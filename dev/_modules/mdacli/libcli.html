@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>mdacli.libcli &mdash; mdacli 0.1.28 documentation</title>
-      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/msmb.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d10597a4" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/msmb.css?v=51bd699f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=27e8b3b8" />
+
+  
     <link rel="shortcut icon" href="../../_static/mdanalysis-logo.ico"/>
     <link rel="canonical" href="https://mdacli.mdanalysis.org/_modules/mdacli/libcli.html" />
   <!--[if lt IE 9]>
@@ -477,6 +479,7 @@
     <span class="c1"># creates the subparser</span>
     <span class="n">analysis_class_parser</span> <span class="o">=</span> <span class="n">sub_parser</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span>
         <span class="n">interface_name</span><span class="p">,</span>
+        <span class="n">aliases</span><span class="o">=</span><span class="p">[</span><span class="n">interface_name</span><span class="o">.</span><span class="n">lower</span><span class="p">()],</span>
         <span class="n">help</span><span class="o">=</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;desc&quot;</span><span class="p">],</span>
         <span class="n">description</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;desc&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n\n</span><span class="si">{</span><span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;desc_long&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
         <span class="n">formatter_class</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">RawDescriptionHelpFormatter</span><span class="p">,</span>
@@ -888,7 +891,7 @@
     <span class="c1"># to be writen</span>
     <span class="k">for</span> <span class="n">member_name</span><span class="p">,</span> <span class="n">parameters</span> <span class="ow">in</span> <span class="n">analysis_interfaces</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="n">create_cli</span><span class="p">(</span><span class="n">sub_parser</span><span class="o">=</span><span class="n">cli_subparser</span><span class="p">,</span>
-                   <span class="n">interface_name</span><span class="o">=</span><span class="n">member_name</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span>
+                   <span class="n">interface_name</span><span class="o">=</span><span class="n">member_name</span><span class="p">,</span>
                    <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">)</span></div>
 
 
@@ -955,7 +958,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright 2021, Philip Loche, Joao MC Teixeira and Oliver Beckstein.
-      <span class="lastupdated">Last updated on Sep 29, 2023.
+      <span class="lastupdated">Last updated on Mar 21, 2024.
       </span></p>
   </div>
 

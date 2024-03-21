@@ -1,13 +1,15 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Philosophy and approach &mdash; mdacli 0.1.28 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/msmb.css" type="text/css" />
-      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d10597a4" />
+      <link rel="stylesheet" type="text/css" href="_static/css/msmb.css?v=51bd699f" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=27e8b3b8" />
+
+  
     <link rel="shortcut icon" href="_static/mdanalysis-logo.ico"/>
     <link rel="canonical" href="https://mdacli.mdanalysis.org/philosophy.html" />
   <!--[if lt IE 9]>
@@ -104,7 +106,7 @@ scripts and face the same challenges and problems i.e.</p>
 <li><p>…</p></li>
 </ul>
 <p>Some of these problems can be solved by using the
-<a class="reference external" href="https://docs.mdanalysis.org/stable/documentation_pages/analysis/base.html#MDAnalysis.analysis.base.AnalysisBase" title="(in MDAnalysis v2.6.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MDAnalysis.analysis.base.AnalysisBase</span></code></a> class of MDA. However,
+<a class="reference external" href="https://docs.mdanalysis.org/stable/documentation_pages/analysis/base.html#MDAnalysis.analysis.base.AnalysisBase" title="(in MDAnalysis v2.7.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MDAnalysis.analysis.base.AnalysisBase</span></code></a> class of MDA. However,
 this class is limited to python, and sometimes a direct CLI to these
 scripts is very helpful for the day-to-day analysis.
 A generic CLI wrapper for all classes based on the AnalysisBase could
@@ -117,11 +119,11 @@ and developers to write their analysis using the
 <cite>base.AnalysisBase</cite>.</p>
 <p>Starting from <cite>taurenmd</cite> and <cite>maicos</cite> we
 developed a general CLI for any
-<a class="reference external" href="https://docs.mdanalysis.org/stable/documentation_pages/analysis/base.html#MDAnalysis.analysis.base.AnalysisBase" title="(in MDAnalysis v2.6.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MDAnalysis.analysis.base.AnalysisBase</span></code></a> class.
+<a class="reference external" href="https://docs.mdanalysis.org/stable/documentation_pages/analysis/base.html#MDAnalysis.analysis.base.AnalysisBase" title="(in MDAnalysis v2.7.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MDAnalysis.analysis.base.AnalysisBase</span></code></a> class.
 mdacli detects all analysis classes located inside the
 MDA project and builds a CLI wrapper around them. The wrapper
 is generic so it also applies to any downstream
-project that uses the <a class="reference external" href="https://docs.mdanalysis.org/stable/documentation_pages/analysis/base.html#MDAnalysis.analysis.base.AnalysisBase" title="(in MDAnalysis v2.6.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MDAnalysis.analysis.base.AnalysisBase</span></code></a>
+project that uses the <a class="reference external" href="https://docs.mdanalysis.org/stable/documentation_pages/analysis/base.html#MDAnalysis.analysis.base.AnalysisBase" title="(in MDAnalysis v2.7.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MDAnalysis.analysis.base.AnalysisBase</span></code></a>
 as parent class. If new classes are added to the
 MDA codebase they are just they will show up without
 any adjustments to <cite>mdacli</cite> itself.</p>
@@ -129,7 +131,7 @@ any adjustments to <cite>mdacli</cite> itself.</p>
 with an argument inspection using the <cite>inspect</cite> library. Based on
 a created dictionary containing
 each parameter of the class with its docstring and type, the actual command
-line interface is build using <a class="reference external" href="https://docs.python.org/3/library/argparse.html#module-argparse" title="(in Python v3.11)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">argparse</span></code></a>. The syntax of the
+line interface is build using <a class="reference external" href="https://docs.python.org/3/library/argparse.html#module-argparse" title="(in Python v3.12)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">argparse</span></code></a>. The syntax of the
 topology and the trajectory flags (<cite>-f</cite>, <cite>-s</cite>, …) is inspired by the
 <a class="reference external" href="https://manual.gromacs.org/documentation/current/user-guide/cmdline.html">GROMACS CLI</a>
 syntax.</p>
@@ -153,7 +155,7 @@ for high higher-dimensional arrays.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2021, Philip Loche, Joao MC Teixeira and Oliver Beckstein.
-      <span class="lastupdated">Last updated on Sep 29, 2023.
+      <span class="lastupdated">Last updated on Mar 21, 2024.
       </span></p>
   </div>
 

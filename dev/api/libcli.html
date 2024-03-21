@@ -1,13 +1,15 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Support functions for CLI &mdash; mdacli 0.1.28 documentation</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/msmb.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d10597a4" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/msmb.css?v=51bd699f" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=27e8b3b8" />
+
+  
     <link rel="shortcut icon" href="../_static/mdanalysis-logo.ico"/>
     <link rel="canonical" href="https://mdacli.mdanalysis.org/api/libcli.html" />
   <!--[if lt IE 9]>
@@ -195,7 +197,7 @@ for every element in list</p></li>
 of no ine is created</p>
 </dd>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.11)"><strong>ValueError</strong></a> – If an Atomgroup does not contain any atoms</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.12)"><strong>ValueError</strong></a> – If an Atomgroup does not contain any atoms</p>
 </dd>
 </dl>
 </dd></dl>
@@ -261,25 +263,25 @@ CLI interface.</p></li>
 define the list of atoms. If the file includes bond information,
 partial charges, atom masses, … then these data will be available to
 MDAnalysis. Alternatively, an existing
-<a class="reference external" href="https://docs.mdanalysis.org/stable/documentation_pages/core/topology.html#MDAnalysis.core.topology.Topology" title="(in MDAnalysis v2.6.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MDAnalysis.core.topology.Topology</span></code></a> instance may be given,
+<a class="reference external" href="https://docs.mdanalysis.org/stable/documentation_pages/core/topology.html#MDAnalysis.core.topology.Topology" title="(in MDAnalysis v2.7.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MDAnalysis.core.topology.Topology</span></code></a> instance may be given,
 numpy coordinates, or None for an empty universe.</p></li>
 <li><p><strong>coordinates</strong> (<em>str, stream, list of str, list of stream</em>) – Coordinates can be provided as files of
 a single frame (eg a PDB, CRD, or GRO file); a list of single
 frames; or a trajectory file (in CHARMM/NAMD/LAMMPS DCD, Gromacs
 XTC/TRR, or generic XYZ format). The coordinates must be
 ordered in the same way as the list of atoms in the topology.
-See <a class="reference external" href="https://docs.mdanalysis.org/stable/documentation_pages/coordinates/init.html#id2" title="(in MDAnalysis v2.6.1)"><span>Table of supported coordinate formats</span></a> for what can be read
+See <a class="reference external" href="https://docs.mdanalysis.org/stable/documentation_pages/coordinates/init.html#id2" title="(in MDAnalysis v2.7.0)"><span>Table of supported coordinate formats</span></a> for what can be read
 as coordinates. Alternatively, streams can be given.</p></li>
 <li><p><strong>topology_format</strong> (<em>str, None</em>) – Provide the file format of the topology file; <code class="docutils literal notranslate"><span class="pre">None</span></code> guesses it from
 the file extension. Can also pass a subclass of
-<a class="reference external" href="https://docs.mdanalysis.org/stable/documentation_pages/topology/base.html#MDAnalysis.topology.base.TopologyReaderBase" title="(in MDAnalysis v2.6.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MDAnalysis.topology.base.TopologyReaderBase</span></code></a> to define a custom
+<a class="reference external" href="https://docs.mdanalysis.org/stable/documentation_pages/topology/base.html#MDAnalysis.topology.base.TopologyReaderBase" title="(in MDAnalysis v2.7.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MDAnalysis.topology.base.TopologyReaderBase</span></code></a> to define a custom
 reader to be used on the topology file.</p></li>
 <li><p><strong>trajectory_format</strong> (<em>str or list or object</em>) – provide the file format of the coordinate or trajectory file;
 <code class="docutils literal notranslate"><span class="pre">None</span></code> guesses it from the file extension. Note that this
 keyword has no effect if a list of file names is supplied because
 the “chained” reader has to guess the file format for each
 individual list member [<code class="docutils literal notranslate"><span class="pre">None</span></code>]. Can also pass a subclass of
-<a class="reference external" href="https://docs.mdanalysis.org/stable/documentation_pages/coordinates/base.html#MDAnalysis.coordinates.base.ProtoReader" title="(in MDAnalysis v2.6.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MDAnalysis.coordinates.base.ProtoReader</span></code></a> to define a custom
+<a class="reference external" href="https://docs.mdanalysis.org/stable/documentation_pages/coordinates/base.html#MDAnalysis.coordinates.base.ProtoReader" title="(in MDAnalysis v2.7.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MDAnalysis.coordinates.base.ProtoReader</span></code></a> to define a custom
 reader to be used on the trajectory file.</p></li>
 <li><p><strong>atom_style</strong> (<em>str</em>) – Customised LAMMPS <cite>atom_style</cite> information. Only works with
 <cite>topology_format = data</cite></p></li>
@@ -289,7 +291,7 @@ shapes of (3, 0) or (1, 3) all angles are set to 90 degrees.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#IndexError" title="(in Python v3.11)"><strong>IndexError</strong></a> – If the dimesions of the <cite>dimensions</cite> argument are not 3 or 6.</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#IndexError" title="(in Python v3.12)"><strong>IndexError</strong></a> – If the dimesions of the <cite>dimensions</cite> argument are not 3 or 6.</p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><cite>MDAnalysis.Universe</cite></p>
@@ -425,7 +427,7 @@ only-parse-one-argument-groups-parameters-with-argparse</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2021, Philip Loche, Joao MC Teixeira and Oliver Beckstein.
-      <span class="lastupdated">Last updated on Sep 29, 2023.
+      <span class="lastupdated">Last updated on Mar 21, 2024.
       </span></p>
   </div>
 
