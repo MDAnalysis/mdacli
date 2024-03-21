@@ -12,6 +12,11 @@ import subprocess
 import pytest
 from MDAnalysisTests.datafiles import TPR, XTC
 
+class TestLogLevel(AnalysisBase):
+
+    def __init__(self):
+        self.log = logging.getLogger(__name__)
+        self.log.debug("TestLogLevel.__init__")
 
 def test_required_args():
     """Test that there is a module given."""
@@ -42,3 +47,9 @@ def test_running_analysis(tmpdir):
     with tmpdir.as_cwd():
         subprocess.check_call(
             ['mda', "rmsf", "-s", TPR, "-f", XTC, "-atomgroup", "all"])
+
+
+def test_verbosity_level_debug():
+    """Test the debug level."""
+    with pytest.raises(subprocess.CalledProcessError):
+        subprocess.check_call(['mda', --debug])

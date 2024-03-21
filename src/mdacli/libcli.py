@@ -367,6 +367,7 @@ def create_cli(sub_parser, interface_name, parameters):
     # creates the subparser
     analysis_class_parser = sub_parser.add_parser(
         interface_name,
+        aliases=[interface_name.lower()],
         help=parameters["desc"],
         description=f"{parameters['desc']}\n\n{parameters['desc_long']}",
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -766,7 +767,7 @@ def setup_clients(ap, title, members):
     # to be writen
     for member_name, parameters in analysis_interfaces.items():
         create_cli(sub_parser=cli_subparser,
-                   interface_name=member_name.lower(),
+                   interface_name=member_name,
                    parameters=parameters)
 
 

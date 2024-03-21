@@ -102,13 +102,6 @@ def cli(name,
     #   sub parser in complete detail.
     setup_clients(ap, title=f"{name} Analysis Modules", members=modules)
 
-    # Be case insensitive for the subcommand
-    module_names = [mod.__name__.split(".")[-1] for mod in modules]
-
-    for i, arg in enumerate(sys.argv[1:]):
-        if arg in module_names:
-            sys.argv[i + 1] = arg.lower()
-
     args = ap.parse_args()
 
     # Set the logging level based on the verbose argument
