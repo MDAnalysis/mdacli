@@ -103,20 +103,26 @@ def cli(name,
     setup_clients(ap, title=f"{name} Analysis Modules", members=modules)
 
     # Be case insensitive for the subcommand
-    sys.argv[1] = sys.argv[1].lower()
+    module_names = [mod.__name__.split(".")[-1] for mod in modules]
+
+    for i, arg in enumerate(sys.argv[1:]):
+        if arg in module_names:
+            sys.argv[i + 1] = arg.lower()
 
     args = ap.parse_args()
 
-    if args.debug:
-        args.verbose = True
+    # Set the logging level based on the verbose argument
+    # If verbose is not an argument, default to WARNING
+    if not hasattr(args, "verbose") or not args.verbose:
+        level = logging.WARNING
     else:
-        # Ignore all warnings if not in debug mode
-        warnings.filterwarnings("ignore")
+        level = logging.INFO
 
     if args.debug:
         level = logging.DEBUG
     else:
-        level = logging.INFO
+        # Ignore all warnings if not in debug mode, because MDA is noisy
+        warnings.filterwarnings("ignore")
 
     with setup_logging(logger, logfile=args.logfile, level=level):
         # Execute the main client interface.

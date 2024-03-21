@@ -33,7 +33,7 @@ def test_extra_options(args):
 
 @pytest.mark.parametrize('args', ("RMSF", "rmsf"))
 def test_case_insensitive(args):
-    """Test for beeing case insensitive."""
+    """Test for being case insensitive."""
     subprocess.check_call(['mda', args, "-h"])
 
 
