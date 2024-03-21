@@ -2,10 +2,10 @@
 Changelog
 =========
 
+* Change handling of lowercase module names
 
 v0.1.28 (2023-09-29)
 ------------------------------------------
-
 
 * Make choices style parsable (#114) 
 
