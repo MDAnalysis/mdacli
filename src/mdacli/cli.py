@@ -102,9 +102,6 @@ def cli(name,
     #   sub parser in complete detail.
     setup_clients(ap, title=f"{name} Analysis Modules", members=modules)
 
-    # Be case insensitive for the subcommand
-    sys.argv[1] = sys.argv[1].lower()
-
     args = ap.parse_args()
 
     if args.debug:
