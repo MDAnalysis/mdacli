@@ -1,1 +1,1 @@
-from .tester_class import Tester
+from .tester_class import Tester # noqa

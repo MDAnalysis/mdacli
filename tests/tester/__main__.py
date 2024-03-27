@@ -6,11 +6,12 @@
 #
 # Released under the GNU Public Licence, v3 or any higher version
 # SPDX-License-Identifier: GPL-3.0-or-later
-"""Analyse molecular dynamics simulation of interfacial and confined systems."""
+"""Test module for mdacli."""
+
+from MDAnalysis.analysis.base import AnalysisBase
 
 from mdacli import cli
 
-from MDAnalysis.analysis.base import AnalysisBase
 
 def main():
     """Execute main CLI entry point."""

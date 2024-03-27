@@ -1,22 +1,34 @@
+#!/usr/bin/env python3
+# -*- Mode: python; tab-width: 4; indent-tabs-mode:nil; coding:utf-8 -*-
+#
+# Copyright (c) 2024 Authors and contributors
+#
+# Released under the GNU Public Licence, v2 or any higher version
+# SPDX-License-Identifier: GPL-2.0-or-later
+"""Test module for mdacli."""
+
+import logging
+
 from MDAnalysis.analysis.base import AnalysisBase
 
 
+logger = logging.getLogger(__name__)
+
+
 class Tester(AnalysisBase):
-    """Test class for mdacli. I AM STUPID
-    
+    """Test class for mdacli. I AM STUPID.
+
     Parameters
     ----------
-    bins : int
-        Determines the number of bins used for data averaging; (this parameter sets the
-        upper limit). The data are by default binned logarithmically. This helps to
-        reduce noise, particularly in the high-frequency domain, and also prevents plot
-        files from being too large.
-
+    atomgroup : AtomGroup or Universe
     """
 
-    def __init__(self, universe, **kwargs):
+    def __init__(self, atomgroup, **kwargs):
         """Initialise the Tester class."""
-        super().__init__(universe, **kwargs)
+        super(Tester, self).__init__(atomgroup.universe.trajectory, **kwargs)
+        logger.info("This is an info message")
+        logger.warn("This is a warning")
+        logger.debug("This is a debug message")
 
     def _prepare(self):
         """Prepare the analysis."""
