@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mdacli"
-version = "0.1.28"
+version = "0.1.29"
 description = "A command line client for MDAnalysis Analysis classes."
 authors = [
     {name = "MDAnalysis Development Team and contributors", email = "mdanalysis@numfocus.org"},

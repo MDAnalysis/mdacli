@@ -124,7 +124,7 @@ def cli(name,
 
             # Get the correct ArgumentParser instance from all subparsers
             # `[0]` selects the first subparser where our analysises live in.
-            _key = analysis_callable.__name__.lower()
+            _key = analysis_callable.__name__
             ap_sup = ap._subparsers._group_actions[0].choices[_key]
             arg_grouped_dict = split_argparse_into_groups(ap_sup, args)
 
