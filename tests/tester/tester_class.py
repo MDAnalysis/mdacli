@@ -5,7 +5,7 @@
 #
 # Released under the GNU Public Licence, v2 or any higher version
 # SPDX-License-Identifier: GPL-2.0-or-later
-"""Test module for mdacli."""
+"""Mock module for mdacli to test logging."""
 
 import logging
 
@@ -16,7 +16,10 @@ logger = logging.getLogger(__name__)
 
 
 class Tester(AnalysisBase):
-    """Test class for mdacli. I AM STUPID.
+    """Mock class for mdacli. Implements only the minimum requirements.
+
+    Currently only logs messages at different levels to check the verbosity and
+    debug flags in the CLI.
 
     Parameters
     ----------
