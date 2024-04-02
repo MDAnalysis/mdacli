@@ -8,6 +8,7 @@
 """Test mdacli cli."""
 
 import subprocess
+import sys
 
 import pytest
 from MDAnalysisTests.datafiles import TPR, XTC
@@ -51,12 +52,16 @@ def test_running_analysis(tmpdir):
             ["mda", "rmsf", "-s", TPR, "-f", XTC, "-atomgroup", "all"]
         )
 
+if sys.platform == "win32":
+    tester_class = ".\tests\run_tester"
+else:
+    tester_class = "./tests/run_tester"
 
 def test_verbosity_level_warning(caplog):
     """Test the log level warning."""
     # This should only print warning messages
     output = subprocess.check_output(
-        ["./tests/run_tester",
+        [tester_class,
          "tester", "-s", TPR, "-f", XTC, "-atomgroup", "all"],
         text=True,
     )
@@ -71,7 +76,7 @@ def test_verbosity_level_info(caplog):
     # This should only print warning and info messages
     output = subprocess.check_output(
         [
-            "./tests/run_tester",
+            tester_class,
             "tester", "-s", TPR, "-f", XTC,
             "-atomgroup", "all",
             "-v",
@@ -89,7 +94,7 @@ def test_verbosity_level_debug(caplog):
     # This should print all messages
     output = subprocess.check_output(
         [
-            "./tests/run_tester", "--debug",
+            tester_class, "--debug",
             "tester", "-s", TPR, "-f", XTC,
             "-atomgroup", "all",
             "-v",
