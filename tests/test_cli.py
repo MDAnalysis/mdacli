@@ -60,7 +60,7 @@ def test_verbosity_level_warning(caplog):
     """Test the log level warning."""
     # This should only print warning messages
     output = subprocess.check_output(
-        [tester_class,
+        ["python3", tester_class,
          "tester", "-s", TPR, "-f", XTC, "-atomgroup", "all"],
         text=True,
     )
@@ -75,7 +75,7 @@ def test_verbosity_level_info(caplog):
     # This should only print warning and info messages
     output = subprocess.check_output(
         [
-            tester_class,
+            "python3", tester_class,
             "tester", "-s", TPR, "-f", XTC,
             "-atomgroup", "all",
             "-v",
@@ -93,7 +93,7 @@ def test_verbosity_level_debug(caplog):
     # This should print all messages
     output = subprocess.check_output(
         [
-            tester_class, "--debug",
+            "python3", tester_class, "--debug",
             "tester", "-s", TPR, "-f", XTC,
             "-atomgroup", "all",
             "-v",
