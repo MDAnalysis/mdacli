@@ -8,10 +8,13 @@
 """Test mdacli cli."""
 
 import subprocess
-import sys
+from pathlib import Path
 
 import pytest
 from MDAnalysisTests.datafiles import TPR, XTC
+
+
+tester_class = (Path('.').absolute() / 'tests/run_tester').as_posix()
 
 
 def test_required_args():
@@ -52,10 +55,6 @@ def test_running_analysis(tmpdir):
             ["mda", "rmsf", "-s", TPR, "-f", XTC, "-atomgroup", "all"]
         )
 
-if sys.platform == "win32":
-    tester_class = ".\tests\run_tester"
-else:
-    tester_class = "./tests/run_tester"
 
 def test_verbosity_level_warning(caplog):
     """Test the log level warning."""
