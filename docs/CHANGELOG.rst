@@ -2,8 +2,7 @@
 Changelog
 =========
 
-* Replace Boolean ``debug`` option in  ``setup_logging`` by more flexible integer
-  ``level`` parameter.
+* Change handling of CHANGELOG checks
 
 v0.1.30 (2024-04-03)
 ------------------------------------------
