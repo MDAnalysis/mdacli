@@ -2,6 +2,7 @@
 Changelog
 =========
 
+* Change handling of CHANGELOG checks
 
 v0.1.30 (2024-04-03)
 ------------------------------------------
