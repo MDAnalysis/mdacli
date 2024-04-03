@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- Mode: python; tab-width: 4; indent-tabs-mode:nil; coding:utf-8 -*-
 #
-# Copyright (c) 2021 Authors and contributors
+# Copyright (c) 2024 Authors and contributors
 #
 # Released under the GNU Public Licence, v2 or any higher version
 # SPDX-License-Identifier: GPL-2.0-or-later
@@ -104,13 +104,20 @@ def cli(name,
 
     args = ap.parse_args()
 
-    if args.debug:
-        args.verbose = True
+    # Set the logging level based on the verbose argument
+    # If verbose is not an argument, default to WARNING
+    if not hasattr(args, "verbose") or not args.verbose:
+        level = logging.WARNING
     else:
-        # Ignore all warnings if not in debug mode
+        level = logging.INFO
+
+    if args.debug:
+        level = logging.DEBUG
+    else:
+        # Ignore all warnings if not in debug mode, because MDA is noisy
         warnings.filterwarnings("ignore")
 
-    with setup_logging(logger, logfile=args.logfile, debug=args.debug):
+    with setup_logging(logger, logfile=args.logfile, level=level):
         # Execute the main client interface.
         try:
             analysis_callable = args.analysis_callable
