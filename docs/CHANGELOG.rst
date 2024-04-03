@@ -2,6 +2,10 @@
 Changelog
 =========
 
+
+v0.1.30 (2024-04-03)
+------------------------------------------
+
 * Replace Boolean ``debug`` option in  ``setup_logging`` by more flexible integer
   ``level`` parameter.
 
