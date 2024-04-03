@@ -106,16 +106,17 @@
 <p>Logging.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="mdacli.logger.setup_logging">
-<span class="sig-prename descclassname"><span class="pre">mdacli.logger.</span></span><span class="sig-name descname"><span class="pre">setup_logging</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logobj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/logger.html#setup_logging"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.logger.setup_logging" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">mdacli.logger.</span></span><span class="sig-name descname"><span class="pre">setup_logging</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logobj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/logger.html#setup_logging"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.logger.setup_logging" title="Link to this definition"></a></dt>
 <dd><p>Create a logging environment for a given logobj.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>logobj</strong> (<code class="docutils literal notranslate"><span class="pre">logging.Logger</span></code>) – A logging instance</p></li>
 <li><p><strong>logfile</strong> (<em>str</em>) – Name of the log file</p></li>
-<li><p><strong>debug</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> detailed debug logs inludcing filename and function name
-are displayed. If <code class="docutils literal notranslate"><span class="pre">False</span></code> only the message logged from
-errors, warnings and infos will be displayed.</p></li>
+<li><p><strong>level</strong> (<em>int</em>) – Set the root logger level to the specified level. If for example set
+to <a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.DEBUG" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">logging.DEBUG</span></code></a> detailed debug logs inludcing filename and
+function name are displayed. For :py:obj:<a href="#id1"><span class="problematic" id="id2">`</span></a>logging.INFO only the message
+logged from errors, warnings and infos will be displayed.</p></li>
 </ul>
 </dd>
 </dl>
@@ -135,7 +136,7 @@ errors, warnings and infos will be displayed.</p></li>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2021, Philip Loche, Joao MC Teixeira and Oliver Beckstein.
-      <span class="lastupdated">Last updated on Mar 21, 2024.
+      <span class="lastupdated">Last updated on Apr 03, 2024.
       </span></p>
   </div>
 

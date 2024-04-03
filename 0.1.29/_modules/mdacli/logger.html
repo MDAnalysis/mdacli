@@ -106,7 +106,7 @@
 <div class="viewcode-block" id="setup_logging">
 <a class="viewcode-back" href="../../api/logger.html#mdacli.logger.setup_logging">[docs]</a>
 <span class="nd">@contextlib</span><span class="o">.</span><span class="n">contextmanager</span>
-<span class="k">def</span> <span class="nf">setup_logging</span><span class="p">(</span><span class="n">logobj</span><span class="p">,</span> <span class="n">logfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">setup_logging</span><span class="p">(</span><span class="n">logobj</span><span class="p">,</span> <span class="n">logfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a logging environment for a given logobj.</span>
 
@@ -116,19 +116,20 @@
 <span class="sd">        A logging instance</span>
 <span class="sd">    logfile : str</span>
 <span class="sd">        Name of the log file</span>
-<span class="sd">    debug : bool</span>
-<span class="sd">        If ``True`` detailed debug logs inludcing filename and function name</span>
-<span class="sd">        are displayed. If ``False`` only the message logged from</span>
-<span class="sd">        errors, warnings and infos will be displayed.</span>
+<span class="sd">    level : int</span>
+<span class="sd">        Set the root logger level to the specified level. If for example set</span>
+<span class="sd">        to :py:obj:`logging.DEBUG` detailed debug logs inludcing filename and</span>
+<span class="sd">        function name are displayed. For :py:obj:`logging.INFO only the message</span>
+<span class="sd">        logged from errors, warnings and infos will be displayed.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="nb">format</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{message}</span><span class="s1">&#39;</span>
-        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
-            <span class="nb">format</span> <span class="o">=</span> <span class="s2">&quot;[</span><span class="si">{levelname}</span><span class="s2">] </span><span class="si">{filename}</span><span class="s2">:</span><span class="si">{name}</span><span class="s2">:</span><span class="si">{funcName}</span><span class="s2">:</span><span class="si">{lineno}</span><span class="s2">: &quot;</span> \
-                     <span class="o">+</span> <span class="nb">format</span>
-            <span class="n">level</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span>
+        <span class="k">if</span> <span class="n">level</span> <span class="o">==</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">:</span>
+            <span class="nb">format</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;[</span><span class="si">{levelname}</span><span class="s2">] </span><span class="si">{filename}</span><span class="s2">:</span><span class="si">{name}</span><span class="s2">:</span><span class="si">{funcName}</span><span class="s2">:</span><span class="si">{lineno}</span><span class="s2">: &quot;</span>
+                <span class="s2">&quot;</span><span class="si">{message}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">level</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">INFO</span>
+            <span class="nb">format</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{message}</span><span class="s2">&quot;</span>
 
         <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">,</span>
                             <span class="n">handlers</span><span class="o">=</span><span class="p">[</span><span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)],</span>
@@ -164,7 +165,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright 2021, Philip Loche, Joao MC Teixeira and Oliver Beckstein.
-      <span class="lastupdated">Last updated on Mar 21, 2024.
+      <span class="lastupdated">Last updated on Apr 03, 2024.
       </span></p>
   </div>
 
