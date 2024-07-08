@@ -2,6 +2,10 @@
 Changelog
 =========
 
+
+v0.1.31 (2024-07-08)
+------------------------------------------
+
 * Add Python 3.12
 * Remove Python 3.8
 * Change handling of CHANGELOG checks
