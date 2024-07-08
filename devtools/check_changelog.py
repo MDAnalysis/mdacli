@@ -26,7 +26,7 @@ repo = git.Repo(folder)
 # Check if the developer is on the main branch
 # We check if the head commit is the same as the main branch head commit
 # as the CI will be in detached head state
-if repo.head.commit == repo.branches["main"].commit:
+if repo.active_branch.name == 'main':
     print("You are on the main branch. Nothing to check.")
     exit(0)
 
