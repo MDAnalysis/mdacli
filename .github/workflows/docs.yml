@@ -12,6 +12,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+      with: 
+        ref: ${{ github.head_ref }}
+        fetch-depth: 1
+        fetch-tags: True
     - name: Set up Python 3.10
       uses: actions/setup-python@v4
       with:
@@ -19,9 +23,7 @@ jobs:
     - run: pip install tox
 
     - name: Build docs
-      with: 
-        ref: ${{ github.head_ref }}
-        fetch-depth: 0
+
       run: tox -e docs
 
     - name: Deploy docs
