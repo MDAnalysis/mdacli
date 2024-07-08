@@ -19,6 +19,7 @@ class ChangelogError(Exception):
 
 folder = Path(__file__).resolve().parents[1]
 changelog = Path("docs", "CHANGELOG.rst")
+contributing = Path("docs", "CONTRIBUTING.rst")
 
 repo = git.Repo(folder)
 
