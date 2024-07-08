@@ -19,7 +19,6 @@ jobs:
     - run: pip install tox
 
     - name: Build docs
-      uses: actions/checkout@v3
       with: 
         ref: ${{ github.head_ref }}
         fetch-depth: 0
