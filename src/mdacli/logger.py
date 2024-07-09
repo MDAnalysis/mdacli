@@ -6,18 +6,55 @@
 # Released under the GNU Public Licence, v2 or any higher version
 # SPDX-License-Identifier: GPL-2.0-or-later
 """Logging."""
-
 import contextlib
 import logging
 import sys
+import warnings
+from pathlib import Path
+from typing import List, Optional, Union
 
 from .colors import Emphasise
 
 
-@contextlib.contextmanager
-def setup_logging(logobj, logfile=None, level=logging.WARNING):
+def check_suffix(filename: Union[str, Path], suffix: str) -> Union[str, Path]:
+    """Check the suffix of a file name and adds if it not existing.
+
+    If ``filename`` does not end with ``suffix`` the ``suffix`` is added and a
+    warning will be issued.
+
+    Parameters
+    ----------
+    filename : Name of the file to be checked.
+    suffix : Expected filesuffix i.e. ``.txt``.
+
+    Returns
+    -------
+    Checked and probably extended file name.
     """
-    Create a logging environment for a given logobj.
+    path_filename = Path(filename)
+
+    if path_filename.suffix != suffix:
+        warnings.warn(
+            f"The file name should have a '{suffix}' extension. The user "
+            f"requested the file with name '{filename}', but it will be saved "
+            f"as '{filename}{suffix}'.",
+            stacklevel=1,
+        )
+        path_filename = path_filename.parent / (path_filename.name + suffix)
+
+    if type(filename) is str:
+        return str(path_filename)
+    else:
+        return path_filename
+
+
+@contextlib.contextmanager
+def setup_logging(
+    logobj: logging.Logger,
+    logfile: Optional[Union[str, Path]] = None,
+    level: int = logging.WARNING,
+):
+    """Create a logging environment for a given ``log_obj``.
 
     Parameters
     ----------
@@ -28,38 +65,51 @@ def setup_logging(logobj, logfile=None, level=logging.WARNING):
     level : int
         Set the root logger level to the specified level. If for example set
         to :py:obj:`logging.DEBUG` detailed debug logs inludcing filename and
-        function name are displayed. For :py:obj:`logging.INFO only the message
-        logged from errors, warnings and infos will be displayed.
+        function name are displayed. For :py:obj:`logging.INFO` only the
+        message logged from errors, warnings and infos will be displayed.
     """
     try:
+        format = ""
         if level == logging.DEBUG:
-            format = (
-                "[{levelname}] {filename}:{name}:{funcName}:{lineno}: "
-                "{message}"
-            )
-        else:
-            format = "{message}"
+            format += "[{levelname}]:{filename}:{funcName}:{lineno} - "
+        format += "{message}"
 
-        logging.basicConfig(format=format,
-                            handlers=[logging.StreamHandler(sys.stdout)],
-                            level=level,
-                            style='{')
+        formatter = logging.Formatter(format, style="{")
+        handlers: List[Union[logging.StreamHandler, logging.FileHandler]] = []
+
+        stream_handler = logging.StreamHandler(sys.stdout)
+        stream_handler.setFormatter(formatter)
+        handlers.append(stream_handler)
 
         if logfile:
-            logfile += ".log" * (not logfile.endswith("log"))
-            handler = logging.FileHandler(filename=logfile, encoding='utf-8')
-            handler.setFormatter(logging.Formatter(format, style='{'))
-            logobj.addHandler(handler)
+            logfile = check_suffix(filename=logfile, suffix=".log")
+            file_handler = logging.FileHandler(
+                filename=str(logfile), encoding="utf-8")
+            file_handler.setFormatter(formatter)
+            handlers.append(file_handler)
         else:
             logging.addLevelName(logging.INFO, Emphasise.info("INFO"))
             logging.addLevelName(logging.DEBUG, Emphasise.debug("DEBUG"))
             logging.addLevelName(logging.WARNING, Emphasise.warning("WARNING"))
             logging.addLevelName(logging.ERROR, Emphasise.error("ERROR"))
-            logobj.info('Logging to file is disabled.')
+
+        logging.basicConfig(
+            format=format, handlers=handlers, level=level, style="{")
+        logging.captureWarnings(True)
+
+        if logfile:
+            abs_path = str(Path(logfile).absolute().resolve())
+            logobj.info(f"This log is also available at '{abs_path}'.")
+        else:
+            logobj.debug("Logging to file is disabled.")
+
+        for handler in handlers:
+            logobj.addHandler(handler)
 
         yield
+
     finally:
-        handlers = logobj.handlers[:]
         for handler in handlers:
+            handler.flush()
             handler.close()
             logobj.removeHandler(handler)
