@@ -25,7 +25,7 @@ def check_suffix(filename: Union[str, Path], suffix: str) -> Union[str, Path]:
     Parameters
     ----------
     filename : Name of the file to be checked.
-    suffix : Expected filesuffix i.e. ``.txt``.
+    suffix : Expected file suffix i.e. ``.txt``.
 
     Returns
     -------
