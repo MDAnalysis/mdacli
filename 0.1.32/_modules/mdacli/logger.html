@@ -116,7 +116,7 @@
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    filename : Name of the file to be checked.</span>
-<span class="sd">    suffix : Expected filesuffix i.e. ``.txt``.</span>
+<span class="sd">    suffix : Expected file suffix i.e. ``.txt``.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -193,7 +193,7 @@
 
         <span class="k">if</span> <span class="n">logfile</span><span class="p">:</span>
             <span class="n">abs_path</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">logfile</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">())</span>
-            <span class="n">logobj</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;This log is also available at </span><span class="si">{</span><span class="n">abs_path</span><span class="si">!r}</span><span class="s2">.&quot;</span><span class="p">)</span>
+            <span class="n">logobj</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;This log is also available at &#39;</span><span class="si">{</span><span class="n">abs_path</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">logobj</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Logging to file is disabled.&quot;</span><span class="p">)</span>
 
