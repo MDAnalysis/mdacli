@@ -62,7 +62,7 @@ project = 'mdacli'
 year = '2021'
 author = 'Philip Loche, Joao MC Teixeira and Oliver Beckstein'
 copyright = '{0}, {1}'.format(year, author)
-version = release = '0.1.31'
+version = release = '0.1.32'
 
 pygments_style = 'trac'
 templates_path = ['_templates']
