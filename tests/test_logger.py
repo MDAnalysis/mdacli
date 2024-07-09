@@ -7,52 +7,111 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 """Test mdacli logger."""
 import logging
+import warnings
+from pathlib import Path
 
-import mdacli.logger
+import pytest
+
+from mdacli.logger import check_suffix, setup_logging
 
 
-class Test_setup_logger:
-    """Test the setup_logger."""
+@pytest.mark.parametrize("filename", ["example.txt", Path("example.txt")])
+def test_check_suffix(filename):
+    """Check suffix tetsing."""
+    result = check_suffix(filename, ".txt")
 
-    def test_default_log(self, caplog):
-        """Default message in STDOUT."""
-        caplog.set_level(logging.INFO)
-        logger = logging.getLogger("test")
-        with mdacli.logger.setup_logging(logger,
-                                         logfile=None,
-                                         level=logging.INFO):
-            logger.info("foo")
-            assert "foo" in caplog.text
+    assert str(result) == "example.txt"
+    assert isinstance(result, type(filename))
 
-    def test_info_log(self, tmpdir, caplog):
-        """Default message in STDOUT and file."""
-        caplog.set_level(logging.INFO)
-        logger = logging.getLogger("test")
-        with tmpdir.as_cwd():
-            # Explicityly leave out the .dat file ending to check if this
-            # is created by the function.
-            with mdacli.logger.setup_logging(logger,
-                                             logfile="logfile",
-                                             level=logging.INFO):
-                logger.info("foo")
-                assert "foo" in caplog.text
-            with open("logfile.log", "r") as f:
-                log = f.read()
 
-            assert "foo" in log
+@pytest.mark.parametrize("filename", ["example", Path("example")])
+def test_warning_on_missing_suffix(filename):
+    """Check issued warning in missing suffix."""
+    match = r"The file name should have a '\.txt' extension."
+    with pytest.warns(UserWarning, match=match):
+        result = check_suffix(filename, ".txt")
 
-    def test_debug_log(self, tmpdir, caplog):
-        """Debug message in STDOUT and file."""
-        caplog.set_level(logging.INFO)
-        logger = logging.getLogger("test")
-        with tmpdir.as_cwd():
-            with mdacli.logger.setup_logging(logger,
-                                             logfile="logfile",
-                                             level=logging.DEBUG):
-                logger.info("foo")
-                assert "test:test_logger.py:52 foo\n" in caplog.text
+    assert str(result) == "example.txt"
+    assert isinstance(result, type(filename))
 
-            with open("logfile.log", "r") as f:
-                log = f.read()
 
-            assert "test_logger.py:test:test_debug_log:52: foo\n" in log
+def test_warnings_in_log(caplog):
+    """Test that warnings are forwarded to the logger.
+
+    Keep this test at the top since it seems otherwise there are some pytest
+    issues...
+    """
+    logger = logging.getLogger()
+
+    with setup_logging(logger):
+        warnings.warn("A warning", stacklevel=1)
+
+    assert "A warning" in caplog.text
+
+
+def test_default_log(caplog, capsys):
+    """Default message only in STDOUT."""
+    caplog.set_level(logging.INFO)
+    logger = logging.getLogger()
+
+    with setup_logging(logger, level=logging.INFO):
+        logger.info("foo")
+        logger.debug("A debug message")
+
+    stdout_log = capsys.readouterr().out
+
+    assert "Logging to file is disabled." not in caplog.text  # DEBUG message
+    assert "INFO" not in stdout_log
+    assert "foo" in stdout_log
+    assert "A debug message" not in stdout_log
+
+
+def test_info_log(caplog, monkeypatch, tmp_path, capsys):
+    """Default message in STDOUT and file."""
+    monkeypatch.chdir(tmp_path)
+    caplog.set_level(logging.INFO)
+    logger = logging.getLogger()
+
+    with setup_logging(logger, logfile="logfile.log", level=logging.INFO):
+        logger.info("foo")
+        logger.debug("A debug message")
+
+    with open("logfile.log", "r") as f:
+        file_log = f.read()
+
+    stdout_log = capsys.readouterr().out
+    log_path = str((tmp_path / "logfile.log").absolute().resolve())
+
+    assert file_log == stdout_log
+    assert f"This log is also available at '{log_path}'" in caplog.text
+
+    for logtext in [stdout_log, file_log]:
+        assert "INFO" not in logtext
+        assert "foo" in logtext
+        assert "A debug message" not in logtext
+
+
+def test_debug_log(caplog, monkeypatch, tmp_path, capsys):
+    """Debug message in STDOUT and file."""
+    monkeypatch.chdir(tmp_path)
+    caplog.set_level(logging.DEBUG)
+    logger = logging.getLogger()
+
+    with setup_logging(logger, logfile="logfile.log", level=logging.DEBUG):
+        logger.info("foo")
+        logger.debug("A debug message")
+
+    with open("logfile.log", "r") as f:
+        file_log = f.read()
+
+    stdout_log = capsys.readouterr().out
+    log_path = str((tmp_path / "logfile.log").absolute())
+
+    assert file_log == stdout_log
+    assert f"This log is also available at '{log_path}'" in caplog.text
+
+    for logtext in [stdout_log, file_log]:
+        assert "foo" in logtext
+        assert "A debug message" in logtext
+        # Test that debug information is in output
+        assert "test_logger.py:test_debug_log:" in logtext
