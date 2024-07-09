@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Logging &mdash; mdacli 0.1.32 documentation</title>
+  <title>Logging &mdash; mdacli 0.1.31 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d10597a4" />
       <link rel="stylesheet" type="text/css" href="../_static/css/msmb.css?v=51bd699f" />
       <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=27e8b3b8" />
@@ -18,13 +18,13 @@
   
         <script src="../_static/jquery.js?v=5d32c60e"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../_static/documentation_options.js?v=e0e570cb"></script>
+        <script src="../_static/documentation_options.js?v=d71dfaa1"></script>
         <script src="../_static/doctools.js?v=9a2dae69"></script>
         <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="../_static/js/versions.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within mdacli 0.1.32 documentation"
+          title="Search within mdacli 0.1.31 documentation"
           href="../_static/opensearch.xml"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -45,7 +45,7 @@
               <img src="../_static/mdacli-logo.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.1.32
+                0.1.31
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -66,7 +66,6 @@
 <li class="toctree-l2"><a class="reference internal" href="save.html">Results Saving</a></li>
 <li class="toctree-l2"><a class="reference internal" href="colors.html">Coloring</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Logging</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#mdacli.logger.check_suffix"><code class="docutils literal notranslate"><span class="pre">check_suffix()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mdacli.logger.setup_logging"><code class="docutils literal notranslate"><span class="pre">setup_logging()</span></code></a></li>
 </ul>
 </li>
@@ -106,28 +105,9 @@
 <span id="logging"></span><h1>Logging<a class="headerlink" href="#module-mdacli.logger" title="Link to this heading"></a></h1>
 <p>Logging.</p>
 <dl class="py function">
-<dt class="sig sig-object py" id="mdacli.logger.check_suffix">
-<span class="sig-prename descclassname"><span class="pre">mdacli.logger.</span></span><span class="sig-name descname"><span class="pre">check_suffix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><span class="pre">Path</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">suffix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><span class="pre">Path</span></a></span></span><a class="reference internal" href="../_modules/mdacli/logger.html#check_suffix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.logger.check_suffix" title="Link to this definition"></a></dt>
-<dd><p>Check the suffix of a file name and adds if it not existing.</p>
-<p>If <code class="docutils literal notranslate"><span class="pre">filename</span></code> does not end with <code class="docutils literal notranslate"><span class="pre">suffix</span></code> the <code class="docutils literal notranslate"><span class="pre">suffix</span></code> is added and a
-warning will be issued.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>filename</strong> (<em>Name of the file to be checked.</em>)</p></li>
-<li><p><strong>suffix</strong> (Expected filesuffix i.e. <code class="docutils literal notranslate"><span class="pre">.txt</span></code>.)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>Checked and probably extended file name.</em></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="mdacli.logger.setup_logging">
-<span class="sig-prename descclassname"><span class="pre">mdacli.logger.</span></span><span class="sig-name descname"><span class="pre">setup_logging</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logobj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Logger" title="(in Python v3.12)"><span class="pre">Logger</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">logfile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><span class="pre">Path</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">30</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/logger.html#setup_logging"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.logger.setup_logging" title="Link to this definition"></a></dt>
-<dd><p>Create a logging environment for a given <code class="docutils literal notranslate"><span class="pre">log_obj</span></code>.</p>
+<span class="sig-prename descclassname"><span class="pre">mdacli.logger.</span></span><span class="sig-name descname"><span class="pre">setup_logging</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logobj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/logger.html#setup_logging"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.logger.setup_logging" title="Link to this definition"></a></dt>
+<dd><p>Create a logging environment for a given logobj.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -135,8 +115,8 @@ warning will be issued.</p>
 <li><p><strong>logfile</strong> (<em>str</em>) – Name of the log file</p></li>
 <li><p><strong>level</strong> (<em>int</em>) – Set the root logger level to the specified level. If for example set
 to <a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.DEBUG" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">logging.DEBUG</span></code></a> detailed debug logs inludcing filename and
-function name are displayed. For <a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.INFO" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">logging.INFO</span></code></a> only the
-message logged from errors, warnings and infos will be displayed.</p></li>
+function name are displayed. For :py:obj:<a href="#id1"><span class="problematic" id="id2">`</span></a>logging.INFO only the message
+logged from errors, warnings and infos will be displayed.</p></li>
 </ul>
 </dd>
 </dl>
@@ -183,7 +163,7 @@ message logged from errors, warnings and infos will be displayed.</p></li>
      aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
       <span class="fa fa-book"></span>
-        0.1.32
+        0.1.31
       <span class="fa fa-caret-down"></span>
     </span>
 
