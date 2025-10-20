@@ -1,4 +1,4 @@
-name: docs
+name: Documentation
 
 on:
   push:
@@ -30,17 +30,9 @@ jobs:
 
     - name: put documentation in the website
       run: |
-<<<<<<< HEAD
-        # set up environment variables
-        # export URL for the Python script $UPDATE_JSON
-        export VERSION=$(grep __version__ src/mdacli/__init__.py | awk '{print $3}' | tr -d "'")
-        UPDATE_JSON=$(pwd)/developer/update_json_stubs_sitemap.py
-        BRANCH="${GITHUB_REF#refs/heads/}"
-=======
         git clone https://github.com/$GITHUB_REPOSITORY --branch gh-pages gh-pages
         rm -rf gh-pages/.git
         cd gh-pages
->>>>>>> b218397 (update gh-pages doc deploy)
 
         REF_KIND=$(echo $GITHUB_REF | cut -d / -f2)
         if [[ "$REF_KIND" == "tags" ]]; then
