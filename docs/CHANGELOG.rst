@@ -8,6 +8,7 @@ v0.1.33 (2025-10-20)
 * Update to newest MDAnalysis version
 * Update docs design and deployment
 * Update repo infrastructure
+* Bump github action dependencies
 
 v0.1.32 (2024-07-09)
 ------------------------------------------
