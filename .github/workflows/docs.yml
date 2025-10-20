@@ -41,7 +41,7 @@ jobs:
         # set up environment variables
         # export URL for the Python script $UPDATE_JSON
         export VERSION=$(grep __version__ src/mdacli/__init__.py | awk '{print $3}' | tr -d "'")
-        UPDATE_JSON=$(pwd)/devtools/update_json_stubs_sitemap.py
+        UPDATE_JSON=$(pwd)/developer/update_json_stubs_sitemap.py
         BRANCH="${GITHUB_REF#refs/heads/}"
 
         # the below turns off non-blocking as it causes large writes to stdout to fail
