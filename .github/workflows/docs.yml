@@ -1,4 +1,4 @@
-name: docs
+name: Documentation
 
 on:
   push:
@@ -28,59 +28,26 @@ jobs:
       if: github.event_name == 'pull_request'
       run: python ./developer/check_changelog.py
 
-    - name: Deploy docs
-      if: github.event_name != 'pull_request'
-      env:
-        GH_USER: github-actions
-        GH_EMAIL: "github-action@users.noreply.github.com"
-        GH_REPOSITORY: "github.com/${{ github.repository }}.git"
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        URL: https://mdacli.mdanalysis.org
-
+    - name: put documentation in the website
       run: |
-        # set up environment variables
-        # export URL for the Python script $UPDATE_JSON
-        export VERSION=$(grep __version__ src/mdacli/__init__.py | awk '{print $3}' | tr -d "'")
-        UPDATE_JSON=$(pwd)/developer/update_json_stubs_sitemap.py
-        BRANCH="${GITHUB_REF#refs/heads/}"
+        git clone https://github.com/$GITHUB_REPOSITORY --branch gh-pages gh-pages
+        rm -rf gh-pages/.git
+        cd gh-pages
 
-        # the below turns off non-blocking as it causes large writes to stdout to fail
-        # (see https://github.com/travis-ci/travis-ci/issues/4704)
-        # commented out as this is not a problem with gh-actions
-        # python -c 'import os,sys,fcntl; flags = fcntl.fcntl(sys.stdout, fcntl.F_GETFL); fcntl.fcntl(sys.stdout, fcntl.F_SETFL, flags&~os.O_NONBLOCK);'
-        
-        # go into built docs
-        cd docs/build/html
+        REF_KIND=$(echo $GITHUB_REF | cut -d / -f2)
+        if [[ "$REF_KIND" == "tags" ]]; then
+            DOC_KIND="stable"
+        else
+            DOC_KIND="latest"
+        fi
 
-        # move docs into version subfolder
-        mkdir ../${VERSION} && mv * ../${VERSION} && mv ../${VERSION} $VERSION
+        rm -rf $DOC_KIND
+        mv ../docs/build/html $DOC_KIND
 
-        # set up git
-        REV=$(git rev-parse --short HEAD)
-        git init
-        git config user.name $GH_USER
-        git config user.email $GH_EMAIL
-        git remote add upstream "https://${GH_USER}:${GH_TOKEN}@${GH_REPOSITORY}"
-        git fetch --depth 50 upstream $BRANCH gh-pages
-        git reset upstream/gh-pages
-
-        # redirects and copies
-        mkdir latest
-        python $UPDATE_JSON --version $VERSION --url $URL
-        touch .
-        touch .nojekyll
-
-        # add this particular version's files
-        git add -A ${VERSION}/
-        git add .nojekyll versions.json *.xml *.html index.html latest
-
-        # add other versions, e.g. stable. If a dev branch is added, add dev too
-        for dirname in stable dev ; do
-          if [ -d $dirname ]; then git add $dirname; fi
-        done
-
-        # check for anything to commit
-        # https://stackoverflow.com/questions/3878624/how-do-i-programmatically-determine-if-there-are-uncommited-changes
-        # then push to gh-pages for build
-        git diff-index --quiet HEAD -- || git commit -m "rebuilt html docs for version ${VERSION} from branch ${BRANCH} with sphinx at ${REV}"
-        git push -q upstream HEAD:gh-pages
+    - name: deploy to gh-pages
+      if: github.event_name == 'push'
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./gh-pages/
+        force_orphan: true
