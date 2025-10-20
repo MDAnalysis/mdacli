@@ -71,6 +71,14 @@ ignore = ["src/mdacli/_version.py"]
 [tool.coverage]
 patch = ["subprocess"]
 
+[tool.coverage.paths]
+source = ["src/mdacli", "*/site-packages"]
+
+[tool.coverage.report]
+skip_covered = true
+show_missing = true
+exclude_lines = ["if __name__ == .__main__.:"]
+
 [tool.mypy]
 exclude = ["docs/src/examples"]
 follow_imports = 'skip'
@@ -134,10 +142,8 @@ version_file = "src/mdacli/_version.py"
 addopts = [
     "--cov",
     "--cov-append",
-    "--cov-config=.coveragerc",
-    "--cov-report=term-missing",
+    "--cov-report=",
     "--import-mode=append",
-    "--hypothesis-show-statistics",
     "--disable-warnings",
 ]
 python_files = [

@@ -19,10 +19,14 @@ jobs:
       uses: actions/setup-python@v4
       with:
         python-version: "3.13"
-    - run: pip install tox
+    - run: pip install tox gitpython
 
     - name: Build docs
       run: tox -e docs
+
+    - name: Check for Changelog
+      if: github.event_name == 'pull_request'
+      run: python ./developer/check_changelog.py
 
     - name: Deploy docs
       if: github.event_name != 'pull_request'
