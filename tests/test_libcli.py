@@ -598,7 +598,7 @@ class Test_run_analysis:
                 output_parameters=output_parameters,
             )
 
-            assert Path.is_file("foo_InterRDF_count_bins_rdf.csv")
+            assert Path("foo_InterRDF_count_bins_rdf.csv").is_file()
 
 
 class Test_create_cli:
