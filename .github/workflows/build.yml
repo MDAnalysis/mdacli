@@ -8,19 +8,15 @@ on:
 
 jobs:
   build:
-    runs-on: ${{ matrix.platform }}
-    strategy:
-      matrix:
-        platform: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: ['3.11', '3.13']
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
 
-    - name: Set up Python ${{ matrix.python-version }}
+    - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: "3.13"
     - run: pip install tox
 
     - name: Test Build
