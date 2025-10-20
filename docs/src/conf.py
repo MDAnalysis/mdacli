@@ -4,6 +4,8 @@ import os
 import sys
 from unittest import mock
 
+import mdacli  # noqa: E402
+
 # activate if there are dependencies
 mock_modules = [
     "matplotlib",
@@ -56,7 +58,7 @@ project = "mdacli"
 year = "2021"
 author = "Philip Loche, Joao MC Teixeira and Oliver Beckstein"
 copyright = f"{year}, {author}"
-version = release = "0.1.32"
+version = release = mdacli.__version__
 
 pygments_style = "trac"
 templates_path = ["_templates"]

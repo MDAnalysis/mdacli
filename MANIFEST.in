@@ -3,7 +3,6 @@ graft src
 include *.rst
 include LICENSE
 
-exclude .bumpversion.cfg
 exclude .codacy.yaml
 exclude .coveragerc
 exclude .readthedocs.yml
