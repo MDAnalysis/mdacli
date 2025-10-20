@@ -8,6 +8,7 @@
 
 from mdacli.cli import cli
 
+from ._version import __version__  # noqa: F401
+
 __all__ = ["cli"]
-__version__ = "0.1.32"
 __authors__ = "MDAnalysis Development Team and contributors"

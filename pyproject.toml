@@ -1,12 +1,14 @@
 [build-system]
-# These are the assumed default build requirements from pip:
-# https://pip.pypa.io/en/stable/reference/pip/#pep-517-and-518-support
-requires = ["setuptools>=43.0.0", "wheel"]
+requires = [
+    "setuptools >= 77",
+    "setuptools_scm>=8",
+    "wheel",
+]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "mdacli"
-version = "0.1.32"
+dynamic = ["version"]
 description = "A command line client for MDAnalysis Analysis classes."
 authors = [
     {name = "MDAnalysis Development Team and contributors", email = "mdanalysis@numfocus.org"},
@@ -63,6 +65,9 @@ user_group = " https://groups.google.com/g/mdnalysis-discussion"
 [project.scripts]
 mda = "mdacli.__main__:main"
 
+[tool.check-manifest]
+ignore = ["src/mdacli/_version.py"]
+
 [tool.coverage]
 patch = ["subprocess"]
 
@@ -72,6 +77,7 @@ follow_imports = 'skip'
 ignore_missing_imports = true
 
 [tool.ruff]
+exclude = ["src/mdacli/_version.py"]
 line-length = 88
 
 [tool.ruff.lint]
@@ -120,6 +126,9 @@ known-first-party = ["mdacli"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools_scm]
+version_file = "src/mdacli/_version.py"
 
 [tool.pytest.ini_options]
 addopts = [

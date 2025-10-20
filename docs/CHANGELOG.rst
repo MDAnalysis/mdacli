@@ -2,7 +2,11 @@
 Changelog
 =========
 
-* Update infrastruture and docs
+v0.1.33 (2025-10-20)
+------------------------------------------
+
+* Update repo infrastructure
+* Update docs design
 
 v0.1.32 (2024-07-09)
 ------------------------------------------
