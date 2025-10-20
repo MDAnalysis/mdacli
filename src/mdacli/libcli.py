@@ -409,7 +409,7 @@ def create_cli(sub_parser, interface_name, parameters):
         )
         groups += len(opt_) * [optional_parameters_group]
 
-    for group, (name, args_dict) in zip(groups, parameters_to_parse):
+    for group, (name, args_dict) in zip(groups, parameters_to_parse, strict=True):
         # prepares parameters before add_argument
         try:
             type_ = STR_TYPE_DICT[args_dict["type"]]

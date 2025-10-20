@@ -11,12 +11,11 @@ import logging
 import sys
 import warnings
 from pathlib import Path
-from typing import Optional, Union
 
 from .colors import Emphasise
 
 
-def check_suffix(filename: Union[str, Path], suffix: str) -> Union[str, Path]:
+def check_suffix(filename: str | Path, suffix: str) -> str | Path:
     """Check the suffix of a file name and adds if it not existing.
 
     If ``filename`` does not end with ``suffix`` the ``suffix`` is added and a
@@ -50,7 +49,7 @@ def check_suffix(filename: Union[str, Path], suffix: str) -> Union[str, Path]:
 @contextlib.contextmanager
 def setup_logging(
     logobj: logging.Logger,
-    logfile: Optional[Union[str, Path]] = None,
+    logfile: str | Path | None = None,
     level: int = logging.WARNING,
 ):
     """Create a logging environment for a given ``log_obj``.
@@ -74,7 +73,7 @@ def setup_logging(
         format += "{message}"
 
         formatter = logging.Formatter(format, style="{")
-        handlers: list[Union[logging.StreamHandler, logging.FileHandler]] = []
+        handlers: list[logging.StreamHandler | logging.FileHandler] = []
 
         stream_handler = logging.StreamHandler(sys.stdout)
         stream_handler.setFormatter(formatter)

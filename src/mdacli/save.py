@@ -64,7 +64,7 @@ def save_1D_arrays(results, fprefix="1darray", remove=True):
 
     out_lists, out_lables = stack_1d_arrays_list(list_1D, list_1D_labels)
 
-    for out_list, out_label in zip(out_lists, out_lables):
+    for out_list, out_label in zip(out_lists, out_lables, strict=True):
         out_label = out_label.flatten()
 
         # [3:] to align lables with entries
