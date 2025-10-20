@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- Mode: python; tab-width: 4; indent-tabs-mode:nil; coding:utf-8 -*-
 #
 # Copyright (c) 2021 Authors and contributors
 #
@@ -7,16 +6,16 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 """Functionalities that support the creation of the command lines interface."""
+
 import argparse
 import ast
 import importlib
 import inspect
 import json
 import logging
-import os
 import re
 import warnings
-from typing import List
+from pathlib import Path
 
 import MDAnalysis as mda
 from MDAnalysis.transformations.boxdimensions import set_dimensions
@@ -24,7 +23,6 @@ from MDAnalysis.transformations.boxdimensions import set_dimensions
 from .colors import Emphasise
 from .save import save
 from .utils import convert_str_time, parse_callable_signature, parse_docs
-
 
 logger = logging.getLogger(__name__)
 
@@ -41,13 +39,13 @@ STR_TYPE_DICT = {
     "NoneType": None,
     "AtomGroup": mda.AtomGroup,
     "MDAnalysis.core.groups.AtomGroup": mda.AtomGroup,
-    "list[AtomGroup]": List[mda.AtomGroup],
+    "list[AtomGroup]": list[mda.AtomGroup],
     "MDAnalysis.core.universe.Universe": mda.Universe,
     "Universe": mda.Universe,
-    }
+}
 
 
-def _warning(message, *args, **kwargs):
+def _warning(message, *args, **kwargs):  # NOQA: ARG001
     logger.warning(Emphasise.warning(message))
 
 
@@ -55,14 +53,13 @@ warnings.showwarning = _warning
 
 
 class KwargsDict(argparse.Action):
-    """
-    Convert input string to a dictionary.
+    """Convert input string to a dictionary.
 
     If string points to a ".json" file, reads the file.
     Else, attempts to convert string to dictionary using json.loads.
     """
 
-    def __call__(self, parser, namespace, value, option_string=None):
+    def __call__(self, parser, namespace, value, option_string=None):  # NOQA: ARG002
         """Call me."""
         if value.startswith("{") and value.endswith("}"):
             try:
@@ -70,21 +67,19 @@ class KwargsDict(argparse.Action):
 
             except json.decoder.JSONDecodeError as err:
                 raise json.decoder.JSONDecodeError(
-                    "An error ocurred when reading "
-                    f"{self.dest!r} argument.",
+                    f"An error ocurred when reading {self.dest!r} argument.",
                     err.doc,
                     err.pos,
-                    ) from None
+                ) from None
         else:
-            with open(value, 'r') as fin:
+            with Path.open(value) as fin:
                 jdict = json.load(fin)
 
         setattr(namespace, self.dest, jdict)
 
 
 def find_classes_in_modules(cls, *module_names):
-    """
-    Find classes that belong to cls in modules.
+    """Find classes that belong to cls in modules.
 
     A series of names can be given as arguments.
 
@@ -109,16 +104,17 @@ def find_classes_in_modules(cls, *module_names):
     for name in module_names:
         module = importlib.import_module(name)
         for _, member in inspect.getmembers(module):
-            if inspect.isclass(member) and issubclass(member, tuple(cls)) \
-               and member not in cls:
+            if (
+                inspect.isclass(member)
+                and issubclass(member, tuple(cls))
+                and member not in cls
+            ):
                 members.append(member)
 
     return members or None
 
 
-def find_cls_members(cls,
-                     modules,
-                     ignore_warnings=False):
+def find_cls_members(cls, modules, ignore_warnings=False):
     """Find members of a certain class in modules.
 
     Parameters
@@ -132,14 +128,12 @@ def find_cls_members(cls,
     """
     with warnings.catch_warnings():
         if not ignore_warnings:
-            warnings.simplefilter('ignore')
-        members = find_classes_in_modules(cls, *[m for m in modules])
-    return members
+            warnings.simplefilter("ignore")
+        return find_classes_in_modules(cls, *[m for m in modules])
 
 
 def split_argparse_into_groups(parser, namespace):
-    """
-    Split the populated namespace of argparse into groups.
+    """Split the populated namespace of argparse into groups.
 
     https://stackoverflow.com/questions/31519997/is-it-possible-to-
     only-parse-one-argument-groups-parameters-with-argparse
@@ -158,8 +152,9 @@ def split_argparse_into_groups(parser, namespace):
     """
     arg_grouped_dict = {}
     for group in parser._action_groups:
-        group_dict = {a.dest: getattr(namespace, a.dest, None)
-                      for a in group._group_actions}
+        group_dict = {
+            a.dest: getattr(namespace, a.dest, None) for a in group._group_actions
+        }
         arg_grouped_dict[group.title] = group_dict
 
     return arg_grouped_dict
@@ -179,40 +174,41 @@ def add_run_group(analysis_class_parser):
     run_group = analysis_class_parser.add_argument_group(
         title="Analysis Run Parameters",
         description="General parameters specific for running the analysis. "
-                    "Parameters can be given in terms of frames (e.g. 12) "
-                    "or as a time ('12ps'). Allowed time units are "
-                    "'ps', 'fs' and 'ns'.")
+        "Parameters can be given in terms of frames (e.g. 12) "
+        "or as a time ('12ps'). Allowed time units are "
+        "'ps', 'fs' and 'ns'.",
+    )
 
     run_group.add_argument(
         "-b",
         dest="start",
         type=str,
         default=None,
-        help="start frame or time for evaluation (default: %(default)s)"
-        )
+        help="start frame or time for evaluation (default: %(default)s)",
+    )
 
     run_group.add_argument(
         "-e",
         dest="stop",
         type=str,
         default=None,
-        help="end frame or time for evaluation (default: %(default)s)"
-        )
+        help="end frame or time for evaluation (default: %(default)s)",
+    )
 
     run_group.add_argument(
         "-dt",
         dest="step",
         type=str,
         default="1",
-        help="step or time step for evaluation (default: %(default)s)"
-        )
+        help="step or time step for evaluation (default: %(default)s)",
+    )
 
     run_group.add_argument(
         "-v",
         dest="verbose",
         help="Be loud and noisy",
         action="store_true",
-        )
+    )
 
 
 def add_output_group(analysis_class_parser):
@@ -228,7 +224,8 @@ def add_output_group(analysis_class_parser):
     """
     output_group = analysis_class_parser.add_argument_group(
         title="Output Parameters",
-        description="Genereal parameters specific for the result output.")
+        description="Genereal parameters specific for the result output.",
+    )
 
     output_group.add_argument(
         "-pre",
@@ -236,8 +233,8 @@ def add_output_group(analysis_class_parser):
         type=str,
         default="",
         help="Additional prefix for all output files. Files will be "
-             " automatically named by the used module (default: %(default)s)"
-        )
+        " automatically named by the used module (default: %(default)s)",
+    )
 
     output_group.add_argument(
         "-o",
@@ -245,11 +242,11 @@ def add_output_group(analysis_class_parser):
         type=str,
         default=".",
         help="Directory in which the output files produced will be stored."
-             "(default: %(default)s)"
-        )
+        "(default: %(default)s)",
+    )
 
 
-def add_cli_universe(parser, name=''):
+def add_cli_universe(parser, name=""):
     """Add universe parameters to an given argparse.ArgumentParser.
 
     instance. The parameters `topology`, `topology_format`, `atom_style`,
@@ -262,17 +259,17 @@ def add_cli_universe(parser, name=''):
     name : str
         suffix for the argument names
     """
-    name = f'_{name}' if name else ''
+    name = f"_{name}" if name else ""
 
     parser.add_argument(
         f"-s{name}",
         dest=f"topology{name}",
         type=str,
         default="topol.tpr",
-        help="The topolgy file. "
-        "The FORMATs {} are implemented in MDAnalysis."
-        "".format(", ".join(mda._PARSERS.keys())),
-        )
+        help="The topolgy file. The FORMATs {} are implemented in MDAnalysis.".format(
+            ", ".join(mda._PARSERS.keys())
+        ),
+    )
 
     parser.add_argument(
         f"-top{name}",
@@ -280,7 +277,8 @@ def add_cli_universe(parser, name=''):
         type=str,
         default=None,
         help="Override automatic topology type detection. "
-        "See topology for implemented formats.")
+        "See topology for implemented formats.",
+    )
 
     parser.add_argument(
         f"-atom_style{name}",
@@ -288,7 +286,8 @@ def add_cli_universe(parser, name=''):
         type=str,
         default=None,
         help="Manually set the atom_style information"
-        "(currently only LAMMPS parser). E.g. atom_style='id type x y z'.")
+        "(currently only LAMMPS parser). E.g. atom_style='id type x y z'.",
+    )
 
     parser.add_argument(
         f"-f{name}",
@@ -299,7 +298,7 @@ def add_cli_universe(parser, name=''):
         help="A single or multiple coordinate files. "
         "The FORMATs {} are implemented in MDAnalysis."
         "".format(", ".join(mda._READERS.keys())),
-        )
+    )
 
     parser.add_argument(
         f"-traj{name}",
@@ -307,7 +306,8 @@ def add_cli_universe(parser, name=''):
         type=str,
         default=None,
         help="Override automatic trajectory type detection. "
-        "See trajectory for implemented formats.")
+        "See trajectory for implemented formats.",
+    )
 
     parser.add_argument(
         f"-dimensions{name}",
@@ -320,12 +320,12 @@ def add_cli_universe(parser, name=''):
         "[a, b, c, alpha, beta, gamma], lengths a, b, c are in angstrom, "
         "and angles alpha, beta, gamma are in degrees. "
         "Providing only three parameters will assume a rectengular simulation "
-        "box (alpha = beta = gamma = 90°).")
+        "box (alpha = beta = gamma = 90°).",
+    )
 
 
 def create_cli(sub_parser, interface_name, parameters):
-    """
-    Add subparsers to `cli_parser`.
+    """Add subparsers to `cli_parser`.
 
     Subparsers parameters are divided in the following categories:
 
@@ -371,22 +371,21 @@ def create_cli(sub_parser, interface_name, parameters):
         help=parameters["desc"],
         description=f"{parameters['desc']}\n\n{parameters['desc_long']}",
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        )
+    )
 
     # Add run_analysis function as the default func parameter.
     # this is possible because the run_analysis function is equal to all
     # Analysis Classes
-    analysis_class_parser.set_defaults(
-        analysis_callable=parameters["callable"])
+    analysis_class_parser.set_defaults(analysis_callable=parameters["callable"])
     add_run_group(analysis_class_parser)
 
     # adds only if `save` method does not exist
-    if not getattr(parameters['callable'], 'save', False):
+    if not getattr(parameters["callable"], "save", False):
         logger.debug("No save method found. Use generic one.")
-        # TODO: add our save function as method. Avoids try except later...
+        # TODO @PicoCentauri: add our save function as method. Avoids try except later
         add_output_group(analysis_class_parser)
     else:
-        # TODO: add parameters from save function to parser
+        # TODO @PicoCentauri: add parameters from save function to parser
         pass
 
     # add positional and optional arguments
@@ -399,7 +398,7 @@ def create_cli(sub_parser, interface_name, parameters):
     mandatory_parameters_group = analysis_class_parser.add_argument_group(
         title=MANDATORY_TITLE,
         description="Mandatory parameters of this Analysis",
-        )
+    )
     groups = len(pos_) * [mandatory_parameters_group]
 
     # Only create parser if optional arguments exist
@@ -407,11 +406,10 @@ def create_cli(sub_parser, interface_name, parameters):
         optional_parameters_group = analysis_class_parser.add_argument_group(
             title="Optional Parameters",
             description="Optional parameters specific of this Analysis",
-            )
+        )
         groups += len(opt_) * [optional_parameters_group]
 
-    for group, (name, args_dict) in zip(groups, parameters_to_parse):
-
+    for group, (name, args_dict) in zip(groups, parameters_to_parse, strict=True):
         # prepares parameters before add_argument
         try:
             type_ = STR_TYPE_DICT[args_dict["type"]]
@@ -430,11 +428,10 @@ def create_cli(sub_parser, interface_name, parameters):
             # No type is given in this format, so we use ast.literal_eval to
             # infer the correct type.
             values = [
-                ast.literal_eval(obj.strip(" `"))
-                for obj in match.group(1).split(",")
+                ast.literal_eval(obj.strip(" `")) for obj in match.group(1).split(",")
             ]
             # prepare type for later
-            type_ = 'enum'
+            type_ = "enum"
             default = values[0]
 
         try:
@@ -444,10 +441,11 @@ def create_cli(sub_parser, interface_name, parameters):
 
         description = args_dict["desc"]
         flag = f"-{name}"
-        arg_params = dict(dest=name,
-                          help=description,
-                          default=default,
-                          )
+        arg_params = dict(
+            dest=name,
+            help=description,
+            default=default,
+        )
         if group.title == MANDATORY_TITLE:
             arg_params["required"] = True
         if type_ is dict:
@@ -459,29 +457,27 @@ def create_cli(sub_parser, interface_name, parameters):
                 arg_params["action"] = "store_false"
             else:
                 arg_params["action"] = "store_true"
-        elif type_ in (mda.AtomGroup, List[mda.AtomGroup]):
-            if type_ == List[mda.AtomGroup]:
+        elif type_ in (mda.AtomGroup, list[mda.AtomGroup]):
+            if type_ == list[mda.AtomGroup]:
                 arg_params["nargs"] = "+"
 
             arg_params["type"] = str
             arg_params["help"] += " Use a MDAnalysis selection string."
 
             # Create one reference Universe argument for atom selection
-            try:
-                reference_universe_group
-            except NameError:
-                reference_universe_group = \
-                    analysis_class_parser.add_argument_group(
-                        title="Reference Universe Parameters",
-                        description="Parameters specific for loading "
-                                    "the reference topology and trajectory"
-                                    " used for atom selection.")
+            if "reference_universe_group" not in locals():
+                reference_universe_group = analysis_class_parser.add_argument_group(
+                    title="Reference Universe Parameters",
+                    description="Parameters specific for loading "
+                    "the reference topology and trajectory"
+                    " used for atom selection.",
+                )
                 add_cli_universe(reference_universe_group)
 
         elif type_ is mda.Universe:
             add_cli_universe(group, name)
             continue
-        elif type_ == 'enum':
+        elif type_ == "enum":
             arg_params["choices"] = values
             arg_params["type"] = type(values[0])
         else:
@@ -494,14 +490,15 @@ def create_cli(sub_parser, interface_name, parameters):
     return
 
 
-def create_universe(topology,
-                    coordinates=None,
-                    topology_format=None,
-                    trajectory_format=None,
-                    atom_style=None,
-                    dimensions=None):
-    """
-    Initilize a MDAnalysis universe instance.
+def create_universe(
+    topology,
+    coordinates=None,
+    topology_format=None,
+    trajectory_format=None,
+    atom_style=None,
+    dimensions=None,
+):
+    """Initilize a MDAnalysis universe instance.
 
     Parameters
     ----------
@@ -550,9 +547,9 @@ def create_universe(topology,
     -------
     `MDAnalysis.Universe`
     """
-    universe = mda.Universe(topology,
-                            topology_format=topology_format,
-                            atom_style=atom_style)
+    universe = mda.Universe(
+        topology, topology_format=topology_format, atom_style=atom_style
+    )
 
     if coordinates is not None:
         universe.load_new(coordinates, format=trajectory_format)
@@ -563,19 +560,22 @@ def create_universe(topology,
         elif len(dimensions) != 6:
             raise IndexError(
                 "The dimensions must contain at least 3 entries for "
-                "the box length and possibly 3 more entries for the angles.")
+                "the box length and possibly 3 more entries for the angles."
+            )
 
         universe.trajectory.add_transformations(set_dimensions(dimensions))
 
     return universe
 
 
-def run_analysis(analysis_callable,
-                 mandatory_analysis_parameters,
-                 optional_analysis_parameters=None,
-                 reference_universe_parameters=None,
-                 run_parameters=None,
-                 output_parameters=None):
+def run_analysis(
+    analysis_callable,
+    mandatory_analysis_parameters,
+    optional_analysis_parameters=None,
+    reference_universe_parameters=None,
+    run_parameters=None,
+    output_parameters=None,
+):
     """Perform main client logic.
 
     Parameters
@@ -613,24 +613,26 @@ def run_analysis(analysis_callable,
         reference_universe = None
 
     # Initilize analysis callable
-    universe = convert_analysis_parameters(analysis_callable,
-                                           mandatory_analysis_parameters,
-                                           reference_universe)
+    universe = convert_analysis_parameters(
+        analysis_callable, mandatory_analysis_parameters, reference_universe
+    )
 
-    convert_analysis_parameters(analysis_callable,
-                                optional_analysis_parameters,
-                                reference_universe)
+    convert_analysis_parameters(
+        analysis_callable, optional_analysis_parameters, reference_universe
+    )
 
     if universe is None:
         universe = reference_universe
 
-    ac = analysis_callable(**mandatory_analysis_parameters,
-                           **optional_analysis_parameters)
+    ac = analysis_callable(
+        **mandatory_analysis_parameters, **optional_analysis_parameters
+    )
 
     # Run the analysis
     for key, value in run_parameters.items():
-        run_parameters[key] = \
+        run_parameters[key] = (
             convert_str_time(value, universe.trajectory.dt) if value else value
+        )
 
     ac.run(verbose=verbose, **run_parameters)
 
@@ -639,20 +641,22 @@ def run_analysis(analysis_callable,
         ac.save()
 
     except AttributeError:
-        directory = output_parameters.get("output_directory", "")
+        directory = Path(output_parameters.get("output_directory", ""))
         fname = output_parameters.get("output_prefix", "")
-        fname = f"{fname}_{analysis_callable.__name__}" if fname \
+        fname = (
+            f"{fname}_{analysis_callable.__name__}"
+            if fname
             else analysis_callable.__name__
-        save(ac.results, os.path.join(directory, fname))
+        )
+        save(ac.results, directory / fname)
 
     return ac
 
 
-def convert_analysis_parameters(analysis_callable,
-                                analysis_parameters,
-                                reference_universe=None):
-    """
-    Convert parameters from the command line suitable for anlysis.
+def convert_analysis_parameters(
+    analysis_callable, analysis_parameters, reference_universe=None
+):
+    """Convert parameters from the command line suitable for anlysis.
 
     Special types (i.e AtomGroups, Universes) are converted from the command
     line strings into the correct format. Parameters are changed inplace.
@@ -696,13 +700,11 @@ def convert_analysis_parameters(analysis_callable,
     # If a Universe is part of the parameters several extra arguments with
     # non matching names were created. We seperate them by their connecting
     # character.
-    analysis_parameters_keys = [p.split("_")[-1] for p
-                                in analysis_parameters.keys()]
+    analysis_parameters_keys = [p.split("_")[-1] for p in analysis_parameters]
 
     for param_name, dictionary in params.items():
         if param_name in analysis_parameters_keys:
-            if dictionary['type'] in ["AtomGroup",
-                                      "MDAnalysis.core.groups.AtomGroup"]:
+            if dictionary["type"] in ["AtomGroup", "MDAnalysis.core.groups.AtomGroup"]:
                 sel = analysis_parameters[param_name]
                 # Do not try to parse `None` value
                 # They could be default arguments of a function
@@ -712,10 +714,12 @@ def convert_analysis_parameters(analysis_callable,
                 if atomgrp:
                     analysis_parameters[param_name] = atomgrp
                 else:
-                    raise ValueError(f"AtomGroup `-{param_name}` with "
-                                     f"string of the selection {sel}` "
-                                     f"does not contain any atoms.")
-            elif "list[AtomGroup]" == dictionary['type']:
+                    raise ValueError(
+                        f"AtomGroup `-{param_name}` with "
+                        f"string of the selection {sel}` "
+                        f"does not contain any atoms."
+                    )
+            elif dictionary["type"] == "list[AtomGroup]":
                 if analysis_parameters[param_name] is None:
                     continue
                 for i, sel in enumerate(analysis_parameters[param_name]):
@@ -723,19 +727,24 @@ def convert_analysis_parameters(analysis_callable,
                     if atomgrp:
                         analysis_parameters[param_name][i] = atomgrp
                     else:
-                        raise ValueError(f"AtomGroup `-{param_name}` with "
-                                         f"string of the selection {sel}` "
-                                         f"does not contain any atoms.")
+                        raise ValueError(
+                            f"AtomGroup `-{param_name}` with "
+                            f"string of the selection {sel}` "
+                            f"does not contain any atoms."
+                        )
 
-            elif dictionary['type'] in ["Universe",
-                                        "MDAnalysis.core.universe.Universe"]:
+            elif dictionary["type"] in [
+                "Universe",
+                "MDAnalysis.core.universe.Universe",
+            ]:
                 # Create universe parameter dictionary from signature
                 sig = inspect.signature(create_universe)
                 universe_parameters = dict(sig.parameters)
 
-                for k in universe_parameters.keys():
+                for k in universe_parameters:
                     universe_parameters[k] = analysis_parameters.pop(
-                        f"{k}_{param_name}")
+                        f"{k}_{param_name}"
+                    )
 
                 universe = create_universe(**universe_parameters)
                 analysis_parameters[param_name] = universe
@@ -744,8 +753,7 @@ def convert_analysis_parameters(analysis_callable,
 
 
 def setup_clients(ap, title, members):
-    """
-    Set up analysis clients for an ArgumentParser instance.
+    """Set up analysis clients for an ArgumentParser instance.
 
     Parameters
     ----------
@@ -759,16 +767,15 @@ def setup_clients(ap, title, members):
     cli_subparser = ap.add_subparsers(title=title)
 
     analysis_interfaces = {
-        member.__name__: parse_callable_signature(member)
-        for member in members
-        }
+        member.__name__: parse_callable_signature(member) for member in members
+    }
 
     # adds each Analysis class/function as a CLI under 'cli_subparser'
     # to be writen
     for member_name, parameters in analysis_interfaces.items():
-        create_cli(sub_parser=cli_subparser,
-                   interface_name=member_name,
-                   parameters=parameters)
+        create_cli(
+            sub_parser=cli_subparser, interface_name=member_name, parameters=parameters
+        )
 
 
 def init_base_argparse(name, version, description):
@@ -793,30 +800,30 @@ def init_base_argparse(name, version, description):
     `ArgumentParser`
     """
     ap = argparse.ArgumentParser(
-        description=description,
-        formatter_class=argparse.RawDescriptionHelpFormatter)
+        description=description, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
 
     ap.add_argument(
-        '--version',
-        action='version',
+        "--version",
+        action="version",
         version=f"{name} {version}",
-        )
+    )
 
     ap.add_argument(
-        '--debug',
-        action='store_true',
+        "--debug",
+        action="store_true",
         help="Run with debug options.",
-        )
+    )
 
     ap.add_argument(
         "-nt",
         dest="num_threads",
         type=int,
         default=0,
-        help="Total number of threads to start (0 is guess)")
+        help="Total number of threads to start (0 is guess)",
+    )
 
-    ap.add_argument('--logfile',
-                    dest='logfile',
-                    action='store',
-                    help='Logfile (optional)')
+    ap.add_argument(
+        "--logfile", dest="logfile", action="store", help="Logfile (optional)"
+    )
     return ap

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- Mode: python; tab-width: 4; indent-tabs-mode:nil; coding:utf-8 -*-
 #
 # Copyright (c) 2024 Authors and contributors
 #
@@ -7,6 +6,7 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 """The toplevel command line interface."""
+
 import logging
 import sys
 import traceback
@@ -22,21 +22,22 @@ from .libcli import (
     run_analysis,
     setup_clients,
     split_argparse_into_groups,
-    )
+)
 from .logger import setup_logging
 from .utils import _exit_if_a_is_b
-
 
 logger = logging.getLogger(__name__)
 
 
-def cli(name,
-        module_list,
-        base_class=AnalysisBase,
-        version="",
-        description="",
-        skip_modules=None,
-        ignore_warnings=False):
+def cli(
+    name,
+    module_list,
+    base_class=AnalysisBase,
+    version="",
+    description="",
+    skip_modules=None,
+    ignore_warnings=False,
+):
     """Create the command-line interface.
 
     This function creates a command line interface with a given `name` based
@@ -80,17 +81,13 @@ def cli(name,
                    skip_modules=skip_mods,
                    ignore_warnings=True)
     """
-    modules = find_cls_members(base_class,
-                               module_list,
-                               ignore_warnings=ignore_warnings)
+    modules = find_cls_members(base_class, module_list, ignore_warnings=ignore_warnings)
 
     skip_modules = [] if skip_modules is None else skip_modules
     modules = [mod for mod in modules if mod.__name__ not in skip_modules]
     _exit_if_a_is_b(modules, None, "No analysis modules founds.")
 
-    ap = init_base_argparse(name=name,
-                            version=version,
-                            description=description)
+    ap = init_base_argparse(name=name, version=version, description=description)
 
     if len(sys.argv) < 2:
         ap.error("A subcommand is required.")
@@ -134,12 +131,14 @@ def cli(name,
             arg_grouped_dict.setdefault("Output Parameters", {})
 
             with threadpool_limits(limits=args.num_threads):
-                run_analysis(analysis_callable,
-                             arg_grouped_dict["Mandatory Parameters"],
-                             arg_grouped_dict["Optional Parameters"],
-                             arg_grouped_dict["Reference Universe Parameters"],
-                             arg_grouped_dict["Analysis Run Parameters"],
-                             arg_grouped_dict["Output Parameters"])
+                run_analysis(
+                    analysis_callable,
+                    arg_grouped_dict["Mandatory Parameters"],
+                    arg_grouped_dict["Optional Parameters"],
+                    arg_grouped_dict["Reference Universe Parameters"],
+                    arg_grouped_dict["Analysis Run Parameters"],
+                    arg_grouped_dict["Output Parameters"],
+                )
         except Exception as e:
             if args.debug:
                 traceback.print_exc()

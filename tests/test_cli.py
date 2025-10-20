@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- Mode: python; tab-width: 4; indent-tabs-mode:nil; coding:utf-8 -*-
 #
 # Copyright (c) 2021 Authors and contributors
 #
@@ -14,8 +13,7 @@ from pathlib import Path
 import pytest
 from MDAnalysisTests.datafiles import TPR, XTC
 
-
-tester_class = (Path('.').absolute() / 'tests/run_tester').as_posix()
+tester_class = (Path().absolute() / "tests/run_tester").as_posix()
 
 
 def test_required_args():
@@ -30,23 +28,23 @@ def test_wrong_module():
         subprocess.check_call(["mda", "foo"])
 
 
-@pytest.mark.parametrize("args", ("version", "debug", "help"))
+@pytest.mark.parametrize("args", ["version", "debug", "help"])
 def test_extra_options(args):
     """Test for a ab extra option."""
     subprocess.check_call(["mda", "--" + args])
 
 
-@pytest.mark.parametrize("args", ("RMSF", "rmsf"))
+@pytest.mark.parametrize("args", ["RMSF", "rmsf"])
 def test_case_insensitive(args):
     """Test for being case insensitive."""
     subprocess.check_call(["mda", args, "-h"])
 
 
-@pytest.mark.parametrize('args', ("RMSF", "rmsf"))
+@pytest.mark.parametrize("args", ["RMSF", "rmsf"])
 def test_case_insensitive_with_flags(args):
     """Test for module name being case insensitive with additional flags."""
     # Check if it still works if the module name is not the second argument
-    subprocess.check_call(['mda', '--debug', args, "-h"])
+    subprocess.check_call(["mda", "--debug", args, "-h"])
 
 
 def test_running_analysis(tmpdir):
@@ -57,12 +55,21 @@ def test_running_analysis(tmpdir):
         )
 
 
-def test_verbosity_level_warning(caplog):
+def test_verbosity_level_warning():
     """Test the log level warning."""
     # This should only print warning messages
     output = subprocess.check_output(
-        [sys.executable, tester_class,
-         "tester", "-s", TPR, "-f", XTC, "-atomgroup", "all"],
+        [
+            sys.executable,
+            tester_class,
+            "tester",
+            "-s",
+            TPR,
+            "-f",
+            XTC,
+            "-atomgroup",
+            "all",
+        ],
         text=True,
     )
     assert "This is a warning" in output
@@ -71,14 +78,20 @@ def test_verbosity_level_warning(caplog):
     assert "This is an info message" not in output
 
 
-def test_verbosity_level_info(caplog):
+def test_verbosity_level_info():
     """Test the log level info."""
     # This should only print warning and info messages
     output = subprocess.check_output(
         [
-            sys.executable, tester_class,
-            "tester", "-s", TPR, "-f", XTC,
-            "-atomgroup", "all",
+            sys.executable,
+            tester_class,
+            "tester",
+            "-s",
+            TPR,
+            "-f",
+            XTC,
+            "-atomgroup",
+            "all",
             "-v",
         ],
         text=True,
@@ -89,14 +102,21 @@ def test_verbosity_level_info(caplog):
     assert "This is a debug message" not in output
 
 
-def test_verbosity_level_debug(caplog):
+def test_verbosity_level_debug():
     """Test the log level debug."""
     # This should print all messages
     output = subprocess.check_output(
         [
-            sys.executable, tester_class, "--debug",
-            "tester", "-s", TPR, "-f", XTC,
-            "-atomgroup", "all",
+            sys.executable,
+            tester_class,
+            "--debug",
+            "tester",
+            "-s",
+            TPR,
+            "-f",
+            XTC,
+            "-atomgroup",
+            "all",
             "-v",
         ],
         text=True,

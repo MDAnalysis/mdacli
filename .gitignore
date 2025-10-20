@@ -13,6 +13,7 @@ __pycache__
 .duecredit.p
 .tox/
 .swp
+_version.py
 
 # Unit test / coverage reports
 htmlcov/
@@ -27,9 +28,7 @@ coverage.xml
 .pytest_cache/
 
 # Sphinx documentation
-docs/_build/
-docs/html
-docs/latex
+docs/build
 
 # editors and IDEs
 *.sw[a-z]

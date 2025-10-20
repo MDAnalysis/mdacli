@@ -7,9 +7,9 @@ MDAnalysis command line interface
 using argparse_. This project is in an **early development stage** and
 work in progress. `Contributions are welcome <https://github.com/MDAnalysis/mdacli/blob/main/docs/CONTRIBUTING.rst>`_!
 
-To install `mdacli` refer to the `INSTALL file <https://github.com/MDAnalysis/mdacli/blob/main/docs/rst/installation.rst>`_.
+To install ``mdacli`` refer to the `INSTALL file <https://github.com/MDAnalysis/mdacli/blob/main/docs/rst/installation.rst>`_.
 
-Run `mdacli`::
+Run ``mdacli``::
 
    mda -h
 
@@ -57,7 +57,7 @@ Currently the following analysis modules are available
    * - HELANAL
      - Perform HELANAL helix analysis on your trajectory.
    * - HoleAnalysis
-     - Run `hole` program on a trajectory.
+     - Run ``hole`` program on a trajectory.
    * - LinearDensity
      - Linear density profile
    * - EinsteinMSD

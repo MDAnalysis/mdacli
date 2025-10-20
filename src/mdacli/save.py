@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
-# -*- Mode: python; tab-width: 4; indent-tabs-mode:nil; coding:utf-8 -*-
 
 # Copyright (c) 2021 Authors and contributors
 #
 # Released under the GNU Public Licence, v2 or any higher version
 # SPDX-License-Identifier: GPL-2.0-or-later
 """Manage data saving."""
+
 import json
-import os
 import sys
 import zipfile
 from functools import partial
@@ -18,8 +17,7 @@ from MDAnalysis.analysis.base import Results
 
 
 def save(results, fprefix="mdacli_results"):
-    """
-    Save the attributes of a results instance to disk.
+    """Save the attributes of a results instance to disk.
 
     1D, 2D and 3D numpy arrays are saved to csv files. 1D arrays of the
     same length are vertically stacked to create a table. 2D arrays are
@@ -49,8 +47,7 @@ def save(results, fprefix="mdacli_results"):
 
 
 def save_1D_arrays(results, fprefix="1darray", remove=True):
-    """
-    Save 1D arrays from results.
+    """Save 1D arrays from results.
 
     Parameters
     ----------
@@ -63,19 +60,19 @@ def save_1D_arrays(results, fprefix="1darray", remove=True):
     list_1D, list_1D_labels = get_1D_arrays(results)
 
     if not list_1D:
-        return
+        return None
 
     out_lists, out_lables = stack_1d_arrays_list(list_1D, list_1D_labels)
 
-    for out_list, out_label in zip(out_lists, out_lables):
+    for out_list, out_label in zip(out_lists, out_lables, strict=True):
         out_label = out_label.flatten()
 
         # [3:] to align lables with entries
         savetxt_w_command(
             fname=f"{fprefix}_{'_'.join(out_label)}.csv",
             X=out_list.T,
-            header=''.join([f"{i:>25}" for i in out_label])[3:]
-            )
+            header="".join([f"{i:>25}" for i in out_label])[3:],
+        )
 
     return return_with_remove(results, list_1D_labels, remove)
 
@@ -130,20 +127,20 @@ def stack_1d_arrays_list(list_1D, extra_list=None):
     out_lists = []
     # Concentanate lists of the same lenngth
     for i in range(0, len(new_length_idx) - 1):
-        out_lists.append(np.vstack(list_1D_sorted[new_length_idx[i]:
-                                                  new_length_idx[i + 1]]))
+        out_lists.append(
+            np.vstack(list_1D_sorted[new_length_idx[i] : new_length_idx[i + 1]])
+        )
 
     if extra_list is not None:
         extra_list_sorted = [extra_list[i] for i in sorted_idx]
         out_extra = []
         for i in range(0, len(new_length_idx) - 1):
-            out_extra.append(np.vstack(extra_list_sorted[new_length_idx[i]:
-                                                         new_length_idx[i + 1]]
-                                       ))
+            out_extra.append(
+                np.vstack(extra_list_sorted[new_length_idx[i] : new_length_idx[i + 1]])
+            )
 
         return out_lists, out_extra
-    else:
-        return out_lists
+    return out_lists
 
 
 def save_2D_arrays(results, fprefix="2Darr", remove=True):
@@ -168,19 +165,18 @@ def save_3D_arrays(results, fprefix="3Darr", remove=True):
                 value,
                 arr_name=f"{fprefix}_{key}",
                 zipit=True,
-                )
+            )
             keys.append(key)
 
     return return_with_remove(results, keys, remove)
 
 
 def save_3D_array_to_2D_csv(
-        item,
-        arr_name='arr',
-        zipit=True,
-        ):
-    """
-    Save 3D array to 2D CSVs.
+    item,
+    arr_name="arr",
+    zipit=True,
+):
+    """Save 3D array to 2D CSVs.
 
     Has option to store all in a ZIP file.
     """
@@ -193,7 +189,7 @@ def save_3D_array_to_2D_csv(
         item,
         item.shape[min_dim],
         axis=min_dim,
-        )
+    )
 
     save_to_folder = not zipit
     folder = None
@@ -225,7 +221,7 @@ def save_higher_dim_arrays(results, fprefix="XDarr", remove=True, min_ndim=4):
     return return_with_remove(results, keys, remove)
 
 
-def save_result_array(arr, fprefix='prefix'):
+def save_result_array(arr, fprefix="prefix"):
     """Save array to disk accoring to num of dimensions."""
     item = np.squeeze(arr)
 
@@ -234,7 +230,7 @@ def save_result_array(arr, fprefix='prefix'):
         item.ndim == 2: save_2D_arrays,
         item.ndim == 3: save_3D_arrays,
         item.ndim > 3: save_higher_dim_arrays,
-        }
+    }
 
     save_options[True](item, fprefix=fprefix)
     return
@@ -242,14 +238,10 @@ def save_result_array(arr, fprefix='prefix'):
 
 def save_json_serializables(results, remove=True, **jsonargs):
     """Save serializable items to a JSON."""
-    json_dict = {
-        key: value
-        for key, value in results.items()
-        if is_serializable(value)
-        }
+    json_dict = {key: value for key, value in results.items() if is_serializable(value)}
 
     if remove:
-        for key in json_dict.keys():
+        for key in json_dict:
             results.pop(key)
 
     if json_dict:
@@ -261,18 +253,19 @@ def is_serializable(value):
     """Assert if value is json serializable."""
     try:
         json.dumps(value)
-        return True
     except (TypeError, OverflowError):
         return False
+    else:
+        return True
 
 
-def save_to_json(json_dict, fname='jdict', indent=4, sort_keys=True):
+def save_to_json(json_dict, fname="jdict", indent=4, sort_keys=True):
     """Save dictionary to JSON file."""
-    with open(f'{fname}.json', 'w') as f:
+    with Path.open(f"{fname}.json", "w") as f:
         json.dump(json_dict, f, indent=indent, sort_keys=sort_keys)
 
 
-def save_Results_object(results, fprefix='results', remove=True):
+def save_Results_object(results, fprefix="results", remove=True):
     """Save results if they are Results objects."""
     keys = []
     for key, value in results.items():
@@ -284,8 +277,7 @@ def save_Results_object(results, fprefix='results', remove=True):
 
 
 def return_with_remove(ddict, keys, remove):
-    """
-    Serve all saving functions.
+    """Serve all saving functions.
 
     If remove is true,
     Returns subset of keys from dict.
@@ -296,13 +288,11 @@ def return_with_remove(ddict, keys, remove):
     if remove:
         return {key: ddict.pop(key) for key in keys}
 
-    else:
-        return None
+    return None
 
 
-def save_files_to_zip(files, zipname='thezip', remove=True):
-    """
-    Compress all files into a single zip archive.
+def save_files_to_zip(files, zipname="thezip", remove=True):
+    """Compress all files into a single zip archive.
 
     Parameters
     ----------
@@ -315,12 +305,12 @@ def save_files_to_zip(files, zipname='thezip', remove=True):
     remove : bool, option, default True
         Removes the original files.
     """
-    with zipfile.ZipFile(f'{zipname}.zip', 'w') as zipF:
+    with zipfile.ZipFile(f"{zipname}.zip", "w") as zipF:
         for file_name in files:
             zipF.write(
                 file_name,
                 compress_type=zipfile.ZIP_DEFLATED,
-                )
+            )
 
     if remove:
         remove_files(files)
@@ -330,20 +320,12 @@ def save_files_to_zip(files, zipname='thezip', remove=True):
 
 def is_dimension_array(arr, ndim):
     """Assert value is array and of certain dimension."""
-    valid = \
-        isinstance(arr, np.ndarray) \
-        and arr.ndim == ndim
-
-    return valid
+    return isinstance(arr, np.ndarray) and arr.ndim == ndim
 
 
 def is_higher_dimension_array(arr, ndim):
     """Assert value is array and of certain dimension."""
-    valid = \
-        isinstance(arr, np.ndarray) \
-        and arr.ndim > ndim
-
-    return valid
+    return isinstance(arr, np.ndarray) and arr.ndim > ndim
 
 
 is_1d_array = partial(is_dimension_array, ndim=1)
@@ -359,35 +341,25 @@ def try_to_squeeze_me(arr):
 def remove_files(files):
     """Remove files from disk."""
     for filename in files:
-        os.remove(filename)
+        Path.unlink(filename)
     return
 
 
-def savetxt_w_command(fname, X, header='', fsuffix=".csv", **kwargs):
-    """
-    Save CSV data with info about execution command.
+def savetxt_w_command(fname, X, header="", fsuffix=".csv", **kwargs):
+    """Save CSV data with info about execution command.
 
     Adds the command line input to the header and checks for a doubled
     defined filesuffix.
     """
-    header = "{}\n{}".format(get_cli_input(), header)
-    fname = "{}{}".format(fname, (not fname.endswith(fsuffix)) * fsuffix)
-    np.savetxt(
-        fname,
-        X,
-        header=header,
-        fmt="%-20s",
-        **kwargs)
+    header = f"{get_cli_input()}\n{header}"
+    fname = f"{fname}{(not fname.endswith(fsuffix)) * fsuffix}"
+    np.savetxt(fname, X, header=header, fmt="%-20s", **kwargs)
 
 
 def get_cli_input():
     """Return a proper fomatted string of the command line input."""
-    program_name = os.path.basename(sys.argv[0])
+    program_name = Path(sys.argv[0]).name
     # Add additional quotes for connected arguments.
-    arguments = [
-        '"{}"'.format(arg).strip()
-        if " " in arg else arg
-        for arg in sys.argv[1:]
-        ]
+    arguments = [f'"{arg}"'.strip() if " " in arg else arg for arg in sys.argv[1:]]
 
     return "Command line was: {} {}".format(program_name, " ".join(arguments))

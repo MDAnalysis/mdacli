@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
-# -*- Mode: python; tab-width: 4; indent-tabs-mode:nil; coding:utf-8 -*-
 #
 # Copyright (c) 2021 Authors and contributors
 #
 # Released under GNU Public Licence, v2 or any higher version
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-"""
-Emphaising strings with colors etc.
+"""Emphaising strings with colors etc.
 
 Taken from https://gist.github.com/tuvokki/14deb97bef6df9bc6553.
 """
@@ -38,16 +36,16 @@ class Emphasise:
         turquoise color
     """
 
-    _endc = '\033[0m'
-    bold = '\033[1m'
-    underline = '\033[4m'
-    gray = '\033[90m'
-    red = '\033[91m'
-    green = '\033[92m'
-    yellow = '\033[93m'
-    blue = '\033[94m'
-    pink = '\033[95m'
-    turquoise = '\033[96m'
+    _endc = "\033[0m"
+    bold = "\033[1m"
+    underline = "\033[4m"
+    gray = "\033[90m"
+    red = "\033[91m"
+    green = "\033[92m"
+    yellow = "\033[93m"
+    blue = "\033[94m"
+    pink = "\033[95m"
+    turquoise = "\033[96m"
 
     def _emphasise(self, str, style):
         return f"{style}{str}{self._endc}"

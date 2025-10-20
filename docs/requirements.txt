@@ -1,0 +1,6 @@
+sphinx>=2.2
+sphinx_sitemap
+sphinx-argparse
+CommonMark
+mock
+mdanalysis_sphinx_theme >=1.0.1

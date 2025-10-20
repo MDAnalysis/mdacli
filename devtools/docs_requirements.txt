@@ -1,7 +1,0 @@
-sphinx>=2.2
-sphinx-rtd-theme
-sphinx-sitemap
-sphinx-argparse
-CommonMark
-mock
-msmb_theme

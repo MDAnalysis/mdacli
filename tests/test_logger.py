@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-# -*- Mode: python; tab-width: 4; indent-tabs-mode:nil; coding:utf-8 -*-
 #
 # Copyright (c) 2024 Authors and contributors
 #
 # Released under the GNU Public Licence, v2 or any higher version
 # SPDX-License-Identifier: GPL-2.0-or-later
 """Test mdacli logger."""
+
 import logging
 import warnings
 from pathlib import Path
@@ -76,7 +76,7 @@ def test_info_log(caplog, monkeypatch, tmp_path, capsys):
         logger.info("foo")
         logger.debug("A debug message")
 
-    with open("logfile.log", "r") as f:
+    with Path.open("logfile.log") as f:
         file_log = f.read()
 
     stdout_log = capsys.readouterr().out
@@ -101,7 +101,7 @@ def test_debug_log(caplog, monkeypatch, tmp_path, capsys):
         logger.info("foo")
         logger.debug("A debug message")
 
-    with open("logfile.log", "r") as f:
+    with Path.open("logfile.log") as f:
         file_log = f.read()
 
     stdout_log = capsys.readouterr().out

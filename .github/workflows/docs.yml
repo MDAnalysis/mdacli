@@ -11,19 +11,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v5
       with:
-        ref: ${{ github.head_ref }}
-        fetch-depth: 1
-        fetch-tags: True
-    - name: Set up Python 3.10
+        fetch-depth: 0
+
+    - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: "3.10"
-    - run: pip install tox
+        python-version: "3.13"
+    - run: pip install tox gitpython
 
     - name: Build docs
       run: tox -e docs
+
+    - name: Check for Changelog
+      if: github.event_name == 'pull_request'
+      run: python ./developer/check_changelog.py
 
     - name: Deploy docs
       if: github.event_name != 'pull_request'
@@ -47,7 +50,7 @@ jobs:
         # python -c 'import os,sys,fcntl; flags = fcntl.fcntl(sys.stdout, fcntl.F_GETFL); fcntl.fcntl(sys.stdout, fcntl.F_SETFL, flags&~os.O_NONBLOCK);'
         
         # go into built docs
-        cd dist/docs
+        cd docs/build/html
 
         # move docs into version subfolder
         mkdir ../${VERSION} && mv * ../${VERSION} && mv ../${VERSION} $VERSION

@@ -1,17 +1,14 @@
-graft docs
 graft src
 
 include *.rst
 include LICENSE
 
-exclude .bumpversion.cfg
-exclude .codacy.yaml
-exclude .coveragerc
+exclude .codecov.yml
 exclude .readthedocs.yml
-exclude .codeclimate.yml
 exclude tox.ini
 
-prune devtools
+prune docs
+prune developer
 prune tests
 prune data
 

@@ -1,0 +1,11 @@
+coverage:
+  ignore:
+    - "src/mdacli/_version.py"
+    - "tests/.*"
+  status:
+    project:
+      default:
+        target: 80%
+    patch: false
+
+comment: false

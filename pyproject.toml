@@ -1,18 +1,20 @@
 [build-system]
-# These are the assumed default build requirements from pip:
-# https://pip.pypa.io/en/stable/reference/pip/#pep-517-and-518-support
-requires = ["setuptools>=43.0.0", "wheel"]
+requires = [
+    "setuptools >= 77",
+    "setuptools_scm>=8",
+    "wheel",
+]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "mdacli"
-version = "0.1.32"
+dynamic = ["version"]
 description = "A command line client for MDAnalysis Analysis classes."
 authors = [
     {name = "MDAnalysis Development Team and contributors", email = "mdanalysis@numfocus.org"},
 ]
 readme = "README.rst"
-requires-python = ">=3.9"
+requires-python = ">=3.11"
 keywords = [
     "python",
     "cli",
@@ -36,10 +38,6 @@ classifiers = [
     "Operating System :: MacOS :: MacOS X",
     "Operating System :: Microsoft :: Windows",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
     "Topic :: Scientific/Engineering",
     "Topic :: Scientific/Engineering :: Bio-Informatics",
     "Topic :: Scientific/Engineering :: Chemistry",
@@ -49,7 +47,7 @@ classifiers = [
 ]
 
 dependencies = [
-    "MDAnalysis>=2.1.0",
+    "MDAnalysis>=2.10.0",
     "threadpoolctl",
 ]
 
@@ -67,38 +65,87 @@ user_group = " https://groups.google.com/g/mdnalysis-discussion"
 [project.scripts]
 mda = "mdacli.__main__:main"
 
+[tool.check-manifest]
+ignore = ["src/mdacli/_version.py"]
+
+[tool.coverage]
+patch = ["subprocess"]
+
+[tool.coverage.paths]
+source = ["src/mdacli", "*/site-packages"]
+
+[tool.coverage.report]
+skip_covered = true
+show_missing = true
+exclude_lines = ["if __name__ == .__main__.:"]
+
+[tool.mypy]
+exclude = ["docs/src/examples"]
+follow_imports = 'skip'
+ignore_missing_imports = true
+
+[tool.ruff]
+exclude = ["src/mdacli/_version.py"]
+line-length = 88
+
+[tool.ruff.lint]
+# See https://docs.astral.sh/ruff/rules for additional details
+extend-select = [
+    "F",  # Pyflakes checks (e.g., unused imports, undefined variables)
+    "B",  # Pyflakes-bugbear checks (e.g., unused imports, undefined variables)
+    "D",  # PEP 257 docstring conventions (e.g., formatting, consistency)
+    "E",  # Pycodestyle errors (e.g., indentation, whitespace, syntax)
+    "UP",  # PyUpgrade rules (e.g., upgrading to modern Python syntax)
+    "I",  # Import conventions (e.g., sorting imports, duplicate imports)
+    "SIM",  # Simplification suggestions (e.g., refactoring redundant code)
+    "PT",  # Pytest style rules (e.g., avoiding assert in tests)
+    "RET",  # Return statements consistency (e.g., avoiding multiple return paths)
+    "W",  # Warnings about style (e.g., trailing whitespace, blank lines)
+    "Q",  # Quotes consistency (e.g., single vs. double quotes)
+    "TD",  # TODO checks (e.g., TODO comments without author)
+    "LOG",  # Logging checks
+    "G",  # Logging formatting checks
+    "T20", # Check for print statements
+    "ARG", # Checks for unused arguments
+    "PTH", # Check for instances where pathlib should be used
+    "FLY",  # Checks for str.join() which can be written as f-strings
+    "TRY",  # Checks for try/except blocks
+]
+
+ignore = [
+    "D107",  # Missing docstring in __init__
+    "D203",  # 1 blank line required before class docstring
+    "D213",  # Multi-line docstring summary should start at the second line
+    "D400",  # First line should end with a period
+    "D401",  # First line should be in imperative mood
+    "D413",  # Missing blank line after last section
+    "D417",  # Missing argument description in the docstring for {definition}: {name}
+    "TRY003",  # Avoid specifying long messages outside the exception class
+    "TD003",  # Missing issue link for this TODO
+    "G004",  # f-strings in log messages
+    "LOG015",  # Logging using root logger #TODO(@PicoCentauri): Check this
+]
+
+[tool.ruff.lint.per-file-ignores]
+"**/{docs,examples}/*" = ["T20"]  # Don't require any docstrings in these directories
+
+[tool.ruff.lint.isort]
+known-first-party = ["mdacli"]
+
 [tool.setuptools.packages.find]
 where = ["src"]
 
-[tool.flake8]
-max_line_length = 80
-hang-closing = true
-ignore = [
-    "W293",
-    "W503",
-    "D412",
-    "D105",
-]
-docstring-convention = "numpy"
-
-[tool.isort]
-line_length = 80
-indent = 4
-multi_line_output = 8
-include_trailing_comma = true
-lines_after_imports = 2
-sections = "FUTURE,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
-known_first_party = "mdacli"
-known_third_party = [
-    "MDAnalysis",
-    "hypothesis",
-    "matplotlib",
-    "numpy",
-    "pytest",
-]
+[tool.setuptools_scm]
+version_file = "src/mdacli/_version.py"
 
 [tool.pytest.ini_options]
-addopts = "-p pytest_cov"
+addopts = [
+    "--cov",
+    "--cov-append",
+    "--cov-report=",
+    "--import-mode=append",
+    "--disable-warnings",
+]
 python_files = [
     "test_*.py",
     "*_test.py",
