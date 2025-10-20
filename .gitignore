@@ -36,3 +36,5 @@ docs/latex
 *~
 .idea
 .vscode
+
+docs/build

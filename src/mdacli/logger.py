@@ -11,7 +11,7 @@ import logging
 import sys
 import warnings
 from pathlib import Path
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 from .colors import Emphasise
 
@@ -74,7 +74,7 @@ def setup_logging(
         format += "{message}"
 
         formatter = logging.Formatter(format, style="{")
-        handlers: List[Union[logging.StreamHandler, logging.FileHandler]] = []
+        handlers: list[Union[logging.StreamHandler, logging.FileHandler]] = []
 
         stream_handler = logging.StreamHandler(sys.stdout)
         stream_handler.setFormatter(formatter)

@@ -28,19 +28,19 @@ def test_wrong_module():
         subprocess.check_call(["mda", "foo"])
 
 
-@pytest.mark.parametrize("args", ("version", "debug", "help"))
+@pytest.mark.parametrize("args", ["version", "debug", "help"])
 def test_extra_options(args):
     """Test for a ab extra option."""
     subprocess.check_call(["mda", "--" + args])
 
 
-@pytest.mark.parametrize("args", ("RMSF", "rmsf"))
+@pytest.mark.parametrize("args", ["RMSF", "rmsf"])
 def test_case_insensitive(args):
     """Test for being case insensitive."""
     subprocess.check_call(["mda", args, "-h"])
 
 
-@pytest.mark.parametrize("args", ("RMSF", "rmsf"))
+@pytest.mark.parametrize("args", ["RMSF", "rmsf"])
 def test_case_insensitive_with_flags(args):
     """Test for module name being case insensitive with additional flags."""
     # Check if it still works if the module name is not the second argument
@@ -55,7 +55,7 @@ def test_running_analysis(tmpdir):
         )
 
 
-def test_verbosity_level_warning(caplog):
+def test_verbosity_level_warning():
     """Test the log level warning."""
     # This should only print warning messages
     output = subprocess.check_output(
@@ -78,7 +78,7 @@ def test_verbosity_level_warning(caplog):
     assert "This is an info message" not in output
 
 
-def test_verbosity_level_info(caplog):
+def test_verbosity_level_info():
     """Test the log level info."""
     # This should only print warning and info messages
     output = subprocess.check_output(
@@ -102,7 +102,7 @@ def test_verbosity_level_info(caplog):
     assert "This is a debug message" not in output
 
 
-def test_verbosity_level_debug(caplog):
+def test_verbosity_level_debug():
     """Test the log level debug."""
     # This should print all messages
     output = subprocess.check_output(

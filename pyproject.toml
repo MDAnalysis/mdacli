@@ -70,8 +70,12 @@ mda = "mdacli.__main__:main"
 [tool.coverage]
 patch = ["subprocess"]
 
+[tool.mypy]
+exclude = ["docs/src/examples"]
+follow_imports = 'skip'
+ignore_missing_imports = true
+
 [tool.ruff]
-exclude = ["versioneer.py", "docs/src/examples/**", "src/maicos/_version.py"]
 line-length = 88
 
 [tool.ruff.lint]

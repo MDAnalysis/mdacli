@@ -13,10 +13,9 @@ import importlib
 import inspect
 import json
 import logging
-import os
 import re
 import warnings
-from typing import List
+from pathlib import Path
 
 import MDAnalysis as mda
 from MDAnalysis.transformations.boxdimensions import set_dimensions
@@ -40,13 +39,13 @@ STR_TYPE_DICT = {
     "NoneType": None,
     "AtomGroup": mda.AtomGroup,
     "MDAnalysis.core.groups.AtomGroup": mda.AtomGroup,
-    "list[AtomGroup]": List[mda.AtomGroup],
+    "list[AtomGroup]": list[mda.AtomGroup],
     "MDAnalysis.core.universe.Universe": mda.Universe,
     "Universe": mda.Universe,
 }
 
 
-def _warning(message, *args, **kwargs):
+def _warning(message, *args, **kwargs):  # NOQA: ARG001
     logger.warning(Emphasise.warning(message))
 
 
@@ -60,7 +59,7 @@ class KwargsDict(argparse.Action):
     Else, attempts to convert string to dictionary using json.loads.
     """
 
-    def __call__(self, parser, namespace, value, option_string=None):
+    def __call__(self, parser, namespace, value, option_string=None):  # NOQA: ARG002
         """Call me."""
         if value.startswith("{") and value.endswith("}"):
             try:
@@ -73,7 +72,7 @@ class KwargsDict(argparse.Action):
                     err.pos,
                 ) from None
         else:
-            with open(value) as fin:
+            with Path.open(value) as fin:
                 jdict = json.load(fin)
 
         setattr(namespace, self.dest, jdict)
@@ -130,8 +129,7 @@ def find_cls_members(cls, modules, ignore_warnings=False):
     with warnings.catch_warnings():
         if not ignore_warnings:
             warnings.simplefilter("ignore")
-        members = find_classes_in_modules(cls, *[m for m in modules])
-    return members
+        return find_classes_in_modules(cls, *[m for m in modules])
 
 
 def split_argparse_into_groups(parser, namespace):
@@ -384,10 +382,10 @@ def create_cli(sub_parser, interface_name, parameters):
     # adds only if `save` method does not exist
     if not getattr(parameters["callable"], "save", False):
         logger.debug("No save method found. Use generic one.")
-        # TODO: add our save function as method. Avoids try except later...
+        # TODO @PicoCentauri: add our save function as method. Avoids try except later
         add_output_group(analysis_class_parser)
     else:
-        # TODO: add parameters from save function to parser
+        # TODO @PicoCentauri: add parameters from save function to parser
         pass
 
     # add positional and optional arguments
@@ -459,17 +457,15 @@ def create_cli(sub_parser, interface_name, parameters):
                 arg_params["action"] = "store_false"
             else:
                 arg_params["action"] = "store_true"
-        elif type_ in (mda.AtomGroup, List[mda.AtomGroup]):
-            if type_ == List[mda.AtomGroup]:
+        elif type_ in (mda.AtomGroup, list[mda.AtomGroup]):
+            if type_ == list[mda.AtomGroup]:
                 arg_params["nargs"] = "+"
 
             arg_params["type"] = str
             arg_params["help"] += " Use a MDAnalysis selection string."
 
             # Create one reference Universe argument for atom selection
-            try:
-                reference_universe_group
-            except NameError:
+            if "reference_universe_group" not in locals():
                 reference_universe_group = analysis_class_parser.add_argument_group(
                     title="Reference Universe Parameters",
                     description="Parameters specific for loading "
@@ -645,14 +641,14 @@ def run_analysis(
         ac.save()
 
     except AttributeError:
-        directory = output_parameters.get("output_directory", "")
+        directory = Path(output_parameters.get("output_directory", ""))
         fname = output_parameters.get("output_prefix", "")
         fname = (
             f"{fname}_{analysis_callable.__name__}"
             if fname
             else analysis_callable.__name__
         )
-        save(ac.results, os.path.join(directory, fname))
+        save(ac.results, directory / fname)
 
     return ac
 
@@ -704,7 +700,7 @@ def convert_analysis_parameters(
     # If a Universe is part of the parameters several extra arguments with
     # non matching names were created. We seperate them by their connecting
     # character.
-    analysis_parameters_keys = [p.split("_")[-1] for p in analysis_parameters.keys()]
+    analysis_parameters_keys = [p.split("_")[-1] for p in analysis_parameters]
 
     for param_name, dictionary in params.items():
         if param_name in analysis_parameters_keys:

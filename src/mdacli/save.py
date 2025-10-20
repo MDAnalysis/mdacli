@@ -7,7 +7,6 @@
 """Manage data saving."""
 
 import json
-import os
 import sys
 import zipfile
 from functools import partial
@@ -254,14 +253,15 @@ def is_serializable(value):
     """Assert if value is json serializable."""
     try:
         json.dumps(value)
-        return True
     except (TypeError, OverflowError):
         return False
+    else:
+        return True
 
 
 def save_to_json(json_dict, fname="jdict", indent=4, sort_keys=True):
     """Save dictionary to JSON file."""
-    with open(f"{fname}.json", "w") as f:
+    with Path.open(f"{fname}.json", "w") as f:
         json.dump(json_dict, f, indent=indent, sort_keys=sort_keys)
 
 
@@ -320,16 +320,12 @@ def save_files_to_zip(files, zipname="thezip", remove=True):
 
 def is_dimension_array(arr, ndim):
     """Assert value is array and of certain dimension."""
-    valid = isinstance(arr, np.ndarray) and arr.ndim == ndim
-
-    return valid
+    return isinstance(arr, np.ndarray) and arr.ndim == ndim
 
 
 def is_higher_dimension_array(arr, ndim):
     """Assert value is array and of certain dimension."""
-    valid = isinstance(arr, np.ndarray) and arr.ndim > ndim
-
-    return valid
+    return isinstance(arr, np.ndarray) and arr.ndim > ndim
 
 
 is_1d_array = partial(is_dimension_array, ndim=1)
@@ -345,7 +341,7 @@ def try_to_squeeze_me(arr):
 def remove_files(files):
     """Remove files from disk."""
     for filename in files:
-        os.remove(filename)
+        Path.unlink(filename)
     return
 
 
@@ -362,7 +358,7 @@ def savetxt_w_command(fname, X, header="", fsuffix=".csv", **kwargs):
 
 def get_cli_input():
     """Return a proper fomatted string of the command line input."""
-    program_name = os.path.basename(sys.argv[0])
+    program_name = Path(sys.argv[0]).name
     # Add additional quotes for connected arguments.
     arguments = [f'"{arg}"'.strip() if " " in arg else arg for arg in sys.argv[1:]]
 

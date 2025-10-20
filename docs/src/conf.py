@@ -4,9 +4,6 @@ import os
 import sys
 from unittest import mock
 
-import msmb_theme
-import sphinx_rtd_theme
-
 # activate if there are dependencies
 mock_modules = [
     "matplotlib",
@@ -33,7 +30,7 @@ extensions = [
     "sphinx.ext.todo",
     "sphinx.ext.viewcode",
     "sphinx.ext.autosectionlabel",
-    "sphinx_rtd_theme",
+    "mdanalysis_sphinx_theme",
     "sphinx_sitemap",
 ]
 
@@ -77,29 +74,16 @@ linkcheck_ignore = [
     r"https://codecov.io/gh/MDAnalysis/mdacli/*",
 ]
 
-html_theme = "msmb_theme"
-html_theme_path = [
-    msmb_theme.get_html_theme_path(),
-    sphinx_rtd_theme.get_html_theme_path(),
-]
+html_theme = "mdanalysis_sphinx_theme"
+htmlhelp_basename = "mdacli"
+
 html_theme_options = {
-    "canonical_url": "",
-    "logo_only": True,
-    "display_version": True,
-    "prev_next_buttons_location": "bottom",
-    "style_external_links": False,
-    "style_nav_header_background": "white",
-    # Toc options
-    "collapse_navigation": True,
-    "sticky_navigation": True,
-    "navigation_depth": 4,
-    "includehidden": True,
-    "titles_only": False,
+    "mda_official": False,
 }
 html_use_smartypants = True
 html_last_updated_fmt = "%b %d, %Y"
 html_split_index = False
-html_short_title = "%s-%s" % (project, version)
+html_short_title = f"{project}-{version}"
 html_baseurl = site_url
 html_logo = "_static/logos/mdacli-logo.png"
 html_favicon = "_static/logos/mdanalysis-logo.ico"
@@ -107,7 +91,7 @@ html_static_path = ["_static"]
 html_css_files = ["custom.css"]
 html_use_opensearch = site_url
 
-html_context = {"versions_json_url": os.path.join(site_url, "versions.json")}
+html_context = {"versions_json_url": f"{site_url}/versions.json"}
 
 napoleon_use_ivar = True
 napoleon_use_rtype = False
@@ -116,6 +100,6 @@ napoleon_use_param = False
 # Configuration for intersphinx: refer to the Python standard library
 # and other packages used by mdacli
 intersphinx_mapping = {
-    "https://docs.python.org/": None,
-    "https://docs.mdanalysis.org/stable/": None,
+    "python": ("https://docs.python.org/3/", None),
+    "MDAnalysis": ("https://docs.mdanalysis.org/stable/", None),
 }

@@ -50,7 +50,7 @@ from .test_utils import complete_docstring
 
 
 @pytest.mark.parametrize(
-    "cmd,expected",
+    ("cmd", "expected"),
     [
         ('-d {"key1":1}', {"key1": 1}),
     ],
@@ -68,7 +68,7 @@ def test_KwargsDict(cmd, expected):
 
 
 @pytest.mark.parametrize(
-    "cmd,expected",
+    ("cmd", "expected"),
     [
         (f"-d {os.fspath(example_json)}", {"key1": 1}),
     ],
@@ -86,7 +86,7 @@ def test_KwargsDict_from_file(cmd, expected):
 
 
 @pytest.mark.parametrize(
-    "s, error, msg",
+    ("s", "error", "msg"),
     [
         ("-d {fail}", JSONDecodeError, "An error ocurred when reading"),
         ("-d fail", FileNotFoundError, "No such file or directory"),
@@ -240,7 +240,7 @@ def test_add_cli_universe(name, dest, default):
 
 @pytest.mark.parametrize(
     ("opt", "dest", "val"),
-    (
+    [
         ("-s", "topology", "foo"),
         ("-top", "topology_format", "foo"),
         ("-f", "coordinates", ["foo", "bar"]),
@@ -250,7 +250,7 @@ def test_add_cli_universe(name, dest, default):
         ("-b", "start", 42),
         ("-e", "stop", 42),
         ("-dt", "step", 42),
-    ),
+    ],
 )
 def test_setup_clients(opt, dest, val):
     """Test all additional arguments."""
