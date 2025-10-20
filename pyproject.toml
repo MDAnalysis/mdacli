@@ -49,7 +49,7 @@ classifiers = [
 ]
 
 dependencies = [
-    "MDAnalysis>=2.1.0",
+    "MDAnalysis>=2.10.0",
     "threadpoolctl",
 ]
 
