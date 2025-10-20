@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-# -*- Mode: python; tab-width: 4; indent-tabs-mode:nil; coding:utf-8 -*-
 #
 # Copyright (c) 2021 Authors and contributors
 #
 # Released under the GNU Public Licence, v2 or any higher version
 # SPDX-License-Identifier: GPL-2.0-or-later
 """Logging."""
+
 import contextlib
 import logging
 import sys
@@ -44,8 +44,7 @@ def check_suffix(filename: Union[str, Path], suffix: str) -> Union[str, Path]:
 
     if type(filename) is str:
         return str(path_filename)
-    else:
-        return path_filename
+    return path_filename
 
 
 @contextlib.contextmanager
@@ -83,8 +82,7 @@ def setup_logging(
 
         if logfile:
             logfile = check_suffix(filename=logfile, suffix=".log")
-            file_handler = logging.FileHandler(
-                filename=str(logfile), encoding="utf-8")
+            file_handler = logging.FileHandler(filename=str(logfile), encoding="utf-8")
             file_handler.setFormatter(formatter)
             handlers.append(file_handler)
         else:
@@ -93,8 +91,7 @@ def setup_logging(
             logging.addLevelName(logging.WARNING, Emphasise.warning("WARNING"))
             logging.addLevelName(logging.ERROR, Emphasise.error("ERROR"))
 
-        logging.basicConfig(
-            format=format, handlers=handlers, level=level, style="{")
+        logging.basicConfig(format=format, handlers=handlers, level=level, style="{")
         logging.captureWarnings(True)
 
         if logfile:

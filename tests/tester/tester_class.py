@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- Mode: python; tab-width: 4; indent-tabs-mode:nil; coding:utf-8 -*-
 #
 # Copyright (c) 2024 Authors and contributors
 #
@@ -10,7 +9,6 @@
 import logging
 
 from MDAnalysis.analysis.base import AnalysisBase
-
 
 logger = logging.getLogger(__name__)
 
@@ -28,9 +26,9 @@ class Tester(AnalysisBase):
 
     def __init__(self, atomgroup, **kwargs):
         """Initialise the Tester class."""
-        super(Tester, self).__init__(atomgroup.universe.trajectory, **kwargs)
+        super().__init__(atomgroup.universe.trajectory, **kwargs)
         logger.info("This is an info message")
-        logger.warn("This is a warning")
+        logger.warning("This is a warning")
         logger.debug("This is a debug message")
 
     def _prepare(self):

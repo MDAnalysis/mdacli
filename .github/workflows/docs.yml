@@ -16,10 +16,10 @@ jobs:
         ref: ${{ github.head_ref }}
         fetch-depth: 1
         fetch-tags: True
-    - name: Set up Python 3.10
+    - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: "3.10"
+        python-version: "3.13"
     - run: pip install tox
 
     - name: Build docs
@@ -47,7 +47,7 @@ jobs:
         # python -c 'import os,sys,fcntl; flags = fcntl.fcntl(sys.stdout, fcntl.F_GETFL); fcntl.fcntl(sys.stdout, fcntl.F_SETFL, flags&~os.O_NONBLOCK);'
         
         # go into built docs
-        cd dist/docs
+        cd docs/build/html
 
         # move docs into version subfolder
         mkdir ../${VERSION} && mv * ../${VERSION} && mv ../${VERSION} $VERSION
