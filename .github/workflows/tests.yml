@@ -28,12 +28,11 @@ jobs:
     - name: run Python tests and collect coverage
       run: |
         tox -e tests
-        coverage xml --data-file tests/.coverage
+        coverage xml
 
     - name: upload to codecov.io
       uses: codecov/codecov-action@v5
       with:
-        # https://github.com/codecov/codecov-action/issues/1842
         fail_ci_if_error: false
-        files: tests/coverage.xml
+        files: coverage.xml
         token: ${{ secrets.CODECOV_TOKEN }}

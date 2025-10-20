@@ -10,7 +10,7 @@ exclude .codeclimate.yml
 exclude tox.ini
 
 prune docs
-prune devtools
+prune developer
 prune tests
 prune data
 
