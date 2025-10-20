@@ -20,7 +20,7 @@ jobs:
       uses: actions/setup-python@v4
       with:
         python-version: "3.13"
-    - run: pip install tox gitpython
+    - run: pip install tox
 
     - name: Build docs
       run: tox -e docs
