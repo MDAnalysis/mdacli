@@ -46,6 +46,35 @@ def test_case_insensitive_with_flags(args):
     # Check if it still works if the module name is not the second argument
     subprocess.check_call(["mda", "--debug", args, "-h"])
 
+def test_subparser_setup_for_tab_completion():
+    """Test that subparsers are correctly set up for tab-completion.
+    
+    This verifies that RMSF and RMSD modules are registered as subcommands,
+    which is what argcomplete needs for tab-completion to work.
+    """
+    from MDAnalysis.analysis.base import AnalysisBase
+    from src.mdacli.libcli import find_cls_members, init_base_argparse, setup_clients
+
+    modules = find_cls_members(
+        AnalysisBase,
+        ["MDAnalysis.analysis.rms"]
+    )
+
+    parser = init_base_argparse(
+        name="MDAnalysis",
+        version="0.1.0",
+        description="Test CLI"
+    )
+
+    setup_clients(parser, title="MDAnalysis Analysis Modules", members=modules)
+
+    subparser_action = [
+        a for a in parser._subparsers._group_actions if hasattr(a, 'choices')
+    ][0]
+
+    choices = list(subparser_action.choices.keys())
+    assert "RMSF" in choices
+    assert "RMSD" in choices
 
 def test_running_analysis(tmpdir):
     """Test running a complete analysis."""

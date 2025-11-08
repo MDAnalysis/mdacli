@@ -6,3 +6,4 @@ Authors
 * Oliver Beckstein (`webpage-ob <https://becksteinlab.physics.asu.edu>`_, `github-ob <https://github.com/orbeckst>`_)
 * Lily Wang (`github-lw <https://github.com/lilyminium>`_)
 * Henrik Jäger (`github-hj <https://github.com/hejamu>`_)
+* Shreejan Dolai (`github-sd <https://github.com/spyke7>`_)

@@ -9,6 +9,7 @@
    :hidden:
 
    installation
+   tab-completion
    philosophy
    usage
    contributing
