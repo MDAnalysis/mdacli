@@ -8,6 +8,7 @@
 
 import subprocess
 import sys
+from contextlib import suppress
 from pathlib import Path
 
 import pytest
@@ -75,7 +76,7 @@ def test_subparser_setup_for_tab_completion():
 
 
 def test_argcomplete_working():
-    """Test that argcomplete is properly registered and working"""
+    """Test that argcomplete is properly registered and working."""
     import argparse
     from unittest.mock import patch
 
@@ -93,20 +94,19 @@ def test_argcomplete_working():
         "InterRDF_s",
     ]
 
-    with patch("src.mdacli.cli.argcomplete.autocomplete") as mock_autocomplete:
-        # Mock sys.argv to prevent the CLI from actually running
-        with patch("sys.argv", ["mda", "--help"]):
-            try:
-                cli(
-                    name="MDAnalysis",
-                    module_list=[f"MDAnalysis.analysis.{m}" for m in __all__],
-                    version=src.mdacli.__version__,
-                    description="Test",
-                    skip_modules=skip_mods,
-                    ignore_warnings=True,
-                )
-            except SystemExit:
-                pass
+    with (
+        patch("src.mdacli.cli.argcomplete.autocomplete") as mock_autocomplete,
+        patch("sys.argv", ["mda", "--help"]),
+        suppress(SystemExit),
+    ):
+        cli(
+            name="MDAnalysis",
+            module_list=[f"MDAnalysis.analysis.{m}" for m in __all__],
+            version=src.mdacli.__version__,
+            description="Test",
+            skip_modules=skip_mods,
+            ignore_warnings=True,
+        )
 
     # Verify that argcomplete.autocomplete was called
     assert mock_autocomplete.called, "argcomplete.autocomplete() was not called"
@@ -117,10 +117,12 @@ def test_argcomplete_working():
         "argcomplete.autocomplete() was called with no arguments"
     )
 
-    parser_arg = call_args[0][0]  # First positional argument
-    assert isinstance(parser_arg, argparse.ArgumentParser), (
-        f"argcomplete.autocomplete() should be called with ArgumentParser, got {type(parser_arg)}"
+    parser_arg = call_args[0][0]
+    msg = (
+        "argcomplete.autocomplete() should be called with ArgumentParser, "
+        f"got {type(parser_arg)}"
     )
+    assert isinstance(parser_arg, argparse.ArgumentParser), msg
 
 
 def test_running_analysis(tmpdir):

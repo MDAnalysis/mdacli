@@ -1,5 +1,3 @@
-.. _tab-completion:
-
 ===================
 Tab-Completion
 ===================

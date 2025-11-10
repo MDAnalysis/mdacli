@@ -4,3 +4,4 @@ sphinx-argparse
 CommonMark
 mock
 mdanalysis_sphinx_theme >=1.0.1
+argcomplete
