@@ -12,39 +12,6 @@ Run ``mdacli``::
 
    mda -h
 
-Enabling Tab-Completion
------------------------
-
-``mdacli`` supports tab-completion for commands and options. To enable it:
-
-**Bash**::
-
-   # For current session only
-   eval "$(register-python-argcomplete mda)"
-
-   # Or add to ~/.bashrc for permanent activation
-   echo 'eval "$(register-python-argcomplete mda)"' >> ~/.bashrc
-   source ~/.bashrc
-
-**Zsh**::
-
-   # Add to ~/.zshrc
-   autoload -U bashcompinit
-   bashcompinit
-   eval "$(register-python-argcomplete mda)"
-
-**Fish**::
-
-   register-python-argcomplete --shell fish mda > ~/.config/fish/completions/mda.fish
-
-**Test it**::
-
-   mda <TAB>           # Shows all available modules
-   mda RM<TAB>         # Shows RMSD, RMSF
-   mda RMSD -<TAB>     # Shows all RMSD options
-
-For more details, see the `argcomplete documentation <https://github.com/kislyuk/argcomplete>`_.
-
 
 For a help and an overview of the supported modules. A help
 message for each module is available using::

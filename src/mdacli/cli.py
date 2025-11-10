@@ -11,8 +11,8 @@ import logging
 import sys
 import traceback
 import warnings
-import argcomplete
 
+import argcomplete
 from MDAnalysis.analysis.base import AnalysisBase
 from threadpoolctl import threadpool_limits
 
@@ -98,7 +98,7 @@ def cli(
     #    i.e. for `mda RMSD` only the RMSD client should be build.
     # 2. for something like `mdacli -h` We do not have to build every
     #   sub parser in complete detail.
-    
+
     argcomplete.autocomplete(ap)
     setup_clients(ap, title=f"{name} Analysis Modules", members=modules)
 

@@ -5,16 +5,6 @@ Tab-Completion
 ===================
 
 ``mdacli`` includes built-in support for command-line tab-completion using
-`argcomplete <https://github.com/kislyuk/argcomplete>`_.
-
-Installation
-============
-
-Tab-completion is automatically available after installing ``mdacli``::
-
-    pip install mdacli
-
-However, you need to activate it in your shell.
 
 Activation
 ==========
