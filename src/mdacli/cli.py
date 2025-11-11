@@ -90,9 +90,6 @@ def cli(
 
     ap = init_base_argparse(name=name, version=version, description=description)
 
-    if len(sys.argv) < 2:
-        ap.error("A subcommand is required.")
-
     # There is to much useless code execution done here:
     # 1. We do not have to setup all possible clients all the time.
     #    i.e. for `mda RMSD` only the RMSD client should be build.
