@@ -1,8 +1,8 @@
-===================
+==============
 Tab-Completion
-===================
+==============
 
-``mdacli`` includes built-in support for command-line tab-completion using
+``mdacli`` includes built-in support for command-line tab-completion
 
 Activation
 ==========

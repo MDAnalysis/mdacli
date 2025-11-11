@@ -9,9 +9,9 @@
    :hidden:
 
    installation
-   tab-completion
    philosophy
    usage
+   tab-completion
    contributing
    api
    changelog

@@ -99,8 +99,8 @@ def cli(
     # 2. for something like `mdacli -h` We do not have to build every
     #   sub parser in complete detail.
 
-    argcomplete.autocomplete(ap)
     setup_clients(ap, title=f"{name} Analysis Modules", members=modules)
+    argcomplete.autocomplete(ap)
 
     args = ap.parse_args()
 

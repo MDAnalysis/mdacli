@@ -2,8 +2,8 @@
 Changelog
 =========
 
-v0.1.34 (2025-11-10)
-------------------------------------------
+Unreleased
+----------
 
 * Added argcomplete for tab completion
 * Updated docs 

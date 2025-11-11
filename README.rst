@@ -12,7 +12,6 @@ Run ``mdacli``::
 
    mda -h
 
-
 For a help and an overview of the supported modules. A help
 message for each module is available using::
 
