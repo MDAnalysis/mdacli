@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# PYTHON_ARGCOMPLETE_OK
 #
 # Copyright (c) 2021 Authors and contributors
 #

@@ -49,6 +49,7 @@ classifiers = [
 dependencies = [
     "MDAnalysis>=2.10.0",
     "threadpoolctl",
+    "argcomplete",
 ]
 
 [project.urls]

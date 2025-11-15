@@ -11,6 +11,7 @@
    installation
    philosophy
    usage
+   tab-completion
    contributing
    api
    changelog
