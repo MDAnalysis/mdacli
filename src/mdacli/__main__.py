@@ -20,7 +20,6 @@ Documentation for each module can be found at the respective sections on the
    https://docs.mdanalysis.org/stable/documentation_pages/analysis_modules.html
 """
 
-import argcomplete
 from MDAnalysis.analysis import __all__
 
 import mdacli
@@ -39,7 +38,7 @@ def main():
         "InterRDF_s",
     ]
 
-    parser = mdacli.cli(
+    mdacli.cli(
         name="MDAnalysis",
         module_list=[f"MDAnalysis.analysis.{m}" for m in __all__],
         version=mdacli.__version__,
@@ -47,8 +46,6 @@ def main():
         skip_modules=skip_mods,
         ignore_warnings=True,
     )
-
-    argcomplete.autocomplete(parser)
 
 
 if __name__ == "__main__":
