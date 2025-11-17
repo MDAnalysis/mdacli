@@ -247,13 +247,13 @@ def add_output_group(analysis_class_parser):
     )
 
 
-def _create_mda_file_completer(format_dict):
+def create_extension_completer(extension_list):
     """Create a completer function for MDAnalysis file formats.
 
     Parameters
     ----------
-    format_dict : dict
-        Dictionary of formats (e.g., mda._PARSERS or mda._READERS)
+    extension_list : list of str
+        List of file extensions (e.g., ['pdb', 'gro', 'psf'])
 
     Returns
     -------
@@ -263,8 +263,8 @@ def _create_mda_file_completer(format_dict):
     """
 
     def completer(prefix, parsed_args, **kwargs):  # noqa: ARG001
-        """Complete only files with extensions supported by MDAnalysis."""
-        valid_exts = tuple(f".{ext.lower()}" for ext in format_dict)
+        """Complete only files with specified extensions."""
+        valid_exts = tuple(f".{ext.lower()}" for ext in extension_list)
 
         # Determine directory and file prefix
         if os.path.sep in prefix:
@@ -304,7 +304,7 @@ def add_cli_universe(parser, name=""):
     Parameters
     ----------
     analysis_class_parser : argparse.ArgumentParser
-        The ArgumentsParser instance to which the run grorup is added
+        The ArgumentsParser instance to which the run group is added
     name : str
         suffix for the argument names
     """
@@ -319,7 +319,7 @@ def add_cli_universe(parser, name=""):
             ", ".join(mda._PARSERS.keys())
         ),
     )
-    topology_arg.completer = _create_mda_file_completer(mda._PARSERS)
+    topology_arg.completer = create_extension_completer(mda._PARSERS)
 
     parser.add_argument(
         f"-top{name}",
@@ -349,7 +349,7 @@ def add_cli_universe(parser, name=""):
         "The FORMATs {} are implemented in MDAnalysis."
         "".format(", ".join(mda._READERS.keys())),
     )
-    trajectory_arg.completer = _create_mda_file_completer(mda._READERS)
+    trajectory_arg.completer = create_extension_completer(mda._READERS)
 
     parser.add_argument(
         f"-traj{name}",

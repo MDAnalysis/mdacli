@@ -90,14 +90,17 @@ def cli(
 
     ap = init_base_argparse(name=name, version=version, description=description)
 
+    setup_clients(ap, title=f"{name} Analysis Modules", members=modules)
+    argcomplete.autocomplete(ap)
+
+    if len(sys.argv) < 2:
+        ap.error("A subcommand is required.")
+
     # There is to much useless code execution done here:
     # 1. We do not have to setup all possible clients all the time.
     #    i.e. for `mda RMSD` only the RMSD client should be build.
     # 2. for something like `mdacli -h` We do not have to build every
     #   sub parser in complete detail.
-
-    setup_clients(ap, title=f"{name} Analysis Modules", members=modules)
-    argcomplete.autocomplete(ap)
 
     args = ap.parse_args()
 
