@@ -246,6 +246,54 @@ def add_output_group(analysis_class_parser):
     )
 
 
+def create_extension_completer(extension_list):
+    """Create a completer function for MDAnalysis file formats.
+
+    Parameters
+    ----------
+    extension_list : list of str
+        List of file extensions (e.g., ['pdb', 'gro', 'psf'])
+
+    Returns
+    -------
+    function
+        Completer function for argcomplete that only shows files
+        with valid MDAnalysis extensions.
+    """
+
+    def completer(prefix, parsed_args, **kwargs):  # noqa: ARG001
+        """Complete only files with specified extensions."""
+        valid_exts = tuple(f".{ext.lower()}" for ext in extension_list)
+
+        prefix_path = Path(prefix)
+
+        # Determine directory and file prefix
+        if prefix_path.parent.name:
+            directory = prefix_path.parent
+            file_prefix = prefix_path.name
+        else:
+            directory = Path()
+            file_prefix = prefix
+
+        matches = []
+        try:
+            for item in directory.iterdir():
+                item_name = item.name
+                # Checking if item matches prefix and is a file with valid extension
+                if (
+                    item_name.startswith(file_prefix)
+                    and item.is_file()
+                    and item_name.lower().endswith(valid_exts)
+                ):
+                    matches.append(str(item) if directory != Path() else item_name)
+        except (OSError, PermissionError):
+            pass
+
+        return matches
+
+    return completer
+
+
 def add_cli_universe(parser, name=""):
     """Add universe parameters to an given argparse.ArgumentParser.
 
@@ -255,13 +303,13 @@ def add_cli_universe(parser, name=""):
     Parameters
     ----------
     analysis_class_parser : argparse.ArgumentParser
-        The ArgumentsParser instance to which the run grorup is added
+        The ArgumentsParser instance to which the run group is added
     name : str
         suffix for the argument names
     """
     name = f"_{name}" if name else ""
 
-    parser.add_argument(
+    topology_arg = parser.add_argument(
         f"-s{name}",
         dest=f"topology{name}",
         type=str,
@@ -270,6 +318,7 @@ def add_cli_universe(parser, name=""):
             ", ".join(mda._PARSERS.keys())
         ),
     )
+    topology_arg.completer = create_extension_completer(mda._PARSERS)
 
     parser.add_argument(
         f"-top{name}",
@@ -289,7 +338,7 @@ def add_cli_universe(parser, name=""):
         "(currently only LAMMPS parser). E.g. atom_style='id type x y z'.",
     )
 
-    parser.add_argument(
+    trajectory_arg = parser.add_argument(
         f"-f{name}",
         dest=f"coordinates{name}",
         type=str,
@@ -299,6 +348,7 @@ def add_cli_universe(parser, name=""):
         "The FORMATs {} are implemented in MDAnalysis."
         "".format(", ".join(mda._READERS.keys())),
     )
+    trajectory_arg.completer = create_extension_completer(mda._READERS)
 
     parser.add_argument(
         f"-traj{name}",
