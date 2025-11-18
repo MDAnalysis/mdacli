@@ -13,7 +13,6 @@ import importlib
 import inspect
 import json
 import logging
-import os
 import re
 import warnings
 from pathlib import Path
@@ -266,10 +265,11 @@ def create_extension_completer(extension_list):
         """Complete only files with specified extensions."""
         valid_exts = tuple(f".{ext.lower()}" for ext in extension_list)
 
+        prefix_path = Path(prefix)
+
         # Determine directory and file prefix
-        if os.path.sep in prefix:
-            prefix_path = Path(prefix)
-            directory = prefix_path.parent if prefix_path.parent != Path() else Path()
+        if prefix_path.parent.name:
+            directory = prefix_path.parent
             file_prefix = prefix_path.name
         else:
             directory = Path()
@@ -277,10 +277,9 @@ def create_extension_completer(extension_list):
 
         matches = []
         try:
-            # List all items in directory
             for item in directory.iterdir():
                 item_name = item.name
-                # Check if item matches prefix and is a file with valid extension
+                # Checking if item matches prefix and is a file with valid extension
                 if (
                     item_name.startswith(file_prefix)
                     and item.is_file()
