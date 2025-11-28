@@ -127,7 +127,7 @@ def find_cls_members(cls, modules, ignore_warnings=False):
         Flag to ignore warnings
     """
     with warnings.catch_warnings():
-        if not ignore_warnings:
+        if ignore_warnings:
             warnings.simplefilter("ignore")
         return find_classes_in_modules(cls, *[m for m in modules])
 

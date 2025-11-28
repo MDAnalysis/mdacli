@@ -40,7 +40,7 @@ def main():
 
     mdacli.cli(
         name="MDAnalysis",
-        module_list=[f"MDAnalysis.analysis.{m}" for m in __all__],
+        module_list=[f"MDAnalysis.analysis.{m}" for m in __all__ if m != "hbonds"],
         version=mdacli.__version__,
         description=__doc__,
         skip_modules=skip_mods,

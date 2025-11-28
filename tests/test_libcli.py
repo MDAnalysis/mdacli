@@ -10,6 +10,7 @@ import argparse
 import logging
 import os
 import sys
+import warnings
 from io import StringIO
 from json.decoder import JSONDecodeError
 from pathlib import Path
@@ -123,6 +124,50 @@ def test_find_cls_members_single(cls):
 
     assert members[0] is InterRDF
     assert members[1] is InterRDF_s
+
+
+def test_find_cls_members_ignore_warnings_true():
+    """Test that warnings are suppressed when ignore_warnings=True."""
+    with patch("mdacli.libcli.find_classes_in_modules") as mocked:
+
+        def warn_func(*_args, **_kwargs):
+            warnings.warn("warning", DeprecationWarning, stacklevel=2)
+            return ["OK"]
+
+        mocked.side_effect = warn_func
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("error")
+
+            members = find_cls_members(
+                AnalysisBase,
+                modules=["dummy.mod"],
+                ignore_warnings=True,
+            )
+
+        assert members == ["OK"]
+
+
+def test_find_cls_members_ignore_warnings_false():
+    """Test that warnings are emitted when ignore_warnings=False."""
+    with patch("mdacli.libcli.find_classes_in_modules") as mocked:
+
+        def warn_func(*_args, **_kwargs):
+            warnings.warn(
+                "This module was moved to ...", DeprecationWarning, stacklevel=2
+            )
+            return ["OK"]
+
+        mocked.side_effect = warn_func
+
+        with pytest.warns(DeprecationWarning, match="moved to"):
+            members = find_cls_members(
+                AnalysisBase,
+                modules=["dummy.mod"],
+                ignore_warnings=False,
+            )
+
+        assert members == ["OK"]
 
 
 @pytest.mark.parametrize(
