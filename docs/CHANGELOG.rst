@@ -5,6 +5,9 @@ Changelog
 Unreleased
 ----------
 
+v0.1.34 (2025-12-02)
+------------------------------------------
+
 * Ignore ``.github`` workflows for changelog checks
 * Ignore unrelated warnings from MDAnalysis
 * Added ``argcomplete`` for tab completion

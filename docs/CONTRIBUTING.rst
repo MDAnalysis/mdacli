@@ -160,3 +160,47 @@ are good to go (Pull Request).
 
 .. _Tox: https://tox.readthedocs.io/en/latest/
 .. _Fork this repository before contributing: https://github.com/MDAnalysis/mdacli/network/members
+
+How to Perform a Release
+-------------------------
+1. **Prepare a Release Pull Request**
+
+   - Based on the main branch create branch ``release-0.1.35`` and a PR.
+   - Ensure that all `CI tests <https://github.com/MDAnalysis/mdacli/actions>`_ pass.
+   - Optionally, run the tests locally to double-check.
+
+2. **Update the Changelog**
+
+   - Edit the changelog located in ``docs/CHANGELOG.rst``:
+      - Add a new section for the new version, summarizing the changes based on the
+        PRs merged since the last release.
+      - Leave a placeholder section titled *Unreleased* for future updates.
+
+3. **Merge the PR and Create a Tag**
+
+   - Merge the release PR.
+   - Update the ``main`` branch and check that the latest commit is the release PR with
+     ``git log``
+   - Create a tag on directly the ``main`` branch.
+   - Push the tag to GitHub. For example for a release of version ``2025.3``:
+
+     .. code-block:: bash
+
+        git checkout main
+        git pull
+        git tag -a v0.1.35 -m "Release v0.1.35"
+        git push --tags
+
+4. **Finalize the GitHub Release**
+
+   - Once the PR is merged, the CI will automatically:
+      - Publish the package to PyPI.
+      - Create a draft release on GitHub.
+   - Update the GitHub release notes by pasting the changelog for the version.
+
+5. **Merge Conda Recipe Changes**
+
+   - May resolve and then merge an automatically created PR on the `conda recipe
+     <https://github.com/conda-forge/mdacli-feedstock>`_.
+   - Once thus PR is merged and the new version will be published automatically on the
+     `conda-forge <https://anaconda.org/conda-forge/mdacli>`_ channel.
