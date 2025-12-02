@@ -5,12 +5,7 @@ Changelog
 Unreleased
 ----------
 
-* Updated the ignoring warnings in libcli.py
-* Added tests for ignoring warnings
-
-v0.1.34 (2025-11-28)
-------------------------------------------
-
+* Ignore unrelated warnings from MDAnalysis
 * Added argcomplete for tab completion
 * Updated docs 
 
