@@ -5,9 +5,10 @@ Changelog
 Unreleased
 ----------
 
+* Ignore ``.github`` workflows for changelog checks
 * Ignore unrelated warnings from MDAnalysis
-* Added argcomplete for tab completion
-* Updated docs 
+* Added ``argcomplete`` for tab completion
+* Updated docs
 
 v0.1.33 (2025-10-20)
 ------------------------------------------
