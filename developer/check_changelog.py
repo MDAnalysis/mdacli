@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 """Check if the CHANGELOG has been modified with respect to the main branch."""
 import os
 
@@ -22,7 +22,21 @@ with open(os.path.join(repo_path, changelog)) as f:
     workfile = f.read()
 
 if file.strip() == workfile.strip():
-    raise ChangelogError("You have not updated the CHANGELOG file. Please "
-                         f"add a summary of your additions to {changelog}.")
+    # Check for changed files and ignore .github/ changes
+    head_commit = repo.head.commit
+    diff = head_commit.diff("origin/main")
+    changed_files = []
+    for x in diff:
+        if x.a_blob.path not in changed_files:
+            changed_files.append(x.a_blob.path)
+        if x.b_blob is not None and x.b_blob.path not in changed_files:
+            changed_files.append(x.b_blob.path)
+    changed_files = [x for x in changed_files if not x.startswith(".github/")]
+
+    if len(changed_files) > 0:
+        raise ChangelogError("You have not updated the CHANGELOG file. Please "
+                             f"add a summary of your additions to {changelog}.")
+    else:
+        print("No changes detected.")
 else:
     print("CHANGELOG is up to date.")
