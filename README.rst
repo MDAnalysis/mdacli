@@ -6,7 +6,7 @@ MDAnalysis command line interface
 ``mdacli`` is a simple command line interface (CLI) to the analysis classes of `MDAnalysis`_
 using argparse_. `Contributions are welcome <https://github.com/MDAnalysis/mdacli/blob/main/docs/CONTRIBUTING.rst>`_!
 
-To install ``mdacli`` refer to the `INSTALL file <https://github.com/MDAnalysis/mdacli/blob/main/docs/rst/installation.rst>`_.
+To install ``mdacli`` refer to the `INSTALL file <https://github.com/MDAnalysis/mdacli/blob/main/docs/src/installation.rst>`_.
 
 Run ``mdacli``::
 
