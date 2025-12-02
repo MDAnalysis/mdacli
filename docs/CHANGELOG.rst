@@ -5,6 +5,7 @@ Changelog
 Unreleased
 ----------
 
+* Ignore unrelated warnings from MDAnalysis
 * Added argcomplete for tab completion
 * Updated docs 
 
