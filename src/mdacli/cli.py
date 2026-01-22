@@ -10,7 +10,6 @@
 import logging
 import sys
 import traceback
-import warnings
 
 import argcomplete
 from MDAnalysis.analysis.base import AnalysisBase
