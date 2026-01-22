@@ -20,7 +20,6 @@ from pathlib import Path
 import MDAnalysis as mda
 from MDAnalysis.transformations.boxdimensions import set_dimensions
 
-from .colors import Emphasise
 from .save import save
 from .utils import convert_str_time, parse_callable_signature, parse_docs
 
@@ -43,13 +42,6 @@ STR_TYPE_DICT = {
     "MDAnalysis.core.universe.Universe": mda.Universe,
     "Universe": mda.Universe,
 }
-
-
-def _warning(message, *args, **kwargs):  # NOQA: ARG001
-    logger.warning(Emphasise.warning(message))
-
-
-warnings.showwarning = _warning
 
 
 class KwargsDict(argparse.Action):
