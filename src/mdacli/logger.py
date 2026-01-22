@@ -48,7 +48,6 @@ def check_suffix(filename: str | Path, suffix: str) -> str | Path:
 
 @contextlib.contextmanager
 def setup_logging(
-    logobj: logging.Logger,
     logfile: str | Path | None = None,
     level: int = logging.WARNING,
 ):
@@ -67,9 +66,13 @@ def setup_logging(
         message logged from errors, warnings and infos will be displayed.
     """
     try:
-        format = ""
+        # Get the root logger
+        logobj = logging.getLogger()
+
         if level == logging.DEBUG:
-            format += "[{levelname}]:{filename}:{funcName}:{lineno} - "
+            format = "[{levelname}]:{filename}:{funcName}:{lineno} - "
+        else:
+            format = ""
         format += "{message}"
 
         formatter = logging.Formatter(format, style="{")
@@ -90,8 +93,11 @@ def setup_logging(
             logging.addLevelName(logging.WARNING, Emphasise.warning("WARNING"))
             logging.addLevelName(logging.ERROR, Emphasise.error("ERROR"))
 
-        logging.basicConfig(format=format, handlers=handlers, level=level, style="{")
-        logging.captureWarnings(True)
+        logobj.setLevel(level)
+        for handler in handlers:
+            handler.setLevel(level)
+            handler.setFormatter(formatter)
+            logobj.addHandler(handler)
 
         if logfile:
             abs_path = str(Path(logfile).absolute().resolve())
@@ -99,8 +105,8 @@ def setup_logging(
         else:
             logobj.debug("Logging to file is disabled.")
 
-        for handler in handlers:
-            logobj.addHandler(handler)
+        # Redirect warnings (from the warnings library) to the logging system
+        logging.captureWarnings(True)
 
         yield
 

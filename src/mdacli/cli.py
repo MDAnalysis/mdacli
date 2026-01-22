@@ -10,7 +10,6 @@
 import logging
 import sys
 import traceback
-import warnings
 
 import argcomplete
 from MDAnalysis.analysis.base import AnalysisBase
@@ -26,8 +25,6 @@ from .libcli import (
 )
 from .logger import setup_logging
 from .utils import _exit_if_a_is_b
-
-logger = logging.getLogger(__name__)
 
 
 def cli(
@@ -113,11 +110,8 @@ def cli(
 
     if args.debug:
         level = logging.DEBUG
-    else:
-        # Ignore all warnings if not in debug mode, because MDA is noisy
-        warnings.filterwarnings("ignore")
 
-    with setup_logging(logger, logfile=args.logfile, level=level):
+    with setup_logging(logfile=args.logfile, level=level):
         # Execute the main client interface.
         try:
             analysis_callable = args.analysis_callable

@@ -5,6 +5,7 @@ Changelog
 Unreleased
 ----------
 
+* Change internal handling of loggers
 * Fix installation link in README
 
 v0.1.34 (2025-12-02)
