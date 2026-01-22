@@ -66,11 +66,13 @@ def setup_logging(
         message logged from errors, warnings and infos will be displayed.
     """
     try:
+        # Get the root logger
         logobj = logging.getLogger()
 
-        format = ""
         if level == logging.DEBUG:
-            format += "[{levelname}]:{filename}:{funcName}:{lineno} - "
+            format = "[{levelname}]:{filename}:{funcName}:{lineno} - "
+        else:
+            format = ""
         format += "{message}"
 
         formatter = logging.Formatter(format, style="{")
@@ -91,8 +93,6 @@ def setup_logging(
             logging.addLevelName(logging.WARNING, Emphasise.warning("WARNING"))
             logging.addLevelName(logging.ERROR, Emphasise.error("ERROR"))
 
-        logging.captureWarnings(True)
-
         logobj.setLevel(level)
         for handler in handlers:
             handler.setLevel(level)
@@ -104,6 +104,9 @@ def setup_logging(
             logobj.info(f"This log is also available at '{abs_path}'.")
         else:
             logobj.debug("Logging to file is disabled.")
+
+        # Redirect warnings (from the warnings library) to the logging system
+        logging.captureWarnings(True)
 
         yield
 

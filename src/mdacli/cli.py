@@ -111,9 +111,6 @@ def cli(
 
     if args.debug:
         level = logging.DEBUG
-    else:
-        # Ignore all warnings if not in debug mode, because MDA is noisy
-        warnings.filterwarnings("ignore")
 
     with setup_logging(logfile=args.logfile, level=level):
         # Execute the main client interface.
