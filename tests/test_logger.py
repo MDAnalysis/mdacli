@@ -41,9 +41,7 @@ def test_warnings_in_log(caplog):
     Keep this test at the top since it seems otherwise there are some pytest
     issues...
     """
-    logger = logging.getLogger()
-
-    with setup_logging(logger):
+    with setup_logging():
         warnings.warn("A warning", stacklevel=1)
 
     assert "A warning" in caplog.text
@@ -54,7 +52,7 @@ def test_default_log(caplog, capsys):
     caplog.set_level(logging.INFO)
     logger = logging.getLogger()
 
-    with setup_logging(logger, level=logging.INFO):
+    with setup_logging(level=logging.INFO):
         logger.info("foo")
         logger.debug("A debug message")
 
@@ -72,7 +70,7 @@ def test_info_log(caplog, monkeypatch, tmp_path, capsys):
     caplog.set_level(logging.INFO)
     logger = logging.getLogger()
 
-    with setup_logging(logger, logfile="logfile.log", level=logging.INFO):
+    with setup_logging(logfile="logfile.log", level=logging.INFO):
         logger.info("foo")
         logger.debug("A debug message")
 
@@ -97,7 +95,7 @@ def test_debug_log(caplog, monkeypatch, tmp_path, capsys):
     caplog.set_level(logging.DEBUG)
     logger = logging.getLogger()
 
-    with setup_logging(logger, logfile="logfile.log", level=logging.DEBUG):
+    with setup_logging(logfile="logfile.log", level=logging.DEBUG):
         logger.info("foo")
         logger.debug("A debug message")
 
