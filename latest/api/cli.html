@@ -1,0 +1,241 @@
+
+
+
+
+
+  
+
+
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.1/css/academicons.min.css" integrity="sha512-b1ASx0WHgVFL5ZQhTgiPWX+68KjS38Jk87jg7pe+qC7q9YkEtFq0z7xCglv7qGIs/68d3mAp+StfC8WKC5SSAg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="shortcut icon" href="../../_static/mdanalysis-logo.ico">
+</head>
+
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>High-Level API &mdash; mdacli 0.1.35.dev3+g99e34787e documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=34bb78ad" />
+      <link rel="stylesheet" type="text/css" href="../_static/site.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=27e8b3b8" />
+
+  
+    <link rel="shortcut icon" href="../_static/mdanalysis-logo.ico"/>
+    <link rel="canonical" href="https://mdacli.mdanalysis.org/api/cli.html" />
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=e28934f6"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/js/versions.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within mdacli 0.1.35.dev3+g99e34787e documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Support functions for CLI" href="libcli.html" />
+    <link rel="prev" title="API library documentation" href="../api.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+
+  
+
+
+
+
+<a href="../index.html">
+  
+    <img src="../_static/mdacli-logo.png" class="logo" alt="Logo"/>
+</a>
+
+
+  
+  
+  
+    <div class="version">
+      0.1.35.dev3+g99e34787e
+    </div>
+  
+
+
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        </div>
+<div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+    
+        <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../philosophy.html">Philosophy and approach</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tab-completion.html">Tab-Completion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API library documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">High-Level API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.cli.cli"><code class="docutils literal notranslate"><span class="pre">cli()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="libcli.html">Support functions for CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="save.html">Results Saving</a></li>
+<li class="toctree-l2"><a class="reference internal" href="colors.html">Coloring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logger.html">Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authors.html">Authors</a></li>
+</ul>
+
+</div>
+
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">mdacli</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../api.html">API library documentation</a></li>
+      <li class="breadcrumb-item active">High-Level API</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/cli.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-mdacli.cli">
+<span id="high-level-api"></span><h1>High-Level API<a class="headerlink" href="#module-mdacli.cli" title="Link to this heading"></a></h1>
+<p>The toplevel command line interface.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="mdacli.cli.cli">
+<span class="sig-prename descclassname"><span class="pre">mdacli.cli.</span></span><span class="sig-name descname"><span class="pre">cli</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_class</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;class</span> <span class="pre">'MDAnalysis.analysis.base.AnalysisBase'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip_modules</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_warnings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/cli.html#cli"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.cli.cli" title="Link to this definition"></a></dt>
+<dd><p>Create the command-line interface.</p>
+<p>This function creates a command line interface with a given <cite>name</cite> based
+on a module list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – name of the interface</p></li>
+<li><p><strong>module_list</strong> (<em>list</em>) – list of module from which the cli is build up.</p></li>
+<li><p><strong>base_class</strong> (<em>cls</em>) – Class or list of classes that the Anaylsis modules belong to</p></li>
+<li><p><strong>description</strong> (<em>str</em>) – description of the cli</p></li>
+<li><p><strong>skip_modules</strong> (<em>list</em>) – list of strings containing modules that should be ommited</p></li>
+<li><p><strong>ignore_warnings</strong> (<em>bool</em>) – ignore warnings when importing modules</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>This example code creates the command line interface of MDAnalysis:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">MDAnalysis.analysis</span><span class="w"> </span><span class="kn">import</span> <span class="n">__all__</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">mdacli</span>
+
+<span class="n">skip_mods</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;AnalysisFromFunction&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;HydrogenBondAnalysis&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;WaterBridgeAnalysis&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;Contacts&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;Dihedral&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;PersistenceLength&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;InterRDF_s&#39;</span><span class="p">]</span>
+
+<span class="n">mdacli</span><span class="o">.</span><span class="n">cli</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;MDAnalysis&quot;</span><span class="p">,</span>
+           <span class="n">module_list</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;MDAnalysis.analysis.</span><span class="si">{</span><span class="n">m</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">__all__</span><span class="p">],</span>
+           <span class="n">version</span><span class="o">=</span><span class="n">mdacli</span><span class="o">.</span><span class="n">__version__</span><span class="p">,</span>
+           <span class="n">description</span><span class="o">=</span><span class="vm">__doc__</span><span class="p">,</span>
+           <span class="n">skip_modules</span><span class="o">=</span><span class="n">skip_mods</span><span class="p">,</span>
+           <span class="n">ignore_warnings</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../api.html" class="btn btn-neutral float-left" title="API library documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="libcli.html" class="btn btn-neutral float-right" title="Support functions for CLI" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Philip Loche, Joao MC Teixeira and Oliver Beckstein.
+      <span class="lastupdated">Last updated on Jan 23, 2026.
+      </span></p>
+  </div>
+
+  
+
+
+
+<div class="footer"><p>Please see
+    our <a href="https://www.mdanalysis.org/pages/privacy/">Privacy Policy</a>
+    to learn how <a href="https://www.mdanalysis.org">MDAnalysis</a> collects data.</p>
+    <script data-goatcounter="https://mdanalysis.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</div>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+    var versions_json_url = 'https://mdacli.mdanalysis.org//versions.json'
+</script>
+
+<div class="rst-versions" data-toggle="rst-versions" role="note"
+     aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book"></span>
+        0.1.35.dev3+g99e34787e
+      <span class="fa fa-caret-down"></span>
+    </span>
+
+    <div class="rst-other-versions">
+        <dl id="versionselector">
+            <dt>Other Versions</dt>
+        </dl>
+
+    </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

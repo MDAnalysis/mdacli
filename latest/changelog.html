@@ -1,0 +1,472 @@
+
+
+
+
+
+  
+
+
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.1/css/academicons.min.css" integrity="sha512-b1ASx0WHgVFL5ZQhTgiPWX+68KjS38Jk87jg7pe+qC7q9YkEtFq0z7xCglv7qGIs/68d3mAp+StfC8WKC5SSAg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="shortcut icon" href="_static/mdanalysis-logo.ico">
+</head>
+
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Changelog &mdash; mdacli 0.1.35.dev3+g99e34787e documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=34bb78ad" />
+      <link rel="stylesheet" type="text/css" href="_static/site.css" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=27e8b3b8" />
+
+  
+    <link rel="shortcut icon" href="_static/mdanalysis-logo.ico"/>
+    <link rel="canonical" href="https://mdacli.mdanalysis.org/changelog.html" />
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=e28934f6"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/js/versions.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within mdacli 0.1.35.dev3+g99e34787e documentation"
+          href="_static/opensearch.xml"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Authors" href="authors.html" />
+    <link rel="prev" title="Utilities" href="api/utils.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+
+  
+
+
+
+
+<a href="index.html">
+  
+    <img src="_static/mdacli-logo.png" class="logo" alt="Logo"/>
+</a>
+
+
+  
+  
+  
+    <div class="version">
+      0.1.35.dev3+g99e34787e
+    </div>
+  
+
+
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        </div>
+<div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+    
+        <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="philosophy.html">Philosophy and approach</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tab-completion.html">Tab-Completion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API library documentation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#unreleased">Unreleased</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-2-0-2026-01-23">v0.2.0 (2026-01-23)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-34-2025-12-02">v0.1.34 (2025-12-02)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-33-2025-10-20">v0.1.33 (2025-10-20)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-32-2024-07-09">v0.1.32 (2024-07-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-31-2024-07-08">v0.1.31 (2024-07-08)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-30-2024-04-03">v0.1.30 (2024-04-03)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-29-2024-03-21">v0.1.29 (2024-03-21)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-28-2023-09-29">v0.1.28 (2023-09-29)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-27-2023-08-25">v0.1.27 (2023-08-25)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-26-2023-06-27">v0.1.26 (2023-06-27)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-25-2023-02-21">v0.1.25 (2023-02-21)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-24-2023-01-27">v0.1.24 (2023-01-27)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-23-2023-01-27">v0.1.23 (2023-01-27)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-22-2023-01-27">v0.1.22 (2023-01-27)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-21-2022-04-22">v0.1.21 (2022-04-22)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-20-2022-04-13">v0.1.20 (2022-04-13)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-19-2022-04-12">v0.1.19 (2022-04-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-18-2022-04-12">v0.1.18 (2022-04-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-17-2022-04-07">v0.1.17 (2022-04-07)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-16-2022-02-25">v0.1.16 (2022-02-25)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-15-2022-02-25">v0.1.15 (2022-02-25)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-14-2022-02-17">v0.1.14 (2022-02-17)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-13-2022-02-16">v0.1.13 (2022-02-16)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-12-2022-01-19">v0.1.12 (2022-01-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-11-2022-01-19">v0.1.11 (2022-01-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-10-2022-01-18">v0.1.10 (2022-01-18)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-9-2022-01-16">v0.1.9 (2022-01-16)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-8-2022-01-16">v0.1.8 (2022-01-16)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-7-2021-12-18">v0.1.7 (2021-12-18)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-6-2021-12-01">v0.1.6 (2021-12-01)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-5-2021-12-01">v0.1.5 (2021-12-01)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-4-2021-11-24">v0.1.4 (2021-11-24)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-3-2021-11-24">v0.1.3 (2021-11-24)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-2-2021-11-18">v0.1.2 (2021-11-18)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-1-2021-11-18">v0.1.1 (2021-11-18)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-0-2021-11-18">v0.1.0 (2021-11-18)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
+</ul>
+
+</div>
+
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">mdacli</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Changelog</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/changelog.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="changelog">
+<h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading"></a></h1>
+<section id="unreleased">
+<h2>Unreleased<a class="headerlink" href="#unreleased" title="Link to this heading"></a></h2>
+</section>
+<section id="v0-2-0-2026-01-23">
+<h2>v0.2.0 (2026-01-23)<a class="headerlink" href="#v0-2-0-2026-01-23" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Change internal handling of loggers</p></li>
+<li><p>Fix installation link in README</p></li>
+</ul>
+</section>
+<section id="v0-1-34-2025-12-02">
+<h2>v0.1.34 (2025-12-02)<a class="headerlink" href="#v0-1-34-2025-12-02" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Ignore <code class="docutils literal notranslate"><span class="pre">.github</span></code> workflows for changelog checks</p></li>
+<li><p>Ignore unrelated warnings from MDAnalysis</p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">argcomplete</span></code> for tab completion</p></li>
+<li><p>Updated docs</p></li>
+</ul>
+</section>
+<section id="v0-1-33-2025-10-20">
+<h2>v0.1.33 (2025-10-20)<a class="headerlink" href="#v0-1-33-2025-10-20" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Update to newest MDAnalysis version</p></li>
+<li><p>Update documentation design and deployment</p></li>
+<li><p>Update repo infrastructure</p></li>
+<li><p>Bump github action dependencies</p></li>
+</ul>
+</section>
+<section id="v0-1-32-2024-07-09">
+<h2>v0.1.32 (2024-07-09)<a class="headerlink" href="#v0-1-32-2024-07-09" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Cleanup logger function</p></li>
+</ul>
+</section>
+<section id="v0-1-31-2024-07-08">
+<h2>v0.1.31 (2024-07-08)<a class="headerlink" href="#v0-1-31-2024-07-08" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Add Python 3.12</p></li>
+<li><p>Remove Python 3.8</p></li>
+<li><p>Change handling of CHANGELOG checks</p></li>
+</ul>
+</section>
+<section id="v0-1-30-2024-04-03">
+<h2>v0.1.30 (2024-04-03)<a class="headerlink" href="#v0-1-30-2024-04-03" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Replace Boolean <code class="docutils literal notranslate"><span class="pre">debug</span></code> option in  <code class="docutils literal notranslate"><span class="pre">setup_logging</span></code> by more flexible integer
+<code class="docutils literal notranslate"><span class="pre">level</span></code> parameter.</p></li>
+</ul>
+</section>
+<section id="v0-1-29-2024-03-21">
+<h2>v0.1.29 (2024-03-21)<a class="headerlink" href="#v0-1-29-2024-03-21" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Change handling of lowercase module names</p></li>
+</ul>
+</section>
+<section id="v0-1-28-2023-09-29">
+<h2>v0.1.28 (2023-09-29)<a class="headerlink" href="#v0-1-28-2023-09-29" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Make choices style parsable (#114)</p></li>
+</ul>
+</section>
+<section id="v0-1-27-2023-08-25">
+<h2>v0.1.27 (2023-08-25)<a class="headerlink" href="#v0-1-27-2023-08-25" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Reenable docs on <a class="reference external" href="https://mdacli.mdanalysis.org">https://mdacli.mdanalysis.org</a></p></li>
+</ul>
+</section>
+<section id="v0-1-26-2023-06-27">
+<h2>v0.1.26 (2023-06-27)<a class="headerlink" href="#v0-1-26-2023-06-27" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Make the canonical names of mda types parsable.</p></li>
+</ul>
+</section>
+<section id="v0-1-25-2023-02-21">
+<h2>v0.1.25 (2023-02-21)<a class="headerlink" href="#v0-1-25-2023-02-21" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Add integration test running a complete analysis.</p></li>
+<li><p>Rename run_analsis to run_analysis</p></li>
+<li><p>Move <cite>-nt</cite> to base args (Fixes #109)</p></li>
+<li><p>set <cite>long-description</cite> to single file</p></li>
+<li><p>remove Py3.8</p></li>
+<li><p>Fixing codecov upload</p></li>
+<li><p>Translate <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> into <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code></p></li>
+</ul>
+</section>
+<section id="v0-1-24-2023-01-27">
+<h2>v0.1.24 (2023-01-27)<a class="headerlink" href="#v0-1-24-2023-01-27" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Fix classifier in setup.cfg</p></li>
+</ul>
+</section>
+<section id="v0-1-23-2023-01-27">
+<h2>v0.1.23 (2023-01-27)<a class="headerlink" href="#v0-1-23-2023-01-27" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Disable docs deploy on Github Pages</p></li>
+<li><p>Add Python 3.11 to CI matrix</p></li>
+</ul>
+</section>
+<section id="v0-1-22-2023-01-27">
+<h2>v0.1.22 (2023-01-27)<a class="headerlink" href="#v0-1-22-2023-01-27" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Limit number of threads used by analysis</p></li>
+</ul>
+</section>
+<section id="v0-1-21-2022-04-22">
+<h2>v0.1.21 (2022-04-22)<a class="headerlink" href="#v0-1-21-2022-04-22" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Allow None as start/stop values (need for 1 frame trajectories)</p></li>
+</ul>
+</section>
+<section id="v0-1-20-2022-04-13">
+<h2>v0.1.20 (2022-04-13)<a class="headerlink" href="#v0-1-20-2022-04-13" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Fix isort dependency</p></li>
+<li><p>Added tests for Python 3.10</p></li>
+<li><p>Introduce new setup.cfg and pyproject.toml</p></li>
+<li><p>Update __authors__</p></li>
+</ul>
+</section>
+<section id="v0-1-19-2022-04-12">
+<h2>v0.1.19 (2022-04-12)<a class="headerlink" href="#v0-1-19-2022-04-12" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Update README.rst for MDAnalysis 2.1.0 modules</p></li>
+</ul>
+</section>
+<section id="v0-1-18-2022-04-12">
+<h2>v0.1.18 (2022-04-12)<a class="headerlink" href="#v0-1-18-2022-04-12" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Fixed typo in libcli.py</p></li>
+</ul>
+</section>
+<section id="v0-1-17-2022-04-07">
+<h2>v0.1.17 (2022-04-07)<a class="headerlink" href="#v0-1-17-2022-04-07" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Added dihedral module</p></li>
+</ul>
+</section>
+<section id="v0-1-16-2022-02-25">
+<h2>v0.1.16 (2022-02-25)<a class="headerlink" href="#v0-1-16-2022-02-25" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Do not convert None types</p></li>
+</ul>
+</section>
+<section id="v0-1-15-2022-02-25">
+<h2>v0.1.15 (2022-02-25)<a class="headerlink" href="#v0-1-15-2022-02-25" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Set positional arguments as required in cli</p></li>
+</ul>
+</section>
+<section id="v0-1-14-2022-02-17">
+<h2>v0.1.14 (2022-02-17)<a class="headerlink" href="#v0-1-14-2022-02-17" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>corrects bump2version changelog update</p></li>
+</ul>
+</section>
+<section id="v0-1-13-2022-02-16">
+<h2>v0.1.13 (2022-02-16)<a class="headerlink" href="#v0-1-13-2022-02-16" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Added conda package install instructions (#88)</p></li>
+</ul>
+</section>
+<section id="v0-1-12-2022-01-19">
+<h2>v0.1.12 (2022-01-19)<a class="headerlink" href="#v0-1-12-2022-01-19" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Support list of AtomGroups as parameters (#82)</p></li>
+<li><p>Simplify <cite>add_argument</cite> logic in <cite>create_CLI</cite> (#82)</p></li>
+<li><p>Allow list of reference classes in module detection (#82)</p></li>
+<li><p>Support for generic classes as reference in module detection (#82)</p></li>
+<li><p>Rename <cite>save_results`</cite> to <cite>save</cite> (#82)</p></li>
+<li><p>More tests for docstring parsing and CLI creation (#82)</p></li>
+</ul>
+</section>
+<section id="v0-1-11-2022-01-19">
+<h2>v0.1.11 (2022-01-19)<a class="headerlink" href="#v0-1-11-2022-01-19" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Improved help for run parameters (#83)</p></li>
+</ul>
+</section>
+<section id="v0-1-10-2022-01-18">
+<h2>v0.1.10 (2022-01-18)<a class="headerlink" href="#v0-1-10-2022-01-18" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Removed conda dependency from CI and tox (#86)</p></li>
+</ul>
+</section>
+<section id="v0-1-9-2022-01-16">
+<h2>v0.1.9 (2022-01-16)<a class="headerlink" href="#v0-1-9-2022-01-16" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Fix test banner in README.rst (#85)</p></li>
+</ul>
+</section>
+<section id="v0-1-8-2022-01-16">
+<h2>v0.1.8 (2022-01-16)<a class="headerlink" href="#v0-1-8-2022-01-16" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Use Github actions matrix for tests (#68)</p></li>
+<li><p>Fix Conda permissions on MacOS (#68)</p></li>
+<li><p>Fix Tests failing on Windows (#68)</p></li>
+</ul>
+</section>
+<section id="v0-1-7-2021-12-18">
+<h2>v0.1.7 (2021-12-18)<a class="headerlink" href="#v0-1-7-2021-12-18" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Improves regex to convert from time to frame (#81)</p></li>
+</ul>
+</section>
+<section id="v0-1-6-2021-12-01">
+<h2>v0.1.6 (2021-12-01)<a class="headerlink" href="#v0-1-6-2021-12-01" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Fixed URL in docs (#80)</p></li>
+</ul>
+</section>
+<section id="v0-1-5-2021-12-01">
+<h2>v0.1.5 (2021-12-01)<a class="headerlink" href="#v0-1-5-2021-12-01" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Add doc deployment to CI (#78)</p></li>
+</ul>
+</section>
+<section id="v0-1-4-2021-11-24">
+<h2>v0.1.4 (2021-11-24)<a class="headerlink" href="#v0-1-4-2021-11-24" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Link docs to mdacli.mdanalysis.org (#75)</p></li>
+</ul>
+</section>
+<section id="v0-1-3-2021-11-24">
+<h2>v0.1.3 (2021-11-24)<a class="headerlink" href="#v0-1-3-2021-11-24" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>MDA-style documentation pages (#70)</p></li>
+</ul>
+</section>
+<section id="v0-1-2-2021-11-18">
+<h2>v0.1.2 (2021-11-18)<a class="headerlink" href="#v0-1-2-2021-11-18" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Added option to manually set box dimensions (#65)</p></li>
+</ul>
+</section>
+<section id="v0-1-1-2021-11-18">
+<h2>v0.1.1 (2021-11-18)<a class="headerlink" href="#v0-1-1-2021-11-18" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>corrects .bumpversion.cfg for CHANGELOG</p></li>
+<li><p>updates docs/CONTRIBUTING.rst accordingly</p></li>
+</ul>
+</section>
+<section id="v0-1-0-2021-11-18">
+<h2>v0.1.0 (2021-11-18)<a class="headerlink" href="#v0-1-0-2021-11-18" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Initial release</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="api/utils.html" class="btn btn-neutral float-left" title="Utilities" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="authors.html" class="btn btn-neutral float-right" title="Authors" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Philip Loche, Joao MC Teixeira and Oliver Beckstein.
+      <span class="lastupdated">Last updated on Jan 23, 2026.
+      </span></p>
+  </div>
+
+  
+
+
+
+<div class="footer"><p>Please see
+    our <a href="https://www.mdanalysis.org/pages/privacy/">Privacy Policy</a>
+    to learn how <a href="https://www.mdanalysis.org">MDAnalysis</a> collects data.</p>
+    <script data-goatcounter="https://mdanalysis.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</div>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+    var versions_json_url = 'https://mdacli.mdanalysis.org//versions.json'
+</script>
+
+<div class="rst-versions" data-toggle="rst-versions" role="note"
+     aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book"></span>
+        0.1.35.dev3+g99e34787e
+      <span class="fa fa-caret-down"></span>
+    </span>
+
+    <div class="rst-other-versions">
+        <dl id="versionselector">
+            <dt>Other Versions</dt>
+        </dl>
+
+    </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,320 @@
+
+
+
+
+
+  
+
+
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.1/css/academicons.min.css" integrity="sha512-b1ASx0WHgVFL5ZQhTgiPWX+68KjS38Jk87jg7pe+qC7q9YkEtFq0z7xCglv7qGIs/68d3mAp+StfC8WKC5SSAg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="shortcut icon" href="_static/mdanalysis-logo.ico">
+</head>
+
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tab-Completion &mdash; mdacli 0.1.35.dev3+g99e34787e documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=34bb78ad" />
+      <link rel="stylesheet" type="text/css" href="_static/site.css" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=27e8b3b8" />
+
+  
+    <link rel="shortcut icon" href="_static/mdanalysis-logo.ico"/>
+    <link rel="canonical" href="https://mdacli.mdanalysis.org/tab-completion.html" />
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=e28934f6"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/js/versions.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within mdacli 0.1.35.dev3+g99e34787e documentation"
+          href="_static/opensearch.xml"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Contributing" href="contributing.html" />
+    <link rel="prev" title="Usage" href="usage.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+
+  
+
+
+
+
+<a href="index.html">
+  
+    <img src="_static/mdacli-logo.png" class="logo" alt="Logo"/>
+</a>
+
+
+  
+  
+  
+    <div class="version">
+      0.1.35.dev3+g99e34787e
+    </div>
+  
+
+
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        </div>
+<div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+    
+        <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="philosophy.html">Philosophy and approach</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Tab-Completion</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#activation">Activation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#bash">Bash</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#zsh">Zsh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fish">Fish</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tcsh">Tcsh</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#usage-examples">Usage Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#tab-completion-not-working">Tab-completion not working</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#still-not-working">Still not working</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#global-activation-for-all-python-scripts">Global activation (for all Python scripts)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API library documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
+</ul>
+
+</div>
+
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">mdacli</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Tab-Completion</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/tab-completion.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="tab-completion">
+<h1>Tab-Completion<a class="headerlink" href="#tab-completion" title="Link to this heading"></a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">mdacli</span></code> includes built-in support for command-line tab-completion</p>
+<section id="activation">
+<h2>Activation<a class="headerlink" href="#activation" title="Link to this heading"></a></h2>
+<p>The activation method depends on your shell:</p>
+<section id="bash">
+<h3>Bash<a class="headerlink" href="#bash" title="Link to this heading"></a></h3>
+<p><strong>Temporary (current session only)</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">eval</span> <span class="s2">&quot;$(register-python-argcomplete mda)&quot;</span>
+</pre></div>
+</div>
+<p><strong>Permanent (recommended)</strong></p>
+<p>Add to your <code class="docutils literal notranslate"><span class="pre">~/.bashrc</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">echo</span> <span class="s1">&#39;eval &quot;$(register-python-argcomplete mda)&quot;&#39;</span> <span class="o">&gt;&gt;</span> <span class="o">~/.</span><span class="n">bashrc</span>
+<span class="n">source</span> <span class="o">~/.</span><span class="n">bashrc</span>
+</pre></div>
+</div>
+</section>
+<section id="zsh">
+<h3>Zsh<a class="headerlink" href="#zsh" title="Link to this heading"></a></h3>
+<p>Add to your <code class="docutils literal notranslate"><span class="pre">~/.zshrc</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">autoload</span> <span class="o">-</span><span class="n">U</span> <span class="n">bashcompinit</span>
+<span class="n">bashcompinit</span>
+<span class="nb">eval</span> <span class="s2">&quot;$(register-python-argcomplete mda)&quot;</span>
+</pre></div>
+</div>
+<p>Then reload:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">source</span> <span class="o">~/.</span><span class="n">zshrc</span>
+</pre></div>
+</div>
+</section>
+<section id="fish">
+<h3>Fish<a class="headerlink" href="#fish" title="Link to this heading"></a></h3>
+<p>Generate the completion file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">register</span><span class="o">-</span><span class="n">python</span><span class="o">-</span><span class="n">argcomplete</span> <span class="o">--</span><span class="n">shell</span> <span class="n">fish</span> <span class="n">mda</span> <span class="o">&gt;</span> <span class="o">~/.</span><span class="n">config</span><span class="o">/</span><span class="n">fish</span><span class="o">/</span><span class="n">completions</span><span class="o">/</span><span class="n">mda</span><span class="o">.</span><span class="n">fish</span>
+</pre></div>
+</div>
+<p>Restart your Fish shell or run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">source</span> <span class="o">~/.</span><span class="n">config</span><span class="o">/</span><span class="n">fish</span><span class="o">/</span><span class="n">config</span><span class="o">.</span><span class="n">fish</span>
+</pre></div>
+</div>
+</section>
+<section id="tcsh">
+<h3>Tcsh<a class="headerlink" href="#tcsh" title="Link to this heading"></a></h3>
+<p>Add to your shell startup file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>eval `register-python-argcomplete --shell tcsh mda`
+</pre></div>
+</div>
+</section>
+</section>
+<section id="usage-examples">
+<h2>Usage Examples<a class="headerlink" href="#usage-examples" title="Link to this heading"></a></h2>
+<p>Once enabled, tab-completion works for:</p>
+<p><strong>Module names</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mda</span> <span class="o">&lt;</span><span class="n">TAB</span><span class="o">&gt;</span>
+<span class="c1"># Shows: AlignTraj, AverageStructure, Contacts, DensityAnalysis, ...</span>
+</pre></div>
+</div>
+<p><strong>Partial module names</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mda</span> <span class="n">RM</span><span class="o">&lt;</span><span class="n">TAB</span><span class="o">&gt;</span>
+<span class="c1"># Shows: RMSD, RMSF</span>
+</pre></div>
+</div>
+<p><strong>Options and flags</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mda</span> <span class="n">RMSD</span> <span class="o">-&lt;</span><span class="n">TAB</span><span class="o">&gt;</span>
+<span class="c1"># Shows: -s, -f, -atomgroup, -b, -e, -dt, -v, --debug, --version, ...</span>
+</pre></div>
+</div>
+<p><strong>Case insensitive</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mda</span> <span class="n">rmsd</span><span class="o">&lt;</span><span class="n">TAB</span><span class="o">&gt;</span>    <span class="c1"># Also works</span>
+<span class="n">mda</span> <span class="n">RmSd</span><span class="o">&lt;</span><span class="n">TAB</span><span class="o">&gt;</span>    <span class="c1"># Also works</span>
+</pre></div>
+</div>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h2>
+<section id="tab-completion-not-working">
+<h3>Tab-completion not working<a class="headerlink" href="#tab-completion-not-working" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p><strong>Verify argcomplete is installed</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">c</span> <span class="s2">&quot;import argcomplete; print(argcomplete.__version__)&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Check if activation command was added</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">grep</span> <span class="s2">&quot;register-python-argcomplete mda&quot;</span> <span class="o">~/.</span><span class="n">bashrc</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Reload your shell</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">source</span> <span class="o">~/.</span><span class="n">bashrc</span>  <span class="c1"># or restart terminal</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Test basic completion</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mda</span> <span class="o">&lt;</span><span class="n">TAB</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="still-not-working">
+<h3>Still not working<a class="headerlink" href="#still-not-working" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Make sure you’ve restarted your terminal or sourced the configuration file</p></li>
+<li><p>For Zsh, ensure <code class="docutils literal notranslate"><span class="pre">bashcompinit</span></code> is loaded before argcomplete</p></li>
+<li><p>Check that <code class="docutils literal notranslate"><span class="pre">mda</span></code> is in your PATH: <code class="docutils literal notranslate"><span class="pre">which</span> <span class="pre">mda</span></code></p></li>
+<li><p>Try running the registration command manually in your current shell</p></li>
+</ul>
+</section>
+<section id="global-activation-for-all-python-scripts">
+<h3>Global activation (for all Python scripts)<a class="headerlink" href="#global-activation-for-all-python-scripts" title="Link to this heading"></a></h3>
+<p>To enable argcomplete for all Python scripts at once:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">activate</span><span class="o">-</span><span class="k">global</span><span class="o">-</span><span class="n">python</span><span class="o">-</span><span class="n">argcomplete</span>
+</pre></div>
+</div>
+<p>This requires root/admin privileges and will enable completion system-wide.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="usage.html" class="btn btn-neutral float-left" title="Usage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="contributing.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Philip Loche, Joao MC Teixeira and Oliver Beckstein.
+      <span class="lastupdated">Last updated on Jan 23, 2026.
+      </span></p>
+  </div>
+
+  
+
+
+
+<div class="footer"><p>Please see
+    our <a href="https://www.mdanalysis.org/pages/privacy/">Privacy Policy</a>
+    to learn how <a href="https://www.mdanalysis.org">MDAnalysis</a> collects data.</p>
+    <script data-goatcounter="https://mdanalysis.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</div>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+    var versions_json_url = 'https://mdacli.mdanalysis.org//versions.json'
+</script>
+
+<div class="rst-versions" data-toggle="rst-versions" role="note"
+     aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book"></span>
+        0.1.35.dev3+g99e34787e
+      <span class="fa fa-caret-down"></span>
+    </span>
+
+    <div class="rst-other-versions">
+        <dl id="versionselector">
+            <dt>Other Versions</dt>
+        </dl>
+
+    </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

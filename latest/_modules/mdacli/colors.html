@@ -1,0 +1,393 @@
+
+
+
+
+
+  
+
+
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.1/css/academicons.min.css" integrity="sha512-b1ASx0WHgVFL5ZQhTgiPWX+68KjS38Jk87jg7pe+qC7q9YkEtFq0z7xCglv7qGIs/68d3mAp+StfC8WKC5SSAg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="shortcut icon" href="../../../../_static/mdanalysis-logo.ico">
+</head>
+
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mdacli.colors &mdash; mdacli 0.1.35.dev3+g99e34787e documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=34bb78ad" />
+      <link rel="stylesheet" type="text/css" href="../../_static/site.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=27e8b3b8" />
+
+  
+    <link rel="shortcut icon" href="../../_static/mdanalysis-logo.ico"/>
+    <link rel="canonical" href="https://mdacli.mdanalysis.org/_modules/mdacli/colors.html" />
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=e28934f6"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/js/versions.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within mdacli 0.1.35.dev3+g99e34787e documentation"
+          href="../../_static/opensearch.xml"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+
+  
+
+
+
+
+<a href="../../index.html">
+  
+    <img src="../../_static/mdacli-logo.png" class="logo" alt="Logo"/>
+</a>
+
+
+  
+  
+  
+    <div class="version">
+      0.1.35.dev3+g99e34787e
+    </div>
+  
+
+
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        </div>
+<div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+    
+        <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../philosophy.html">Philosophy and approach</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tab-completion.html">Tab-Completion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API library documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../authors.html">Authors</a></li>
+</ul>
+
+</div>
+
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">mdacli</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">mdacli.colors</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for mdacli.colors</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (c) 2021 Authors and contributors</span>
+<span class="c1">#</span>
+<span class="c1"># Released under GNU Public Licence, v2 or any higher version</span>
+<span class="c1"># SPDX-License-Identifier: GPL-2.0-or-later</span>
+
+<span class="sd">&quot;&quot;&quot;Emphaising strings with colors etc.</span>
+
+<span class="sd">Taken from https://gist.github.com/tuvokki/14deb97bef6df9bc6553.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="Emphasise">
+<a class="viewcode-back" href="../../api/colors.html#mdacli.colors.Emphasise">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Emphasise</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class for emphaising strings with colors etc.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    bold : str</span>
+<span class="sd">        bold attribute</span>
+<span class="sd">    underline : str</span>
+<span class="sd">        underline attribute</span>
+<span class="sd">    gray : str</span>
+<span class="sd">        gray color</span>
+<span class="sd">    red : str</span>
+<span class="sd">        red color</span>
+<span class="sd">    green : str</span>
+<span class="sd">        green color</span>
+<span class="sd">    yellow : str</span>
+<span class="sd">        yellow color</span>
+<span class="sd">    blue : str</span>
+<span class="sd">        blue color</span>
+<span class="sd">    pink : str</span>
+<span class="sd">        pink color</span>
+<span class="sd">    turquoise : str</span>
+<span class="sd">        turquoise color</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_endc</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[0m&quot;</span>
+    <span class="n">bold</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[1m&quot;</span>
+    <span class="n">underline</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[4m&quot;</span>
+    <span class="n">gray</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[90m&quot;</span>
+    <span class="n">red</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[91m&quot;</span>
+    <span class="n">green</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[92m&quot;</span>
+    <span class="n">yellow</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[93m&quot;</span>
+    <span class="n">blue</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[94m&quot;</span>
+    <span class="n">pink</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[95m&quot;</span>
+    <span class="n">turquoise</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[96m&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_emphasise</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">style</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">style</span><span class="si">}{</span><span class="nb">str</span><span class="si">}{</span><span class="bp">self</span><span class="o">.</span><span class="n">_endc</span><span class="si">}</span><span class="s2">&quot;</span>
+
+<div class="viewcode-block" id="Emphasise.emphasise">
+<a class="viewcode-back" href="../../api/colors.html#mdacli.colors.Emphasise.emphasise">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">emphasise</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">style</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Decorate a ``str`` with desired style.</span>
+
+<span class="sd">        The Style could be a color, bold or underline.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        message : str</span>
+<span class="sd">            message to print</span>
+<span class="sd">        style : str</span>
+<span class="sd">            emphasising style. See class attributes for available styles</span>
+
+<span class="sd">        Example</span>
+<span class="sd">        -------</span>
+<span class="sd">        &gt;&gt;&gt; print(Emphasise.emphasise(&quot;My colored message&quot;, Emphasise.blue))</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">style_str</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">Emphasise</span><span class="p">,</span> <span class="n">style</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Emphasise</span><span class="o">.</span><span class="n">_emphasise</span><span class="p">(</span><span class="n">Emphasise</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">style_str</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Emphasise.warning">
+<a class="viewcode-back" href="../../api/colors.html#mdacli.colors.Emphasise.warning">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">warning</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a yellow warning.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        message : str</span>
+<span class="sd">            yellow warning to print</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        decorated_message : str</span>
+<span class="sd">            decorated message</span>
+
+<span class="sd">        Example</span>
+<span class="sd">        ------</span>
+<span class="sd">        &gt;&gt;&gt; print(bcolors.warning(&quot;Potential Danger!&quot;))</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Emphasise</span><span class="o">.</span><span class="n">_emphasise</span><span class="p">(</span><span class="n">Emphasise</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">Emphasise</span><span class="o">.</span><span class="n">yellow</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Emphasise.error">
+<a class="viewcode-back" href="../../api/colors.html#mdacli.colors.Emphasise.error">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">error</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a red error.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        message : str</span>
+<span class="sd">            red error to return</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        decorated_message : str</span>
+<span class="sd">            decorated message</span>
+
+<span class="sd">        Example</span>
+<span class="sd">        ------</span>
+<span class="sd">        &gt;&gt;&gt; print(bcolors.error(&quot;Potential Danger!&quot;))</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Emphasise</span><span class="o">.</span><span class="n">_emphasise</span><span class="p">(</span><span class="n">Emphasise</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">Emphasise</span><span class="o">.</span><span class="n">red</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Emphasise.ok">
+<a class="viewcode-back" href="../../api/colors.html#mdacli.colors.Emphasise.ok">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ok</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a green ok.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        message : str</span>
+<span class="sd">            green ok to return</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        decorated_message : str</span>
+<span class="sd">            decorated message</span>
+
+<span class="sd">        Example</span>
+<span class="sd">        ------</span>
+<span class="sd">        &gt;&gt;&gt; print(bcolors.ok(&quot;Yay!&quot;))</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Emphasise</span><span class="o">.</span><span class="n">_emphasise</span><span class="p">(</span><span class="n">Emphasise</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">Emphasise</span><span class="o">.</span><span class="n">green</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Emphasise.info">
+<a class="viewcode-back" href="../../api/colors.html#mdacli.colors.Emphasise.info">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">info</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a blue info.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        message : str</span>
+<span class="sd">            blue info to return</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        decorated_message : str</span>
+<span class="sd">            decorated message</span>
+
+<span class="sd">        Example</span>
+<span class="sd">        ------</span>
+<span class="sd">        &gt;&gt;&gt; print(bcolors.info(&quot;Blue Yay!&quot;))</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Emphasise</span><span class="o">.</span><span class="n">_emphasise</span><span class="p">(</span><span class="n">Emphasise</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">Emphasise</span><span class="o">.</span><span class="n">blue</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Emphasise.header">
+<a class="viewcode-back" href="../../api/colors.html#mdacli.colors.Emphasise.header">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">header</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a pink header.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        message : str</span>
+<span class="sd">            pink header to return</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        decorated_message : str</span>
+<span class="sd">            decorated message</span>
+
+<span class="sd">        Example</span>
+<span class="sd">        ------</span>
+<span class="sd">        &gt;&gt;&gt; print(bcolors.header(&quot;This is great&quot;))</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Emphasise</span><span class="o">.</span><span class="n">_emphasise</span><span class="p">(</span><span class="n">Emphasise</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">Emphasise</span><span class="o">.</span><span class="n">blue</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Emphasise.debug">
+<a class="viewcode-back" href="../../api/colors.html#mdacli.colors.Emphasise.debug">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">debug</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a turquoise debug message.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        message : str</span>
+<span class="sd">            turquoise debug message to return</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        decorated_message : str</span>
+<span class="sd">            decorated message</span>
+
+<span class="sd">        Example</span>
+<span class="sd">        ------</span>
+<span class="sd">        &gt;&gt;&gt; print(bcolors.debug(&quot;a=1&quot;))</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Emphasise</span><span class="o">.</span><span class="n">_emphasise</span><span class="p">(</span><span class="n">Emphasise</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">Emphasise</span><span class="o">.</span><span class="n">turquoise</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Philip Loche, Joao MC Teixeira and Oliver Beckstein.
+      <span class="lastupdated">Last updated on Jan 23, 2026.
+      </span></p>
+  </div>
+
+  
+
+
+
+<div class="footer"><p>Please see
+    our <a href="https://www.mdanalysis.org/pages/privacy/">Privacy Policy</a>
+    to learn how <a href="https://www.mdanalysis.org">MDAnalysis</a> collects data.</p>
+    <script data-goatcounter="https://mdanalysis.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</div>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+    var versions_json_url = 'https://mdacli.mdanalysis.org//versions.json'
+</script>
+
+<div class="rst-versions" data-toggle="rst-versions" role="note"
+     aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book"></span>
+        0.1.35.dev3+g99e34787e
+      <span class="fa fa-caret-down"></span>
+    </span>
+
+    <div class="rst-other-versions">
+        <dl id="versionselector">
+            <dt>Other Versions</dt>
+        </dl>
+
+    </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

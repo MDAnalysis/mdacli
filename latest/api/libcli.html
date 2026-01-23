@@ -1,0 +1,524 @@
+
+
+
+
+
+  
+
+
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.1/css/academicons.min.css" integrity="sha512-b1ASx0WHgVFL5ZQhTgiPWX+68KjS38Jk87jg7pe+qC7q9YkEtFq0z7xCglv7qGIs/68d3mAp+StfC8WKC5SSAg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="shortcut icon" href="../../_static/mdanalysis-logo.ico">
+</head>
+
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Support functions for CLI &mdash; mdacli 0.1.35.dev3+g99e34787e documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=34bb78ad" />
+      <link rel="stylesheet" type="text/css" href="../_static/site.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=27e8b3b8" />
+
+  
+    <link rel="shortcut icon" href="../_static/mdanalysis-logo.ico"/>
+    <link rel="canonical" href="https://mdacli.mdanalysis.org/api/libcli.html" />
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=e28934f6"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/js/versions.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within mdacli 0.1.35.dev3+g99e34787e documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Results Saving" href="save.html" />
+    <link rel="prev" title="High-Level API" href="cli.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+
+  
+
+
+
+
+<a href="../index.html">
+  
+    <img src="../_static/mdacli-logo.png" class="logo" alt="Logo"/>
+</a>
+
+
+  
+  
+  
+    <div class="version">
+      0.1.35.dev3+g99e34787e
+    </div>
+  
+
+
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        </div>
+<div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+    
+        <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../philosophy.html">Philosophy and approach</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tab-completion.html">Tab-Completion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API library documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="cli.html">High-Level API</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Support functions for CLI</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.libcli.KwargsDict"><code class="docutils literal notranslate"><span class="pre">KwargsDict</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.libcli.add_cli_universe"><code class="docutils literal notranslate"><span class="pre">add_cli_universe()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.libcli.add_output_group"><code class="docutils literal notranslate"><span class="pre">add_output_group()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.libcli.add_run_group"><code class="docutils literal notranslate"><span class="pre">add_run_group()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.libcli.convert_analysis_parameters"><code class="docutils literal notranslate"><span class="pre">convert_analysis_parameters()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.libcli.create_cli"><code class="docutils literal notranslate"><span class="pre">create_cli()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.libcli.create_extension_completer"><code class="docutils literal notranslate"><span class="pre">create_extension_completer()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.libcli.create_universe"><code class="docutils literal notranslate"><span class="pre">create_universe()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.libcli.find_classes_in_modules"><code class="docutils literal notranslate"><span class="pre">find_classes_in_modules()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.libcli.find_cls_members"><code class="docutils literal notranslate"><span class="pre">find_cls_members()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.libcli.init_base_argparse"><code class="docutils literal notranslate"><span class="pre">init_base_argparse()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.libcli.run_analysis"><code class="docutils literal notranslate"><span class="pre">run_analysis()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.libcli.setup_clients"><code class="docutils literal notranslate"><span class="pre">setup_clients()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.libcli.split_argparse_into_groups"><code class="docutils literal notranslate"><span class="pre">split_argparse_into_groups()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="save.html">Results Saving</a></li>
+<li class="toctree-l2"><a class="reference internal" href="colors.html">Coloring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logger.html">Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authors.html">Authors</a></li>
+</ul>
+
+</div>
+
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">mdacli</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../api.html">API library documentation</a></li>
+      <li class="breadcrumb-item active">Support functions for CLI</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/libcli.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-mdacli.libcli">
+<span id="support-functions-for-cli"></span><h1>Support functions for CLI<a class="headerlink" href="#module-mdacli.libcli" title="Link to this heading"></a></h1>
+<p>Functionalities that support the creation of the command lines interface.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="mdacli.libcli.KwargsDict">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mdacli.libcli.</span></span><span class="sig-name descname"><span class="pre">KwargsDict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">option_strings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">choices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">required</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metavar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deprecated</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/libcli.html#KwargsDict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.libcli.KwargsDict" title="Link to this definition"></a></dt>
+<dd><p>Convert input string to a dictionary.</p>
+<p>If string points to a “.json” file, reads the file.
+Else, attempts to convert string to dictionary using json.loads.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mdacli.libcli.add_cli_universe">
+<span class="sig-prename descclassname"><span class="pre">mdacli.libcli.</span></span><span class="sig-name descname"><span class="pre">add_cli_universe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parser</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/libcli.html#add_cli_universe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.libcli.add_cli_universe" title="Link to this definition"></a></dt>
+<dd><p>Add universe parameters to an given argparse.ArgumentParser.</p>
+<p>instance. The parameters <cite>topology</cite>, <cite>topology_format</cite>, <cite>atom_style</cite>,
+<cite>coordinates</cite> and <cite>trajectory_format</cite> are added to the parse.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>analysis_class_parser</strong> (<em>argparse.ArgumentParser</em>) – The ArgumentsParser instance to which the run group is added</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – suffix for the argument names</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mdacli.libcli.add_output_group">
+<span class="sig-prename descclassname"><span class="pre">mdacli.libcli.</span></span><span class="sig-name descname"><span class="pre">add_output_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">analysis_class_parser</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/libcli.html#add_output_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.libcli.add_output_group" title="Link to this definition"></a></dt>
+<dd><p>Add output group parameters to argparse.ArgumentParser instance.</p>
+<p>The run group adds the parameters <cite>output_prefix</cite> and
+<cite>output_directory</cite> to the parser.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>analysis_class_parser</strong> (<em>argparse.ArgumentParser</em>) – The ArgumentsParser instance to which the run grorup is added</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mdacli.libcli.add_run_group">
+<span class="sig-prename descclassname"><span class="pre">mdacli.libcli.</span></span><span class="sig-name descname"><span class="pre">add_run_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">analysis_class_parser</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/libcli.html#add_run_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.libcli.add_run_group" title="Link to this definition"></a></dt>
+<dd><p>Add run group parameters to an given argparse.ArgumentParser instance.</p>
+<p>The run group adds the parameters <cite>start</cite>, <cite>stop</cite>, <cite>step</cite>, <cite>verbose</cite> to the
+parser.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>analysis_class_parser</strong> (<em>argparse.ArgumentParser</em>) – The ArgumentsParser instance to which the run grorup is added</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mdacli.libcli.convert_analysis_parameters">
+<span class="sig-prename descclassname"><span class="pre">mdacli.libcli.</span></span><span class="sig-name descname"><span class="pre">convert_analysis_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">analysis_callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">analysis_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_universe</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/libcli.html#convert_analysis_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.libcli.convert_analysis_parameters" title="Link to this definition"></a></dt>
+<dd><p>Convert parameters from the command line suitable for anlysis.</p>
+<p>Special types (i.e AtomGroups, Universes) are converted from the command
+line strings into the correct format. Parameters are changed inplace.
+Note that only keys are converted and no new key are added if
+present in the doc of the <cite>analysis_callable</cite> but not
+in the <cite>analysis_parameters</cite> dict.</p>
+<p>AtomGroup selection with type None are ignored since these could be
+default arguments.</p>
+<p>The following types are converted:</p>
+<ul class="simple">
+<li><p>AtomGroup: Select atoms based on <code class="docutils literal notranslate"><span class="pre">universe.select_atoms</span></code></p></li>
+<li><p>list[AtomGroup]: Select atoms based on <code class="docutils literal notranslate"><span class="pre">universe.select_atoms</span></code>
+for every element in list</p></li>
+<li><p>Universe: Created from parameters.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>analysis_callable</strong> (<em>function</em>) – Analysis class for which the analysis should be performed.</p></li>
+<li><p><strong>analysis_parameters</strong> (<em>dict</em>) – parameters to be processed</p></li>
+<li><p><strong>reference_universe</strong> (<cite>MDAnalysis.Universe</cite>) – Universe from which the AtomGroup selection are done.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>universe</strong> (<em>Universe</em>) – The universe created from the anaylysis parameters or None
+of no ine is created</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If an Atomgroup does not contain any atoms</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mdacli.libcli.create_cli">
+<span class="sig-prename descclassname"><span class="pre">mdacli.libcli.</span></span><span class="sig-name descname"><span class="pre">create_cli</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sub_parser</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interface_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/libcli.html#create_cli"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.libcli.create_cli" title="Link to this definition"></a></dt>
+<dd><p>Add subparsers to <cite>cli_parser</cite>.</p>
+<p>Subparsers parameters are divided in the following categories:</p>
+<ol class="arabic simple">
+<li><dl class="simple">
+<dt>Analysis Run parameters</dt><dd><p>time frame as begin, end, step and vebosity</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Saving Parameters</dt><dd><p>output_prefix and output_directory</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Mandatory Parameters</dt><dd><p>mandatory parameters are defined in the CLI as named parameters
+as per design</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Optional Parameters</dt><dd><p>Named parameters in the Analysis class</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Reference Universe Parameters</dt><dd><p>A reference Universe for selection commands. Only is created if
+AtomGroup arguments exist.</p>
+</dd>
+</dl>
+</li>
+</ol>
+<p>All CLI’s parameters are named parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sub_parser</strong> (<em>argparse.sub_parser</em>) – A sub parser where the new parser will be added.</p></li>
+<li><p><strong>interface_name</strong> (<em>str</em>) – Name of the interface.</p></li>
+<li><p><strong>parameters</strong> (<em>dict</em>) – Parameters needed to fill the argparse requirements for the
+CLI interface.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>None</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mdacli.libcli.create_extension_completer">
+<span class="sig-prename descclassname"><span class="pre">mdacli.libcli.</span></span><span class="sig-name descname"><span class="pre">create_extension_completer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">extension_list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/libcli.html#create_extension_completer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.libcli.create_extension_completer" title="Link to this definition"></a></dt>
+<dd><p>Create a completer function for MDAnalysis file formats.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>extension_list</strong> (<em>list of str</em>) – List of file extensions (e.g., [‘pdb’, ‘gro’, ‘psf’])</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>function</em> – Completer function for argcomplete that only shows files
+with valid MDAnalysis extensions.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mdacli.libcli.create_universe">
+<span class="sig-prename descclassname"><span class="pre">mdacli.libcli.</span></span><span class="sig-name descname"><span class="pre">create_universe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">topology</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coordinates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topology_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trajectory_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atom_style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimensions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/libcli.html#create_universe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.libcli.create_universe" title="Link to this definition"></a></dt>
+<dd><p>Initilize a MDAnalysis universe instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>topology</strong> (str, stream, <cite>~MDAnalysis.core.topology.Topology</cite>, <cite>np.ndarray</cite>) – A CHARMM/XPLOR PSF topology file, PDB file or Gromacs GRO file; used to
+define the list of atoms. If the file includes bond information,
+partial charges, atom masses, … then these data will be available to
+MDAnalysis. Alternatively, an existing
+<a class="reference external" href="https://docs.mdanalysis.org/stable/documentation_pages/core/topology.html#MDAnalysis.core.topology.Topology" title="(in MDAnalysis v2.10.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MDAnalysis.core.topology.Topology</span></code></a> instance may be given,
+numpy coordinates, or None for an empty universe.</p></li>
+<li><p><strong>coordinates</strong> (<em>str, stream, list of str, list of stream</em>) – Coordinates can be provided as files of
+a single frame (eg a PDB, CRD, or GRO file); a list of single
+frames; or a trajectory file (in CHARMM/NAMD/LAMMPS DCD, Gromacs
+XTC/TRR, or generic XYZ format). The coordinates must be
+ordered in the same way as the list of atoms in the topology.
+See <a class="reference external" href="https://docs.mdanalysis.org/stable/documentation_pages/coordinates/init.html#id2" title="(in MDAnalysis v2.10.0)"><span>Table of supported coordinate formats</span></a> for what can be read
+as coordinates. Alternatively, streams can be given.</p></li>
+<li><p><strong>topology_format</strong> (<em>str, None</em>) – Provide the file format of the topology file; <code class="docutils literal notranslate"><span class="pre">None</span></code> guesses it from
+the file extension. Can also pass a subclass of
+<a class="reference external" href="https://docs.mdanalysis.org/stable/documentation_pages/topology/base.html#MDAnalysis.topology.base.TopologyReaderBase" title="(in MDAnalysis v2.10.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MDAnalysis.topology.base.TopologyReaderBase</span></code></a> to define a custom
+reader to be used on the topology file.</p></li>
+<li><p><strong>trajectory_format</strong> (<em>str or list or object</em>) – provide the file format of the coordinate or trajectory file;
+<code class="docutils literal notranslate"><span class="pre">None</span></code> guesses it from the file extension. Note that this
+keyword has no effect if a list of file names is supplied because
+the “chained” reader has to guess the file format for each
+individual list member [<code class="docutils literal notranslate"><span class="pre">None</span></code>]. Can also pass a subclass of
+<a class="reference external" href="https://docs.mdanalysis.org/stable/documentation_pages/coordinates/base.html#MDAnalysis.coordinates.base.ProtoReader" title="(in MDAnalysis v2.10.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MDAnalysis.coordinates.base.ProtoReader</span></code></a> to define a custom
+reader to be used on the trajectory file.</p></li>
+<li><p><strong>atom_style</strong> (<em>str</em>) – Customised LAMMPS <cite>atom_style</cite> information. Only works with
+<cite>topology_format = data</cite></p></li>
+<li><p><strong>dimensions</strong> (<em>iterable of floats</em>) – vector that contains unit cell lengths and probable angles.
+Expected shapes are eithere (6, 0) or (1, 6) or for
+shapes of (3, 0) or (1, 3) all angles are set to 90 degrees.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#IndexError" title="(in Python v3.14)"><strong>IndexError</strong></a> – If the dimesions of the <cite>dimensions</cite> argument are not 3 or 6.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><cite>MDAnalysis.Universe</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mdacli.libcli.find_classes_in_modules">
+<span class="sig-prename descclassname"><span class="pre">mdacli.libcli.</span></span><span class="sig-name descname"><span class="pre">find_classes_in_modules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">module_names</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/libcli.html#find_classes_in_modules"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.libcli.find_classes_in_modules" title="Link to this definition"></a></dt>
+<dd><p>Find classes that belong to cls in modules.</p>
+<p>A series of names can be given as arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cls</strong> (<em>single class or list of classes</em>) – parent reference class type to search for</p></li>
+<li><p><strong>module_names</strong> (<em>str</em>) – module to import import in absolute or relative terms
+(e.g. either pkg.mod or ..mod).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>list</em></p></li>
+<li><p><em>list of found class objects. If no classes are found, return None.</em></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mdacli.libcli.find_cls_members">
+<span class="sig-prename descclassname"><span class="pre">mdacli.libcli.</span></span><span class="sig-name descname"><span class="pre">find_cls_members</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modules</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_warnings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/libcli.html#find_cls_members"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.libcli.find_cls_members" title="Link to this definition"></a></dt>
+<dd><p>Find members of a certain class in modules.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cls</strong> (<em>class or list of classes</em>) – parent reference class or list of classes to be searched for</p></li>
+<li><p><strong>modules</strong> (<em>list</em>) – list of modules for which members should be searched for</p></li>
+<li><p><strong>ignore_warnings</strong> (<em>bool</em>) – Flag to ignore warnings</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mdacli.libcli.init_base_argparse">
+<span class="sig-prename descclassname"><span class="pre">mdacli.libcli.</span></span><span class="sig-name descname"><span class="pre">init_base_argparse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/libcli.html#init_base_argparse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.libcli.init_base_argparse" title="Link to this definition"></a></dt>
+<dd><p>Create a basic <cite>ArgumentParser</cite>.</p>
+<p>The parser has options for printing the version, running in debug mode
+and with a logfile. Note that the funtion only adds the options to
+the parser but not the logic for actually running in debug mode nor
+how to store the log file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – Name of the cli program</p></li>
+<li><p><strong>version</strong> (<em>str</em>) – Version of the cli program</p></li>
+<li><p><strong>description</strong> (<em>str</em>) – Description of the cli program</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><cite>ArgumentParser</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mdacli.libcli.run_analysis">
+<span class="sig-prename descclassname"><span class="pre">mdacli.libcli.</span></span><span class="sig-name descname"><span class="pre">run_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">analysis_callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mandatory_analysis_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optional_analysis_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_universe_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/libcli.html#run_analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.libcli.run_analysis" title="Link to this definition"></a></dt>
+<dd><p>Perform main client logic.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>analysis_callable</strong> (<em>function</em>) – Analysis class for which the analysis is performed.</p></li>
+<li><p><strong>mandatory_analysis_parameters</strong> (<em>dict</em>) – Mandatory parameters for executing the analysis</p></li>
+<li><p><strong>optional_analysis_parameters</strong> (<em>dict</em>) – Optional parameters for executing the analysis</p></li>
+<li><p><strong>run_parameters</strong> (<em>dict</em>) – time frame parameters: start, stop, step, verbose</p></li>
+<li><p><strong>output_parameters</strong> (<em>dict</em>) – output_prefix and output_directory</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><cite>MDAnalysis.analysis.base.AnalysisBase</cite> – AnalysisBase instance of the given <code class="docutils literal notranslate"><span class="pre">analysis_callable</span></code> after run.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mdacli.libcli.setup_clients">
+<span class="sig-prename descclassname"><span class="pre">mdacli.libcli.</span></span><span class="sig-name descname"><span class="pre">setup_clients</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ap</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">members</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/libcli.html#setup_clients"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.libcli.setup_clients" title="Link to this definition"></a></dt>
+<dd><p>Set up analysis clients for an ArgumentParser instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ap</strong> (<cite>argparse.ArgumentParser</cite>) – Argument parser instance</p></li>
+<li><p><strong>title</strong> (<em>str</em>) – title of the parser</p></li>
+<li><p><strong>members</strong> (<em>list</em>) – list containing Analysis classes for setting up the parser</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mdacli.libcli.split_argparse_into_groups">
+<span class="sig-prename descclassname"><span class="pre">mdacli.libcli.</span></span><span class="sig-name descname"><span class="pre">split_argparse_into_groups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parser</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">namespace</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/libcli.html#split_argparse_into_groups"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.libcli.split_argparse_into_groups" title="Link to this definition"></a></dt>
+<dd><p>Split the populated namespace of argparse into groups.</p>
+<p><a class="reference external" href="https://stackoverflow.com/questions/31519997/is-it-possible-to">https://stackoverflow.com/questions/31519997/is-it-possible-to</a>-
+only-parse-one-argument-groups-parameters-with-argparse</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>parse</strong> (<cite>argparse.ArgumentParser</cite>) – argument parser instance</p></li>
+<li><p><strong>namespace</strong> (<cite>argparse.Namespace</cite>) – instance storing the parameters</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>arg_grouped_dict</strong> (<em>dict</em>) – Dictionary containing parameters split according to their groups</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="cli.html" class="btn btn-neutral float-left" title="High-Level API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="save.html" class="btn btn-neutral float-right" title="Results Saving" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Philip Loche, Joao MC Teixeira and Oliver Beckstein.
+      <span class="lastupdated">Last updated on Jan 23, 2026.
+      </span></p>
+  </div>
+
+  
+
+
+
+<div class="footer"><p>Please see
+    our <a href="https://www.mdanalysis.org/pages/privacy/">Privacy Policy</a>
+    to learn how <a href="https://www.mdanalysis.org">MDAnalysis</a> collects data.</p>
+    <script data-goatcounter="https://mdanalysis.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</div>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+    var versions_json_url = 'https://mdacli.mdanalysis.org//versions.json'
+</script>
+
+<div class="rst-versions" data-toggle="rst-versions" role="note"
+     aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book"></span>
+        0.1.35.dev3+g99e34787e
+      <span class="fa fa-caret-down"></span>
+    </span>
+
+    <div class="rst-other-versions">
+        <dl id="versionselector">
+            <dt>Other Versions</dt>
+        </dl>
+
+    </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

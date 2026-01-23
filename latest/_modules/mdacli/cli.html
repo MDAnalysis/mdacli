@@ -1,0 +1,324 @@
+
+
+
+
+
+  
+
+
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.1/css/academicons.min.css" integrity="sha512-b1ASx0WHgVFL5ZQhTgiPWX+68KjS38Jk87jg7pe+qC7q9YkEtFq0z7xCglv7qGIs/68d3mAp+StfC8WKC5SSAg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="shortcut icon" href="../../../../_static/mdanalysis-logo.ico">
+</head>
+
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mdacli.cli &mdash; mdacli 0.1.35.dev3+g99e34787e documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=34bb78ad" />
+      <link rel="stylesheet" type="text/css" href="../../_static/site.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=27e8b3b8" />
+
+  
+    <link rel="shortcut icon" href="../../_static/mdanalysis-logo.ico"/>
+    <link rel="canonical" href="https://mdacli.mdanalysis.org/_modules/mdacli/cli.html" />
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=e28934f6"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/js/versions.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within mdacli 0.1.35.dev3+g99e34787e documentation"
+          href="../../_static/opensearch.xml"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+
+  
+
+
+
+
+<a href="../../index.html">
+  
+    <img src="../../_static/mdacli-logo.png" class="logo" alt="Logo"/>
+</a>
+
+
+  
+  
+  
+    <div class="version">
+      0.1.35.dev3+g99e34787e
+    </div>
+  
+
+
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        </div>
+<div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+    
+        <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../philosophy.html">Philosophy and approach</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tab-completion.html">Tab-Completion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API library documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../authors.html">Authors</a></li>
+</ul>
+
+</div>
+
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">mdacli</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">mdacli.cli</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for mdacli.cli</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (c) 2024 Authors and contributors</span>
+<span class="c1">#</span>
+<span class="c1"># Released under the GNU Public Licence, v2 or any higher version</span>
+<span class="c1"># SPDX-License-Identifier: GPL-2.0-or-later</span>
+
+<span class="sd">&quot;&quot;&quot;The toplevel command line interface.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">traceback</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">argcomplete</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">MDAnalysis.analysis.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">AnalysisBase</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">threadpoolctl</span><span class="w"> </span><span class="kn">import</span> <span class="n">threadpool_limits</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.colors</span><span class="w"> </span><span class="kn">import</span> <span class="n">Emphasise</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.libcli</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">find_cls_members</span><span class="p">,</span>
+    <span class="n">init_base_argparse</span><span class="p">,</span>
+    <span class="n">run_analysis</span><span class="p">,</span>
+    <span class="n">setup_clients</span><span class="p">,</span>
+    <span class="n">split_argparse_into_groups</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">setup_logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">_exit_if_a_is_b</span>
+
+
+<div class="viewcode-block" id="cli">
+<a class="viewcode-back" href="../../api/cli.html#mdacli.cli.cli">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">cli</span><span class="p">(</span>
+    <span class="n">name</span><span class="p">,</span>
+    <span class="n">module_list</span><span class="p">,</span>
+    <span class="n">base_class</span><span class="o">=</span><span class="n">AnalysisBase</span><span class="p">,</span>
+    <span class="n">version</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">skip_modules</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">ignore_warnings</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create the command-line interface.</span>
+
+<span class="sd">    This function creates a command line interface with a given `name` based</span>
+<span class="sd">    on a module list.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name : str</span>
+<span class="sd">        name of the interface</span>
+<span class="sd">    module_list : list</span>
+<span class="sd">        list of module from which the cli is build up.</span>
+<span class="sd">    base_class : cls</span>
+<span class="sd">        Class or list of classes that the Anaylsis modules belong to</span>
+<span class="sd">    description : str</span>
+<span class="sd">        description of the cli</span>
+<span class="sd">    skip_modules : list</span>
+<span class="sd">        list of strings containing modules that should be ommited</span>
+<span class="sd">    ignore_warnings : bool</span>
+<span class="sd">        ignore warnings when importing modules</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    This example code creates the command line interface of MDAnalysis::</span>
+
+<span class="sd">        from MDAnalysis.analysis import __all__</span>
+
+<span class="sd">        import mdacli</span>
+
+<span class="sd">        skip_mods = [&#39;AnalysisFromFunction&#39;,</span>
+<span class="sd">                    &#39;HydrogenBondAnalysis&#39;,</span>
+<span class="sd">                    &#39;WaterBridgeAnalysis&#39;,</span>
+<span class="sd">                    &#39;Contacts&#39;,</span>
+<span class="sd">                    &#39;Dihedral&#39;,</span>
+<span class="sd">                    &#39;PersistenceLength&#39;,</span>
+<span class="sd">                    &#39;InterRDF_s&#39;]</span>
+
+<span class="sd">        mdacli.cli(name=&quot;MDAnalysis&quot;,</span>
+<span class="sd">                   module_list=[f&#39;MDAnalysis.analysis.{m}&#39; for m in __all__],</span>
+<span class="sd">                   version=mdacli.__version__,</span>
+<span class="sd">                   description=__doc__,</span>
+<span class="sd">                   skip_modules=skip_mods,</span>
+<span class="sd">                   ignore_warnings=True)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">modules</span> <span class="o">=</span> <span class="n">find_cls_members</span><span class="p">(</span><span class="n">base_class</span><span class="p">,</span> <span class="n">module_list</span><span class="p">,</span> <span class="n">ignore_warnings</span><span class="o">=</span><span class="n">ignore_warnings</span><span class="p">)</span>
+
+    <span class="n">skip_modules</span> <span class="o">=</span> <span class="p">[]</span> <span class="k">if</span> <span class="n">skip_modules</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">skip_modules</span>
+    <span class="n">modules</span> <span class="o">=</span> <span class="p">[</span><span class="n">mod</span> <span class="k">for</span> <span class="n">mod</span> <span class="ow">in</span> <span class="n">modules</span> <span class="k">if</span> <span class="n">mod</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">skip_modules</span><span class="p">]</span>
+    <span class="n">_exit_if_a_is_b</span><span class="p">(</span><span class="n">modules</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;No analysis modules founds.&quot;</span><span class="p">)</span>
+
+    <span class="n">ap</span> <span class="o">=</span> <span class="n">init_base_argparse</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">)</span>
+
+    <span class="n">setup_clients</span><span class="p">(</span><span class="n">ap</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> Analysis Modules&quot;</span><span class="p">,</span> <span class="n">members</span><span class="o">=</span><span class="n">modules</span><span class="p">)</span>
+    <span class="n">argcomplete</span><span class="o">.</span><span class="n">autocomplete</span><span class="p">(</span><span class="n">ap</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">ap</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;A subcommand is required.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># There is to much useless code execution done here:</span>
+    <span class="c1"># 1. We do not have to setup all possible clients all the time.</span>
+    <span class="c1">#    i.e. for `mda RMSD` only the RMSD client should be build.</span>
+    <span class="c1"># 2. for something like `mdacli -h` We do not have to build every</span>
+    <span class="c1">#   sub parser in complete detail.</span>
+
+    <span class="n">args</span> <span class="o">=</span> <span class="n">ap</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+    <span class="c1"># Set the logging level based on the verbose argument</span>
+    <span class="c1"># If verbose is not an argument, default to WARNING</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="s2">&quot;verbose&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+        <span class="n">level</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">level</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">INFO</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
+        <span class="n">level</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span>
+
+    <span class="k">with</span> <span class="n">setup_logging</span><span class="p">(</span><span class="n">logfile</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">logfile</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">):</span>
+        <span class="c1"># Execute the main client interface.</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">analysis_callable</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">analysis_callable</span>
+
+            <span class="c1"># Get the correct ArgumentParser instance from all subparsers</span>
+            <span class="c1"># `[0]` selects the first subparser where our analysises live in.</span>
+            <span class="n">_key</span> <span class="o">=</span> <span class="n">analysis_callable</span><span class="o">.</span><span class="vm">__name__</span>
+            <span class="n">ap_sup</span> <span class="o">=</span> <span class="n">ap</span><span class="o">.</span><span class="n">_subparsers</span><span class="o">.</span><span class="n">_group_actions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span>
+            <span class="n">arg_grouped_dict</span> <span class="o">=</span> <span class="n">split_argparse_into_groups</span><span class="p">(</span><span class="n">ap_sup</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+
+            <span class="c1"># Some parameters may not exist</span>
+            <span class="n">arg_grouped_dict</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;Optional Parameters&quot;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="n">arg_grouped_dict</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;Reference Universe Parameters&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="n">arg_grouped_dict</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;Output Parameters&quot;</span><span class="p">,</span> <span class="p">{})</span>
+
+            <span class="k">with</span> <span class="n">threadpool_limits</span><span class="p">(</span><span class="n">limits</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">num_threads</span><span class="p">):</span>
+                <span class="n">run_analysis</span><span class="p">(</span>
+                    <span class="n">analysis_callable</span><span class="p">,</span>
+                    <span class="n">arg_grouped_dict</span><span class="p">[</span><span class="s2">&quot;Mandatory Parameters&quot;</span><span class="p">],</span>
+                    <span class="n">arg_grouped_dict</span><span class="p">[</span><span class="s2">&quot;Optional Parameters&quot;</span><span class="p">],</span>
+                    <span class="n">arg_grouped_dict</span><span class="p">[</span><span class="s2">&quot;Reference Universe Parameters&quot;</span><span class="p">],</span>
+                    <span class="n">arg_grouped_dict</span><span class="p">[</span><span class="s2">&quot;Analysis Run Parameters&quot;</span><span class="p">],</span>
+                    <span class="n">arg_grouped_dict</span><span class="p">[</span><span class="s2">&quot;Output Parameters&quot;</span><span class="p">],</span>
+                <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
+                <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">Emphasise</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Philip Loche, Joao MC Teixeira and Oliver Beckstein.
+      <span class="lastupdated">Last updated on Jan 23, 2026.
+      </span></p>
+  </div>
+
+  
+
+
+
+<div class="footer"><p>Please see
+    our <a href="https://www.mdanalysis.org/pages/privacy/">Privacy Policy</a>
+    to learn how <a href="https://www.mdanalysis.org">MDAnalysis</a> collects data.</p>
+    <script data-goatcounter="https://mdanalysis.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</div>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+    var versions_json_url = 'https://mdacli.mdanalysis.org//versions.json'
+</script>
+
+<div class="rst-versions" data-toggle="rst-versions" role="note"
+     aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book"></span>
+        0.1.35.dev3+g99e34787e
+      <span class="fa fa-caret-down"></span>
+    </span>
+
+    <div class="rst-other-versions">
+        <dl id="versionselector">
+            <dt>Other Versions</dt>
+        </dl>
+
+    </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

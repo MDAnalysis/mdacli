@@ -1,0 +1,444 @@
+
+
+
+
+
+  
+
+
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.1/css/academicons.min.css" integrity="sha512-b1ASx0WHgVFL5ZQhTgiPWX+68KjS38Jk87jg7pe+qC7q9YkEtFq0z7xCglv7qGIs/68d3mAp+StfC8WKC5SSAg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="shortcut icon" href="../../../../_static/mdanalysis-logo.ico">
+</head>
+
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mdacli.utils &mdash; mdacli 0.1.35.dev3+g99e34787e documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=34bb78ad" />
+      <link rel="stylesheet" type="text/css" href="../../_static/site.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=27e8b3b8" />
+
+  
+    <link rel="shortcut icon" href="../../_static/mdanalysis-logo.ico"/>
+    <link rel="canonical" href="https://mdacli.mdanalysis.org/_modules/mdacli/utils.html" />
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=e28934f6"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/js/versions.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within mdacli 0.1.35.dev3+g99e34787e documentation"
+          href="../../_static/opensearch.xml"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+
+  
+
+
+
+
+<a href="../../index.html">
+  
+    <img src="../../_static/mdacli-logo.png" class="logo" alt="Logo"/>
+</a>
+
+
+  
+  
+  
+    <div class="version">
+      0.1.35.dev3+g99e34787e
+    </div>
+  
+
+
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        </div>
+<div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+    
+        <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../philosophy.html">Philosophy and approach</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tab-completion.html">Tab-Completion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API library documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../authors.html">Authors</a></li>
+</ul>
+
+</div>
+
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">mdacli</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">mdacli.utils</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for mdacli.utils</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (c) 2021 Authors and contributors</span>
+<span class="c1">#</span>
+<span class="c1"># Released under the GNU Public Licence, v2 or any higher version</span>
+<span class="c1"># SPDX-License-Identifier: GPL-2.0-or-later</span>
+
+<span class="sd">&quot;&quot;&quot;Useful helper functions for running the cli.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">inspect</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">defaultdict</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">MDAnalysis</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mda</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_exit_if_a_is_b</span><span class="p">(</span><span class="n">obj1</span><span class="p">,</span> <span class="n">obj2</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Exit if `obj1` and `obj2` are the same.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">obj1</span> <span class="ow">is</span> <span class="n">obj2</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="split_time_unit">
+<a class="viewcode-back" href="../../api/utils.html#mdacli.utils.split_time_unit">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">split_time_unit</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Split time and units.</span>
+
+<span class="sd">    Follows the regex:: https://regex101.com/r/LZAbil/2</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tuple (float, str)</span>
+<span class="sd">        Value as float, units as str.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    IndexError</span>
+<span class="sd">        Tuple could not be found. This happens when a number is not</span>
+<span class="sd">        present in the start of the string.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">type_regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+        <span class="sa">r</span><span class="s2">&quot;^(\-?\d+\.?\d*|\-?\.\d+|\-?\.?\d+[eE]\-?\d+|-?\d+\.?\d*[eE]\d+)($|[a-z]*$)&quot;</span>
+    <span class="p">)</span>  <span class="c1"># noqa: E501</span>
+    <span class="n">value</span><span class="p">,</span> <span class="n">unit</span> <span class="o">=</span> <span class="n">type_regex</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">s</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">),</span> <span class="n">unit</span></div>
+
+
+
+<div class="viewcode-block" id="convert_str_time">
+<a class="viewcode-back" href="../../api/utils.html#mdacli.utils.convert_str_time">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">convert_str_time</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a string `x` into a frame number based on given `dt`.</span>
+
+<span class="sd">    If `x` does not contain any units its assumed to be a frame number</span>
+<span class="sd">    already.</span>
+
+<span class="sd">    See :func:`split_time_unit`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : str</span>
+<span class="sd">        the input string</span>
+<span class="sd">    dt : float</span>
+<span class="sd">        the time step in ps</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    int</span>
+<span class="sd">        frame number</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        The input does not contain any units but is not an integer.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">val</span><span class="p">,</span> <span class="n">unit</span> <span class="o">=</span> <span class="n">split_time_unit</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">unit</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="n">mda</span><span class="o">.</span><span class="n">units</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">unit</span><span class="p">,</span> <span class="s2">&quot;ps&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">val</span> <span class="o">//</span> <span class="n">dt</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">val</span> <span class="o">%</span> <span class="mi">1</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># the number is not int&#39;able</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Only integers or time step combinations (´12ps´) &quot;</span>
+            <span class="s2">&quot;are valid for frame selection&quot;</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">val</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="parse_callable_signature">
+<a class="viewcode-back" href="../../api/utils.html#mdacli.utils.parse_callable_signature">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">parse_callable_signature</span><span class="p">(</span><span class="n">callable_obj</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse a callable signature to a convenient dictionary for CLI creation.</span>
+
+<span class="sd">    The parameters used in the CLI are a combination of the callable</span>
+<span class="sd">    signature and the information in the callable docstring.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    callable_obj : callable</span>
+<span class="sd">        The callable object to inspect. Details of this object required</span>
+<span class="sd">        for the creation of a CLI are added to the `storage_dict`.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dict</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">storage_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">storage_dict</span><span class="p">[</span><span class="s2">&quot;callable&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">callable_obj</span>
+
+    <span class="n">sig</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">callable_obj</span><span class="p">)</span>
+    <span class="n">summary</span><span class="p">,</span> <span class="n">summary_extended</span><span class="p">,</span> <span class="n">doc</span> <span class="o">=</span> <span class="n">parse_docs</span><span class="p">(</span><span class="n">callable_obj</span><span class="p">)</span>
+
+    <span class="c1"># args for CLIs</span>
+    <span class="n">positional_args</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">optional_args</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c1"># tuple to ignore args and kwargs, these are note necessary to consider</span>
+    <span class="c1"># for the purpose of this implementation - at least to currently</span>
+    <span class="n">ARGS_KWARGS</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">inspect</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">VAR_KEYWORD</span><span class="p">,</span>
+        <span class="n">inspect</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">VAR_POSITIONAL</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># brings to local scope</span>
+    <span class="n">EMPTY</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">empty</span>
+
+    <span class="c1"># for each parameter in the callable&#39;s signature</span>
+    <span class="k">for</span> <span class="n">sig_name</span><span class="p">,</span> <span class="n">sig_param</span> <span class="ow">in</span> <span class="n">sig</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">sig_param</span><span class="o">.</span><span class="n">kind</span> <span class="ow">in</span> <span class="n">ARGS_KWARGS</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="c1"># positional parameter</span>
+        <span class="k">elif</span> <span class="n">sig_param</span><span class="o">.</span><span class="n">default</span> <span class="o">==</span> <span class="n">EMPTY</span><span class="p">:</span>
+            <span class="c1"># parameter type and description is extract from docstring</span>
+            <span class="k">for</span> <span class="n">param_name</span><span class="p">,</span> <span class="n">doc_param</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">param_name</span> <span class="o">==</span> <span class="n">sig_name</span><span class="p">:</span>
+                    <span class="n">positional_args</span><span class="p">[</span><span class="n">sig_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="n">doc_param</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">],</span>
+                        <span class="s2">&quot;desc&quot;</span><span class="p">:</span> <span class="n">doc_param</span><span class="p">[</span><span class="s2">&quot;desc&quot;</span><span class="p">],</span>
+                    <span class="p">}</span>
+                    <span class="k">break</span>  <span class="c1"># done, jumps off the loop</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># else reaches if the parameter in the signature is not present</span>
+                <span class="c1"># in the docstring. It shouldn&#39;t, but just in case :-)</span>
+                <span class="c1"># unless we explicitly decide not to consider any parameters</span>
+                <span class="c1"># not referenced in the documentation, this should be kept</span>
+                <span class="c1">#</span>
+                <span class="c1"># str is the default value of argparse arguments type parameter</span>
+                <span class="n">positional_args</span><span class="p">[</span><span class="n">sig_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;str&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;desc&quot;</span><span class="p">:</span> <span class="s2">&quot;No description available.&quot;</span><span class="p">,</span>
+                <span class="p">}</span>
+
+        <span class="c1"># named parameters</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">param_name</span><span class="p">,</span> <span class="n">doc_param</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">param_name</span> <span class="o">==</span> <span class="n">sig_name</span><span class="p">:</span>
+                    <span class="n">optional_args</span><span class="p">[</span><span class="n">sig_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="c1"># type taken form docstring</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="n">doc_param</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">],</span>
+                        <span class="c1"># but default taken from signature</span>
+                        <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">sig_param</span><span class="o">.</span><span class="n">default</span><span class="p">,</span>
+                        <span class="s2">&quot;desc&quot;</span><span class="p">:</span> <span class="n">doc_param</span><span class="p">[</span><span class="s2">&quot;desc&quot;</span><span class="p">],</span>
+                    <span class="p">}</span>
+                    <span class="k">break</span>  <span class="c1"># parameter captured, break the loop</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># if the parameter is in signature but NOT in the docstring</span>
+                <span class="c1"># uses type.__name__ to match with STR_TYPE_DICT keys</span>
+                <span class="n">optional_args</span><span class="p">[</span><span class="n">sig_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="nb">type</span><span class="p">(</span><span class="n">sig_param</span><span class="o">.</span><span class="n">default</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>  <span class="c1"># corrected here</span>
+                    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">sig_param</span><span class="o">.</span><span class="n">default</span><span class="p">,</span>
+                    <span class="s2">&quot;desc&quot;</span><span class="p">:</span> <span class="s2">&quot;No description available.&quot;</span><span class="p">,</span>
+                <span class="p">}</span>
+
+    <span class="c1"># places all information captured for the callable in the dictionary</span>
+    <span class="n">storage_dict</span><span class="p">[</span><span class="s2">&quot;positional&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">positional_args</span>
+    <span class="n">storage_dict</span><span class="p">[</span><span class="s2">&quot;optional&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">optional_args</span>
+    <span class="n">storage_dict</span><span class="p">[</span><span class="s2">&quot;desc&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">summary</span>
+    <span class="n">storage_dict</span><span class="p">[</span><span class="s2">&quot;desc_long&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">summary_extended</span>
+
+    <span class="k">return</span> <span class="n">storage_dict</span></div>
+
+
+
+<div class="viewcode-block" id="parse_docs">
+<a class="viewcode-back" href="../../api/utils.html#mdacli.utils.parse_docs">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">parse_docs</span><span class="p">(</span><span class="n">klass</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse classes docstrings to a convenient dictionary.</span>
+
+<span class="sd">    This parser is based on NumpyDocString format, yet it is not so</span>
+<span class="sd">    strict. Combined docstrings from class main docstring and `__init__`</span>
+<span class="sd">    method.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    klass : callable</span>
+<span class="sd">        A klass object from which a DOCSTRING can be extracted.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tuple (str, str, dict of dict)</span>
+<span class="sd">        * One line summary description of the callable</span>
+<span class="sd">        * Extended description of the callable</span>
+<span class="sd">        * dictionary where keys are parameter names and subdictinary</span>
+<span class="sd">            has keys &quot;type&quot; and &quot;desc&quot; for parameter type and description.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">doc</span> <span class="o">=</span> <span class="n">klass</span><span class="o">.</span><span class="vm">__doc__</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">doc</span> <span class="o">+=</span> <span class="n">klass</span><span class="o">.</span><span class="fm">__init__</span><span class="o">.</span><span class="vm">__doc__</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="n">doc_lines</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">lstrip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span> <span class="k">if</span> <span class="n">s</span><span class="p">]</span>
+
+    <span class="c1"># first docstring sentence is the summary</span>
+    <span class="n">summary</span> <span class="o">=</span> <span class="n">doc_lines</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># sometimes signature parameters in docstring are referred as &quot;Arguments&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">param_index</span> <span class="o">=</span> <span class="n">doc_lines</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">&quot;Parameters&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="n">param_index</span> <span class="o">=</span> <span class="n">doc_lines</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">&quot;Arguments&quot;</span><span class="p">)</span>
+
+    <span class="c1"># the extended summary is every text that exists between the summary</span>
+    <span class="c1"># and the Parameters title line</span>
+    <span class="n">summary_extended</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">doc_lines</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="n">param_index</span><span class="p">])</span>
+
+    <span class="c1"># the line to start collecting parameters is `param_index` + 2</span>
+    <span class="c1"># because of the &quot;Parameters&quot; title and the &#39;---------&#39; underscore</span>
+    <span class="n">par_i</span> <span class="o">=</span> <span class="n">param_index</span> <span class="o">+</span> <span class="mi">2</span>
+
+    <span class="c1"># search for the line where Parameters section ends</span>
+    <span class="c1"># will search until the end of the docstring or until a &#39;----&#39;-like</span>
+    <span class="c1"># line is found - corresponding to the start of another section</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">doc_lines</span><span class="p">[</span><span class="n">par_i</span><span class="p">:],</span> <span class="n">start</span><span class="o">=</span><span class="n">par_i</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s2">&quot;----&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>  <span class="c1"># at least of Note\n----</span>
+            <span class="c1"># -1 because the exact line is the one of the title not of</span>
+            <span class="c1"># the underlines</span>
+            <span class="n">end_param_line</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="k">break</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># if the end of the docstring is reached, takes the last line</span>
+        <span class="n">end_param_line</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+    <span class="c1"># starts collecting parameters in doctrings</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">dict</span><span class="p">)</span>  <span class="c1"># the dictionary which will be returned</span>
+
+    <span class="c1"># temporary parameter description list</span>
+    <span class="n">desc_tmp</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># regex to find parameter types</span>
+    <span class="n">type_regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^([\[\]\w\.]+|\{.*\})|(?&lt;=\`\~)(.*?)(?=\`)&quot;</span><span class="p">)</span>
+
+    <span class="c1"># goes back to front to register descriptions first ;-)</span>
+    <span class="c1"># considers only the Parameters section</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">doc_lines</span><span class="p">[</span><span class="n">par_i</span><span class="p">:</span><span class="n">end_param_line</span><span class="p">][::</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="s2">&quot; : &quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+            <span class="n">par_name</span><span class="p">,</span> <span class="n">others_</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; : &quot;</span><span class="p">)</span>
+            <span class="n">par_type</span> <span class="o">=</span> <span class="p">[</span><span class="n">_</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">type_regex</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">others_</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">_</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">params</span><span class="p">[</span><span class="n">par_name</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">par_type</span>
+            <span class="n">params</span><span class="p">[</span><span class="n">par_name</span><span class="p">][</span><span class="s2">&quot;desc&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">desc_tmp</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">desc_tmp</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">desc_tmp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">summary</span><span class="p">,</span> <span class="n">summary_extended</span><span class="p">,</span> <span class="n">params</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Philip Loche, Joao MC Teixeira and Oliver Beckstein.
+      <span class="lastupdated">Last updated on Jan 23, 2026.
+      </span></p>
+  </div>
+
+  
+
+
+
+<div class="footer"><p>Please see
+    our <a href="https://www.mdanalysis.org/pages/privacy/">Privacy Policy</a>
+    to learn how <a href="https://www.mdanalysis.org">MDAnalysis</a> collects data.</p>
+    <script data-goatcounter="https://mdanalysis.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</div>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+    var versions_json_url = 'https://mdacli.mdanalysis.org//versions.json'
+</script>
+
+<div class="rst-versions" data-toggle="rst-versions" role="note"
+     aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book"></span>
+        0.1.35.dev3+g99e34787e
+      <span class="fa fa-caret-down"></span>
+    </span>
+
+    <div class="rst-other-versions">
+        <dl id="versionselector">
+            <dt>Other Versions</dt>
+        </dl>
+
+    </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

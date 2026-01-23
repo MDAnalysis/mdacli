@@ -1,0 +1,425 @@
+
+
+
+
+
+  
+
+
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.1/css/academicons.min.css" integrity="sha512-b1ASx0WHgVFL5ZQhTgiPWX+68KjS38Jk87jg7pe+qC7q9YkEtFq0z7xCglv7qGIs/68d3mAp+StfC8WKC5SSAg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="shortcut icon" href="../../_static/mdanalysis-logo.ico">
+</head>
+
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Results Saving &mdash; mdacli 0.1.35.dev3+g99e34787e documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=34bb78ad" />
+      <link rel="stylesheet" type="text/css" href="../_static/site.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=27e8b3b8" />
+
+  
+    <link rel="shortcut icon" href="../_static/mdanalysis-logo.ico"/>
+    <link rel="canonical" href="https://mdacli.mdanalysis.org/api/save.html" />
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=e28934f6"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/js/versions.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within mdacli 0.1.35.dev3+g99e34787e documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Coloring" href="colors.html" />
+    <link rel="prev" title="Support functions for CLI" href="libcli.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+
+  
+
+
+
+
+<a href="../index.html">
+  
+    <img src="../_static/mdacli-logo.png" class="logo" alt="Logo"/>
+</a>
+
+
+  
+  
+  
+    <div class="version">
+      0.1.35.dev3+g99e34787e
+    </div>
+  
+
+
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        </div>
+<div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+    
+        <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../philosophy.html">Philosophy and approach</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tab-completion.html">Tab-Completion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API library documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="cli.html">High-Level API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="libcli.html">Support functions for CLI</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Results Saving</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.save.get_1D_arrays"><code class="docutils literal notranslate"><span class="pre">get_1D_arrays()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.save.get_cli_input"><code class="docutils literal notranslate"><span class="pre">get_cli_input()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.save.is_1d_array"><code class="docutils literal notranslate"><span class="pre">is_1d_array()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.save.is_2d_array"><code class="docutils literal notranslate"><span class="pre">is_2d_array()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.save.is_3d_array"><code class="docutils literal notranslate"><span class="pre">is_3d_array()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.save.is_dimension_array"><code class="docutils literal notranslate"><span class="pre">is_dimension_array()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.save.is_higher_dimension_array"><code class="docutils literal notranslate"><span class="pre">is_higher_dimension_array()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.save.is_serializable"><code class="docutils literal notranslate"><span class="pre">is_serializable()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.save.remove_files"><code class="docutils literal notranslate"><span class="pre">remove_files()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.save.return_with_remove"><code class="docutils literal notranslate"><span class="pre">return_with_remove()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.save.save"><code class="docutils literal notranslate"><span class="pre">save()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.save.save_1D_arrays"><code class="docutils literal notranslate"><span class="pre">save_1D_arrays()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.save.save_2D_arrays"><code class="docutils literal notranslate"><span class="pre">save_2D_arrays()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.save.save_3D_array_to_2D_csv"><code class="docutils literal notranslate"><span class="pre">save_3D_array_to_2D_csv()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.save.save_3D_arrays"><code class="docutils literal notranslate"><span class="pre">save_3D_arrays()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.save.save_Results_object"><code class="docutils literal notranslate"><span class="pre">save_Results_object()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.save.save_files_to_zip"><code class="docutils literal notranslate"><span class="pre">save_files_to_zip()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.save.save_higher_dim_arrays"><code class="docutils literal notranslate"><span class="pre">save_higher_dim_arrays()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.save.save_json_serializables"><code class="docutils literal notranslate"><span class="pre">save_json_serializables()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.save.save_result_array"><code class="docutils literal notranslate"><span class="pre">save_result_array()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.save.save_to_json"><code class="docutils literal notranslate"><span class="pre">save_to_json()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.save.savetxt_w_command"><code class="docutils literal notranslate"><span class="pre">savetxt_w_command()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.save.stack_1d_arrays_list"><code class="docutils literal notranslate"><span class="pre">stack_1d_arrays_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mdacli.save.try_to_squeeze_me"><code class="docutils literal notranslate"><span class="pre">try_to_squeeze_me()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="colors.html">Coloring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logger.html">Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authors.html">Authors</a></li>
+</ul>
+
+</div>
+
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">mdacli</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../api.html">API library documentation</a></li>
+      <li class="breadcrumb-item active">Results Saving</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/save.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-mdacli.save">
+<span id="results-saving"></span><h1>Results Saving<a class="headerlink" href="#module-mdacli.save" title="Link to this heading"></a></h1>
+<p>Manage data saving.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="mdacli.save.get_1D_arrays">
+<span class="sig-prename descclassname"><span class="pre">mdacli.save.</span></span><span class="sig-name descname"><span class="pre">get_1D_arrays</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">results</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/save.html#get_1D_arrays"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.save.get_1D_arrays" title="Link to this definition"></a></dt>
+<dd><p>Get items from dict which correspond to np.ndarrays one dim.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mdacli.save.get_cli_input">
+<span class="sig-prename descclassname"><span class="pre">mdacli.save.</span></span><span class="sig-name descname"><span class="pre">get_cli_input</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/save.html#get_cli_input"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.save.get_cli_input" title="Link to this definition"></a></dt>
+<dd><p>Return a proper fomatted string of the command line input.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mdacli.save.is_1d_array">
+<span class="sig-prename descclassname"><span class="pre">mdacli.save.</span></span><span class="sig-name descname"><span class="pre">is_1d_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">ndim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mdacli.save.is_1d_array" title="Link to this definition"></a></dt>
+<dd><p>Assert value is array and of certain dimension.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mdacli.save.is_2d_array">
+<span class="sig-prename descclassname"><span class="pre">mdacli.save.</span></span><span class="sig-name descname"><span class="pre">is_2d_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">ndim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mdacli.save.is_2d_array" title="Link to this definition"></a></dt>
+<dd><p>Assert value is array and of certain dimension.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mdacli.save.is_3d_array">
+<span class="sig-prename descclassname"><span class="pre">mdacli.save.</span></span><span class="sig-name descname"><span class="pre">is_3d_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">ndim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mdacli.save.is_3d_array" title="Link to this definition"></a></dt>
+<dd><p>Assert value is array and of certain dimension.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mdacli.save.is_dimension_array">
+<span class="sig-prename descclassname"><span class="pre">mdacli.save.</span></span><span class="sig-name descname"><span class="pre">is_dimension_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ndim</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/save.html#is_dimension_array"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.save.is_dimension_array" title="Link to this definition"></a></dt>
+<dd><p>Assert value is array and of certain dimension.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mdacli.save.is_higher_dimension_array">
+<span class="sig-prename descclassname"><span class="pre">mdacli.save.</span></span><span class="sig-name descname"><span class="pre">is_higher_dimension_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ndim</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/save.html#is_higher_dimension_array"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.save.is_higher_dimension_array" title="Link to this definition"></a></dt>
+<dd><p>Assert value is array and of certain dimension.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mdacli.save.is_serializable">
+<span class="sig-prename descclassname"><span class="pre">mdacli.save.</span></span><span class="sig-name descname"><span class="pre">is_serializable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/save.html#is_serializable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.save.is_serializable" title="Link to this definition"></a></dt>
+<dd><p>Assert if value is json serializable.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mdacli.save.remove_files">
+<span class="sig-prename descclassname"><span class="pre">mdacli.save.</span></span><span class="sig-name descname"><span class="pre">remove_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">files</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/save.html#remove_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.save.remove_files" title="Link to this definition"></a></dt>
+<dd><p>Remove files from disk.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mdacli.save.return_with_remove">
+<span class="sig-prename descclassname"><span class="pre">mdacli.save.</span></span><span class="sig-name descname"><span class="pre">return_with_remove</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ddict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/save.html#return_with_remove"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.save.return_with_remove" title="Link to this definition"></a></dt>
+<dd><p>Serve all saving functions.</p>
+<p>If remove is true,
+Returns subset of keys from dict.
+Removes keys subset from original dict.</p>
+<p>Else, return None.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mdacli.save.save">
+<span class="sig-prename descclassname"><span class="pre">mdacli.save.</span></span><span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">results</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fprefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mdacli_results'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/save.html#save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.save.save" title="Link to this definition"></a></dt>
+<dd><p>Save the attributes of a results instance to disk.</p>
+<p>1D, 2D and 3D numpy arrays are saved to csv files. 1D arrays of the
+same length are vertically stacked to create a table. 2D arrays are
+saved directly. 3D arrays are split into 2D arrays along the
+shortest dimension and one CSV is saved for each 2D array created,
+and resulting CSVs are stored together in a ZIP file. Note: higher
+dimensional arrays are ignored.</p>
+<p>We try to save everything else in a JSON file. Non-serializable
+types are ignored.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fprefix</strong> (<em>str</em>) – prefix for all files saved</p></li>
+<li><p><strong>results</strong> (<cite>~MDAnalysis.analysis.base.Results</cite>) – A Results instance from which the stored data is taken.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mdacli.save.save_1D_arrays">
+<span class="sig-prename descclassname"><span class="pre">mdacli.save.</span></span><span class="sig-name descname"><span class="pre">save_1D_arrays</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">results</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fprefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'1darray'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/save.html#save_1D_arrays"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.save.save_1D_arrays" title="Link to this definition"></a></dt>
+<dd><p>Save 1D arrays from results.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>results</strong> (<em>dict-like</em>) – Dictionary containing results.</p></li>
+<li><p><strong>remove</strong> (<em>bool</em>) – If true remove keys mapping to 1D numpy arrays.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mdacli.save.save_2D_arrays">
+<span class="sig-prename descclassname"><span class="pre">mdacli.save.</span></span><span class="sig-name descname"><span class="pre">save_2D_arrays</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">results</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fprefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'2Darr'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/save.html#save_2D_arrays"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.save.save_2D_arrays" title="Link to this definition"></a></dt>
+<dd><p>Save items of 2D array.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mdacli.save.save_3D_array_to_2D_csv">
+<span class="sig-prename descclassname"><span class="pre">mdacli.save.</span></span><span class="sig-name descname"><span class="pre">save_3D_array_to_2D_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arr_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'arr'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zipit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/save.html#save_3D_array_to_2D_csv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.save.save_3D_array_to_2D_csv" title="Link to this definition"></a></dt>
+<dd><p>Save 3D array to 2D CSVs.</p>
+<p>Has option to store all in a ZIP file.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mdacli.save.save_3D_arrays">
+<span class="sig-prename descclassname"><span class="pre">mdacli.save.</span></span><span class="sig-name descname"><span class="pre">save_3D_arrays</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">results</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fprefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'3Darr'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/save.html#save_3D_arrays"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.save.save_3D_arrays" title="Link to this definition"></a></dt>
+<dd><p>Save items of 2D array.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mdacli.save.save_Results_object">
+<span class="sig-prename descclassname"><span class="pre">mdacli.save.</span></span><span class="sig-name descname"><span class="pre">save_Results_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">results</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fprefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'results'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/save.html#save_Results_object"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.save.save_Results_object" title="Link to this definition"></a></dt>
+<dd><p>Save results if they are Results objects.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mdacli.save.save_files_to_zip">
+<span class="sig-prename descclassname"><span class="pre">mdacli.save.</span></span><span class="sig-name descname"><span class="pre">save_files_to_zip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">files</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zipname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'thezip'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/save.html#save_files_to_zip"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.save.save_files_to_zip" title="Link to this definition"></a></dt>
+<dd><p>Compress all files into a single zip archive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>files</strong> (<em>list-like</em>) – File names to save to the ZIP archive.</p></li>
+<li><p><strong>zipname</strong> (<em>str</em>) – The name of the zip file without extension.</p></li>
+<li><p><strong>remove</strong> (<em>bool, option, default True</em>) – Removes the original files.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mdacli.save.save_higher_dim_arrays">
+<span class="sig-prename descclassname"><span class="pre">mdacli.save.</span></span><span class="sig-name descname"><span class="pre">save_higher_dim_arrays</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">results</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fprefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'XDarr'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_ndim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/save.html#save_higher_dim_arrays"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.save.save_higher_dim_arrays" title="Link to this definition"></a></dt>
+<dd><p>Save items of multidimensional arrays to CSV.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mdacli.save.save_json_serializables">
+<span class="sig-prename descclassname"><span class="pre">mdacli.save.</span></span><span class="sig-name descname"><span class="pre">save_json_serializables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">results</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">jsonargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/save.html#save_json_serializables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.save.save_json_serializables" title="Link to this definition"></a></dt>
+<dd><p>Save serializable items to a JSON.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mdacli.save.save_result_array">
+<span class="sig-prename descclassname"><span class="pre">mdacli.save.</span></span><span class="sig-name descname"><span class="pre">save_result_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fprefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'prefix'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/save.html#save_result_array"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.save.save_result_array" title="Link to this definition"></a></dt>
+<dd><p>Save array to disk accoring to num of dimensions.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mdacli.save.save_to_json">
+<span class="sig-prename descclassname"><span class="pre">mdacli.save.</span></span><span class="sig-name descname"><span class="pre">save_to_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'jdict'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/save.html#save_to_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.save.save_to_json" title="Link to this definition"></a></dt>
+<dd><p>Save dictionary to JSON file.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mdacli.save.savetxt_w_command">
+<span class="sig-prename descclassname"><span class="pre">mdacli.save.</span></span><span class="sig-name descname"><span class="pre">savetxt_w_command</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fsuffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.csv'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/save.html#savetxt_w_command"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.save.savetxt_w_command" title="Link to this definition"></a></dt>
+<dd><p>Save CSV data with info about execution command.</p>
+<p>Adds the command line input to the header and checks for a doubled
+defined filesuffix.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mdacli.save.stack_1d_arrays_list">
+<span class="sig-prename descclassname"><span class="pre">mdacli.save.</span></span><span class="sig-name descname"><span class="pre">stack_1d_arrays_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">list_1D</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/save.html#stack_1d_arrays_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.save.stack_1d_arrays_list" title="Link to this definition"></a></dt>
+<dd><p>Stack a list of 1D numpy arrays of the same length vertically together.</p>
+<p>The result is a list containing 2D arrays where each array got the same
+number of rows.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>list_1d</strong> (<em>list</em>) – list of 1 dimensional numpy arrays</p></li>
+<li><p><strong>extra_list</strong> (<em>list</em>) – additional list of numpy arrays on which the
+operations are executed as for <code class="docutils literal notranslate"><span class="pre">list_1d</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>out_list</strong> (<em>list</em>) – list of stacked 2D numpy arrays organized by their length</p></li>
+<li><p><strong>out_extra</strong> (<em>list</em>) – list of stacked 2D numpy applied applied to the same operations
+as out_list</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mdacli.save.try_to_squeeze_me">
+<span class="sig-prename descclassname"><span class="pre">mdacli.save.</span></span><span class="sig-name descname"><span class="pre">try_to_squeeze_me</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mdacli/save.html#try_to_squeeze_me"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mdacli.save.try_to_squeeze_me" title="Link to this definition"></a></dt>
+<dd><p>Squeeze the arr if is array.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="libcli.html" class="btn btn-neutral float-left" title="Support functions for CLI" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="colors.html" class="btn btn-neutral float-right" title="Coloring" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Philip Loche, Joao MC Teixeira and Oliver Beckstein.
+      <span class="lastupdated">Last updated on Jan 23, 2026.
+      </span></p>
+  </div>
+
+  
+
+
+
+<div class="footer"><p>Please see
+    our <a href="https://www.mdanalysis.org/pages/privacy/">Privacy Policy</a>
+    to learn how <a href="https://www.mdanalysis.org">MDAnalysis</a> collects data.</p>
+    <script data-goatcounter="https://mdanalysis.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</div>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+    var versions_json_url = 'https://mdacli.mdanalysis.org//versions.json'
+</script>
+
+<div class="rst-versions" data-toggle="rst-versions" role="note"
+     aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book"></span>
+        0.1.35.dev3+g99e34787e
+      <span class="fa fa-caret-down"></span>
+    </span>
+
+    <div class="rst-other-versions">
+        <dl id="versionselector">
+            <dt>Other Versions</dt>
+        </dl>
+
+    </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

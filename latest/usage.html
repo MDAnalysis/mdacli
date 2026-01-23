@@ -1,0 +1,232 @@
+
+
+
+
+
+  
+
+
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.1/css/academicons.min.css" integrity="sha512-b1ASx0WHgVFL5ZQhTgiPWX+68KjS38Jk87jg7pe+qC7q9YkEtFq0z7xCglv7qGIs/68d3mAp+StfC8WKC5SSAg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="shortcut icon" href="_static/mdanalysis-logo.ico">
+</head>
+
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Usage &mdash; mdacli 0.1.35.dev3+g99e34787e documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=34bb78ad" />
+      <link rel="stylesheet" type="text/css" href="_static/site.css" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=27e8b3b8" />
+
+  
+    <link rel="shortcut icon" href="_static/mdanalysis-logo.ico"/>
+    <link rel="canonical" href="https://mdacli.mdanalysis.org/usage.html" />
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=e28934f6"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/js/versions.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within mdacli 0.1.35.dev3+g99e34787e documentation"
+          href="_static/opensearch.xml"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Tab-Completion" href="tab-completion.html" />
+    <link rel="prev" title="Philosophy and approach" href="philosophy.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+
+  
+
+
+
+
+<a href="index.html">
+  
+    <img src="_static/mdacli-logo.png" class="logo" alt="Logo"/>
+</a>
+
+
+  
+  
+  
+    <div class="version">
+      0.1.35.dev3+g99e34787e
+    </div>
+  
+
+
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        </div>
+<div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+    
+        <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="philosophy.html">Philosophy and approach</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tab-completion.html">Tab-Completion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API library documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
+</ul>
+
+</div>
+
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">mdacli</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Usage</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/usage.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h1>
+<p>To use <code class="docutils literal notranslate"><span class="pre">mdacli</span></code>, after installation
+open your terminal and run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mda</span> <span class="o">-</span><span class="n">h</span>
+</pre></div>
+</div>
+<p>This command will provide a list of all available modules. A list of the
+<a class="reference internal" href="index.html#available-modules"><span class="std std-ref">Available modules</span></a> is also available on the page of the documentation. Ask
+help <code class="docutils literal notranslate"><span class="pre">-h</span></code> in each module available for detailed instruction on how to use each
+module command-line client.</p>
+<p><code class="docutils literal notranslate"><span class="pre">mdacli</span></code> modules’ parameters emulate the parameters of the <code class="docutils literal notranslate"><span class="pre">Analysis</span></code> classes
+from <code class="docutils literal notranslate"><span class="pre">MDAnalysis</span></code>. So, each module will have its own requirements. Some will
+require two trajectories, others <code class="docutils literal notranslate"><span class="pre">AtomGroup</span></code> selections, etc. You will see that
+all is explained in each client <code class="docutils literal notranslate"><span class="pre">-h</span></code> option.</p>
+<p>For example, to calculate a radial distribution function (RDF) between two groups use for
+example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mda</span> <span class="n">interrdf</span> <span class="o">-</span><span class="n">h</span>
+</pre></div>
+</div>
+<p>A sample water trajectory is provided of rigid SPC/E water is
+provided <a class="reference external" href="https://github.com/MDAnalysis/mdacli/tree/main/data">online</a>.
+<code class="docutils literal notranslate"><span class="pre">topol.tpr</span></code> contains a GROMACS topolgy file and <code class="docutils literal notranslate"><span class="pre">traj.trr</span></code> is
+the corresponding trajectory. The oxygen-oxygen
+rdf can be calculated using:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mda</span> <span class="n">interrdf</span> <span class="o">-</span><span class="n">s</span> <span class="n">topol</span><span class="o">.</span><span class="n">tpr</span> <span class="o">-</span><span class="n">f</span> <span class="n">traj</span><span class="o">.</span><span class="n">trr</span> <span class="o">-</span><span class="n">g1</span> <span class="s2">&quot;name OW&quot;</span> <span class="o">-</span><span class="n">g2</span> <span class="s2">&quot;name OW&quot;</span>
+</pre></div>
+</div>
+<p>The oxygen atoms are selected with the <code class="docutils literal notranslate"><span class="pre">-g1</span></code> and <code class="docutils literal notranslate"><span class="pre">-g2</span></code> flags.</p>
+<p>A more verbose output is achieved by using the <code class="docutils literal notranslate"><span class="pre">-v</span></code> flag. Even more
+information is provided with the <code class="docutils literal notranslate"><span class="pre">--debug</span></code> flag.
+All warnings
+of the run can also directly stored to a log file using the <code class="docutils literal notranslate"><span class="pre">--logfile</span></code>
+flag:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mda</span> <span class="o">--</span><span class="n">debug</span> <span class="o">--</span><span class="n">logfile</span> <span class="n">rdf</span><span class="o">.</span><span class="n">log</span> <span class="n">interrdf</span> <span class="o">-</span><span class="n">v</span> <span class="o">-</span><span class="n">s</span> <span class="n">topol</span><span class="o">.</span><span class="n">tpr</span> <span class="o">-</span><span class="n">f</span> <span class="n">traj</span><span class="o">.</span><span class="n">trr</span> <span class="o">-</span><span class="n">g1</span> <span class="s2">&quot;name OW&quot;</span> <span class="o">-</span><span class="n">g2</span> <span class="s2">&quot;name OW&quot;</span>
+</pre></div>
+</div>
+<p>The results of each analysis are stored by default in the current directory.
+The output
+directory can be changed with the <code class="docutils literal notranslate"><span class="pre">-o</span></code> flag and an additional prefix can be
+set using the <code class="docutils literal notranslate"><span class="pre">-pre</span></code> flag.</p>
+<p>The results of the RDF calculations
+are two <code class="docutils literal notranslate"><span class="pre">.csv</span></code> files. The actual RDF is saved in the 2nd and 3rd columns
+of <code class="docutils literal notranslate"><span class="pre">InterRDF_count_bins_rdf.csv</span></code>. The header rows of each file provide
+information about the stored data. Simple results such as bare numbers or
+strings are stored as <code class="docutils literal notranslate"><span class="pre">JSON</span></code> dumps. More complex data such as
+4 or higher-dimensional arrays are saved as a bunch of CSV files zipped
+together. A similar procedure will happen for each module.</p>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="philosophy.html" class="btn btn-neutral float-left" title="Philosophy and approach" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tab-completion.html" class="btn btn-neutral float-right" title="Tab-Completion" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Philip Loche, Joao MC Teixeira and Oliver Beckstein.
+      <span class="lastupdated">Last updated on Jan 23, 2026.
+      </span></p>
+  </div>
+
+  
+
+
+
+<div class="footer"><p>Please see
+    our <a href="https://www.mdanalysis.org/pages/privacy/">Privacy Policy</a>
+    to learn how <a href="https://www.mdanalysis.org">MDAnalysis</a> collects data.</p>
+    <script data-goatcounter="https://mdanalysis.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</div>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+    var versions_json_url = 'https://mdacli.mdanalysis.org//versions.json'
+</script>
+
+<div class="rst-versions" data-toggle="rst-versions" role="note"
+     aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book"></span>
+        0.1.35.dev3+g99e34787e
+      <span class="fa fa-caret-down"></span>
+    </span>
+
+    <div class="rst-other-versions">
+        <dl id="versionselector">
+            <dt>Other Versions</dt>
+        </dl>
+
+    </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

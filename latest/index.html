@@ -1,0 +1,276 @@
+
+
+
+
+
+  
+
+
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.1/css/academicons.min.css" integrity="sha512-b1ASx0WHgVFL5ZQhTgiPWX+68KjS38Jk87jg7pe+qC7q9YkEtFq0z7xCglv7qGIs/68d3mAp+StfC8WKC5SSAg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="shortcut icon" href="_static/mdanalysis-logo.ico">
+</head>
+
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MDAnalysis command line interface &mdash; mdacli 0.1.35.dev3+g99e34787e documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=34bb78ad" />
+      <link rel="stylesheet" type="text/css" href="_static/site.css" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=27e8b3b8" />
+
+  
+    <link rel="shortcut icon" href="_static/mdanalysis-logo.ico"/>
+    <link rel="canonical" href="https://mdacli.mdanalysis.org/index.html" />
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=e28934f6"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/js/versions.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within mdacli 0.1.35.dev3+g99e34787e documentation"
+          href="_static/opensearch.xml"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installation" href="installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+
+  
+
+
+
+
+<a href="#">
+  
+    <img src="_static/mdacli-logo.png" class="logo" alt="Logo"/>
+</a>
+
+
+  
+  
+  
+    <div class="version">
+      0.1.35.dev3+g99e34787e
+    </div>
+  
+
+
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        </div>
+<div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+    
+        <ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="philosophy.html">Philosophy and approach</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tab-completion.html">Tab-Completion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API library documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
+</ul>
+
+</div>
+
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">mdacli</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">MDAnalysis command line interface</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="mdanalysis-command-line-interface">
+<h1>MDAnalysis command line interface<a class="headerlink" href="#mdanalysis-command-line-interface" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://github.com/MDAnalysis/mdacli/actions?query=branch%3Amain"><img alt="GitHub Actions Tests Job Status" src="https://github.com/MDAnalysis/mdacli/workflows/Tests/badge.svg" /></a> <a class="reference external" href="https://codecov.io/gh/MDAnalysis/mdacli"><img alt="Codecov mdacli" src="https://codecov.io/gh/MDAnalysis/mdacli/branch/main/graph/badge.svg?token=ets2mZ6xJD" /></a> <a class="reference external" href="https://mdacli.mdanalysis.org"><img alt="Documentation of stable released version" src="https://img.shields.io/badge/📚_Documentation-stable-success" /></a> <a class="reference external" href="https://mdacli.mdanalysis.org/latest"><img alt="Documentation of latest unreleased version" src="https://img.shields.io/badge/📒_Documentation-latest-yellow.svg" /></a> <a class="reference external" href="https://www.mdanalysis.org`"><img alt="Powered by MDAnalysis" src="https://img.shields.io/badge/powered%20by-MDAnalysis-orange.svg?logoWidth=16&amp;logo=data:image/x-icon;base64,AAABAAEAEBAAAAEAIAAoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJD+XwCY/fEAkf3uAJf97wGT/a+HfHaoiIWE7n9/f+6Hh4fvgICAjwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACT/yYAlP//AJ///wCg//8JjvOchXly1oaGhv+Ghob/j4+P/39/f3IAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJH8aQCY/8wAkv2kfY+elJ6al/yVlZX7iIiI8H9/f7h/f38UAAAAAAAAAAAAAAAAAAAAAAAAAAB/f38egYF/noqAebF8gYaagnx3oFpUUtZpaWr/WFhY8zo6OmT///8BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgICAn46Ojv+Hh4b/jouJ/4iGhfcAAADnAAAA/wAAAP8AAADIAAAAAwCj/zIAnf2VAJD/PAAAAAAAAAAAAAAAAICAgNGHh4f/gICA/4SEhP+Xl5f/AwMD/wAAAP8AAAD/AAAA/wAAAB8Aov9/ALr//wCS/Z0AAAAAAAAAAAAAAACBgYGOjo6O/4mJif+Pj4//iYmJ/wAAAOAAAAD+AAAA/wAAAP8AAABhAP7+FgCi/38Axf4fAAAAAAAAAAAAAAAAiIiID4GBgYKCgoKogoB+fYSEgZhgYGDZXl5e/m9vb/9ISEjpEBAQxw8AAFQAAAAAAAAANQAAADcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAjo6Mb5iYmP+cnJz/jY2N95CQkO4pKSn/AAAA7gAAAP0AAAD7AAAAhgAAAAEAAAAAAAAAAACL/gsAkv2uAJX/QQAAAAB9fX3egoKC/4CAgP+NjY3/c3Nz+wAAAP8AAAD/AAAA/wAAAPUAAAAcAAAAAAAAAAAAnP4NAJL9rgCR/0YAAAAAfX19w4ODg/98fHz/i4uL/4qKivwAAAD/AAAA/wAAAP8AAAD1AAAAGwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALGxsVyqqqr/mpqa/6mpqf9KSUn/AAAA5QAAAPkAAAD5AAAAhQAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADkUFBSuZ2dn/3V1df8uLi7bAAAATgBGfyQAAAA2AAAAMwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB0AAADoAAAA/wAAAP8AAAD/AAAAWgC3/2AAnv3eAJ/+dgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA9AAAA/wAAAP8AAAD/AAAA/wAKDzEAnP3WAKn//wCS/OgAf/8MAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIQAAANwAAADtAAAA7QAAAMAAABUMAJn9gwCe/e0Aj/2LAP//AQAAAAAAAAAA" /></a></p>
+<p><code class="docutils literal notranslate"><span class="pre">mdacli</span></code> is a simple command line interface (CLI) to the analysis classes of <a class="reference external" href="https://www.mdanalysis.org">MDAnalysis</a>
+using <a class="reference external" href="https://docs.python.org/3/library/argparse.html">argparse</a>. <a class="reference external" href="https://github.com/MDAnalysis/mdacli/blob/main/docs/CONTRIBUTING.rst">Contributions are welcome</a>!</p>
+<p>To install <code class="docutils literal notranslate"><span class="pre">mdacli</span></code> refer to the <a class="reference external" href="https://github.com/MDAnalysis/mdacli/blob/main/docs/src/installation.rst">INSTALL file</a>.</p>
+<p>Run <code class="docutils literal notranslate"><span class="pre">mdacli</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mda</span> <span class="o">-</span><span class="n">h</span>
+</pre></div>
+</div>
+<p>For a help and an overview of the supported modules. A help
+message for each module is available using:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mda</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span> <span class="o">-</span><span class="n">h</span>
+</pre></div>
+</div>
+<section id="available-modules">
+<h2>Available modules<a class="headerlink" href="#available-modules" title="Link to this heading"></a></h2>
+<p>Currently the following analysis modules are available</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 66.7%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Module Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>AlignTraj</p></td>
+<td><p>RMS-align trajectory to a reference structure using a selection.</p></td>
+</tr>
+<tr class="row-odd"><td><p>AverageStructure</p></td>
+<td><p>RMS-align trajectory to a reference structure using a selection,
+and calculate the average coordinates of the trajectory.</p></td>
+</tr>
+<tr class="row-even"><td><p>Contacts</p></td>
+<td><p>Calculate contacts based observables.</p></td>
+</tr>
+<tr class="row-odd"><td><p>DensityAnalysis</p></td>
+<td><p>Volumetric density analysis.</p></td>
+</tr>
+<tr class="row-even"><td><p>DistanceMatrix</p></td>
+<td><p>Calculate the pairwise distance between each frame in a trajectory</p></td>
+</tr>
+<tr class="row-odd"><td><p>Dihedral</p></td>
+<td><p>Calculate dihedral angles for specified atomgroups.</p></td>
+</tr>
+<tr class="row-even"><td><p>Janin</p></td>
+<td><p>Calculate χ_1 and χ_2 dihedral angles of selected group</p></td>
+</tr>
+<tr class="row-odd"><td><p>Ramachandran</p></td>
+<td><p>Calculate ϕ and ψ dihedral angles of selected group</p></td>
+</tr>
+<tr class="row-even"><td><p>DielectricConstant</p></td>
+<td><p>Computes the average dipole moment.</p></td>
+</tr>
+<tr class="row-odd"><td><p>GNMAnalysis</p></td>
+<td><p>Basic tool for GNM analysis.</p></td>
+</tr>
+<tr class="row-even"><td><p>closeContactGNMAnalysis</p></td>
+<td><p>GNMAnalysis only using close contacts.</p></td>
+</tr>
+<tr class="row-odd"><td><p>HELANAL</p></td>
+<td><p>Perform HELANAL helix analysis on your trajectory.</p></td>
+</tr>
+<tr class="row-even"><td><p>HoleAnalysis</p></td>
+<td><p>Run <code class="docutils literal notranslate"><span class="pre">hole</span></code> program on a trajectory.</p></td>
+</tr>
+<tr class="row-odd"><td><p>LinearDensity</p></td>
+<td><p>Linear density profile</p></td>
+</tr>
+<tr class="row-even"><td><p>EinsteinMSD</p></td>
+<td><p>Class to calculate Mean Squared Displacement by the Einstein relation.</p></td>
+</tr>
+<tr class="row-odd"><td><p>PCA</p></td>
+<td><p>Principal component analysis on an MD trajectory.</p></td>
+</tr>
+<tr class="row-even"><td><p>InterRDF</p></td>
+<td><p>Intermolecular pair distribution function</p></td>
+</tr>
+<tr class="row-odd"><td><p>RMSD</p></td>
+<td><p>Class to perform RMSD analysis on a trajectory.</p></td>
+</tr>
+<tr class="row-even"><td><p>RMSF</p></td>
+<td><p>Calculate RMSF of given atoms across a trajectory.</p></td>
+</tr>
+</tbody>
+</table>
+<p>More information about each module is available through the help
+page or at the <a class="reference external" href="https://docs.mdanalysis.org/stable/documentation_pages/analysis_modules.html">MDAnalysis documentation</a>.</p>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="installation.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Philip Loche, Joao MC Teixeira and Oliver Beckstein.
+      <span class="lastupdated">Last updated on Jan 23, 2026.
+      </span></p>
+  </div>
+
+  
+
+
+
+<div class="footer"><p>Please see
+    our <a href="https://www.mdanalysis.org/pages/privacy/">Privacy Policy</a>
+    to learn how <a href="https://www.mdanalysis.org">MDAnalysis</a> collects data.</p>
+    <script data-goatcounter="https://mdanalysis.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</div>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+    var versions_json_url = 'https://mdacli.mdanalysis.org//versions.json'
+</script>
+
+<div class="rst-versions" data-toggle="rst-versions" role="note"
+     aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book"></span>
+        0.1.35.dev3+g99e34787e
+      <span class="fa fa-caret-down"></span>
+    </span>
+
+    <div class="rst-other-versions">
+        <dl id="versionselector">
+            <dt>Other Versions</dt>
+        </dl>
+
+    </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

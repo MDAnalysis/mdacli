@@ -1,0 +1,394 @@
+
+
+
+
+
+  
+
+
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.1/css/academicons.min.css" integrity="sha512-b1ASx0WHgVFL5ZQhTgiPWX+68KjS38Jk87jg7pe+qC7q9YkEtFq0z7xCglv7qGIs/68d3mAp+StfC8WKC5SSAg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="shortcut icon" href="_static/mdanalysis-logo.ico">
+</head>
+
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contributing &mdash; mdacli 0.1.35.dev3+g99e34787e documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=34bb78ad" />
+      <link rel="stylesheet" type="text/css" href="_static/site.css" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=27e8b3b8" />
+
+  
+    <link rel="shortcut icon" href="_static/mdanalysis-logo.ico"/>
+    <link rel="canonical" href="https://mdacli.mdanalysis.org/contributing.html" />
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=e28934f6"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/js/versions.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within mdacli 0.1.35.dev3+g99e34787e documentation"
+          href="_static/opensearch.xml"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API library documentation" href="api.html" />
+    <link rel="prev" title="Tab-Completion" href="tab-completion.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+
+  
+
+
+
+
+<a href="index.html">
+  
+    <img src="_static/mdacli-logo.png" class="logo" alt="Logo"/>
+</a>
+
+
+  
+  
+  
+    <div class="version">
+      0.1.35.dev3+g99e34787e
+    </div>
+  
+
+
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        </div>
+<div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+    
+        <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="philosophy.html">Philosophy and approach</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tab-completion.html">Tab-Completion</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#fork-this-repository">Fork this repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#clone-the-main-project-to-your-computer">Clone the main project to your computer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#add-your-fork-as-remote">Add your fork as remote</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#create-a-new-branch-and-start-developing">Create a new branch and start developing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pull-request-your-changes">Pull Request your changes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#install-for-developers">Install for developers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-tests-with-tox">Running tests with tox</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#update-changelog">Update CHANGELOG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pull-request">Pull Request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-perform-a-release">How to Perform a Release</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API library documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
+</ul>
+
+</div>
+
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">mdacli</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Contributing</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/contributing.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="contributing">
+<h1>Contributing<a class="headerlink" href="#contributing" title="Link to this heading"></a></h1>
+<p>Contributing to this project is easy because we have set up a powerful
+CI environment. :relaxed: This document will guide you step-by-step.</p>
+<p>Contributions are always welcome. Not only in the form of
+code contributions via pull requests but also issues, especially
+since the project is in an early development phase.</p>
+<p>The way to interact with us is to <cite>fork</cite> the <cite>mdacli</cite> repository to your
+account, create a development branch in your fork, and finally pull
+request your changes to the main repository for review. Next, we present
+you guidelines for this process. If you are a <cite>git</cite> pro you may wish to
+apply your own <cite>git</cite> method; if not, you are safe following ours.</p>
+<section id="fork-this-repository">
+<h2>Fork this repository<a class="headerlink" href="#fork-this-repository" title="Link to this heading"></a></h2>
+<p><a class="reference external" href="https://github.com/MDAnalysis/mdacli/network/members">Fork this repository before contributing</a>.</p>
+</section>
+<section id="clone-the-main-project-to-your-computer">
+<h2>Clone the main project to your computer<a class="headerlink" href="#clone-the-main-project-to-your-computer" title="Link to this heading"></a></h2>
+<p>Next, clone the main repository to your local machine.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">MDAnalysis</span><span class="o">/</span><span class="n">mdacli</span><span class="o">.</span><span class="n">git</span>
+<span class="n">cd</span> <span class="n">mdacli</span>
+</pre></div>
+</div>
+</section>
+<section id="add-your-fork-as-remote">
+<h2>Add your fork as remote<a class="headerlink" href="#add-your-fork-as-remote" title="Link to this heading"></a></h2>
+<p>You can’t create a branch in the main repository :no_entry_sign:, you
+need to make it in your fork :smile: , first you need to add your fork
+as a <cite>remote</cite> in the cloned repository (following the previous commands)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">checkout</span> <span class="n">main</span>
+<span class="n">git</span> <span class="n">remote</span> <span class="n">add</span> <span class="n">myfork</span> <span class="n">git</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/&lt;</span><span class="n">your</span><span class="o">-</span><span class="n">username</span><span class="o">&gt;/</span><span class="n">mdacli</span><span class="o">.</span><span class="n">git</span>
+<span class="n">git</span> <span class="n">fetch</span> <span class="n">myfork</span>
+</pre></div>
+</div>
+</section>
+<section id="create-a-new-branch-and-start-developing">
+<h2>Create a new branch and start developing<a class="headerlink" href="#create-a-new-branch-and-start-developing" title="Link to this heading"></a></h2>
+<p>Now create a new branch and start developing:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">checkout</span> <span class="o">-</span><span class="n">b</span> <span class="o">&lt;</span><span class="n">my</span><span class="o">-</span><span class="n">new</span><span class="o">-</span><span class="n">branch</span><span class="o">-</span><span class="k">with</span><span class="o">-</span><span class="n">a</span><span class="o">-</span><span class="n">nice</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>Develop your code. You should commit your changes to your fork in
+encapsulated steps. That is, when you finish doing some task, you should
+commit it.</p>
+<blockquote>
+<div><p>git add &lt;the new files&gt;
+git commit -m “&lt;your good commit message&gt;”
+git push myfork &lt;my-new-branch-with-a-nice-name&gt;</p>
+</div></blockquote>
+<p>You will see that your changes are now in your fork and branch.</p>
+</section>
+<section id="pull-request-your-changes">
+<h2>Pull Request your changes<a class="headerlink" href="#pull-request-your-changes" title="Link to this heading"></a></h2>
+<p>Once you finish your changes create a Pull Request to the main <cite>mdacli</cite>
+repository so we can review your contribution, give you feedback, and
+hopefully accept it :relaxed:. However, before PR, continue reading this
+guideline!</p>
+</section>
+<section id="install-for-developers">
+<h2>Install for developers<a class="headerlink" href="#install-for-developers" title="Link to this heading"></a></h2>
+<p>If you are contributing to <code class="docutils literal notranslate"><span class="pre">madcli</span></code>, most likely you are already a
+contributor of <code class="docutils literal notranslate"><span class="pre">MDAnalysis</span> <span class="pre">v2</span></code>. If you already have <cite>MDAnalysis v2</cite>
+installed, install <cite>mdacli</cite> in the same Python environment. For that,
+inside <cite>mdacli</cite>’s repository:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">develop</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">deps</span>
+</pre></div>
+</div>
+<p>It is very important to use the <cite>develop</cite> flag, so that the changes you
+make in the code are always reflected (real time) in your installation.
+The <cite>–no-deps</cite> avoids installing <cite>MDAnalysis</cite> twice.</p>
+<p>If you don’t have <cite>MDAnalysis v2</cite> installed how did you run <cite>mdacli</cite> in
+the first place? Please refer to <a class="reference internal" href="installation.html#installation"><span class="std std-ref">Installation</span></a> before continuing.</p>
+<p>The whole <cite>mdacli</cite> Continuous Integration pipeline is based on <cite>Tox_</cite>.
+So you need to install <cite>tox</cite> to be our friend :smile_cat:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">tox</span> <span class="n">tox</span><span class="o">-</span><span class="n">conda</span>
+<span class="c1"># or</span>
+<span class="n">conda</span> <span class="n">install</span> <span class="n">tox</span> <span class="n">tox</span><span class="o">-</span><span class="n">conda</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span>
+</pre></div>
+</div>
+</section>
+<section id="running-tests-with-tox">
+<h2>Running tests with tox<a class="headerlink" href="#running-tests-with-tox" title="Link to this heading"></a></h2>
+<p>Before creating a Pull Request from your branch, certify that all the
+tests pass correctly by running:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tox</span>
+</pre></div>
+</div>
+<p>These are exactly the same tests that will be performed online in our
+Github Actions workflows. Possibly, some tests referring to specific
+Python versions may fail because the interpreter is not installed;
+ignored these tests.</p>
+<p>Also, you can run individual environments if you wish to test only
+specific functionalities, for example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tox</span> <span class="o">-</span><span class="n">e</span> <span class="n">lint</span>  <span class="c1"># code style</span>
+<span class="n">tox</span> <span class="o">-</span><span class="n">e</span> <span class="n">build</span>  <span class="c1"># packaging</span>
+<span class="n">tox</span> <span class="o">-</span><span class="n">e</span> <span class="n">docs</span>  <span class="c1"># only builds the documentation</span>
+<span class="n">tox</span> <span class="o">-</span><span class="n">e</span> <span class="n">test</span>  <span class="c1"># testing</span>
+</pre></div>
+</div>
+</section>
+<section id="update-changelog">
+<h2>Update CHANGELOG<a class="headerlink" href="#update-changelog" title="Link to this heading"></a></h2>
+<p>Update the changelog file under <code class="code docutils literal notranslate"><span class="pre">docs/CHANGELOG.rst</span></code> with an
+explanatory bullet list of your contribution bellow the <cite>CHANGELOG</cite>
+title. Add that list right after the main title and before the last
+version subtitle:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Changelog</span>
+<span class="o">=========</span>
+
+<span class="o">*</span> <span class="n">here</span> <span class="n">goes</span> <span class="n">my</span> <span class="n">new</span> <span class="n">additions</span>
+<span class="o">*</span> <span class="n">explain</span> <span class="n">them</span> <span class="n">shortly</span> <span class="ow">and</span> <span class="n">well</span>
+
+<span class="n">vX</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">X</span> <span class="p">(</span><span class="mi">1900</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span><span class="p">)</span>
+<span class="o">-------------------</span>
+</pre></div>
+</div>
+<p>Also add your name to the authors list at <code class="code docutils literal notranslate"><span class="pre">docs/AUTHORS.rst</span></code>.</p>
+</section>
+<section id="pull-request">
+<h2>Pull Request<a class="headerlink" href="#pull-request" title="Link to this heading"></a></h2>
+<p>Once you are finished, you can Pull Request you additions to the main
+repository and engage with the community. Please read the <cite>docs/PULLREQUEST.rst</cite>
+guidelines first, you will see them when you open a PR.</p>
+<p><strong>Before submitting a Pull Request, verify your development branch
+passes all tests as</strong> <a class="reference internal" href="#running-tests-with-tox"><span class="std std-ref">described</span></a> <strong>. If
+you are developing new code you should also implement new test cases.</strong></p>
+<p>Also, before PR, update your development branch to the upstream main
+branch to certify there are no incompatibilities:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">checkout</span> <span class="n">main</span>
+<span class="n">git</span> <span class="n">pull</span>
+<span class="n">git</span> <span class="n">checkout</span> <span class="o">&lt;</span><span class="n">my</span><span class="o">-</span><span class="n">new</span><span class="o">-</span><span class="n">branch</span><span class="o">-</span><span class="k">with</span><span class="o">-</span><span class="n">a</span><span class="o">-</span><span class="n">nice</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span>
+<span class="n">git</span> <span class="n">merge</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">ff</span> <span class="n">main</span>
+</pre></div>
+</div>
+<p>Correct any conflicts that may appear. It there are no conflicts, you
+are good to go (Pull Request).</p>
+</section>
+<section id="how-to-perform-a-release">
+<h2>How to Perform a Release<a class="headerlink" href="#how-to-perform-a-release" title="Link to this heading"></a></h2>
+<ol class="arabic">
+<li><p><strong>Prepare a Release Pull Request</strong></p>
+<ul class="simple">
+<li><p>Based on the main branch create branch <code class="docutils literal notranslate"><span class="pre">release-0.1.35</span></code> and a PR.</p></li>
+<li><p>Ensure that all <a class="reference external" href="https://github.com/MDAnalysis/mdacli/actions">CI tests</a> pass.</p></li>
+<li><p>Optionally, run the tests locally to double-check.</p></li>
+</ul>
+</li>
+<li><p><strong>Update the Changelog</strong></p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Edit the changelog located in <code class="docutils literal notranslate"><span class="pre">docs/CHANGELOG.rst</span></code>:</dt><dd><ul>
+<li><p>Add a new section for the new version, summarizing the changes based on the
+PRs merged since the last release.</p></li>
+<li><p>Leave a placeholder section titled <em>Unreleased</em> for future updates.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</li>
+<li><p><strong>Merge the PR and Create a Tag</strong></p>
+<ul>
+<li><p>Merge the release PR.</p></li>
+<li><p>Update the <code class="docutils literal notranslate"><span class="pre">main</span></code> branch and check that the latest commit is the release PR with
+<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">log</span></code></p></li>
+<li><p>Create a tag on directly the <code class="docutils literal notranslate"><span class="pre">main</span></code> branch.</p></li>
+<li><p>Push the tag to GitHub. For example for a release of version <code class="docutils literal notranslate"><span class="pre">2025.3</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>main
+git<span class="w"> </span>pull
+git<span class="w"> </span>tag<span class="w"> </span>-a<span class="w"> </span>v0.1.35<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Release v0.1.35&quot;</span>
+git<span class="w"> </span>push<span class="w"> </span>--tags
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+<li><p><strong>Finalize the GitHub Release</strong></p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Once the PR is merged, the CI will automatically:</dt><dd><ul>
+<li><p>Publish the package to PyPI.</p></li>
+<li><p>Create a draft release on GitHub.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p>Update the GitHub release notes by pasting the changelog for the version.</p></li>
+</ul>
+</li>
+<li><p><strong>Merge Conda Recipe Changes</strong></p>
+<ul class="simple">
+<li><p>May resolve and then merge an automatically created PR on the <a class="reference external" href="https://github.com/conda-forge/mdacli-feedstock">conda recipe</a>.</p></li>
+<li><p>Once thus PR is merged and the new version will be published automatically on the
+<a class="reference external" href="https://anaconda.org/conda-forge/mdacli">conda-forge</a> channel.</p></li>
+</ul>
+</li>
+</ol>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tab-completion.html" class="btn btn-neutral float-left" title="Tab-Completion" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="api.html" class="btn btn-neutral float-right" title="API library documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Philip Loche, Joao MC Teixeira and Oliver Beckstein.
+      <span class="lastupdated">Last updated on Jan 23, 2026.
+      </span></p>
+  </div>
+
+  
+
+
+
+<div class="footer"><p>Please see
+    our <a href="https://www.mdanalysis.org/pages/privacy/">Privacy Policy</a>
+    to learn how <a href="https://www.mdanalysis.org">MDAnalysis</a> collects data.</p>
+    <script data-goatcounter="https://mdanalysis.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</div>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+    var versions_json_url = 'https://mdacli.mdanalysis.org//versions.json'
+</script>
+
+<div class="rst-versions" data-toggle="rst-versions" role="note"
+     aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book"></span>
+        0.1.35.dev3+g99e34787e
+      <span class="fa fa-caret-down"></span>
+    </span>
+
+    <div class="rst-other-versions">
+        <dl id="versionselector">
+            <dt>Other Versions</dt>
+        </dl>
+
+    </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

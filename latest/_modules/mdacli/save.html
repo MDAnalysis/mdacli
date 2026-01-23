@@ -1,0 +1,606 @@
+
+
+
+
+
+  
+
+
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.1/css/academicons.min.css" integrity="sha512-b1ASx0WHgVFL5ZQhTgiPWX+68KjS38Jk87jg7pe+qC7q9YkEtFq0z7xCglv7qGIs/68d3mAp+StfC8WKC5SSAg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="shortcut icon" href="../../../../_static/mdanalysis-logo.ico">
+</head>
+
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mdacli.save &mdash; mdacli 0.1.35.dev3+g99e34787e documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=34bb78ad" />
+      <link rel="stylesheet" type="text/css" href="../../_static/site.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=27e8b3b8" />
+
+  
+    <link rel="shortcut icon" href="../../_static/mdanalysis-logo.ico"/>
+    <link rel="canonical" href="https://mdacli.mdanalysis.org/_modules/mdacli/save.html" />
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=e28934f6"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/js/versions.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within mdacli 0.1.35.dev3+g99e34787e documentation"
+          href="../../_static/opensearch.xml"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+
+  
+
+
+
+
+<a href="../../index.html">
+  
+    <img src="../../_static/mdacli-logo.png" class="logo" alt="Logo"/>
+</a>
+
+
+  
+  
+  
+    <div class="version">
+      0.1.35.dev3+g99e34787e
+    </div>
+  
+
+
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        </div>
+<div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+    
+        <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../philosophy.html">Philosophy and approach</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tab-completion.html">Tab-Completion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API library documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../authors.html">Authors</a></li>
+</ul>
+
+</div>
+
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">mdacli</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">mdacli.save</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for mdacli.save</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+
+<span class="c1"># Copyright (c) 2021 Authors and contributors</span>
+<span class="c1">#</span>
+<span class="c1"># Released under the GNU Public Licence, v2 or any higher version</span>
+<span class="c1"># SPDX-License-Identifier: GPL-2.0-or-later</span>
+<span class="sd">&quot;&quot;&quot;Manage data saving.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">zipfile</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">MDAnalysis.analysis.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Results</span>
+
+
+<div class="viewcode-block" id="save">
+<a class="viewcode-back" href="../../api/save.html#mdacli.save.save">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">fprefix</span><span class="o">=</span><span class="s2">&quot;mdacli_results&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Save the attributes of a results instance to disk.</span>
+
+<span class="sd">    1D, 2D and 3D numpy arrays are saved to csv files. 1D arrays of the</span>
+<span class="sd">    same length are vertically stacked to create a table. 2D arrays are</span>
+<span class="sd">    saved directly. 3D arrays are split into 2D arrays along the</span>
+<span class="sd">    shortest dimension and one CSV is saved for each 2D array created,</span>
+<span class="sd">    and resulting CSVs are stored together in a ZIP file. Note: higher</span>
+<span class="sd">    dimensional arrays are ignored.</span>
+
+<span class="sd">    We try to save everything else in a JSON file. Non-serializable</span>
+<span class="sd">    types are ignored.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fprefix : str</span>
+<span class="sd">        prefix for all files saved</span>
+
+<span class="sd">    results : `~MDAnalysis.analysis.base.Results`</span>
+<span class="sd">        A Results instance from which the stored data is taken.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">save_1D_arrays</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">fprefix</span><span class="o">=</span><span class="n">fprefix</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">save_2D_arrays</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">fprefix</span><span class="o">=</span><span class="n">fprefix</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">save_3D_arrays</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">fprefix</span><span class="o">=</span><span class="n">fprefix</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">save_higher_dim_arrays</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">fprefix</span><span class="o">=</span><span class="n">fprefix</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">min_ndim</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+    <span class="n">save_json_serializables</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fname</span><span class="o">=</span><span class="n">fprefix</span><span class="p">)</span>
+    <span class="n">save_Results_object</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">fprefix</span><span class="o">=</span><span class="n">fprefix</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span></div>
+
+
+
+<div class="viewcode-block" id="save_1D_arrays">
+<a class="viewcode-back" href="../../api/save.html#mdacli.save.save_1D_arrays">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">save_1D_arrays</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">fprefix</span><span class="o">=</span><span class="s2">&quot;1darray&quot;</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Save 1D arrays from results.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    results : dict-like</span>
+<span class="sd">        Dictionary containing results.</span>
+
+<span class="sd">    remove : bool</span>
+<span class="sd">        If true remove keys mapping to 1D numpy arrays.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">list_1D</span><span class="p">,</span> <span class="n">list_1D_labels</span> <span class="o">=</span> <span class="n">get_1D_arrays</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">list_1D</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="n">out_lists</span><span class="p">,</span> <span class="n">out_lables</span> <span class="o">=</span> <span class="n">stack_1d_arrays_list</span><span class="p">(</span><span class="n">list_1D</span><span class="p">,</span> <span class="n">list_1D_labels</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">out_list</span><span class="p">,</span> <span class="n">out_label</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">out_lists</span><span class="p">,</span> <span class="n">out_lables</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="n">out_label</span> <span class="o">=</span> <span class="n">out_label</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+
+        <span class="c1"># [3:] to align lables with entries</span>
+        <span class="n">savetxt_w_command</span><span class="p">(</span>
+            <span class="n">fname</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fprefix</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="s1">&#39;_&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_label</span><span class="p">)</span><span class="si">}</span><span class="s2">.csv&quot;</span><span class="p">,</span>
+            <span class="n">X</span><span class="o">=</span><span class="n">out_list</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+            <span class="n">header</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="si">:</span><span class="s2">&gt;25</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">out_label</span><span class="p">])[</span><span class="mi">3</span><span class="p">:],</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">return_with_remove</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">list_1D_labels</span><span class="p">,</span> <span class="n">remove</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_1D_arrays">
+<a class="viewcode-back" href="../../api/save.html#mdacli.save.get_1D_arrays">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_1D_arrays</span><span class="p">(</span><span class="n">results</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get items from dict which correspond to np.ndarrays one dim.&quot;&quot;&quot;</span>
+    <span class="n">list_1D</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">list_1D_labels</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">is_1d_array</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+            <span class="n">list_1D</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="n">list_1D_labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">list_1D</span><span class="p">,</span> <span class="n">list_1D_labels</span></div>
+
+
+
+<div class="viewcode-block" id="stack_1d_arrays_list">
+<a class="viewcode-back" href="../../api/save.html#mdacli.save.stack_1d_arrays_list">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">stack_1d_arrays_list</span><span class="p">(</span><span class="n">list_1D</span><span class="p">,</span> <span class="n">extra_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Stack a list of 1D numpy arrays of the same length vertically together.</span>
+
+<span class="sd">    The result is a list containing 2D arrays where each array got the same</span>
+<span class="sd">    number of rows.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    list_1d : list</span>
+<span class="sd">        list of 1 dimensional numpy arrays</span>
+
+<span class="sd">    extra_list : list</span>
+<span class="sd">        additional list of numpy arrays on which the</span>
+<span class="sd">        operations are executed as for ``list_1d``</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    out_list : list</span>
+<span class="sd">        list of stacked 2D numpy arrays organized by their length</span>
+<span class="sd">    out_extra : list</span>
+<span class="sd">        list of stacked 2D numpy applied applied to the same operations</span>
+<span class="sd">        as out_list</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Sort for lengths</span>
+    <span class="n">lengths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">list_1D</span><span class="p">])</span>
+    <span class="n">sorted_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">lengths</span><span class="p">)</span>
+
+    <span class="c1"># Sort lists according to the lengths of the items</span>
+    <span class="n">list_1D_sorted</span> <span class="o">=</span> <span class="p">[</span><span class="n">list_1D</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">sorted_idx</span><span class="p">]</span>
+
+    <span class="c1"># Count the number of items for each length</span>
+    <span class="n">counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">lengths</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">new_length_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([[</span><span class="mi">0</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">counts</span><span class="p">)])</span>
+
+    <span class="n">out_lists</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># Concentanate lists of the same lenngth</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_length_idx</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">out_lists</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">list_1D_sorted</span><span class="p">[</span><span class="n">new_length_idx</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">:</span> <span class="n">new_length_idx</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]])</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">extra_list</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">extra_list_sorted</span> <span class="o">=</span> <span class="p">[</span><span class="n">extra_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">sorted_idx</span><span class="p">]</span>
+        <span class="n">out_extra</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_length_idx</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">out_extra</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">extra_list_sorted</span><span class="p">[</span><span class="n">new_length_idx</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">:</span> <span class="n">new_length_idx</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]])</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">out_lists</span><span class="p">,</span> <span class="n">out_extra</span>
+    <span class="k">return</span> <span class="n">out_lists</span></div>
+
+
+
+<div class="viewcode-block" id="save_2D_arrays">
+<a class="viewcode-back" href="../../api/save.html#mdacli.save.save_2D_arrays">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">save_2D_arrays</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">fprefix</span><span class="o">=</span><span class="s2">&quot;2Darr&quot;</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Save items of 2D array.&quot;&quot;&quot;</span>
+    <span class="n">keys</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">try_to_squeeze_me</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">is_2d_array</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+            <span class="n">savetxt_w_command</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fprefix</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">.csv&quot;</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="n">value</span><span class="p">)</span>
+            <span class="n">keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">return_with_remove</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">keys</span><span class="p">,</span> <span class="n">remove</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="save_3D_arrays">
+<a class="viewcode-back" href="../../api/save.html#mdacli.save.save_3D_arrays">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">save_3D_arrays</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">fprefix</span><span class="o">=</span><span class="s2">&quot;3Darr&quot;</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Save items of 2D array.&quot;&quot;&quot;</span>
+    <span class="n">keys</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">try_to_squeeze_me</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">is_3d_array</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+            <span class="n">save_3D_array_to_2D_csv</span><span class="p">(</span>
+                <span class="n">value</span><span class="p">,</span>
+                <span class="n">arr_name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fprefix</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="n">zipit</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">return_with_remove</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">keys</span><span class="p">,</span> <span class="n">remove</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="save_3D_array_to_2D_csv">
+<a class="viewcode-back" href="../../api/save.html#mdacli.save.save_3D_array_to_2D_csv">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">save_3D_array_to_2D_csv</span><span class="p">(</span>
+    <span class="n">item</span><span class="p">,</span>
+    <span class="n">arr_name</span><span class="o">=</span><span class="s2">&quot;arr&quot;</span><span class="p">,</span>
+    <span class="n">zipit</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Save 3D array to 2D CSVs.</span>
+
+<span class="sd">    Has option to store all in a ZIP file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">min_dim</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+    <span class="n">files_to_zip</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Split array along the dimension with smallest number</span>
+    <span class="c1"># of entries</span>
+    <span class="n">splitted_item</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">split</span><span class="p">(</span>
+        <span class="n">item</span><span class="p">,</span>
+        <span class="n">item</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">min_dim</span><span class="p">],</span>
+        <span class="n">axis</span><span class="o">=</span><span class="n">min_dim</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">save_to_folder</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">zipit</span>
+    <span class="n">folder</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">save_to_folder</span><span class="p">:</span>
+        <span class="n">folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">arr_name</span><span class="p">)</span>
+        <span class="n">folder</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">arr</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">splitted_item</span><span class="p">):</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">arr_name</span><span class="si">}</span><span class="s2">_dim_</span><span class="si">{</span><span class="n">min_dim</span><span class="si">}</span><span class="s2">_idx_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">.csv&quot;</span>
+        <span class="n">foutname</span> <span class="o">=</span> <span class="n">folder</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span> <span class="k">if</span> <span class="n">folder</span> <span class="k">else</span> <span class="n">fname</span>
+        <span class="n">savetxt_w_command</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="n">foutname</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">arr</span><span class="p">))</span>
+        <span class="n">files_to_zip</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">zipit</span><span class="p">:</span>
+        <span class="n">save_files_to_zip</span><span class="p">(</span><span class="n">files_to_zip</span><span class="p">,</span> <span class="n">zipname</span><span class="o">=</span><span class="n">arr_name</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">return</span></div>
+
+
+
+<div class="viewcode-block" id="save_higher_dim_arrays">
+<a class="viewcode-back" href="../../api/save.html#mdacli.save.save_higher_dim_arrays">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">save_higher_dim_arrays</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">fprefix</span><span class="o">=</span><span class="s2">&quot;XDarr&quot;</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">min_ndim</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Save items of multidimensional arrays to CSV.&quot;&quot;&quot;</span>
+    <span class="n">keys</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">try_to_squeeze_me</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">is_higher_dimension_array</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">min_ndim</span><span class="p">):</span>
+            <span class="n">save_result_array</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">fprefix</span><span class="o">=</span><span class="n">fprefix</span><span class="p">,</span> <span class="n">arr_name</span><span class="o">=</span><span class="n">key</span><span class="p">)</span>
+            <span class="n">keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">return_with_remove</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">keys</span><span class="p">,</span> <span class="n">remove</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="save_result_array">
+<a class="viewcode-back" href="../../api/save.html#mdacli.save.save_result_array">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">save_result_array</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">fprefix</span><span class="o">=</span><span class="s2">&quot;prefix&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Save array to disk accoring to num of dimensions.&quot;&quot;&quot;</span>
+    <span class="n">item</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+
+    <span class="n">save_options</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">item</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span> <span class="n">save_1D_arrays</span><span class="p">,</span>
+        <span class="n">item</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span> <span class="n">save_2D_arrays</span><span class="p">,</span>
+        <span class="n">item</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span> <span class="n">save_3D_arrays</span><span class="p">,</span>
+        <span class="n">item</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span> <span class="n">save_higher_dim_arrays</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="n">save_options</span><span class="p">[</span><span class="kc">True</span><span class="p">](</span><span class="n">item</span><span class="p">,</span> <span class="n">fprefix</span><span class="o">=</span><span class="n">fprefix</span><span class="p">)</span>
+    <span class="k">return</span></div>
+
+
+
+<div class="viewcode-block" id="save_json_serializables">
+<a class="viewcode-back" href="../../api/save.html#mdacli.save.save_json_serializables">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">save_json_serializables</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">jsonargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Save serializable items to a JSON.&quot;&quot;&quot;</span>
+    <span class="n">json_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">is_serializable</span><span class="p">(</span><span class="n">value</span><span class="p">)}</span>
+
+    <span class="k">if</span> <span class="n">remove</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">json_dict</span><span class="p">:</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">json_dict</span><span class="p">:</span>
+        <span class="n">json_dict</span><span class="p">[</span><span class="s2">&quot;command&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_cli_input</span><span class="p">()</span>
+        <span class="n">save_to_json</span><span class="p">(</span><span class="n">json_dict</span><span class="p">,</span> <span class="o">**</span><span class="n">jsonargs</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="is_serializable">
+<a class="viewcode-back" href="../../api/save.html#mdacli.save.is_serializable">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">is_serializable</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Assert if value is json serializable.&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">OverflowError</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+
+<div class="viewcode-block" id="save_to_json">
+<a class="viewcode-back" href="../../api/save.html#mdacli.save.save_to_json">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">save_to_json</span><span class="p">(</span><span class="n">json_dict</span><span class="p">,</span> <span class="n">fname</span><span class="o">=</span><span class="s2">&quot;jdict&quot;</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Save dictionary to JSON file.&quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="n">Path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2">.json&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">json_dict</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="n">sort_keys</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="save_Results_object">
+<a class="viewcode-back" href="../../api/save.html#mdacli.save.save_Results_object">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">save_Results_object</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">fprefix</span><span class="o">=</span><span class="s2">&quot;results&quot;</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Save results if they are Results objects.&quot;&quot;&quot;</span>
+    <span class="n">keys</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Results</span><span class="p">):</span>
+            <span class="n">save</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fprefix</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+            <span class="n">keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">return_with_remove</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">keys</span><span class="p">,</span> <span class="n">remove</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="return_with_remove">
+<a class="viewcode-back" href="../../api/save.html#mdacli.save.return_with_remove">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">return_with_remove</span><span class="p">(</span><span class="n">ddict</span><span class="p">,</span> <span class="n">keys</span><span class="p">,</span> <span class="n">remove</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Serve all saving functions.</span>
+
+<span class="sd">    If remove is true,</span>
+<span class="sd">    Returns subset of keys from dict.</span>
+<span class="sd">    Removes keys subset from original dict.</span>
+
+<span class="sd">    Else, return None.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">remove</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">ddict</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">}</span>
+
+    <span class="k">return</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="save_files_to_zip">
+<a class="viewcode-back" href="../../api/save.html#mdacli.save.save_files_to_zip">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">save_files_to_zip</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">zipname</span><span class="o">=</span><span class="s2">&quot;thezip&quot;</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compress all files into a single zip archive.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    files : list-like</span>
+<span class="sd">        File names to save to the ZIP archive.</span>
+
+<span class="sd">    zipname : str</span>
+<span class="sd">        The name of the zip file without extension.</span>
+
+<span class="sd">    remove : bool, option, default True</span>
+<span class="sd">        Removes the original files.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">zipname</span><span class="si">}</span><span class="s2">.zip&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">zipF</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">file_name</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+            <span class="n">zipF</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+                <span class="n">file_name</span><span class="p">,</span>
+                <span class="n">compress_type</span><span class="o">=</span><span class="n">zipfile</span><span class="o">.</span><span class="n">ZIP_DEFLATED</span><span class="p">,</span>
+            <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">remove</span><span class="p">:</span>
+        <span class="n">remove_files</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
+
+    <span class="k">return</span></div>
+
+
+
+<div class="viewcode-block" id="is_dimension_array">
+<a class="viewcode-back" href="../../api/save.html#mdacli.save.is_dimension_array">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">is_dimension_array</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">ndim</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Assert value is array and of certain dimension.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> <span class="n">arr</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="n">ndim</span></div>
+
+
+
+<div class="viewcode-block" id="is_higher_dimension_array">
+<a class="viewcode-back" href="../../api/save.html#mdacli.save.is_higher_dimension_array">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">is_higher_dimension_array</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">ndim</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Assert value is array and of certain dimension.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> <span class="n">arr</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="n">ndim</span></div>
+
+
+
+<span class="n">is_1d_array</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">is_dimension_array</span><span class="p">,</span> <span class="n">ndim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">is_2d_array</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">is_dimension_array</span><span class="p">,</span> <span class="n">ndim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">is_3d_array</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">is_dimension_array</span><span class="p">,</span> <span class="n">ndim</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="try_to_squeeze_me">
+<a class="viewcode-back" href="../../api/save.html#mdacli.save.try_to_squeeze_me">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">try_to_squeeze_me</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Squeeze the arr if is array.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="k">else</span> <span class="n">arr</span></div>
+
+
+
+<div class="viewcode-block" id="remove_files">
+<a class="viewcode-back" href="../../api/save.html#mdacli.save.remove_files">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">remove_files</span><span class="p">(</span><span class="n">files</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove files from disk.&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+        <span class="n">Path</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="k">return</span></div>
+
+
+
+<div class="viewcode-block" id="savetxt_w_command">
+<a class="viewcode-back" href="../../api/save.html#mdacli.save.savetxt_w_command">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">savetxt_w_command</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">fsuffix</span><span class="o">=</span><span class="s2">&quot;.csv&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Save CSV data with info about execution command.</span>
+
+<span class="sd">    Adds the command line input to the header and checks for a doubled</span>
+<span class="sd">    defined filesuffix.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">header</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">get_cli_input</span><span class="p">()</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">header</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fname</span><span class="si">}{</span><span class="p">(</span><span class="ow">not</span><span class="w"> </span><span class="n">fname</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">fsuffix</span><span class="p">))</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">fsuffix</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="n">header</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%-20s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_cli_input">
+<a class="viewcode-back" href="../../api/save.html#mdacli.save.get_cli_input">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_cli_input</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a proper fomatted string of the command line input.&quot;&quot;&quot;</span>
+    <span class="n">program_name</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">name</span>
+    <span class="c1"># Add additional quotes for connected arguments.</span>
+    <span class="n">arguments</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;&quot;</span><span class="si">{</span><span class="n">arg</span><span class="si">}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">if</span> <span class="s2">&quot; &quot;</span> <span class="ow">in</span> <span class="n">arg</span> <span class="k">else</span> <span class="n">arg</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]]</span>
+
+    <span class="k">return</span> <span class="s2">&quot;Command line was: </span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">program_name</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">arguments</span><span class="p">))</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Philip Loche, Joao MC Teixeira and Oliver Beckstein.
+      <span class="lastupdated">Last updated on Jan 23, 2026.
+      </span></p>
+  </div>
+
+  
+
+
+
+<div class="footer"><p>Please see
+    our <a href="https://www.mdanalysis.org/pages/privacy/">Privacy Policy</a>
+    to learn how <a href="https://www.mdanalysis.org">MDAnalysis</a> collects data.</p>
+    <script data-goatcounter="https://mdanalysis.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</div>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+    var versions_json_url = 'https://mdacli.mdanalysis.org//versions.json'
+</script>
+
+<div class="rst-versions" data-toggle="rst-versions" role="note"
+     aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book"></span>
+        0.1.35.dev3+g99e34787e
+      <span class="fa fa-caret-down"></span>
+    </span>
+
+    <div class="rst-other-versions">
+        <dl id="versionselector">
+            <dt>Other Versions</dt>
+        </dl>
+
+    </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
