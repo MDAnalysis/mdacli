@@ -72,7 +72,7 @@ def convert_str_time(x, dt):
     val, unit = split_time_unit(x)
     if unit != "":
         val = mda.units.convert(val, unit, "ps")
-        return round(val / dt)
+        return int(np.floor(np.round(val / dt, 9)))
     if val % 1 != 0:  # the number is not int'able
         raise ValueError(
             "Only integers or time step combinations (´12ps´) "
