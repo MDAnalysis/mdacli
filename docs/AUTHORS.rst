@@ -7,3 +7,4 @@ Authors
 * Lily Wang (`github-lw <https://github.com/lilyminium>`_)
 * Henrik Jäger (`github-hj <https://github.com/hejamu>`_)
 * Shreejan Dolai (`github-sd <https://github.com/spyke7>`_)
+* Damien Toquer (`github-sd <https://github.com/DamienTOQUER>`_)

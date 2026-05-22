@@ -44,6 +44,18 @@ def test_convert_str_time(x, frame):
     assert frame == convert_str_time(x, dt=1)
 
 
+@pytest.mark.parametrize(
+    ("x", "frame"),
+    [
+        ("1ps", 10),
+        ("0.1ps", 1),
+    ],
+)
+def test_convert_str_time_decimaldt(x, frame):
+    """Test convert string to time with decimal dt."""
+    assert frame == convert_str_time(x, dt=0.1)
+
+
 def test_convert_str_time_dt():
     """Test convert string to time in ps."""
     assert convert_str_time("10ps", dt=10) == 1

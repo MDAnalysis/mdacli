@@ -13,6 +13,7 @@ import sys
 from collections import defaultdict
 
 import MDAnalysis as mda
+import numpy as np
 
 
 def _exit_if_a_is_b(obj1, obj2, msg):
