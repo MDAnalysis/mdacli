@@ -75,7 +75,7 @@ def convert_str_time(x, dt):
     The end value is rounded to the 9th number to avoid floating point errors. If we
     don't use the 9 digits then the floating point behaviour of np.floor would be
     unstable, i.e.:
-    
+
         >>> np.floor(0.999999999999999999)
         np.float64(1.0)
         >>> np.floor(0.9999999999999999)
