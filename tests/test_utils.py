@@ -49,6 +49,7 @@ def test_convert_str_time(x, frame):
     [
         ("1ps", 10),
         ("0.1ps", 1),
+        ("0.3ps", 3),
     ],
 )
 def test_convert_str_time_decimaldt(x, frame):
