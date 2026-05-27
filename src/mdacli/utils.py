@@ -72,14 +72,14 @@ def convert_str_time(x, dt):
 
     Notes
     -----
-    The end value is rounded to the 9th number to avoid floating point errors. If we
-    don't use the 9 digits then the floating point behaviour of np.floor would be
-    unstable, i.e.:
+    The quotient ``val / dt`` is rounded to 9 decimal places before flooring
+    so that values that should land exactly on a frame boundary are not
+    pushed down by floating-point error. For example:
 
-        >>> np.floor(0.999999999999999999)
-        np.float64(1.0)
-        >>> np.floor(0.9999999999999999)
-        np.float64(0.0)
+        >>> np.floor(0.3 / 0.1)
+        np.float64(2.0)
+        >>> np.floor(np.round(0.3 / 0.1, 9))
+        np.float64(3.0)
     """
     val, unit = split_time_unit(x)
     if unit != "":
