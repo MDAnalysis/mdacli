@@ -5,6 +5,8 @@ Changelog
 Unreleased
 ----------
 
+* Fix convert_str_time in util
+
 v0.2.0 (2026-01-23)
 ------------------------------------------
 

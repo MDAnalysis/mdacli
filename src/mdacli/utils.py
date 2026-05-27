@@ -13,6 +13,7 @@ import sys
 from collections import defaultdict
 
 import MDAnalysis as mda
+import numpy as np
 
 
 def _exit_if_a_is_b(obj1, obj2, msg):
@@ -68,11 +69,22 @@ def convert_str_time(x, dt):
     ------
     ValueError
         The input does not contain any units but is not an integer.
+
+    Notes
+    -----
+    The quotient ``val / dt`` is rounded to 9 decimal places before flooring
+    so that values that should land exactly on a frame boundary are not
+    pushed down by floating-point error. For example:
+
+        >>> np.floor(0.3 / 0.1)
+        np.float64(2.0)
+        >>> np.floor(np.round(0.3 / 0.1, 9))
+        np.float64(3.0)
     """
     val, unit = split_time_unit(x)
     if unit != "":
         val = mda.units.convert(val, unit, "ps")
-        return int(val // dt)
+        return int(np.floor(np.round(val / dt, 9)))
     if val % 1 != 0:  # the number is not int'able
         raise ValueError(
             "Only integers or time step combinations (´12ps´) "
