@@ -6,6 +6,7 @@ Unreleased
 ----------
 
 * Fix convert_str_time in util
+* Have ReadTheDocs only produce Epub as extra format (#140)
 
 v0.2.0 (2026-01-23)
 ------------------------------------------
