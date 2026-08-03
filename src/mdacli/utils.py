@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 #
 # Copyright (c) 2021 Authors and contributors
 #
@@ -40,7 +39,7 @@ def split_time_unit(s):
     """
     type_regex = re.compile(
         r"^(\-?\d+\.?\d*|\-?\.\d+|\-?\.?\d+[eE]\-?\d+|-?\d+\.?\d*[eE]\d+)($|[a-z]*$)"
-    )  # noqa: E501
+    )
     value, unit = type_regex.findall(s)[0]
     return float(value), unit
 
@@ -256,7 +255,7 @@ def parse_docs(klass):
     for line in doc_lines[par_i:end_param_line][::-1]:
         if " : " in line:
             par_name, others_ = line.split(" : ")
-            par_type = [_ for _ in type_regex.findall(others_)[0] if _][0]
+            par_type = next(_ for _ in type_regex.findall(others_)[0] if _)
             params[par_name]["type"] = par_type
             params[par_name]["desc"] = " ".join(desc_tmp[::-1])
             desc_tmp.clear()

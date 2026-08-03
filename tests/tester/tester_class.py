@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 #
 # Copyright (c) 2024 Authors and contributors
 #
@@ -33,12 +32,9 @@ class Tester(AnalysisBase):
 
     def _prepare(self):
         """Prepare the analysis."""
-        pass
 
     def _single_frame(self):
         """Analyse a single frame."""
-        pass
 
     def _conclude(self):
         """Conclude the analysis."""
-        pass

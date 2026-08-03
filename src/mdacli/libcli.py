@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 #
 # Copyright (c) 2021 Authors and contributors
 #
@@ -431,8 +430,8 @@ def create_cli(sub_parser, interface_name, parameters):
         pass
 
     # add positional and optional arguments
-    pos_ = sorted(list(parameters["positional"].items()), key=lambda x: x[0])
-    opt_ = sorted(list(parameters["optional"].items()), key=lambda x: x[0])
+    pos_ = sorted(parameters["positional"].items(), key=lambda x: x[0])
+    opt_ = sorted(parameters["optional"].items(), key=lambda x: x[0])
 
     parameters_to_parse = pos_ + opt_
 
@@ -483,11 +482,11 @@ def create_cli(sub_parser, interface_name, parameters):
 
         description = args_dict["desc"]
         flag = f"-{name}"
-        arg_params = dict(
-            dest=name,
-            help=description,
-            default=default,
-        )
+        arg_params = {
+            "dest": name,
+            "help": description,
+            "default": default,
+        }
         if group.title == MANDATORY_TITLE:
             arg_params["required"] = True
         if type_ is dict:
@@ -529,7 +528,6 @@ def create_cli(sub_parser, interface_name, parameters):
             arg_params["help"] += " (default: %(default)s)"
 
         group.add_argument(flag, **arg_params)
-    return
 
 
 def create_universe(

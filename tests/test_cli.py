@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 #
 # Copyright (c) 2021 Authors and contributors
 #
@@ -66,9 +65,9 @@ def test_subparser_setup_for_tab_completion():
 
     setup_clients(parser, title="MDAnalysis Analysis Modules", members=modules)
 
-    subparser_action = [
+    subparser_action = next(
         a for a in parser._subparsers._group_actions if hasattr(a, "choices")
-    ][0]
+    )
 
     choices = list(subparser_action.choices.keys())
     assert "RMSF" in choices

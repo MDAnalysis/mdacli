@@ -5,6 +5,8 @@ Changelog
 Unreleased
 ----------
 
+* Fix lint errors (shebangs, blind exception, redundant list/dict calls)
+
 v0.2.1 (2026-06-02)
 ------------------------------------------
 

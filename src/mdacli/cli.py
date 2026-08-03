@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 #
 # Copyright (c) 2024 Authors and contributors
 #
@@ -136,7 +135,7 @@ def cli(
                     arg_grouped_dict["Analysis Run Parameters"],
                     arg_grouped_dict["Output Parameters"],
                 )
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001 top-level CLI handler must catch any analysis error to report it cleanly
             if args.debug:
                 traceback.print_exc()
             else:
