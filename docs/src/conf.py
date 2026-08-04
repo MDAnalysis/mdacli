@@ -4,7 +4,7 @@ import os
 import sys
 from unittest import mock
 
-import mdacli  # noqa: E402
+import mdacli
 
 # activate if there are dependencies
 mock_modules = [

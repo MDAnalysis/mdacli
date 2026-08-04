@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 # Copyright (c) 2021 Authors and contributors
 #
 # Released under the GNU Public Licence, v2 or any higher version
@@ -43,7 +41,6 @@ def save(results, fprefix="mdacli_results"):
     save_higher_dim_arrays(results, fprefix=fprefix, remove=True, min_ndim=4)
     save_json_serializables(results, remove=True, fname=fprefix)
     save_Results_object(results, fprefix=fprefix, remove=True)
-    return
 
 
 def save_1D_arrays(results, fprefix="1darray", remove=True):
@@ -126,7 +123,7 @@ def stack_1d_arrays_list(list_1D, extra_list=None):
 
     out_lists = []
     # Concentanate lists of the same lenngth
-    for i in range(0, len(new_length_idx) - 1):
+    for i in range(len(new_length_idx) - 1):
         out_lists.append(
             np.vstack(list_1D_sorted[new_length_idx[i] : new_length_idx[i + 1]])
         )
@@ -134,7 +131,7 @@ def stack_1d_arrays_list(list_1D, extra_list=None):
     if extra_list is not None:
         extra_list_sorted = [extra_list[i] for i in sorted_idx]
         out_extra = []
-        for i in range(0, len(new_length_idx) - 1):
+        for i in range(len(new_length_idx) - 1):
             out_extra.append(
                 np.vstack(extra_list_sorted[new_length_idx[i] : new_length_idx[i + 1]])
             )
@@ -206,8 +203,6 @@ def save_3D_array_to_2D_csv(
     if zipit:
         save_files_to_zip(files_to_zip, zipname=arr_name, remove=True)
 
-    return
-
 
 def save_higher_dim_arrays(results, fprefix="XDarr", remove=True, min_ndim=4):
     """Save items of multidimensional arrays to CSV."""
@@ -233,7 +228,6 @@ def save_result_array(arr, fprefix="prefix"):
     }
 
     save_options[True](item, fprefix=fprefix)
-    return
 
 
 def save_json_serializables(results, remove=True, **jsonargs):
@@ -315,8 +309,6 @@ def save_files_to_zip(files, zipname="thezip", remove=True):
     if remove:
         remove_files(files)
 
-    return
-
 
 def is_dimension_array(arr, ndim):
     """Assert value is array and of certain dimension."""
@@ -342,7 +334,6 @@ def remove_files(files):
     """Remove files from disk."""
     for filename in files:
         Path.unlink(filename)
-    return
 
 
 def savetxt_w_command(fname, X, header="", fsuffix=".csv", **kwargs):

@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 #
 # Copyright (c) 2024 Authors and contributors
 # (see the AUTHORS.rst file for the full list of names)
